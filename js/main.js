@@ -3,10 +3,17 @@
    matched to scroll progress onto a <canvas>. No <video> seeking = no jank.
    ============================================================================ */
 
+// Phones cap decoded-image memory, so serve a lighter frame set there.
+const IS_MOBILE = window.matchMedia('(max-width: 767px)').matches;
+const frameCfg = (section, name, bg) => {
+  const dir = IS_MOBILE ? `assets/framesm/${name}` : `assets/frames/${name}`;
+  const frameCount = IS_MOBILE ? 60 : 120;
+  return { section, frameCount, bg, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
+};
 const SCRUB_SECTIONS = [
-  { section: '#hero',     frameCount: 120, bg: '#0c0e0d', path: i => `assets/frames/hero/frame_${String(i).padStart(4,'0')}.webp` },
-  { section: '#scene-spa',frameCount: 120, bg: '#0a0c12', path: i => `assets/frames/spa/frame_${String(i).padStart(4,'0')}.webp` },
-  { section: '#scene-ski',frameCount: 120, bg: '#0c0e0d', path: i => `assets/frames/skilift/frame_${String(i).padStart(4,'0')}.webp` },
+  frameCfg('#hero', 'hero', '#0c0e0d'),
+  frameCfg('#scene-spa', 'spa', '#0a0c12'),
+  frameCfg('#scene-ski', 'skilift', '#0c0e0d'),
 ];
 
 function smoothstep(a, b, x) {

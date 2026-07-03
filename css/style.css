@@ -98,7 +98,7 @@ em{font-style:italic;color:var(--gold-soft)}
   55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ---- MISSION ---- */
-.mission{padding:clamp(2.5rem,5vh,4rem) clamp(1.2rem,5vw,4rem) clamp(6rem,14vh,11rem);max-width:1200px;margin:0 auto}
+.mission{padding:clamp(2.5rem,5vh,4rem) clamp(1.2rem,5vw,4rem) clamp(3.5rem,7vh,6rem);max-width:1200px;margin:0 auto}
 .mission__lead{font-family:var(--serif);font-weight:500;
   font-size:clamp(1.7rem,3.6vw,3rem);line-height:1.18;letter-spacing:-.01em;
   margin-bottom:2rem;max-width:20ch}
@@ -129,7 +129,7 @@ em{font-style:italic;color:var(--gold-soft)}
   font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft)}
 
 /* ---- SERVICES ---- */
-.services{padding:clamp(6rem,14vh,11rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.services{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
 .services__head{margin-bottom:4rem;max-width:24ch}
 .services__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
   border:1px solid var(--line)}
@@ -142,7 +142,7 @@ em{font-style:italic;color:var(--gold-soft)}
 .svc p{font-size:.92rem;color:rgba(243,237,225,.66)}
 
 /* ---- IMPACT ---- */
-.impact{padding:clamp(6rem,14vh,11rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.impact{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
 .impact__head{max-width:26ch;margin-bottom:3rem}
 .impact__sub{margin-top:1.4rem;color:rgba(243,237,225,.66);font-size:1.05rem;max-width:46ch}
 .impact__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;
@@ -167,7 +167,7 @@ em{font-style:italic;color:var(--gold-soft)}
 .grid__tile figcaption b{font-size:.82rem;color:var(--gold-soft);font-weight:600}
 
 /* ---- CHANNELS (non-scroll break) ---- */
-.channels{padding:clamp(6rem,13vh,10rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.channels{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
 .channels__head{max-width:30ch;margin-bottom:3.2rem}
 .channels__sub{margin-top:1.3rem;color:rgba(243,237,225,.66);font-size:1.05rem;max-width:52ch}
 .channels__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
@@ -213,7 +213,7 @@ em{font-style:italic;color:var(--gold-soft)}
 .phone__review span{font-size:.72rem;color:rgba(255,255,255,.6)}
 
 /* ---- TEAM ---- */
-.team{padding:clamp(6rem,14vh,11rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.team{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
 .team__head{max-width:28ch;margin-bottom:3.5rem}
 .team__sub{margin-top:1.4rem;color:rgba(243,237,225,.66);font-size:1.05rem}
 .team__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem}
@@ -235,7 +235,7 @@ em{font-style:italic;color:var(--gold-soft)}
 @keyframes marq{to{transform:translateX(-50%)}}
 
 /* ---- CONTACT ---- */
-.contact{padding:clamp(6rem,16vh,12rem) clamp(1.2rem,5vw,4rem)}
+.contact{padding:clamp(4rem,8vh,7rem) clamp(1.2rem,5vw,4rem)}
 .contact__inner{max-width:900px;margin:0 auto;text-align:center}
 .contact__title{font-family:var(--serif);font-weight:500;
   font-size:clamp(2.6rem,7vw,5.6rem);line-height:1;letter-spacing:-.02em;margin:.6rem 0 1.4rem}

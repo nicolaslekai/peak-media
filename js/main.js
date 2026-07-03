@@ -5,15 +5,15 @@
 
 // Phones cap decoded-image memory, so serve a lighter frame set there.
 const IS_MOBILE = window.matchMedia('(max-width: 767px)').matches;
-const frameCfg = (section, name, bg) => {
+const frameCfg = (section, name, bg, focalX = 0.5, focalY = 0.5) => {
   const dir = IS_MOBILE ? `assets/framesm/${name}` : `assets/frames/${name}`;
   const frameCount = IS_MOBILE ? 60 : 120;
-  return { section, frameCount, bg, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
+  return { section, frameCount, bg, focalX, focalY, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
 };
 const SCRUB_SECTIONS = [
-  frameCfg('#hero', 'hero', '#0c0e0d'),
-  frameCfg('#scene-spa', 'spa', '#0a0c12'),
-  frameCfg('#scene-ski', 'skilift', '#0c0e0d'),
+  frameCfg('#hero', 'hero', '#0c0e0d', 0.62, 0.5),      // keep the sun + pool in frame
+  frameCfg('#scene-spa', 'spa', '#0a0c12', 0.5, 0.42),  // keep the starry window in frame
+  frameCfg('#scene-ski', 'skilift', '#0c0e0d', 0.5, 0.5),
 ];
 
 function smoothstep(a, b, x) {
@@ -50,14 +50,10 @@ function initScrub(cfg) {
     const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
     let dw, dh, dx, dy;
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
-    if (IS_MOBILE) {
-      // fit to full width so the whole wide scene is visible (letterbox top/bottom)
-      dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2;
-    } else if (ir > cr) {
-      dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0;
-    } else {
-      dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2;
-    }
+    // cover-fit; on mobile bias the crop to a focal point so the action stays on screen
+    const fx = IS_MOBILE ? cfg.focalX : 0.5, fy = IS_MOBILE ? cfg.focalY : 0.5;
+    if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) * fx; dy = 0; }
+    else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) * fy; }
     ctx.drawImage(img, dx, dy, dw, dh);
     return true;
   }
@@ -68,12 +64,17 @@ function initScrub(cfg) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     draw(current < 0 ? 0 : current);
   }
+  let shown = -1;  // interpolated (float) frame position, eased toward the scroll target
   function update() {
     const rect = section.getBoundingClientRect();
     if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight) return;
     const scrollable = rect.height - window.innerHeight;
     const p = Math.min(Math.max(-rect.top / scrollable, 0), 1);
-    const idx = Math.min(cfg.frameCount - 1, Math.round(p * (cfg.frameCount - 1)));
+    const target = p * (cfg.frameCount - 1);
+    if (shown < 0) shown = target;
+    shown += (target - shown) * 0.22;                 // ease toward target = smooth, jerk-free scrub
+    if (Math.abs(target - shown) < 0.04) shown = target;
+    const idx = Math.min(cfg.frameCount - 1, Math.max(0, Math.round(shown)));
     if (idx !== current) { if (draw(idx)) current = idx; }  // only advance when the frame actually painted
     // last TAIL_FRAMES: lift the pinned stage away so the clip finishes as we scroll onward
     if (stage) {

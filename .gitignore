@@ -1,0 +1,12 @@
+# raw ComfyUI render output (2K PNG masters) — the web-ready copies live in assets/img
+renders/
+templates/
+
+# editor / harness config
+.claude/
+
+# python / tooling
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

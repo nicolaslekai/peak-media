@@ -1,0 +1,167 @@
+/* ============ PEAK STORIES — canvas frame-sequence scroll engine ============
+   The smooth "3D scroll" technique: preload numbered JPGs and paint the frame
+   matched to scroll progress onto a <canvas>. No <video> seeking = no jank.
+   ============================================================================ */
+
+const SCRUB_SECTIONS = [
+  { section: '#hero',     frameCount: 120, bg: '#0c0e0d', path: i => `assets/frames/hero/frame_${String(i).padStart(4,'0')}.webp` },
+  { section: '#scene-spa',frameCount: 120, bg: '#0a0c12', path: i => `assets/frames/spa/frame_${String(i).padStart(4,'0')}.webp` },
+  { section: '#scene-ski',frameCount: 120, bg: '#0c0e0d', path: i => `assets/frames/skilift/frame_${String(i).padStart(4,'0')}.webp` },
+];
+
+function smoothstep(a, b, x) {
+  if (a === b) return x < a ? 0 : 1;
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+}
+
+const TAIL_FRAMES = 15;  // last N frames double as the hand-off into the next section
+
+function initScrub(cfg) {
+  const section = document.querySelector(cfg.section);
+  if (!section) return null;
+  const canvas = section.querySelector('canvas');
+  const stage = section.querySelector('.cine__stage');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const lines = [...section.querySelectorAll('.cine-line')];
+  const bg = cfg.bg || '#0c0e0d';
+  const images = [];
+  let firstDrawn = false, current = -1;
+  const tailStart = (cfg.frameCount - TAIL_FRAMES) / (cfg.frameCount - 1);
+
+  for (let i = 0; i < cfg.frameCount; i++) {
+    const img = new Image();
+    img.src = cfg.path(i + 1);
+    img.onload = () => { if (!firstDrawn) { firstDrawn = true; draw(0); } };
+    images[i] = img;
+  }
+
+  function draw(index) {
+    const img = images[index];
+    if (!img || !img.complete || !img.naturalWidth) return false;
+    const cw = canvas.clientWidth, ch = canvas.clientHeight;
+    const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
+    let dw, dh, dx, dy;
+    if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
+    else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
+    ctx.drawImage(img, dx, dy, dw, dh);
+    return true;
+  }
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw(current < 0 ? 0 : current);
+  }
+  function update() {
+    const rect = section.getBoundingClientRect();
+    if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight) return;
+    const scrollable = rect.height - window.innerHeight;
+    const p = Math.min(Math.max(-rect.top / scrollable, 0), 1);
+    const idx = Math.min(cfg.frameCount - 1, Math.round(p * (cfg.frameCount - 1)));
+    if (idx !== current) { if (draw(idx)) current = idx; }  // only advance when the frame actually painted
+    // last TAIL_FRAMES: lift the pinned stage away so the clip finishes as we scroll onward
+    if (stage) {
+      const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
+      const e = t * t * (3 - 2 * t);   // ease the exit
+      stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.55).toFixed(1)}px,0)` : '';
+      stage.style.opacity = t > 0 ? (1 - e * 0.92).toFixed(3) : '';
+    }
+    // trapezoidal caption fade: in early, hold, out late
+    for (const el of lines) {
+      const a = parseFloat(el.dataset.in), b = parseFloat(el.dataset.out);
+      const fade = 0.12;
+      const o = smoothstep(a, a + fade, p) * (1 - smoothstep(b - fade, b, p));
+      el.style.opacity = o.toFixed(3);
+      el.style.transform = `translateY(${(1 - o) * 34}px)`;
+    }
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  return { update, resize };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const scrubs = SCRUB_SECTIONS.map(initScrub).filter(Boolean);
+
+  /* Lenis smooth scroll — also drives the canvas update loop */
+  let lenis = null;
+  if (window.Lenis && !reduce) {
+    lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.9 });
+    window.lenis = lenis;
+  }
+  const updateAll = () => { for (const s of scrubs) { try { s.update(); } catch (e) {} } };
+  let loggedErr = false;
+  function raf(t) {
+    try {
+      if (lenis) lenis.raf(t);
+      updateAll();
+    } catch (e) {
+      if (!loggedErr) { loggedErr = true; console.error('[scrub loop]', e); }
+    }
+    requestAnimationFrame(raf);   // always keep the loop alive
+  }
+  requestAnimationFrame(raf);
+  // also repaint on every scroll event — robust even where rAF is throttled
+  if (lenis) lenis.on('scroll', updateAll);
+  window.addEventListener('scroll', updateAll, { passive: true });
+
+  /* nav bg + scroll cue */
+  const nav = document.getElementById('nav');
+  const onScroll = (y) => {
+    nav.classList.toggle('scrolled', y > 60);
+    document.querySelectorAll('.hero__cue').forEach(h => h.style.opacity = y > 80 ? '0' : '');
+  };
+  if (lenis) lenis.on('scroll', ({ scroll }) => onScroll(scroll));
+  else window.addEventListener('scroll', () => onScroll(window.scrollY), { passive: true });
+  onScroll(0);
+
+  /* smooth anchor links */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const el = document.querySelector(a.getAttribute('href'));
+      if (!el) return;
+      e.preventDefault();
+      if (lenis) lenis.scrollTo(el, { duration: 1.3 });
+      else el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  /* reveals + counters */
+  if (reduce) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    document.querySelectorAll('[data-count]').forEach(animateCount);
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('in');
+        if (en.target.hasAttribute('data-count')) animateCount(en.target);
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal, [data-count]').forEach((el, i) => {
+      if (el.classList.contains('reveal')) el.style.transitionDelay = (i % 4) * 0.06 + 's';
+      io.observe(el);
+    });
+  }
+});
+
+function animateCount(el) {
+  const target = parseFloat(el.dataset.count);
+  const dec = parseInt(el.dataset.dec || '0', 10);
+  const pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+  const dur = 1600, t0 = performance.now();
+  const de = (v) => v.toFixed(dec).replace('.', ',');   // German decimal comma
+  function step(now) {
+    const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = pre + de(target * e) + suf;
+    if (k < 1) requestAnimationFrame(step);
+    else el.textContent = pre + de(target) + suf;
+  }
+  requestAnimationFrame(step);
+}

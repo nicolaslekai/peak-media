@@ -49,9 +49,15 @@ function initScrub(cfg) {
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
     const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
     let dw, dh, dx, dy;
-    if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
-    else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
+    if (IS_MOBILE) {
+      // fit to full width so the whole wide scene is visible (letterbox top/bottom)
+      dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2;
+    } else if (ir > cr) {
+      dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0;
+    } else {
+      dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2;
+    }
     ctx.drawImage(img, dx, dy, dw, dh);
     return true;
   }

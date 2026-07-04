@@ -51,13 +51,15 @@ function initScrub(cfg) {
     let dw, dh, dx, dy;
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
     if (IS_MOBILE) {
-      // show the FULL 16:9 frame at device width, anchored high; the caption sits below it
-      dw = cw; dh = cw / ir; dx = 0; dy = Math.round(ch * 0.085);
-    } else if (ir > cr) {
-      dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0;
-    } else {
-      dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2;
+      // 4:5 crop (shows ~45% of the 16:9 width — enough action), centered, caption overlaid
+      const boxH = Math.min(ch, cw * 1.25), boxY = (ch - boxH) / 2;
+      dh = boxH; dw = boxH * ir; dx = (cw - dw) * (cfg.focalX ?? 0.5); dy = boxY;
+      ctx.save(); ctx.beginPath(); ctx.rect(0, boxY, cw, boxH); ctx.clip();
+      ctx.drawImage(img, dx, dy, dw, dh); ctx.restore();
+      return true;
     }
+    if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
+    else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
     ctx.drawImage(img, dx, dy, dw, dh);
     return true;
   }

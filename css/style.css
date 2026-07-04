@@ -286,15 +286,14 @@ em{font-style:italic;color:var(--gold-soft)}
   .foot{grid-template-columns:1fr}
   .foot__cols{grid-template-columns:1fr 1fr}
 }
-/* ---- MOBILE cinematic: full 16:9 frame up top, caption below ---- */
+/* ---- MOBILE cinematic: 4:5 crop with the caption overlaid on it ---- */
 @media(max-width:767px){
-  .cine__stage{align-items:flex-end}
-  .hero__inner,.scene__content{padding-bottom:8vh}
-  .cine__scrim{background:linear-gradient(0deg,rgba(8,10,9,.95) 0%,rgba(8,10,9,.62) 24%,rgba(8,10,9,0) 44%)}
-  .hero__title{font-size:clamp(2.5rem,11.5vw,3.4rem);line-height:1.04;margin-bottom:1.2rem}
-  .hero__sub{max-width:100%;margin-bottom:1.6rem}
-  .scene__title{font-size:clamp(1.9rem,8.5vw,2.8rem)}
-  .scene__text{max-width:100%}
+  .cine__stage{align-items:center}
+  .cine__scrim{background:linear-gradient(0deg,rgba(8,10,9,.55) 0%,rgba(8,10,9,.28) 42%,rgba(8,10,9,.5) 100%)}
+  .hero__title{font-size:clamp(2.4rem,11vw,3.3rem);line-height:1.04;margin-bottom:1.4rem}
+  .hero__sub,.scene__text{display:none}   /* trim the mobile copy — let the visuals carry it */
+  .scene__index{margin-bottom:.8rem}
+  .scene__title{font-size:clamp(1.9rem,8.5vw,2.8rem);margin-bottom:1.2rem}
 }
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}

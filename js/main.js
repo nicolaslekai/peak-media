@@ -130,9 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(raf);   // always keep the loop alive
   }
   requestAnimationFrame(raf);
-  // also repaint on every scroll event — robust even where rAF is throttled
-  if (lenis) lenis.on('scroll', updateAll);
-  window.addEventListener('scroll', updateAll, { passive: true });
+  // NOTE: the rAF loop is the SOLE driver of the frame interpolation — do not also call
+  // updateAll() on scroll events, or the lerp advances several times per frame and jitters.
 
   /* nav bg + scroll cue */
   const nav = document.getElementById('nav');

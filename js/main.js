@@ -85,13 +85,21 @@ function initScrub(cfg) {
     shown += (target - shown) * 0.22;                 // ease toward target = smooth, jerk-free scrub
     if (Math.abs(target - shown) < 0.04) shown = target;
     const idx = Math.min(cfg.frameCount - 1, Math.max(0, Math.round(shown)));
-    if (idx !== current) { if (draw(idx)) current = idx; }  // only advance when the frame actually painted
-    // last TAIL_FRAMES: lift the pinned stage away so the clip finishes as we scroll onward
+    if (idx !== current && draw(idx)) current = idx;  // only advance when the frame actually painted
     if (stage) {
-      const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
-      const e = t * t * (3 - 2 * t);   // ease the exit
-      stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.55).toFixed(1)}px,0)` : '';
-      stage.style.opacity = t > 0 ? (1 - e * 0.92).toFixed(3) : '';
+      if (IS_MOBILE) {
+        // clean opacity crossfade: fade the whole frame in at the start, out at the end —
+        // no upward translate, so there's no black "fly-away" gap between sections
+        const o = smoothstep(0, 0.09, p) * (1 - smoothstep(0.86, 1, p));
+        stage.style.opacity = o.toFixed(3);
+        stage.style.transform = '';
+      } else {
+        // desktop: lift the pinned stage away so the clip finishes as we scroll onward
+        const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
+        const e = t * t * (3 - 2 * t);
+        stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.55).toFixed(1)}px,0)` : '';
+        stage.style.opacity = t > 0 ? (1 - e * 0.92).toFixed(3) : '';
+      }
     }
     // trapezoidal caption fade: in early, hold, out late
     for (const el of lines) {
@@ -107,7 +115,7 @@ function initScrub(cfg) {
   return { update, resize };
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function __boot() {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const scrubs = SCRUB_SECTIONS.map(initScrub).filter(Boolean);
@@ -118,15 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
     lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.9 });
     window.lenis = lenis;
   }
-  const updateAll = () => { for (const s of scrubs) { try { s.update(); } catch (e) {} } };
-  let loggedErr = false;
+  const updateAll = () => { for (const s of scrubs) s.update(); };
   function raf(t) {
-    try {
-      if (lenis) lenis.raf(t);
-      updateAll();
-    } catch (e) {
-      if (!loggedErr) { loggedErr = true; console.error('[scrub loop]', e); }
-    }
+    if (lenis) lenis.raf(t);
+    updateAll();
     requestAnimationFrame(raf);   // always keep the loop alive
   }
   requestAnimationFrame(raf);
@@ -172,7 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
       io.observe(el);
     });
   }
-});
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', __boot);
+else __boot();
 
 function animateCount(el) {
   const target = parseFloat(el.dataset.count);

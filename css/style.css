@@ -298,6 +298,11 @@ em{font-style:italic;color:var(--gold-soft)}
   .hero__sub,.scene__text{display:none}   /* trim the mobile copy — let the visuals carry it */
   .scene__index{margin-bottom:.8rem}
   .scene__title{font-size:clamp(1.9rem,8.5vw,2.8rem);margin-bottom:1.2rem}
+  /* shorter cine sections + tighter content padding = the frames hand off quickly, no long black gap */
+  .hero.cine{height:132vh}
+  .scene.cine{height:160vh}
+  .mission,.channels,.services,.impact,.team{padding-top:3rem;padding-bottom:3rem}
+  .contact{padding-top:3.5rem;padding-bottom:3.5rem}
 }
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}

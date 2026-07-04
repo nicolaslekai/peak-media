@@ -1,52 +1,37 @@
-#!/usr/bin/env python3
-"""Slice each scroll clip into a numbered JPG frame sequence for canvas scroll-scrubbing.
-Windows-friendly (uses imageio-ffmpeg's bundled binary). This is the smooth technique:
-the site draws preloaded JPGs to a <canvas> by scroll progress — no <video> seeking.
-"""
-import imageio_ffmpeg, subprocess, os, sys, re, glob
-
+"""Slice the scene videos into high-quality WebP frame sequences for the canvas scrub.
+Produces a crisp desktop set (assets/frames) and a lighter mobile set (assets/framesm)."""
+import imageio_ffmpeg, subprocess, os, glob, re
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VID = os.path.join(ROOT, "assets", "video")
-FRAMES = os.path.join(ROOT, "assets", "frames")
-
-# clip file -> frame-folder name
-JOBS = [
-    ("hero.mp4",    "hero"),
-    ("spa.mp4",     "spa"),
-    ("skilift.mp4", "skilift"),
+CLIPS = ["hero", "spa", "skilift"]
+# (out_dir, width, webp_quality, frame_count)
+SETS = [
+    (os.path.join(ROOT, "assets", "frames"),  1920, 92, 120),  # desktop: crisp
+    (os.path.join(ROOT, "assets", "framesm"), 1170, 90, 60),   # mobile: retina width, lighter
 ]
-WIDTH = 1600     # frame width — WebP is lighter, so we can afford a touch more resolution
-COUNT = 120      # frames per clip
-WEBP_QUALITY = 82  # libwebp quality 0..100
 
-def duration(path):
-    p = subprocess.run([FF, "-i", path], capture_output=True, text=True)
-    m = re.search(r"Duration: (\d+):(\d+):([\d.]+)", p.stderr)
-    if not m: return 5.0
-    h, mm, s = m.groups()
-    return int(h)*3600 + int(mm)*60 + float(s)
+def duration(p):
+    out = subprocess.run([FF, "-i", p], capture_output=True, text=True).stderr
+    m = re.search(r"Duration: (\d+):(\d+):(\d+\.\d+)", out)
+    h, mm, s = m.groups(); return int(h)*3600 + int(mm)*60 + float(s)
 
-def main():
-    for clip, name in JOBS:
-        src = os.path.join(VID, clip)
-        if not os.path.exists(src):
-            print("MISSING", clip); continue
-        out = os.path.join(FRAMES, name)
-        os.makedirs(out, exist_ok=True)
-        for old in glob.glob(os.path.join(out, "frame_*.*")):
-            os.remove(old)
-        dur = duration(src)
-        fps = COUNT / dur if dur > 0 else 30
+for name in CLIPS:
+    src = os.path.join(VID, name + ".mp4")
+    if not os.path.exists(src): print("MISSING", src); continue
+    dur = duration(src)
+    for outroot, width, q, count in SETS:
+        out = os.path.join(outroot, name); os.makedirs(out, exist_ok=True)
+        for old in glob.glob(os.path.join(out, "frame_*.*")): os.remove(old)
+        fps = count / dur if dur > 0 else 24
         cmd = [FF, "-y", "-i", src,
-               "-vf", f"fps={fps:.4f},scale={WIDTH}:-2",
-               "-c:v", "libwebp", "-quality", str(WEBP_QUALITY), "-compression_level", "6",
+               "-vf", f"fps={fps:.4f},scale={width}:-2:flags=lanczos",
+               "-c:v", "libwebp", "-quality", str(q), "-compression_level", "6", "-preset", "photo",
                os.path.join(out, "frame_%04d.webp"),
                "-hide_banner", "-loglevel", "error"]
         subprocess.run(cmd, check=True)
-        n = len(glob.glob(os.path.join(out, "frame_*.webp")))
-        total_mb = sum(os.path.getsize(f) for f in glob.glob(os.path.join(out,"frame_*.webp")))/1048576
-        print(f"{name}: {n} frames @ {WIDTH}px ({total_mb:.1f} MB)  -> FRAME_COUNT={n}")
-
-if __name__ == "__main__":
-    main()
+        files = glob.glob(os.path.join(out, "frame_*.webp"))
+        mb = sum(os.path.getsize(f) for f in files) / 1048576
+        tag = "desktop" if width >= 1600 else "mobile "
+        print(f"{tag} {name}: {len(files)} @ {width}px q{q}  ({mb:.1f} MB)")
+print("DONE")

@@ -50,10 +50,14 @@ function initScrub(cfg) {
     const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
     let dw, dh, dx, dy;
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
-    // cover-fit; on mobile bias the crop to a focal point so the action stays on screen
-    const fx = IS_MOBILE ? cfg.focalX : 0.5, fy = IS_MOBILE ? cfg.focalY : 0.5;
-    if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) * fx; dy = 0; }
-    else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) * fy; }
+    if (IS_MOBILE) {
+      // show the FULL 16:9 frame at device width, anchored high; the caption sits below it
+      dw = cw; dh = cw / ir; dx = 0; dy = Math.round(ch * 0.085);
+    } else if (ir > cr) {
+      dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0;
+    } else {
+      dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2;
+    }
     ctx.drawImage(img, dx, dy, dw, dh);
     return true;
   }

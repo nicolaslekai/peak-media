@@ -286,6 +286,16 @@ em{font-style:italic;color:var(--gold-soft)}
   .foot{grid-template-columns:1fr}
   .foot__cols{grid-template-columns:1fr 1fr}
 }
+/* ---- MOBILE cinematic: full 16:9 frame up top, caption below ---- */
+@media(max-width:767px){
+  .cine__stage{align-items:flex-end}
+  .hero__inner,.scene__content{padding-bottom:8vh}
+  .cine__scrim{background:linear-gradient(0deg,rgba(8,10,9,.95) 0%,rgba(8,10,9,.62) 24%,rgba(8,10,9,0) 44%)}
+  .hero__title{font-size:clamp(2.5rem,11.5vw,3.4rem);line-height:1.04;margin-bottom:1.2rem}
+  .hero__sub{max-width:100%;margin-bottom:1.6rem}
+  .scene__title{font-size:clamp(1.9rem,8.5vw,2.8rem)}
+  .scene__text{max-width:100%}
+}
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}
   .regions__track,.hero__cue span,.hero__title span{animation:none}

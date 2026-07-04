@@ -63,15 +63,19 @@ function initScrub(cfg) {
     ctx.drawImage(img, dx, dy, dw, dh);
     return true;
   }
+  let cssW = 0, cssH = 0;
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = canvas.clientWidth * dpr;
-    canvas.height = canvas.clientHeight * dpr;
+    cssW = canvas.clientWidth; cssH = canvas.clientHeight;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     draw(current < 0 ? 0 : current);
   }
   let shown = -1;  // interpolated (float) frame position, eased toward the scroll target
   function update() {
+    // if the canvas box changed size (viewport/toolbar/orientation), re-sync the backing buffer to avoid stretch
+    if (canvas.clientWidth !== cssW || canvas.clientHeight !== cssH) resize();
     const rect = section.getBoundingClientRect();
     if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight) return;
     const scrollable = rect.height - window.innerHeight;

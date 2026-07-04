@@ -288,10 +288,11 @@ em{font-style:italic;color:var(--gold-soft)}
 }
 /* ---- MOBILE cinematic: 4:5 crop with the caption overlaid on it ---- */
 @media(max-width:767px){
-  /* let the top menu scroll away so the 4:5 frame sits centered in the phone */
+  /* let the top menu scroll away so the frame sits centered in the phone */
   .nav{position:absolute}
   .nav.scrolled{background:none;backdrop-filter:none;border:none}
-  .cine__stage{align-items:center}
+  /* dvh = the actually-visible height on iOS in-app browsers, so the frame centers correctly */
+  .cine__stage{align-items:center;height:100svh;height:100dvh;min-height:0}
   .cine__scrim{background:linear-gradient(0deg,rgba(8,10,9,.55) 0%,rgba(8,10,9,.28) 42%,rgba(8,10,9,.5) 100%)}
   .hero__title{font-size:clamp(2.4rem,11vw,3.3rem);line-height:1.04;margin-bottom:1.4rem}
   .hero__sub,.scene__text{display:none}   /* trim the mobile copy — let the visuals carry it */

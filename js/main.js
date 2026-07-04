@@ -51,8 +51,8 @@ function initScrub(cfg) {
     let dw, dh, dx, dy;
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
     if (IS_MOBILE) {
-      // 4:5 crop (shows ~45% of the 16:9 width — enough action), centered, caption overlaid
-      const boxH = Math.min(ch, cw * 1.25), boxY = (ch - boxH) / 2;
+      // taller crop, centered, caption overlaid — fills more of the phone, smaller bands
+      const boxH = Math.min(ch, cw * 1.4), boxY = (ch - boxH) / 2;
       dh = boxH; dw = boxH * ir; dx = (cw - dw) * (cfg.focalX ?? 0.5); dy = boxY;
       ctx.save(); ctx.beginPath(); ctx.rect(0, boxY, cw, boxH); ctx.clip();
       ctx.drawImage(img, dx, dy, dw, dh); ctx.restore();

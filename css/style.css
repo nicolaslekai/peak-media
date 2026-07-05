@@ -291,18 +291,35 @@ em{font-style:italic;color:var(--gold-soft)}
   /* let the top menu scroll away so the frame sits centered in the phone */
   .nav{position:absolute}
   .nav.scrolled{background:none;backdrop-filter:none;border:none}
-  /* svh = stable visible height (doesn't change as toolbars hide/show), so no stretch on scroll */
-  .cine__stage{align-items:center;height:100svh;min-height:0}
+  /* the stage IS the 4:5 crop (no full-screen black bands baked into the canvas):
+     it pins vertically centered, and surrounding content follows right behind it.
+     svh = stable visible height (doesn't change as toolbars hide/show), so no stretch on scroll */
+  .cine__stage{align-items:center;height:min(100svh,140vw);min-height:0;
+    top:calc((100svh - min(100svh,140vw))/2)}
+  .hero.cine .cine__stage{margin-top:calc((100svh - min(100svh,140vw))/2)}
   .cine__scrim{background:linear-gradient(0deg,rgba(8,10,9,.55) 0%,rgba(8,10,9,.28) 42%,rgba(8,10,9,.5) 100%)}
   .hero__title{font-size:clamp(2.4rem,11vw,3.3rem);line-height:1.04;margin-bottom:1.4rem}
   .hero__sub,.scene__text{display:none}   /* trim the mobile copy — let the visuals carry it */
   .scene__index{margin-bottom:.8rem}
   .scene__title{font-size:clamp(1.9rem,8.5vw,2.8rem);margin-bottom:1.2rem}
-  /* shorter cine sections + tighter content padding = the frames hand off quickly, no long black gap */
-  .hero.cine{height:132vh}
-  .scene.cine{height:160vh}
-  .mission,.channels,.services,.impact,.team{padding-top:3rem;padding-bottom:3rem}
-  .contact{padding-top:3.5rem;padding-bottom:3.5rem}
+  /* shorter cine sections = frames hand off quickly, content follows the crop directly */
+  .hero.cine{height:130vh}
+  .scene.cine{height:150vh}
+  /* tight vertical rhythm everywhere — no dead air between blocks */
+  .mission,.channels,.services,.impact,.team{padding-top:2.2rem;padding-bottom:2.2rem}
+  .contact{padding-top:2.5rem;padding-bottom:2.5rem}
+  .mission__lead{margin-bottom:1.2rem}
+  .mission__body{margin-bottom:1.8rem}
+  .mission__stats{padding-top:1.8rem;gap:1.4rem}
+  .services__head,.impact__head,.channels__head,.team__head{margin-bottom:1.8rem}
+  .impact__stats{padding:1.8rem 0;margin-bottom:1.8rem}
+  .svc{min-height:0;padding:1.6rem 1.4rem}
+  .svc__no{margin-bottom:1rem}
+  .svc h3{min-height:0}
+  .chan{min-height:0;padding:1.4rem 1.2rem}
+  .chan__top{margin-bottom:1rem}
+  .contact__body{margin-bottom:1.8rem}
+  .foot{padding:2.5rem 1.2rem 1.8rem;gap:1.8rem}
 }
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}

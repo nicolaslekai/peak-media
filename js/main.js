@@ -86,20 +86,13 @@ function initScrub(cfg) {
     if (Math.abs(target - shown) < 0.04) shown = target;
     const idx = Math.min(cfg.frameCount - 1, Math.max(0, Math.round(shown)));
     if (idx !== current && draw(idx)) current = idx;  // only advance when the frame actually painted
-    if (stage) {
-      if (IS_MOBILE) {
-        // clean opacity crossfade: fade the whole frame in at the start, out at the end —
-        // no upward translate, so there's no black "fly-away" gap between sections
-        const o = smoothstep(0, 0.09, p) * (1 - smoothstep(0.86, 1, p));
-        stage.style.opacity = o.toFixed(3);
-        stage.style.transform = '';
-      } else {
-        // desktop: lift the pinned stage away so the clip finishes as we scroll onward
-        const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
-        const e = t * t * (3 - 2 * t);
-        stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.55).toFixed(1)}px,0)` : '';
-        stage.style.opacity = t > 0 ? (1 - e * 0.92).toFixed(3) : '';
-      }
+    if (stage && !IS_MOBILE) {
+      // desktop: lift the pinned stage away so the clip finishes as we scroll onward.
+      // mobile skips this — the stage is exactly the 4:5 crop and scrolls off naturally.
+      const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
+      const e = t * t * (3 - 2 * t);
+      stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.55).toFixed(1)}px,0)` : '';
+      stage.style.opacity = t > 0 ? (1 - e * 0.92).toFixed(3) : '';
     }
     // trapezoidal caption fade: in early, hold, out late
     for (const el of lines) {

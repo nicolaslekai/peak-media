@@ -22,7 +22,7 @@ function smoothstep(a, b, x) {
   return t * t * (3 - 2 * t);
 }
 
-const TAIL_FRAMES = 15;  // last N frames double as the hand-off into the next section
+const TAIL_FRAMES = 8;   // last N frames double as the hand-off into the next section
 
 function initScrub(cfg) {
   const section = document.querySelector(cfg.section);
@@ -82,17 +82,18 @@ function initScrub(cfg) {
     const p = Math.min(Math.max(-rect.top / scrollable, 0), 1);
     const target = p * (cfg.frameCount - 1);
     if (shown < 0) shown = target;
-    shown += (target - shown) * 0.22;                 // ease toward target = smooth, jerk-free scrub
+    shown += (target - shown) * 0.15;                 // ease toward target = smooth, jerk-free scrub
     if (Math.abs(target - shown) < 0.04) shown = target;
     const idx = Math.min(cfg.frameCount - 1, Math.max(0, Math.round(shown)));
     if (idx !== current && draw(idx)) current = idx;  // only advance when the frame actually painted
     if (stage && !IS_MOBILE) {
-      // desktop: lift the pinned stage away so the clip finishes as we scroll onward.
+      // desktop: gentle parallax lift at the very end — the image stays visible while the
+      // next section slides up behind it, so there's never a black hole in the hand-off.
       // mobile skips this — the stage is exactly the 4:5 crop and scrolls off naturally.
       const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
       const e = t * t * (3 - 2 * t);
-      stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.55).toFixed(1)}px,0)` : '';
-      stage.style.opacity = t > 0 ? (1 - e * 0.92).toFixed(3) : '';
+      stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.22).toFixed(1)}px,0)` : '';
+      stage.style.opacity = t > 0 ? (1 - e * 0.4).toFixed(3) : '';
     }
     // trapezoidal caption fade: in early, hold, out late
     for (const el of lines) {
@@ -116,7 +117,7 @@ function __boot() {
   /* Lenis smooth scroll — also drives the canvas update loop */
   let lenis = null;
   if (window.Lenis && !reduce) {
-    lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.9 });
+    lenis = new Lenis({ lerp: 0.075, smoothWheel: true, wheelMultiplier: 0.9 });
     window.lenis = lenis;
   }
   const updateAll = () => { for (const s of scrubs) s.update(); };

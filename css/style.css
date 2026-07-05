@@ -65,8 +65,8 @@ em{font-style:italic;color:var(--gold-soft)}
 
 /* ---- CANVAS FRAME-SEQUENCE SCRUB (smooth 3D scroll) ---- */
 .cine{position:relative}
-.hero.cine{height:175vh}
-.scene.cine{height:260vh}   /* taller = slower scrub, each frame lingers longer */
+.hero.cine{height:200vh}    /* longer scrub distance = more px per frame = no skipping */
+.scene.cine{height:230vh}
 .cine__stage{position:sticky;top:0;height:100vh;min-height:600px;overflow:hidden;
   display:flex;align-items:center}
 .cine__stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background:var(--ink)}
@@ -98,13 +98,13 @@ em{font-style:italic;color:var(--gold-soft)}
   55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ---- MISSION ---- */
-.mission{padding:clamp(2.5rem,5vh,4rem) clamp(1.2rem,5vw,4rem) clamp(3.5rem,7vh,6rem);max-width:1200px;margin:0 auto}
+.mission{padding:clamp(2.5rem,5vh,4rem) clamp(1.2rem,5vw,4rem) clamp(2.8rem,5vh,4.5rem);max-width:1200px;margin:0 auto}
 .mission__lead{font-family:var(--serif);font-weight:500;
   font-size:clamp(1.7rem,3.6vw,3rem);line-height:1.18;letter-spacing:-.01em;
   margin-bottom:2rem;max-width:20ch}
-.mission__body{max-width:60ch;color:rgba(243,237,225,.72);font-size:1.06rem;margin-bottom:4rem}
+.mission__body{max-width:60ch;color:rgba(243,237,225,.72);font-size:1.06rem;margin-bottom:2.4rem}
 .mission__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;
-  border-top:1px solid var(--line);padding-top:3rem}
+  border-top:1px solid var(--line);padding-top:2.2rem}
 .stat__num{display:block;font-family:var(--serif);font-size:clamp(2.6rem,5vw,4.4rem);
   line-height:1;color:var(--gold-soft);font-weight:500}
 .stat__label{display:block;margin-top:.8rem;font-size:.86rem;color:rgba(243,237,225,.6);letter-spacing:.02em}
@@ -129,8 +129,8 @@ em{font-style:italic;color:var(--gold-soft)}
   font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft)}
 
 /* ---- SERVICES ---- */
-.services{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
-.services__head{margin-bottom:4rem;max-width:24ch}
+.services{padding:clamp(2.8rem,5vh,4.5rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.services__head{margin-bottom:2.4rem;max-width:24ch}
 .services__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
   border:1px solid var(--line)}
 .svc{background:var(--ink);padding:2.6rem 1.8rem;min-height:270px;
@@ -142,11 +142,11 @@ em{font-style:italic;color:var(--gold-soft)}
 .svc p{font-size:.92rem;color:rgba(243,237,225,.66)}
 
 /* ---- IMPACT ---- */
-.impact{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
-.impact__head{max-width:26ch;margin-bottom:3rem}
+.impact{padding:clamp(2.8rem,5vh,4.5rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.impact__head{max-width:26ch;margin-bottom:2.2rem}
 .impact__sub{margin-top:1.4rem;color:rgba(243,237,225,.66);font-size:1.05rem;max-width:46ch}
 .impact__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;
-  padding:2.6rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:3.5rem}
+  padding:2.2rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:2.4rem}
 .mstat__num{display:block;font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.4rem);
   color:var(--gold-soft);line-height:1;font-weight:500}
 .mstat__label{display:block;margin-top:.7rem;font-size:.82rem;color:rgba(243,237,225,.6)}
@@ -167,8 +167,8 @@ em{font-style:italic;color:var(--gold-soft)}
 .grid__tile figcaption b{font-size:.82rem;color:var(--gold-soft);font-weight:600}
 
 /* ---- CHANNELS (non-scroll break) ---- */
-.channels{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
-.channels__head{max-width:30ch;margin-bottom:3.2rem}
+.channels{padding:clamp(2.8rem,5vh,4.5rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.channels__head{max-width:30ch;margin-bottom:2.4rem}
 .channels__sub{margin-top:1.3rem;color:rgba(243,237,225,.66);font-size:1.05rem;max-width:52ch}
 .channels__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
   border:1px solid var(--line)}
@@ -213,8 +213,8 @@ em{font-style:italic;color:var(--gold-soft)}
 .phone__review span{font-size:.72rem;color:rgba(255,255,255,.6)}
 
 /* ---- TEAM ---- */
-.team{padding:clamp(3.5rem,7vh,6rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
-.team__head{max-width:28ch;margin-bottom:3.5rem}
+.team{padding:clamp(2.8rem,5vh,4.5rem) clamp(1.2rem,5vw,4rem);max-width:1300px;margin:0 auto}
+.team__head{max-width:28ch;margin-bottom:2.4rem}
 .team__sub{margin-top:1.4rem;color:rgba(243,237,225,.66);font-size:1.05rem}
 .team__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem}
 .member__img{position:relative;overflow:hidden;border-radius:3px;aspect-ratio:4/5;background:var(--ink-2)}
@@ -235,11 +235,11 @@ em{font-style:italic;color:var(--gold-soft)}
 @keyframes marq{to{transform:translateX(-50%)}}
 
 /* ---- CONTACT ---- */
-.contact{padding:clamp(4rem,8vh,7rem) clamp(1.2rem,5vw,4rem)}
+.contact{padding:clamp(3rem,6vh,5rem) clamp(1.2rem,5vw,4rem)}
 .contact__inner{max-width:900px;margin:0 auto;text-align:center}
 .contact__title{font-family:var(--serif);font-weight:500;
   font-size:clamp(2.6rem,7vw,5.6rem);line-height:1;letter-spacing:-.02em;margin:.6rem 0 1.4rem}
-.contact__body{max-width:50ch;margin:0 auto 3rem;color:rgba(243,237,225,.72);font-size:1.08rem}
+.contact__body{max-width:50ch;margin:0 auto 2.2rem;color:rgba(243,237,225,.72);font-size:1.08rem}
 .contact__form{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;text-align:left;max-width:640px;margin:0 auto}
 .field{position:relative}
 .field--full{grid-column:1/-1}
@@ -254,7 +254,7 @@ em{font-style:italic;color:var(--gold-soft)}
 .contact__form .btn{grid-column:1/-1;justify-self:start;margin-top:.6rem;cursor:pointer}
 
 /* ---- FOOTER ---- */
-.foot{border-top:1px solid var(--line);padding:4rem clamp(1.2rem,5vw,4rem) 2.5rem;
+.foot{border-top:1px solid var(--line);padding:2.8rem clamp(1.2rem,5vw,4rem) 2rem;
   display:grid;grid-template-columns:1fr 2fr;gap:3rem;max-width:1300px;margin:0 auto}
 .foot__brand{display:flex;align-items:center;gap:.7rem;font-weight:700;letter-spacing:.24em;
   font-size:.9rem;color:var(--gold-soft)}

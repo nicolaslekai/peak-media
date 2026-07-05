@@ -33,34 +33,44 @@ function initScrub(cfg) {
   const lines = [...section.querySelectorAll('.cine-line')];
   const bg = cfg.bg || '#0c0e0d';
   const images = [];
-  let firstDrawn = false, current = -1;
+  let firstDrawn = false;
   const tailStart = (cfg.frameCount - TAIL_FRAMES) / (cfg.frameCount - 1);
 
   for (let i = 0; i < cfg.frameCount; i++) {
     const img = new Image();
+    img.decoding = 'async';
     img.src = cfg.path(i + 1);
     img.onload = () => { if (!firstDrawn) { firstDrawn = true; draw(0); } };
     images[i] = img;
   }
 
-  function draw(index) {
-    const img = images[index];
-    if (!img || !img.complete || !img.naturalWidth) return false;
+  // draw() takes a FLOAT frame position and cross-blends the two neighbouring
+  // frames by the fraction — the scrub has no visible stepping between frames.
+  function draw(pos) {
+    const i0 = Math.max(0, Math.min(cfg.frameCount - 1, Math.floor(pos)));
+    const f = Math.min(1, Math.max(0, pos - i0));
+    const base = images[i0];
+    if (!base || !base.complete || !base.naturalWidth) return false;
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
-    const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
+    const ir = base.naturalWidth / base.naturalHeight, cr = cw / ch;
     let dw, dh, dx, dy;
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
+    ctx.save();
     if (IS_MOBILE) {
       // taller crop, centered, caption overlaid — fills more of the phone, smaller bands
       const boxH = Math.min(ch, cw * 1.4), boxY = (ch - boxH) / 2;
       dh = boxH; dw = boxH * ir; dx = (cw - dw) * (cfg.focalX ?? 0.5); dy = boxY;
-      ctx.save(); ctx.beginPath(); ctx.rect(0, boxY, cw, boxH); ctx.clip();
-      ctx.drawImage(img, dx, dy, dw, dh); ctx.restore();
-      return true;
-    }
-    if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
+      ctx.beginPath(); ctx.rect(0, boxY, cw, boxH); ctx.clip();
+    } else if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
     else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
-    ctx.drawImage(img, dx, dy, dw, dh);
+    ctx.drawImage(base, dx, dy, dw, dh);
+    const nxt = images[i0 + 1];
+    if (f > 0.01 && nxt && nxt.complete && nxt.naturalWidth) {
+      ctx.globalAlpha = f;
+      ctx.drawImage(nxt, dx, dy, dw, dh);
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
     return true;
   }
   let cssW = 0, cssH = 0;
@@ -70,9 +80,10 @@ function initScrub(cfg) {
     canvas.width = cssW * dpr;
     canvas.height = cssH * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw(current < 0 ? 0 : current);
+    draw(drawn < 0 ? 0 : drawn);
   }
-  let shown = -1;  // interpolated (float) frame position, eased toward the scroll target
+  let shown = -1;   // interpolated (float) frame position, eased toward the scroll target
+  let drawn = -1;   // float position of the last successful paint
   function update() {
     // if the canvas box changed size (viewport/toolbar/orientation), re-sync the backing buffer to avoid stretch
     if (canvas.clientWidth !== cssW || canvas.clientHeight !== cssH) resize();
@@ -83,9 +94,8 @@ function initScrub(cfg) {
     const target = p * (cfg.frameCount - 1);
     if (shown < 0) shown = target;
     shown += (target - shown) * 0.15;                 // ease toward target = smooth, jerk-free scrub
-    if (Math.abs(target - shown) < 0.04) shown = target;
-    const idx = Math.min(cfg.frameCount - 1, Math.max(0, Math.round(shown)));
-    if (idx !== current && draw(idx)) current = idx;  // only advance when the frame actually painted
+    if (Math.abs(target - shown) < 0.002) shown = target;
+    if (Math.abs(shown - drawn) > 0.002 && draw(shown)) drawn = shown;
     if (stage && !IS_MOBILE) {
       // desktop: gentle parallax lift at the very end — the image stays visible while the
       // next section slides up behind it, so there's never a black hole in the hand-off.
@@ -95,13 +105,14 @@ function initScrub(cfg) {
       stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.22).toFixed(1)}px,0)` : '';
       stage.style.opacity = t > 0 ? (1 - e * 0.4).toFixed(3) : '';
     }
-    // trapezoidal caption fade: in early, hold, out late
+    // trapezoidal caption fade: in early, hold, out late — wide bands + a short
+    // travel distance keep the text drifting gently instead of popping
     for (const el of lines) {
       const a = parseFloat(el.dataset.in), b = parseFloat(el.dataset.out);
-      const fade = 0.12;
+      const fade = 0.16;
       const o = smoothstep(a, a + fade, p) * (1 - smoothstep(b - fade, b, p));
       el.style.opacity = o.toFixed(3);
-      el.style.transform = `translateY(${(1 - o) * 34}px)`;
+      el.style.transform = `translateY(${((1 - o) * 24).toFixed(1)}px)`;
     }
   }
   window.addEventListener('resize', resize);

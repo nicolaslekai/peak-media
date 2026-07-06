@@ -228,11 +228,14 @@ em{font-style:italic;color:var(--gold-soft)}
 /* ---- REGIONS marquee ---- */
 .regions{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   padding:2.2rem 0;overflow:hidden;white-space:nowrap}
-.regions__track{display:inline-flex;gap:2rem;align-items:center;animation:marq 34s linear infinite}
-.regions__track span{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2.4rem);
+.regions__track{display:inline-flex;animation:marq 51s linear infinite;will-change:transform}
+/* each group is one full repetition INCLUDING the trailing gap (padding-right),
+   so the two halves are pixel-identical and -50% wraps seamlessly */
+.regions__group{display:inline-flex;gap:2rem;align-items:center;padding-right:2rem}
+.regions__group span{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2.4rem);
   color:rgba(243,237,225,.5);font-style:italic}
-.regions__track span:nth-child(even){color:var(--gold);font-size:1rem;font-style:normal}
-@keyframes marq{to{transform:translateX(-50%)}}
+.regions__group span:nth-child(even){color:var(--gold);font-size:1rem;font-style:normal}
+@keyframes marq{to{transform:translate3d(-50%,0,0)}}
 
 /* ---- CONTACT ---- */
 .contact{padding:clamp(3rem,6vh,5rem) clamp(1.2rem,5vw,4rem)}

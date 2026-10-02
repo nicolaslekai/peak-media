@@ -1,18 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <style>
+    svg { color: #0C0E0D; }
+    @media (prefers-color-scheme: dark) {
+      svg { color: #FFFFFF; }
+    }
+  </style>
   <defs>
     <mask id="bsf-horizon">
       <rect width="256" height="256" fill="#fff"/>
-      <g fill="#000" stroke="#000" stroke-width="24" stroke-linejoin="round">
-        <path d="M19 209.9C41.8 178 90 128.5 106 128.5C122 128.5 164 179 185.1 209.9L185.1 256L19 256Z"/>
-        <path d="M159 184C166.2 171 177 159 189 159C201 159 224.3 185.3 237.1 210L237.1 256L159 256Z"/>
+      <g fill="#000" stroke="#000" stroke-width="26.9" stroke-linejoin="round">
+        <path d="M5.9 220C31.5 184.2 85.4 128.8 103.4 128.8C121.3 128.8 168.3 185.3 191.9 220L191.9 256L5.9 256Z"/>
+        <path d="M162.7 190.9C170.8 176.3 182.9 162.9 196.3 162.9C209.8 162.9 235.9 192.4 250.2 220.1L250.2 256L162.7 256Z"/>
       </g>
     </mask>
   </defs>
-  <rect width="256" height="256" rx="48" fill="#0C0E0D"/>
-  <g fill="#FFFFFF">
-    <path d="M31 171.2A100 100 0 1 1 225 171.2" fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
-    <circle cx="153" cy="147" r="53" mask="url(#bsf-horizon)"/>
-    <path d="M19 209.9C41.8 178 90 128.5 106 128.5C122 128.5 164 179 185.1 209.9C152 191 122 146.5 106 146.5C90 146.5 54.2 191 21 212.1Z"/>
-    <path d="M159 184C166.2 171 177 159 189 159C201 159 224.3 185.3 237.1 210C211.7 196.7 201 176 189 176C177 176 173.8 185 159 184Z"/>
+  <g fill="currentColor">
+    <path d="M19.3 176.6A112 112 0 1 1 236.7 176.6" fill="none" stroke="currentColor" stroke-width="17.9" stroke-linecap="round"/>
+    <circle cx="156" cy="149.5" r="59.4" mask="url(#bsf-horizon)"/>
+    <path d="M5.9 220C31.5 184.2 85.4 128.8 103.4 128.8C121.3 128.8 168.3 185.3 191.9 220C154.9 198.8 121.3 148.9 103.4 148.9C85.4 148.9 45.3 198.8 8.2 222.4Z"/>
+    <path d="M162.7 190.9C170.8 176.3 182.9 162.9 196.3 162.9C209.8 162.9 235.9 192.4 250.2 220.1C221.7 205.2 209.8 182 196.3 182C182.9 182 179.3 192.1 162.7 190.9Z"/>
   </g>
 </svg>

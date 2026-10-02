@@ -732,41 +732,49 @@ h2 {
   margin-top: 0.2rem;
 }
 
-/* ---- REGIONS marquee ---- */
+/* ---- REGIONS marquee (decorative) ----
+   Two identical lists side by side, each moving left by its own width, so the
+   second list takes the first one's place and the loop is seamless. Each list
+   must be at least as wide as the viewport: one repetition of the six names is
+   ~1400px at the largest font size, so each list holds two (~2800px). The
+   trailing padding equals the gap, so the seam looks like any other gap.
+   34s keeps the previous speed (~82px/s). */
 .regions {
+  display: flex;
+  overflow: hidden;
+  padding: 2.2rem 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  padding: 2.2rem 0;
-  overflow: hidden;
   white-space: nowrap;
 }
-.regions__track {
-  display: inline-flex;
-  animation: marq 51s linear infinite;
+.regions ul {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2rem;
+  padding-right: 2rem;
+  list-style: none;
+  animation: marq 34s linear infinite;
   will-change: transform;
 }
-/* each group is one full repetition INCLUDING the trailing gap (padding-right),
-   so the two halves are pixel-identical and -50% wraps seamlessly */
-.regions__group {
-  display: inline-flex;
-  gap: 2rem;
+.regions li {
+  display: flex;
   align-items: center;
-  padding-right: 2rem;
-}
-.regions__group span {
+  gap: 2rem;
   font-family: var(--serif);
   font-size: clamp(1.4rem, 3vw, 2.4rem);
-  color: rgba(243, 237, 225, 0.5);
   font-style: italic;
+  color: rgba(243, 237, 225, 0.5);
 }
-.regions__group span:nth-child(even) {
-  color: var(--gold);
+.regions li::after {
+  content: "·";
   font-size: 1rem;
   font-style: normal;
+  color: var(--gold);
 }
 @keyframes marq {
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
   }
 }
 
@@ -1042,7 +1050,7 @@ h2 {
     transform: none;
     transition: none;
   }
-  .regions__track,
+  .regions ul,
   .hero__cue span,
   .hero__title span {
     animation: none;

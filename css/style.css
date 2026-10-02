@@ -39,10 +39,6 @@ a {
   color: inherit;
   text-decoration: none;
 }
-em {
-  font-style: italic;
-  color: var(--gold-soft);
-}
 h1,
 h2,
 h3 {
@@ -471,6 +467,25 @@ body::after {
   font-size: 0.92rem;
   color: rgba(243, 237, 225, 0.66);
 }
+/* a metric inside a tile (channels), pushed to the bottom so metrics line up
+   across a row; not the .metrics list below the tiles */
+.tiles .metric {
+  margin-top: auto;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--text-soft);
+}
+.tiles .metric b {
+  display: block;
+  font-size: 2.2rem;
+  line-height: 1.1;
+}
+.tiles .metric + p {
+  margin-top: 1rem;
+  font-size: 0.86rem;
+  color: rgba(243, 237, 225, 0.6);
+  line-height: 1.5;
+}
 
 /* ---- SERVICES: numbered tiles ---- */
 .services .tiles {
@@ -522,24 +537,6 @@ body::after {
   place-items: center;
   color: var(--gold);
   font-size: 0.85rem;
-}
-/* a metric inside a tile (not the .metrics row below the tiles) */
-.tiles .metric {
-  margin-top: auto; /* metrics line up at the same height across a row */
-  font-family: var(--serif);
-  font-size: 1.05rem;
-  color: var(--text-soft);
-}
-.tiles .metric b {
-  display: block;
-  font-size: 2.2rem;
-  line-height: 1.1;
-}
-.tiles .metric + p {
-  margin-top: 1rem;
-  font-size: 0.86rem;
-  color: rgba(243, 237, 225, 0.6);
-  line-height: 1.5;
 }
 
 /* ---- PHONES: iPhone-style mockups (social proof wall) ----
@@ -808,8 +805,7 @@ body::after {
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
 }
-.foot__cols span {
-  display: block;
+.foot__cols p {
   font-size: 0.72rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -834,7 +830,7 @@ body::after {
   color: rgba(243, 237, 225, 0.4);
 }
 
-/* ---- RESPONSIVE ---- */
+/* ---- RESPONSIVE (1000px → 767px → 640px) ---- */
 @media (max-width: 1000px) {
   .nav nav a:not(.nav__cta) {
     display: none;
@@ -859,28 +855,6 @@ body::after {
     gap: 2rem;
   }
 }
-@media (max-width: 640px) {
-  .tiles,
-  .impact .metrics,
-  .contact__form {
-    grid-template-columns: 1fr;
-  }
-  .team__grid {
-    gap: 1rem;
-  } /* the two founders stay side by side, phones included */
-  .phones {
-    gap: 1rem;
-  }
-  .metrics--inline {
-    gap: 1.2rem;
-  }
-  .foot {
-    grid-template-columns: 1fr;
-  }
-  .foot__cols {
-    grid-template-columns: 1fr 1fr;
-  }
-}
 /* ---- MOBILE cinematic: 5:7 portrait crop with the caption overlaid on it ---- */
 @media (max-width: 767px) {
   /* let the top menu scroll away so the frame sits centered in the phone */
@@ -892,7 +866,8 @@ body::after {
     backdrop-filter: none;
     border: none;
   }
-  /* the stage IS the 5:7 crop (height 140vw; matches cw * 1.4 in main.js; no full-screen black bands baked into the canvas):
+  /* the stage IS the 5:7 crop (height 140vw, matches cw * 1.4 in main.js;
+     no full-screen black bands baked into the canvas):
      it pins vertically centered, and surrounding content follows right behind it.
      svh = stable visible height (doesn't change as toolbars hide/show), so no stretch on scroll */
   .cine__stage {
@@ -978,6 +953,29 @@ body::after {
   .foot {
     padding: 2.5rem 1.2rem 1.8rem;
     gap: 1.8rem;
+  }
+}
+/* ---- SMALL PHONES: single-column grids ---- */
+@media (max-width: 640px) {
+  .tiles,
+  .impact .metrics,
+  .contact__form {
+    grid-template-columns: 1fr;
+  }
+  .team__grid {
+    gap: 1rem; /* the two founders stay side by side, phones included */
+  }
+  .phones {
+    gap: 1rem;
+  }
+  .metrics--inline {
+    gap: 1.2rem;
+  }
+  .foot {
+    grid-template-columns: 1fr;
+  }
+  .foot__cols {
+    grid-template-columns: 1fr 1fr;
   }
 }
 @media (prefers-reduced-motion: reduce) {

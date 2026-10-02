@@ -1,4 +1,4 @@
-/* ============ PEAK MEDIA — Alpine 5-Star Luxury ============ */
+/* ============ PEAK STORIES — Alpine 5-Star Luxury ============ */
 :root {
   --ink: #0c0e0d; /* near-black forest */
   --ink-2: #14181a;
@@ -169,27 +169,13 @@ h2 {
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--line);
 }
-.nav__brand {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--paper);
-}
-.nav__mark {
-  color: var(--gold);
-  display: flex;
-}
-.nav__name {
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  font-size: 0.9rem;
-}
-.nav__links {
+/* the <nav> element inside the .nav bar holds the section links */
+.nav nav {
   display: flex;
   align-items: center;
   gap: 2.2rem;
 }
-.nav__links a {
+.nav nav a {
   font-size: 0.82rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -197,20 +183,35 @@ h2 {
   color: rgba(243, 237, 225, 0.82);
   transition: color 0.3s;
 }
-.nav__links a:hover {
+.nav nav a:hover {
   color: var(--gold-soft);
 }
-.nav__cta {
+.nav .nav__cta {
   border: 1px solid var(--line);
   padding: 0.7em 1.3em;
   border-radius: 2px;
-  color: var(--gold-soft) !important;
+  color: var(--gold-soft);
   white-space: nowrap;
 }
-.nav__cta:hover {
+.nav .nav__cta:hover {
   background: var(--gold);
-  color: var(--ink) !important;
+  color: var(--ink);
   border-color: var(--gold);
+}
+
+/* ---- BRAND (nav and footer) ---- */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+.brand svg {
+  color: var(--gold);
 }
 
 /* ---- CANVAS FRAME-SEQUENCE SCRUB (smooth 3D scroll) ---- */
@@ -852,13 +853,7 @@ h2 {
   max-width: var(--container);
   margin: 0 auto;
 }
-.foot__brand {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  font-size: 0.9rem;
+.foot .brand {
   color: var(--gold-soft);
 }
 .foot__cols {
@@ -894,13 +889,13 @@ h2 {
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 1000px) {
-  .nav__links a:not(.nav__cta) {
+  .nav nav a:not(.nav__cta) {
     display: none;
   }
   .nav {
     padding: 1.1rem 1.2rem;
   }
-  .nav__cta {
+  .nav .nav__cta {
     padding: 0.65em 1.05em;
     font-size: 0.72rem;
   }

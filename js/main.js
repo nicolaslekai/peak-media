@@ -162,39 +162,22 @@ function __boot() {
     });
   });
 
-  /* reveals + counters */
+  /* reveals */
   if (reduce) {
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
-    document.querySelectorAll('[data-count]').forEach(animateCount);
   } else {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(en => {
         if (!en.isIntersecting) return;
         en.target.classList.add('in');
-        if (en.target.hasAttribute('data-count')) animateCount(en.target);
         io.unobserve(en.target);
       });
     }, { threshold: 0.2, rootMargin: '0px 0px -6% 0px' });
-    document.querySelectorAll('.reveal, [data-count]').forEach((el, i) => {
-      if (el.classList.contains('reveal')) el.style.transitionDelay = (i % 4) * 0.06 + 's';
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i % 4) * 0.06 + 's';
       io.observe(el);
     });
   }
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', __boot);
 else __boot();
-
-function animateCount(el) {
-  const target = parseFloat(el.dataset.count);
-  const dec = parseInt(el.dataset.dec || '0', 10);
-  const pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
-  const dur = 1600, t0 = performance.now();
-  const de = (v) => v.toFixed(dec).replace('.', ',');   // German decimal comma
-  function step(now) {
-    const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-    el.textContent = pre + de(target * e) + suf;
-    if (k < 1) requestAnimationFrame(step);
-    else el.textContent = pre + de(target) + suf;
-  }
-  requestAnimationFrame(step);
-}

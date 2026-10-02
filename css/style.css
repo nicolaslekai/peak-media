@@ -105,6 +105,48 @@ body::after {
   font-size: 1.05rem;
   color: var(--text-soft);
 }
+
+/* ---- METRICS: key figures, <b> = the figure, the rest = its label ----
+   .metrics is a list of them (layout per section); --inline runs the figure
+   in front of the label. A single .metric also appears inside channel tiles. */
+.metric b {
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--gold-soft);
+}
+.metric em {
+  font-size: 0.9em;
+  color: rgba(243, 237, 225, 0.4);
+}
+.metrics {
+  list-style: none;
+  display: grid;
+  gap: 2rem;
+  padding-top: 2.2rem;
+  border-top: 1px solid var(--line);
+}
+.metrics .metric {
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+  color: rgba(243, 237, 225, 0.6);
+}
+.metrics .metric b {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+}
+.metrics--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-top: 2.6rem;
+}
+.metrics--inline .metric b {
+  display: inline;
+  margin: 0 0.3rem 0 0;
+  font-size: 1.5rem;
+}
 .btn {
   display: inline-block;
   font-family: var(--sans);
@@ -375,27 +417,13 @@ body::after {
   font-size: clamp(1.7rem, 3.6vw, 3rem);
   line-height: 1.18;
 }
-.mission__stats {
-  display: grid;
+.mission .metrics {
   grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
-  border-top: 1px solid var(--line);
-  padding-top: 2.2rem;
 }
-.stat__num {
-  display: block;
-  font-family: var(--serif);
+.mission .metric b {
+  /* the intro figures are the largest on the page */
   font-size: clamp(2.6rem, 5vw, 4.4rem);
-  line-height: 1;
-  color: var(--gold-soft);
-  font-weight: 500;
-}
-.stat__label {
-  display: block;
-  margin-top: 0.8rem;
-  font-size: 0.86rem;
-  color: rgba(243, 237, 225, 0.6);
-  letter-spacing: 0.02em;
 }
 
 /* ---- CINEMATIC SCENES ---- */
@@ -463,32 +491,11 @@ body::after {
 }
 
 /* ---- IMPACT ---- */
-.impact__stats {
-  display: grid;
+.impact .metrics {
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  padding: 2.2rem 0;
-  border-top: 1px solid var(--line);
+  padding-bottom: 2.2rem;
   border-bottom: 1px solid var(--line);
   margin-bottom: 2.4rem;
-}
-.mstat__num {
-  display: block;
-  font-family: var(--serif);
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
-  color: var(--gold-soft);
-  line-height: 1;
-  font-weight: 500;
-}
-.mstat__label {
-  display: block;
-  margin-top: 0.7rem;
-  font-size: 0.82rem;
-  color: rgba(243, 237, 225, 0.6);
-}
-.mstat__label em {
-  color: rgba(243, 237, 225, 0.4);
-  font-size: 0.9em;
 }
 
 /* ---- CHANNELS (non-scroll break): denser tiles with an icon label and a metric ---- */
@@ -516,41 +523,23 @@ body::after {
   color: var(--gold);
   font-size: 0.85rem;
 }
-.channels .metric {
+/* a metric inside a tile (not the .metrics row below the tiles) */
+.tiles .metric {
   margin-top: auto; /* metrics line up at the same height across a row */
   font-family: var(--serif);
   font-size: 1.05rem;
   color: var(--text-soft);
 }
-.channels .metric b {
+.tiles .metric b {
   display: block;
   font-size: 2.2rem;
   line-height: 1.1;
-  color: var(--gold-soft);
 }
-.channels .metric + p {
+.tiles .metric + p {
   margin-top: 1rem;
   font-size: 0.86rem;
   color: rgba(243, 237, 225, 0.6);
   line-height: 1.5;
-}
-.channels__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2.5rem;
-  margin-top: 2.6rem;
-  padding-top: 2.2rem;
-  border-top: 1px solid var(--line);
-}
-.channels__facts span {
-  font-size: 0.92rem;
-  color: rgba(243, 237, 225, 0.6);
-}
-.channels__facts b {
-  color: var(--gold-soft);
-  font-family: var(--serif);
-  font-size: 1.5rem;
-  margin-right: 0.3rem;
 }
 
 /* ---- PHONES: iPhone-style mockups (social proof wall) ----
@@ -858,21 +847,21 @@ body::after {
     font-size: 0.72rem;
   }
   .tiles,
-  .impact__stats {
+  .impact .metrics {
     grid-template-columns: repeat(2, 1fr);
   }
   .phones {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.4rem;
   }
-  .mission__stats {
+  .mission .metrics {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
 }
 @media (max-width: 640px) {
   .tiles,
-  .impact__stats,
+  .impact .metrics,
   .contact__form {
     grid-template-columns: 1fr;
   }
@@ -882,7 +871,7 @@ body::after {
   .phones {
     gap: 1rem;
   }
-  .channels__facts {
+  .metrics--inline {
     gap: 1.2rem;
   }
   .foot {
@@ -963,12 +952,12 @@ body::after {
   .section > header {
     margin-bottom: 1.8rem;
   }
-  .mission__stats {
+  .mission .metrics {
     padding-top: 1.8rem;
     gap: 1.4rem;
   }
-  .impact__stats {
-    padding: 1.8rem 0;
+  .impact .metrics {
+    padding-block: 1.8rem;
     margin-bottom: 1.8rem;
   }
   .tiles > article {

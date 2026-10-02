@@ -1,495 +1,443 @@
 <!doctype html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Peak Stories — Social Content, der Gäste zum Buchen bringt</title>
-    <meta
-      name="description"
-      content="Peak Stories ist ein bayerisches Kreativstudio für scroll-stoppenden Social Content, Filme und Fotografie für Hotels, Spas und Alpenresorts."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css?v=41" />
-  </head>
-  <body>
-    <!-- NAV -->
-    <header class="nav" id="nav">
-      <a class="brand" href="#top">
-        <svg viewBox="0 0 40 32" width="34" height="27" aria-hidden="true">
-          <path
-            d="M2 30 L14 6 L20 16 L26 2 L38 30 Z"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linejoin="round"
-          />
-        </svg>
-        Peak Stories
-      </a>
-      <nav>
-        <a href="#work">Arbeiten</a>
-        <a href="#channels">Kanäle</a>
-        <a href="#impact">Ergebnisse</a>
-        <a href="#team">Studio</a>
-        <a href="#contact" class="nav__cta">Projekt starten</a>
-      </nav>
-    </header>
 
-    <main id="top">
-      <!-- HERO — canvas frame-sequence scrub -->
-      <section class="cine hero" id="hero">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peak Stories — Social Content, der Gäste zum Buchen bringt</title>
+  <meta name="description"
+    content="Peak Stories ist ein bayerisches Kreativstudio für scroll-stoppenden Social Content, Filme und Fotografie für Hotels, Spas und Alpenresorts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=41" />
+</head>
+
+<body>
+  <!-- NAV -->
+  <header class="nav" id="nav">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 40 32" width="34" height="27" aria-hidden="true">
+        <path d="M2 30 L14 6 L20 16 L26 2 L38 30 Z" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linejoin="round" />
+      </svg>
+      Peak Stories
+    </a>
+    <nav>
+      <a href="#work">Arbeiten</a>
+      <a href="#channels">Kanäle</a>
+      <a href="#impact">Ergebnisse</a>
+      <a href="#team">Studio</a>
+      <a href="#contact" class="nav__cta">Projekt starten</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO — canvas frame-sequence scrub -->
+    <section class="cine hero" id="hero">
+      <div class="cine__stage">
+        <canvas></canvas>
+        <div class="cine__scrim"></div>
+        <div class="cine__copy">
+          <p class="kicker kicker--light">
+            Bayern · Social Film · Fotografie
+          </p>
+          <h1>Wir füllen Ihre Zimmer.</h1>
+          <p>
+            Wir machen gemeinsam mit Hotels, Spas und Bergresorts Social
+            Content, in den sich Gäste verlieben — und über den sie buchen.
+            Weniger stille Wochen, mehr volle Häuser.
+          </p>
+          <div class="hero__actions">
+            <a href="#work" class="btn btn--gold">Arbeiten ansehen</a>
+            <a href="#contact" class="btn btn--ghost">Sprechen wir</a>
+          </div>
+        </div>
+        <div class="hero__cue" aria-hidden="true">Scrollen</div>
+      </div>
+    </section>
+
+    <!-- MISSION -->
+    <section class="section mission" id="approach">
+      <header>
+        <p class="kicker reveal">Wie wir helfen</p>
+        <h2 class="reveal">
+          Ein schönes Haus sollte keine leeren Zimmer haben. Wir arbeiten
+          Seite an Seite mit Ihrem Team und machen aus stillen Wochen
+          ausgebuchte — mit Geschichten, bei denen Menschen wirklich
+          hängenbleiben.
+        </h2>
+        <p class="reveal">
+          Wir sind vier Leute, die ein Jahrzehnt lang Kampagnen für große
+          Marken gemacht haben — und dieses Handwerk lieber für die Orte
+          einsetzen, die wir lieben. Deshalb arbeiten wir partnerschaftlich
+          mit Ihnen: Wir lernen Ihre Zimmer, Ihre Saisons und Ihre Gäste
+          kennen — und liefern Content, der den Kalender voll hält. Kein
+          Fachjargon, keine Knebelverträge. Nur ein kleines Team, das Ihre
+          Auslastung wie die eigene behandelt.
+        </p>
+      </header>
+      <ul class="metrics">
+        <li class="metric reveal">
+          <b>38%</b> Mehr direkte Buchungsanfragen bei unseren Partnern
+        </li>
+        <li class="metric reveal">
+          <b>70%</b> Der Reisen werden heute zuerst auf Social &amp; Video
+          recherchiert
+        </li>
+        <li class="metric reveal">
+          <b>4×</b> Mehr Saves auf einem Hero-Reel als auf einem statischen
+          Post
+        </li>
+      </ul>
+    </section>
+
+    <div id="work">
+      <!-- SCENE 1 — WELLNESS (spa star-timelapse) -->
+      <section class="cine scene" id="scene-spa">
         <div class="cine__stage">
           <canvas></canvas>
           <div class="cine__scrim"></div>
           <div class="cine__copy">
-            <p class="kicker kicker--light">
-              Bayern · Social Film · Fotografie
+            <p class="kicker cine-line" data-in="0.06" data-out="0.94">
+              01 — Wellness
             </p>
-            <h1>Wir füllen Ihre Zimmer.</h1>
-            <p>
-              Wir machen gemeinsam mit Hotels, Spas und Bergresorts Social
-              Content, in den sich Gäste verlieben — und über den sie buchen.
-              Weniger stille Wochen, mehr volle Häuser.
+            <h2 class="cine-line" data-in="0.08" data-out="0.94">
+              Ruhe, die den Scroll stoppt.
+            </h2>
+            <p class="cine-line" data-in="0.12" data-out="0.92">
+              Langsamer, warmer, greifbarer Spa-Content, bei dem man ausatmet
+              und anfängt, die eigene Auszeit zu planen. Saves und Shares
+              entstehen aus dem Gefühl, nicht aus Ausstattungslisten.
             </p>
-            <div class="hero__actions">
-              <a href="#work" class="btn btn--gold">Arbeiten ansehen</a>
-              <a href="#contact" class="btn btn--ghost">Sprechen wir</a>
-            </div>
+            <ul class="tags cine-line" data-in="0.14" data-out="0.9">
+              <li>Reels</li>
+              <li>Markenfilme</li>
+              <li>Story-Sets</li>
+            </ul>
           </div>
-          <div class="hero__cue" aria-hidden="true">Scrollen</div>
         </div>
       </section>
 
-      <!-- MISSION -->
-      <section class="section mission" id="approach">
+      <!-- CHANNELS — non-scroll break between scenes -->
+      <section class="section channels" id="channels">
         <header>
-          <p class="kicker reveal">Wie wir helfen</p>
+          <p class="kicker reveal">Jeder Kanal, aus einer Hand</p>
           <h2 class="reveal">
-            Ein schönes Haus sollte keine leeren Zimmer haben. Wir arbeiten
-            Seite an Seite mit Ihrem Team und machen aus stillen Wochen
-            ausgebuchte — mit Geschichten, bei denen Menschen wirklich
-            hängenbleiben.
+            Wir bespielen die Kanäle, die Buchungen bringen.
           </h2>
           <p class="reveal">
-            Wir sind vier Leute, die ein Jahrzehnt lang Kampagnen für große
-            Marken gemacht haben — und dieses Handwerk lieber für die Orte
-            einsetzen, die wir lieben. Deshalb arbeiten wir partnerschaftlich
-            mit Ihnen: Wir lernen Ihre Zimmer, Ihre Saisons und Ihre Gäste
-            kennen — und liefern Content, der den Kalender voll hält. Kein
-            Fachjargon, keine Knebelverträge. Nur ein kleines Team, das Ihre
-            Auslastung wie die eigene behandelt.
+            Ein Studio, jede Fläche, die Reisende wirklich ansehen — geplant,
+            gedreht, geschnitten und gepostet.
           </p>
-        </header>
-        <ul class="metrics">
-          <li class="metric reveal">
-            <b>38%</b> Mehr direkte Buchungsanfragen bei unseren Partnern
-          </li>
-          <li class="metric reveal">
-            <b>70%</b> Der Reisen werden heute zuerst auf Social &amp; Video
-            recherchiert
-          </li>
-          <li class="metric reveal">
-            <b>4×</b> Mehr Saves auf einem Hero-Reel als auf einem statischen
-            Post
-          </li>
-        </ul>
-      </section>
-
-      <div id="work">
-        <!-- SCENE 1 — WELLNESS (spa star-timelapse) -->
-        <section class="cine scene" id="scene-spa">
-          <div class="cine__stage">
-            <canvas></canvas>
-            <div class="cine__scrim"></div>
-            <div class="cine__copy">
-              <p class="kicker cine-line" data-in="0.06" data-out="0.94">
-                01 — Wellness
-              </p>
-              <h2 class="cine-line" data-in="0.08" data-out="0.94">
-                Ruhe, die den Scroll stoppt.
-              </h2>
-              <p class="cine-line" data-in="0.12" data-out="0.92">
-                Langsamer, warmer, greifbarer Spa-Content, bei dem man ausatmet
-                und anfängt, die eigene Auszeit zu planen. Saves und Shares
-                entstehen aus dem Gefühl, nicht aus Ausstattungslisten.
-              </p>
-              <ul class="tags cine-line" data-in="0.14" data-out="0.9">
-                <li>Reels</li>
-                <li>Markenfilme</li>
-                <li>Story-Sets</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- CHANNELS — non-scroll break between scenes -->
-        <section class="section channels" id="channels">
-          <header>
-            <p class="kicker reveal">Jeder Kanal, aus einer Hand</p>
-            <h2 class="reveal">
-              Wir bespielen die Kanäle, die Buchungen bringen.
-            </h2>
-            <p class="reveal">
-              Ein Studio, jede Fläche, die Reisende wirklich ansehen — geplant,
-              gedreht, geschnitten und gepostet.
-            </p>
-          </header>
-          <div class="tiles">
-            <article class="reveal">
-              <h3><span aria-hidden="true">▶</span>Instagram</h3>
-              <p class="metric">
-                <b>4,2%</b> Ø Engagement
-              </p>
-              <p>
-                Reels, Carousels und Stories, abgestimmt auf Explore — die
-                Entdeckungs-Engine fürs Reisen.
-              </p>
-            </article>
-            <article class="reveal">
-              <h3><span aria-hidden="true">♪</span>TikTok</h3>
-              <p class="metric">
-                <b>3,4 Mio.</b> Ø Views / Hero
-              </p>
-              <p>
-                Nativ, schnell geschnitten, vertikal — macht aus einem Haus
-                einen Ort, den man screenshottet.
-              </p>
-            </article>
-            <article class="reveal">
-              <h3><span aria-hidden="true">▷</span>YouTube</h3>
-              <p class="metric">
-                <b>45s</b> Shorts + Filme
-              </p>
-              <p>
-                Shorts für Reichweite, längere Markenfilme für die Suche, die
-                die Buchung abschließt.
-              </p>
-            </article>
-            <article class="reveal">
-              <h3><span aria-hidden="true">✦</span>Meta &amp; Paid</h3>
-              <p class="metric">
-                <b>25×</b> Peak ROAS
-              </p>
-              <p>
-                Die besten organischen Cuts, mit Budget verstärkt, um Zimmer in
-                der Nebensaison zu füllen.
-              </p>
-            </article>
-          </div>
-          <ul class="metrics metrics--inline reveal">
-            <li class="metric">
-              <b>70%</b> der Reisenden buchen, nachdem sie ein Video gesehen
-              haben
-            </li>
-            <li class="metric">
-              <b>4×</b> mehr Saves auf Hero-Reels als auf Statischem
-            </li>
-            <li class="metric"><b>5/Wo</b> Posting-Frequenz, die wir fahren</li>
-          </ul>
-        </section>
-
-        <!-- SCENE 2 — POWDER (skier) -->
-        <section class="cine scene" id="scene-ski">
-          <div class="cine__stage">
-            <canvas></canvas>
-            <div class="cine__scrim"></div>
-            <div class="cine__copy cine__copy--end">
-              <p class="kicker cine-line" data-in="0.06" data-out="0.94">
-                02 — Powder
-              </p>
-              <h2 class="cine-line" data-in="0.08" data-out="0.94">
-                Views, die viral gehen.
-              </h2>
-              <p class="cine-line" data-in="0.12" data-out="0.92">
-                First Tracks, tiefer Powder und ein Gesicht voll Schnee — das
-                adrenalingeladene Action-Material, das Daumen mitten im Scroll
-                stoppt und Millionen-Views einfährt.
-              </p>
-              <ul class="tags cine-line" data-in="0.14" data-out="0.9">
-                <li>Action</li>
-                <li>POV</li>
-                <li>Reels</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-      </div>
-      <!-- /#work -->
-
-      <!-- SERVICES -->
-      <section class="section services">
-        <header>
-          <p class="kicker reveal">Was wir machen</p>
-          <h2 class="reveal">Ein komplettes Social-Team, am Berg.</h2>
         </header>
         <div class="tiles">
           <article class="reveal">
-            <h3>Social &amp; Short-Form</h3>
+            <h3><span aria-hidden="true">▶</span>Instagram</h3>
+            <p class="metric"><b>4,2%</b> Ø Engagement</p>
             <p>
-              Always-on Reels, TikTok und Stories, gebaut fürs Wandern durchs
-              Netz — Hooks, Pacing und Formate für den Algorithmus.
+              Reels, Carousels und Stories, abgestimmt auf Explore — die
+              Entdeckungs-Engine fürs Reisen.
             </p>
           </article>
           <article class="reveal">
-            <h3>Filme &amp; Markenstories</h3>
+            <h3><span aria-hidden="true">♪</span>TikTok</h3>
+            <p class="metric"><b>3,4 Mio.</b> Ø Views / Hero</p>
             <p>
-              Signature-Hero-Filme und Saisonkampagnen, die Ihrem Haus eine
-              cineastische Identität über alle Kanäle geben.
+              Nativ, schnell geschnitten, vertikal — macht aus einem Haus
+              einen Ort, den man screenshottet.
             </p>
           </article>
           <article class="reveal">
-            <h3>Fotografie</h3>
+            <h3><span aria-hidden="true">▷</span>YouTube</h3>
+            <p class="metric"><b>45s</b> Shorts + Filme</p>
             <p>
-              Editorial-Aufnahmen für Web, Print und OTA — Architektur,
-              Wellness, Kulinarik und Lifestyle in einer Bildsprache.
+              Shorts für Reichweite, längere Markenfilme für die Suche, die
+              die Buchung abschließt.
             </p>
           </article>
           <article class="reveal">
-            <h3>Wachstum &amp; Strategie</h3>
+            <h3><span aria-hidden="true">✦</span>Meta &amp; Paid</h3>
+            <p class="metric"><b>25×</b> Peak ROAS</p>
             <p>
-              Contentpläne, Creator-Kooperationen und Reportings, die aus Views,
-              Saves und Shares direkte Buchungen machen.
+              Die besten organischen Cuts, mit Budget verstärkt, um Zimmer in
+              der Nebensaison zu füllen.
             </p>
           </article>
         </div>
-      </section>
-
-      <!-- IMPACT / RESULTS — iPhone-framed social proof -->
-      <section class="section impact" id="impact">
-        <header>
-          <p class="kicker reveal">Beweise, keine Versprechen</p>
-          <h2 class="reveal">
-            Wir jagen keine Likes. Wir helfen, Zimmer zu füllen.
-          </h2>
-          <p class="reveal">
-            Ein Jahr Hand in Hand mit einem alpinen Wellnessresort — das hat der
-            Content für den Kalender getan.
-          </p>
-        </header>
-
-        <ul class="metrics">
-          <li class="metric reveal"><b>4,8 Mio.</b> Views auf dem Hero-Reel</li>
-          <li class="metric reveal">
-            <b>567%</b> Follower-Wachstum in 12 Monaten
+        <ul class="metrics metrics--inline reveal">
+          <li class="metric">
+            <b>70%</b> der Reisenden buchen, nachdem sie ein Video gesehen
+            haben
           </li>
-          <li class="metric reveal">
-            <b>6,2%</b> Ø Engagement-Rate <em>(Branche ≈0,5 %)</em>
+          <li class="metric">
+            <b>4×</b> mehr Saves auf Hero-Reels als auf Statischem
           </li>
-          <li class="metric reveal">
-            <b>38%</b> Mehr direkte Buchungsanfragen
-          </li>
+          <li class="metric"><b>5/Wo</b> Posting-Frequenz, die wir fahren</li>
         </ul>
-
-        <!-- iPhone reel wall -->
-        <div class="phones">
-          <figure class="phone reveal">
-            <img
-              src="assets/img/G1_reel_pool.png"
-              alt="Pool-Reel"
-              loading="lazy"
-            />
-            <figcaption>
-              <span>LIVE</span>
-              <p><b>@alpenglow.retreat</b> 1,2 Mio. Views · 84k Likes</p>
-            </figcaption>
-          </figure>
-          <figure class="phone phone--review reveal">
-            <img
-              src="assets/img/G6_chalet_interior.png"
-              alt="Gästebewertung"
-              loading="lazy"
-            />
-            <figcaption>
-              <p class="rating" role="img" aria-label="5 von 5 Sternen">
-                ★★★★★
-              </p>
-              <blockquote>
-                „Gebucht, sobald ich ihr Reel gesehen habe.“
-              </blockquote>
-              <p>— Gästebewertung</p>
-            </figcaption>
-          </figure>
-          <figure class="phone reveal">
-            <img
-              src="assets/img/G5_ski_action.png"
-              alt="Powder-Reel"
-              loading="lazy"
-            />
-            <figcaption>
-              <span>REEL</span>
-              <p><b>Powder Day</b> 2,1 Mio. Views · 12k Saves</p>
-            </figcaption>
-          </figure>
-          <figure class="phone reveal">
-            <img
-              src="assets/img/G4_champagne.png"
-              alt="Sunset-Moment"
-              loading="lazy"
-            />
-            <figcaption>
-              <span>STORY</span>
-              <p><b>Sunset Service</b> +42% Saves diese Woche</p>
-            </figcaption>
-          </figure>
-        </div>
       </section>
 
-      <!-- TEAM -->
-      <section class="section team" id="team">
-        <header>
-          <p class="kicker reveal">Das Studio</p>
-          <h2 class="reveal">Zwei Gründer, ein Alpenstudio.</h2>
-          <p class="reveal">
-            Die Leute, die die Agenturwelt verlassen haben, um den Content zu
-            machen, den der Tourismus verdient.
+      <!-- SCENE 2 — POWDER (skier) -->
+      <section class="cine scene" id="scene-ski">
+        <div class="cine__stage">
+          <canvas></canvas>
+          <div class="cine__scrim"></div>
+          <div class="cine__copy cine__copy--end">
+            <p class="kicker cine-line" data-in="0.06" data-out="0.94">
+              02 — Powder
+            </p>
+            <h2 class="cine-line" data-in="0.08" data-out="0.94">
+              Views, die viral gehen.
+            </h2>
+            <p class="cine-line" data-in="0.12" data-out="0.92">
+              First Tracks, tiefer Powder und ein Gesicht voll Schnee — das
+              adrenalingeladene Action-Material, das Daumen mitten im Scroll
+              stoppt und Millionen-Views einfährt.
+            </p>
+            <ul class="tags cine-line" data-in="0.14" data-out="0.9">
+              <li>Action</li>
+              <li>POV</li>
+              <li>Reels</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- /#work -->
+
+    <!-- SERVICES -->
+    <section class="section services">
+      <header>
+        <p class="kicker reveal">Was wir machen</p>
+        <h2 class="reveal">Ein komplettes Social-Team, am Berg.</h2>
+      </header>
+      <div class="tiles">
+        <article class="reveal">
+          <h3>Social &amp; Short-Form</h3>
+          <p>
+            Always-on Reels, TikTok und Stories, gebaut fürs Wandern durchs
+            Netz — Hooks, Pacing und Formate für den Algorithmus.
           </p>
-        </header>
-        <div class="team__grid">
-          <figure class="member reveal">
-            <div class="member__img">
-              <img
-                src="assets/img/T4_producer.png"
-                alt="Nicolas Lekai"
-                loading="lazy"
-              />
-            </div>
-            <figcaption>
-              <h3>Nicolas Lekai</h3>
-              <p>Gründer &amp; Creative Director</p>
-            </figcaption>
-          </figure>
-
-          <figure class="member reveal">
-            <div class="member__img">
-              <img
-                src="assets/img/T2_photographer.png"
-                alt="Daniel"
-                loading="lazy"
-              />
-            </div>
-            <figcaption>
-              <h3>Daniel</h3>
-              <p>Gründer &amp; Executive Producer</p>
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <!-- REGIONS — decorative marquee (two identical lists) -->
-      <div class="regions" aria-hidden="true">
-        <ul>
-          <li>Tegernsee</li>
-          <li>Garmisch-Partenkirchen</li>
-          <li>Berchtesgaden</li>
-          <li>Allgäu</li>
-          <li>Zugspitze</li>
-          <li>Königssee</li>
-          <li>Tegernsee</li>
-          <li>Garmisch-Partenkirchen</li>
-          <li>Berchtesgaden</li>
-          <li>Allgäu</li>
-          <li>Zugspitze</li>
-          <li>Königssee</li>
-        </ul>
-        <ul>
-          <li>Tegernsee</li>
-          <li>Garmisch-Partenkirchen</li>
-          <li>Berchtesgaden</li>
-          <li>Allgäu</li>
-          <li>Zugspitze</li>
-          <li>Königssee</li>
-          <li>Tegernsee</li>
-          <li>Garmisch-Partenkirchen</li>
-          <li>Berchtesgaden</li>
-          <li>Allgäu</li>
-          <li>Zugspitze</li>
-          <li>Königssee</li>
-        </ul>
-      </div>
-
-      <!-- CONTACT -->
-      <section class="section contact" id="contact">
-        <header>
-          <p class="kicker reveal">Sprechen wir</p>
-          <h2 class="reveal">Erzählen Sie uns von Ihrem Haus.</h2>
-          <p class="reveal">
-            Egal, wo Ihre Auslastung heute steht — wir helfen gern. Schreiben
-            Sie uns kurz zu Ihrem Hotel, Spa oder Resort, und wir melden uns
-            innerhalb von zwei Werktagen mit Ideen — kein Pitch, kein Druck.
+        </article>
+        <article class="reveal">
+          <h3>Filme &amp; Markenstories</h3>
+          <p>
+            Signature-Hero-Filme und Saisonkampagnen, die Ihrem Haus eine
+            cineastische Identität über alle Kanäle geben.
           </p>
-        </header>
-        <form class="contact__form reveal" onsubmit="return false;">
-          <div class="field">
-            <input type="text" required placeholder=" " id="f-name" /><label
-              for="f-name"
-              >Ihr Name</label
-            >
-          </div>
-          <div class="field">
-            <input type="text" required placeholder=" " id="f-prop" /><label
-              for="f-prop"
-              >Haus / Betrieb</label
-            >
-          </div>
-          <div class="field">
-            <input type="email" required placeholder=" " id="f-mail" /><label
-              for="f-mail"
-              >E-Mail</label
-            >
-          </div>
-          <div class="field field--full">
-            <textarea rows="3" placeholder=" " id="f-msg"></textarea
-            ><label for="f-msg">Was schwebt Ihnen vor?</label>
-          </div>
-          <button class="btn btn--gold" type="submit">Anfrage senden</button>
-        </form>
-      </section>
-    </main>
-
-    <footer class="foot">
-      <div class="brand">
-        <svg viewBox="0 0 40 32" width="30" height="24" aria-hidden="true">
-          <path
-            d="M2 30 L14 6 L20 16 L26 2 L38 30 Z"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linejoin="round"
-          />
-        </svg>
-        Peak Stories
+        </article>
+        <article class="reveal">
+          <h3>Fotografie</h3>
+          <p>
+            Editorial-Aufnahmen für Web, Print und OTA — Architektur,
+            Wellness, Kulinarik und Lifestyle in einer Bildsprache.
+          </p>
+        </article>
+        <article class="reveal">
+          <h3>Wachstum &amp; Strategie</h3>
+          <p>
+            Contentpläne, Creator-Kooperationen und Reportings, die aus Views,
+            Saves und Shares direkte Buchungen machen.
+          </p>
+        </article>
       </div>
-      <div class="foot__cols">
-        <div>
-          <p>Studio</p>
-          <a href="#">München · Bayern</a>
-          <a href="mailto:hallo@peakstories.studio">hallo@peakstories.studio</a>
-        </div>
-        <div>
-          <p>Social</p>
-          <a href="#">Instagram</a>
-          <a href="#">TikTok</a>
-          <a href="#">YouTube</a>
-        </div>
-        <div>
-          <p>Entdecken</p>
-          <a href="#work">Arbeiten</a>
-          <a href="#team">Studio</a>
-          <a href="#contact">Kontakt</a>
-        </div>
-      </div>
-      <p class="foot__legal">
-        © 2026 Peak Stories. Alpines Content-Studio. Bildmaterial zu
-        Konzeptzwecken generiert.
-      </p>
-    </footer>
+    </section>
 
-    <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
-    <script src="js/main.js?v=41"></script>
-  </body>
+    <!-- IMPACT / RESULTS — iPhone-framed social proof -->
+    <section class="section impact" id="impact">
+      <header>
+        <p class="kicker reveal">Beweise, keine Versprechen</p>
+        <h2 class="reveal">
+          Wir jagen keine Likes. Wir helfen, Zimmer zu füllen.
+        </h2>
+        <p class="reveal">
+          Ein Jahr Hand in Hand mit einem alpinen Wellnessresort — das hat der
+          Content für den Kalender getan.
+        </p>
+      </header>
+
+      <ul class="metrics">
+        <li class="metric reveal"><b>4,8 Mio.</b> Views auf dem Hero-Reel</li>
+        <li class="metric reveal">
+          <b>567%</b> Follower-Wachstum in 12 Monaten
+        </li>
+        <li class="metric reveal">
+          <b>6,2%</b> Ø Engagement-Rate <em>(Branche ≈0,5 %)</em>
+        </li>
+        <li class="metric reveal">
+          <b>38%</b> Mehr direkte Buchungsanfragen
+        </li>
+      </ul>
+
+      <!-- iPhone reel wall -->
+      <div class="phones">
+        <figure class="phone reveal">
+          <img src="assets/img/G1_reel_pool.png" alt="Pool-Reel" loading="lazy" />
+          <figcaption>
+            <span>LIVE</span>
+            <p><b>@alpenglow.retreat</b> 1,2 Mio. Views · 84k Likes</p>
+          </figcaption>
+        </figure>
+        <figure class="phone phone--review reveal">
+          <img src="assets/img/G6_chalet_interior.png" alt="Gästebewertung" loading="lazy" />
+          <figcaption>
+            <p class="rating" role="img" aria-label="5 von 5 Sternen">
+              ★★★★★
+            </p>
+            <blockquote>
+              „Gebucht, sobald ich ihr Reel gesehen habe.“
+            </blockquote>
+            <p>— Gästebewertung</p>
+          </figcaption>
+        </figure>
+        <figure class="phone reveal">
+          <img src="assets/img/G5_ski_action.png" alt="Powder-Reel" loading="lazy" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Powder Day</b> 2,1 Mio. Views · 12k Saves</p>
+          </figcaption>
+        </figure>
+        <figure class="phone reveal">
+          <img src="assets/img/G4_champagne.png" alt="Sunset-Moment" loading="lazy" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Sunset Service</b> +42% Saves diese Woche</p>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="section team" id="team">
+      <header>
+        <p class="kicker reveal">Das Studio</p>
+        <h2 class="reveal">Zwei Gründer, ein Alpenstudio.</h2>
+        <p class="reveal">
+          Die Leute, die die Agenturwelt verlassen haben, um den Content zu
+          machen, den der Tourismus verdient.
+        </p>
+      </header>
+      <div class="team__grid">
+        <figure class="member reveal">
+          <div class="member__img">
+            <img src="assets/img/T4_producer.png" alt="Nicolas Lekai" loading="lazy" />
+          </div>
+          <figcaption>
+            <h3>Nicolas Lekai</h3>
+            <p>Gründer &amp; Creative Director</p>
+          </figcaption>
+        </figure>
+
+        <figure class="member reveal">
+          <div class="member__img">
+            <img src="assets/img/T2_photographer.png" alt="Daniel" loading="lazy" />
+          </div>
+          <figcaption>
+            <h3>Daniel</h3>
+            <p>Gründer &amp; Executive Producer</p>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- REGIONS — decorative marquee (two identical lists) -->
+    <div class="regions" aria-hidden="true">
+      <ul>
+        <li>Tegernsee</li>
+        <li>Garmisch-Partenkirchen</li>
+        <li>Berchtesgaden</li>
+        <li>Allgäu</li>
+        <li>Zugspitze</li>
+        <li>Königssee</li>
+        <li>Tegernsee</li>
+        <li>Garmisch-Partenkirchen</li>
+        <li>Berchtesgaden</li>
+        <li>Allgäu</li>
+        <li>Zugspitze</li>
+        <li>Königssee</li>
+      </ul>
+      <ul>
+        <li>Tegernsee</li>
+        <li>Garmisch-Partenkirchen</li>
+        <li>Berchtesgaden</li>
+        <li>Allgäu</li>
+        <li>Zugspitze</li>
+        <li>Königssee</li>
+        <li>Tegernsee</li>
+        <li>Garmisch-Partenkirchen</li>
+        <li>Berchtesgaden</li>
+        <li>Allgäu</li>
+        <li>Zugspitze</li>
+        <li>Königssee</li>
+      </ul>
+    </div>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact">
+      <header>
+        <p class="kicker reveal">Sprechen wir</p>
+        <h2 class="reveal">Erzählen Sie uns von Ihrem Haus.</h2>
+        <p class="reveal">
+          Egal, wo Ihre Auslastung heute steht — wir helfen gern. Schreiben
+          Sie uns kurz zu Ihrem Hotel, Spa oder Resort, und wir melden uns
+          innerhalb von zwei Werktagen mit Ideen — kein Pitch, kein Druck.
+        </p>
+      </header>
+      <form class="contact__form reveal" onsubmit="return false;">
+        <div class="field">
+          <input type="text" required placeholder=" " id="f-name" /><label for="f-name">Ihr Name</label>
+        </div>
+        <div class="field">
+          <input type="text" required placeholder=" " id="f-prop" /><label for="f-prop">Haus / Betrieb</label>
+        </div>
+        <div class="field">
+          <input type="email" required placeholder=" " id="f-mail" /><label for="f-mail">E-Mail</label>
+        </div>
+        <div class="field field--full">
+          <textarea rows="3" placeholder=" " id="f-msg"></textarea><label for="f-msg">Was schwebt Ihnen vor?</label>
+        </div>
+        <button class="btn btn--gold" type="submit">Anfrage senden</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="brand">
+      <svg viewBox="0 0 40 32" width="30" height="24" aria-hidden="true">
+        <path d="M2 30 L14 6 L20 16 L26 2 L38 30 Z" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linejoin="round" />
+      </svg>
+      Peak Stories
+    </div>
+    <div class="foot__cols">
+      <div>
+        <p>Studio</p>
+        <a href="#">München · Bayern</a>
+        <a href="mailto:hallo@peakstories.studio">hallo@peakstories.studio</a>
+      </div>
+      <div>
+        <p>Social</p>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+        <a href="#">YouTube</a>
+      </div>
+      <div>
+        <p>Entdecken</p>
+        <a href="#work">Arbeiten</a>
+        <a href="#team">Studio</a>
+        <a href="#contact">Kontakt</a>
+      </div>
+    </div>
+    <p class="foot__legal">
+      © 2026 Peak Stories. Alpines Content-Studio. Bildmaterial zu
+      Konzeptzwecken generiert.
+    </p>
+  </footer>
+
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="js/main.js?v=41"></script>
+</body>
+
 </html>

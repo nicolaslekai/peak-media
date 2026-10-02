@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <mask id="bsf-horizon">
+      <rect width="256" height="256" fill="#fff"/>
+      <g fill="#000" stroke="#000" stroke-width="24" stroke-linejoin="round">
+        <path d="M19 209.9C41.8 178 90 128.5 106 128.5C122 128.5 164 179 185.1 209.9L185.1 256L19 256Z"/>
+        <path d="M159 184C166.2 171 177 159 189 159C201 159 224.3 185.3 237.1 210L237.1 256L159 256Z"/>
+      </g>
+    </mask>
+  </defs>
+  <rect width="256" height="256" rx="48" fill="#0C0E0D"/>
+  <g fill="#FFFFFF">
+    <path d="M31 171.2A100 100 0 1 1 225 171.2" fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+    <circle cx="153" cy="147" r="53" mask="url(#bsf-horizon)"/>
+    <path d="M19 209.9C41.8 178 90 128.5 106 128.5C122 128.5 164 179 185.1 209.9C152 191 122 146.5 106 146.5C90 146.5 54.2 191 21 212.1Z"/>
+    <path d="M159 184C166.2 171 177 159 189 159C201 159 224.3 185.3 237.1 210C211.7 196.7 201 176 189 176C177 176 173.8 185 159 184Z"/>
+  </g>
+</svg>

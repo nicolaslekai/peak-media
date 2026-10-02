@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 172" role="img" aria-label="Blaue Stunde">
+  <defs>
+    <!-- Hides the disc below the ridge line and keeps a clear gap above it -->
+    <mask id="bs-horizon">
+      <rect width="240" height="172" fill="#fff"/>
+      <g fill="#000" stroke="#000" stroke-width="9" stroke-linejoin="round">
+        <path d="M4 169C33.9 138.1 82 90.3 98 90.3C114 90.3 152.1 138.9 178 169L178 172L4 172Z"/>
+        <path d="M151 139.9C160.7 131.6 169 120.7 181 120.7C193 120.7 213.8 146.8 236 169L236 172L151 172Z"/>
+      </g>
+    </mask>
+  </defs>
+  <path class="bs-arc" d="M26 137.2A100 100 0 1 1 214 137.2" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"/>
+  <circle class="bs-disc" cx="150" cy="103" r="62" fill="#FFFFFF" mask="url(#bs-horizon)"/>
+  <g class="bs-mountains" fill="#FFFFFF">
+    <path d="M4 169C33.9 138.1 82 90.3 98 90.3C114 90.3 152.1 138.9 178 169C147.9 143.1 114 96.7 98 96.7C82 96.7 38.1 142.9 4 169Z"/>
+    <path d="M151 139.9C160.7 131.6 169 120.7 181 120.7C193 120.7 213.8 146.8 236 169C210.2 151.2 193 126.3 181 126.3C169 126.3 163.3 136.4 151 139.9Z"/>
+  </g>
+</svg>

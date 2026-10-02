@@ -1,4 +1,4 @@
-/* ============ PEAK STORIES — Alpine 5-Star Luxury ============ */
+/* ============ BLAUE STUNDE — Alpine 5-Star Luxury ============ */
 :root {
   --ink: #0c0e0d;
   /* near-black forest */
@@ -219,7 +219,8 @@ body::after {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  /* above the page overlays (vignette 9997, grain 9999) so the brand keeps its real colour */
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -284,8 +285,12 @@ body::after {
   color: var(--paper);
 }
 
-.brand svg {
-  color: var(--gold);
+/* symbol: blaue-stunde-logo-white.svg, scaled by height (aspect ratio 240:172) */
+.brand img {
+  display: block;
+  flex: none;
+  height: 40px;
+  width: auto;
 }
 
 /* ---- CANVAS FRAME-SEQUENCE SCRUB (smooth 3D scroll) ---- */
@@ -969,6 +974,9 @@ body::after {
 
 /* ---- MOBILE cinematic: 5:7 portrait crop with the caption overlaid on it ---- */
 @media (max-width: 767px) {
+  .brand img {
+    height: 36px;
+  }
 
   /* let the top menu scroll away so the frame sits centered in the phone */
   .nav {

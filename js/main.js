@@ -1,4 +1,4 @@
-/* ============ PEAK STORIES — canvas frame-sequence scroll engine ============
+/* ============ BLAUE STUNDE — canvas frame-sequence scroll engine ============
    The smooth "3D scroll" technique: preload numbered WebP frames and paint the frame
    matched to scroll progress onto a <canvas>. No <video> seeking = no jank.
    ============================================================================ */

@@ -9,6 +9,10 @@
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "Manrope", system-ui, sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --text-soft: rgba(243, 237, 225, 0.72);
+  --container: 1300px;
+  --gutter: clamp(1.2rem, 5vw, 4rem);
+  --section-y: clamp(2.8rem, 5vh, 4.5rem);
 }
 * {
   box-sizing: border-box;
@@ -38,6 +42,17 @@ a {
 em {
   font-style: italic;
   color: var(--gold-soft);
+}
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+}
+h2 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 /* ---- overlays ---- */
@@ -69,12 +84,25 @@ em {
 .kicker--light {
   color: var(--gold-soft);
 }
-.section-title {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(2.2rem, 5vw, 4rem);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+
+/* ---- content section: container + editorial header ---- */
+.section {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: var(--section-y) var(--gutter);
+}
+.section > header {
+  max-width: 52rem;
+  margin-bottom: 2.4rem;
+}
+.section > header h2 {
+  text-wrap: balance;
+}
+.section > header h2 + p {
+  margin-top: 1.4rem;
+  max-width: 60ch;
+  font-size: 1.05rem;
+  color: var(--text-soft);
 }
 .btn {
   display: inline-block;
@@ -326,26 +354,10 @@ em {
 }
 
 /* ---- MISSION ---- */
-.mission {
-  padding: clamp(2.5rem, 5vh, 4rem) clamp(1.2rem, 5vw, 4rem)
-    clamp(2.8rem, 5vh, 4.5rem);
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.mission__lead {
-  font-family: var(--serif);
-  font-weight: 500;
+.mission h2 {
+  /* a statement rather than a title: smaller than the other section headings */
   font-size: clamp(1.7rem, 3.6vw, 3rem);
   line-height: 1.18;
-  letter-spacing: -0.01em;
-  margin-bottom: 2rem;
-  max-width: 20ch;
-}
-.mission__body {
-  max-width: 60ch;
-  color: rgba(243, 237, 225, 0.72);
-  font-size: 1.06rem;
-  margin-bottom: 2.4rem;
 }
 .mission__stats {
   display: grid;
@@ -445,15 +457,6 @@ em {
 }
 
 /* ---- SERVICES ---- */
-.services {
-  padding: clamp(2.8rem, 5vh, 4.5rem) clamp(1.2rem, 5vw, 4rem);
-  max-width: 1300px;
-  margin: 0 auto;
-}
-.services__head {
-  margin-bottom: 2.4rem;
-  max-width: 24ch;
-}
 .services__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -479,8 +482,6 @@ em {
   margin-bottom: 2.4rem;
 }
 .svc h3 {
-  font-family: var(--serif);
-  font-weight: 500;
   font-size: 1.6rem;
   margin: 0 0 0.8rem;
   min-height: 2.2em;
@@ -493,21 +494,6 @@ em {
 }
 
 /* ---- IMPACT ---- */
-.impact {
-  padding: clamp(2.8rem, 5vh, 4.5rem) clamp(1.2rem, 5vw, 4rem);
-  max-width: 1300px;
-  margin: 0 auto;
-}
-.impact__head {
-  max-width: 26ch;
-  margin-bottom: 2.2rem;
-}
-.impact__sub {
-  margin-top: 1.4rem;
-  color: rgba(243, 237, 225, 0.66);
-  font-size: 1.05rem;
-  max-width: 46ch;
-}
 .impact__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -537,21 +523,6 @@ em {
 }
 
 /* ---- CHANNELS (non-scroll break) ---- */
-.channels {
-  padding: clamp(2.8rem, 5vh, 4.5rem) clamp(1.2rem, 5vw, 4rem);
-  max-width: 1300px;
-  margin: 0 auto;
-}
-.channels__head {
-  max-width: 30ch;
-  margin-bottom: 2.4rem;
-}
-.channels__sub {
-  margin-top: 1.3rem;
-  color: rgba(243, 237, 225, 0.66);
-  font-size: 1.05rem;
-  max-width: 52ch;
-}
 .channels__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -730,20 +701,6 @@ em {
 }
 
 /* ---- TEAM ---- */
-.team {
-  padding: clamp(2.8rem, 5vh, 4.5rem) clamp(1.2rem, 5vw, 4rem);
-  max-width: 1300px;
-  margin: 0 auto;
-}
-.team__head {
-  max-width: 28ch;
-  margin-bottom: 2.4rem;
-}
-.team__sub {
-  margin-top: 1.4rem;
-  color: rgba(243, 237, 225, 0.66);
-  font-size: 1.05rem;
-}
 .team__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -774,8 +731,6 @@ em {
   padding: 1.1rem 0.2rem 0;
 }
 .member h3 {
-  font-family: var(--serif);
-  font-weight: 500;
   font-size: 1.45rem;
 }
 .member p {
@@ -824,34 +779,26 @@ em {
   }
 }
 
-/* ---- CONTACT ---- */
+/* ---- CONTACT (closing call to action: centred, larger heading) ---- */
 .contact {
-  padding: clamp(3rem, 6vh, 5rem) clamp(1.2rem, 5vw, 4rem);
+  --section-y: clamp(3rem, 6vh, 5rem);
 }
-.contact__inner {
-  max-width: 900px;
-  margin: 0 auto;
+.contact > header {
+  margin-inline: auto;
   text-align: center;
 }
-.contact__title {
-  font-family: var(--serif);
-  font-weight: 500;
+.contact h2 {
   font-size: clamp(2.6rem, 7vw, 5.6rem);
   line-height: 1;
   letter-spacing: -0.02em;
-  margin: 0.6rem 0 1.4rem;
 }
-.contact__body {
-  max-width: 50ch;
-  margin: 0 auto 2.2rem;
-  color: rgba(243, 237, 225, 0.72);
-  font-size: 1.08rem;
+.contact h2 + p {
+  margin-inline: auto;
 }
 .contact__form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.4rem;
-  text-align: left;
   max-width: 640px;
   margin: 0 auto;
 }
@@ -908,11 +855,11 @@ em {
 /* ---- FOOTER ---- */
 .foot {
   border-top: 1px solid var(--line);
-  padding: 2.8rem clamp(1.2rem, 5vw, 4rem) 2rem;
+  padding: 2.8rem var(--gutter) 2rem;
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 3rem;
-  max-width: 1300px;
+  max-width: var(--container);
   margin: 0 auto;
 }
 .foot__brand {
@@ -1069,33 +1016,18 @@ em {
     height: 150vh;
   }
   /* tight vertical rhythm everywhere — no dead air between blocks */
-  .mission,
-  .channels,
-  .services,
-  .impact,
-  .team {
-    padding-top: 2.2rem;
-    padding-bottom: 2.2rem;
+  :root {
+    --section-y: 2.2rem;
   }
   .contact {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    --section-y: 2.5rem;
   }
-  .mission__lead {
-    margin-bottom: 1.2rem;
-  }
-  .mission__body {
+  .section > header {
     margin-bottom: 1.8rem;
   }
   .mission__stats {
     padding-top: 1.8rem;
     gap: 1.4rem;
-  }
-  .services__head,
-  .impact__head,
-  .channels__head,
-  .team__head {
-    margin-bottom: 1.8rem;
   }
   .impact__stats {
     padding: 1.8rem 0;
@@ -1117,9 +1049,6 @@ em {
   }
   .chan__top {
     margin-bottom: 1rem;
-  }
-  .contact__body {
-    margin-bottom: 1.8rem;
   }
   .foot {
     padding: 2.5rem 1.2rem 1.8rem;

@@ -99,7 +99,7 @@ function initScrub(cfg) {
     if (stage && !IS_MOBILE) {
       // desktop: gentle parallax lift at the very end — the image stays visible while the
       // next section slides up behind it, so there's never a black hole in the hand-off.
-      // mobile skips this — the stage is exactly the 4:5 crop and scrolls off naturally.
+      // mobile skips this — the stage is exactly the 5:7 crop and scrolls off naturally.
       const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
       const e = t * t * (3 - 2 * t);
       stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.22).toFixed(1)}px,0)` : '';

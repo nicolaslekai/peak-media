@@ -456,41 +456,46 @@ h2 {
   color: var(--gold-soft);
 }
 
-/* ---- SERVICES ---- */
-.services__grid {
+/* ---- TILES: hairline grid of cards with a heading and a description
+   (services, channels) ---- */
+.tiles {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
 }
-.svc {
-  background: var(--ink);
-  padding: 2.6rem 1.8rem;
-  min-height: 270px;
+.tiles > article {
   display: flex;
   flex-direction: column;
+  padding: 2.6rem 1.8rem;
+  background: var(--ink);
   transition: background 0.5s var(--ease);
 }
-.svc:hover {
+.tiles > article:hover {
   background: var(--ink-2);
 }
-.svc__no {
+.tiles p {
+  font-size: 0.92rem;
+  color: rgba(243, 237, 225, 0.66);
+}
+
+/* ---- SERVICES: numbered tiles ---- */
+.services .tiles {
+  counter-reset: service;
+}
+.services article::before {
+  counter-increment: service;
+  content: counter(service, decimal-leading-zero);
   font-family: var(--serif);
   font-size: 1.4rem;
   color: var(--gold);
   margin-bottom: 2.4rem;
 }
-.svc h3 {
+.services h3 {
   font-size: 1.6rem;
-  margin: 0 0 0.8rem;
-  min-height: 2.2em;
-  display: flex;
-  align-items: flex-start;
-}
-.svc p {
-  font-size: 0.92rem;
-  color: rgba(243, 237, 225, 0.66);
+  min-height: 2.2em; /* keeps descriptions aligned when a title wraps */
+  margin-bottom: 0.8rem;
 }
 
 /* ---- IMPACT ---- */
@@ -522,32 +527,22 @@ h2 {
   font-size: 0.9em;
 }
 
-/* ---- CHANNELS (non-scroll break) ---- */
-.channels__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-}
-.chan {
-  background: var(--ink);
+/* ---- CHANNELS (non-scroll break): denser tiles with an icon label and a metric ---- */
+.channels article {
   padding: 2rem 1.6rem;
-  min-height: 230px;
-  display: flex;
-  flex-direction: column;
-  transition: background 0.5s var(--ease);
 }
-.chan:hover {
-  background: var(--ink-2);
-}
-.chan__top {
+.channels h3 {
   display: flex;
   align-items: center;
   gap: 0.7rem;
   margin-bottom: 1.6rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: 0.02em;
 }
-.chan__ico {
+.channels h3 span {
+  /* platform icon (decorative) */
   width: 30px;
   height: 30px;
   border: 1px solid var(--line);
@@ -557,24 +552,19 @@ h2 {
   color: var(--gold);
   font-size: 0.85rem;
 }
-.chan__name {
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  font-size: 1.02rem;
-}
-.chan__stat {
+.channels .metric {
+  margin-top: auto; /* metrics line up at the same height across a row */
   font-family: var(--serif);
   font-size: 1.05rem;
-  color: rgba(243, 237, 225, 0.72);
-  margin-top: auto;
+  color: var(--text-soft);
 }
-.chan__stat b {
-  font-size: 2.2rem;
-  color: var(--gold-soft);
+.channels .metric b {
   display: block;
+  font-size: 2.2rem;
   line-height: 1.1;
+  color: var(--gold-soft);
 }
-.chan__desc {
+.channels .metric + p {
   margin-top: 1rem;
   font-size: 0.86rem;
   color: rgba(243, 237, 225, 0.6);
@@ -914,9 +904,8 @@ h2 {
     padding: 0.65em 1.05em;
     font-size: 0.72rem;
   }
-  .services__grid,
-  .impact__stats,
-  .channels__grid {
+  .tiles,
+  .impact__stats {
     grid-template-columns: repeat(2, 1fr);
   }
   .phones {
@@ -929,9 +918,8 @@ h2 {
   }
 }
 @media (max-width: 640px) {
-  .services__grid,
+  .tiles,
   .impact__stats,
-  .channels__grid,
   .contact__form {
     grid-template-columns: 1fr;
   }
@@ -1033,21 +1021,19 @@ h2 {
     padding: 1.8rem 0;
     margin-bottom: 1.8rem;
   }
-  .svc {
-    min-height: 0;
+  .tiles > article {
     padding: 1.6rem 1.4rem;
   }
-  .svc__no {
+  .services article::before {
     margin-bottom: 1rem;
   }
-  .svc h3 {
+  .services h3 {
     min-height: 0;
   }
-  .chan {
-    min-height: 0;
+  .channels article {
     padding: 1.4rem 1.2rem;
   }
-  .chan__top {
+  .channels h3 {
     margin-bottom: 1rem;
   }
   .foot {

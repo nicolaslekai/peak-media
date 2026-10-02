@@ -592,17 +592,14 @@ body::after {
   margin-right: 0.3rem;
 }
 
-/* ---- iPHONE SOCIAL WALL ---- */
+/* ---- PHONES: iPhone-style mockups (social proof wall) ----
+   The figure is the phone: screen image + caption overlay; the island is ::before. */
 .phones {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.8rem;
-  perspective: 1600px;
 }
 .phone {
-  margin: 0;
-}
-.phone__frame {
   position: relative;
   aspect-ratio: 9/19.5;
   border-radius: 2.4rem;
@@ -613,13 +610,10 @@ body::after {
     0 2px 0 #000 inset,
     0 30px 60px -20px rgba(0, 0, 0, 0.75),
     0 0 0 6px rgba(20, 22, 24, 0.6);
-  transform: translateY(0);
-  transition: transform 0.6s var(--ease);
 }
-.phone:hover .phone__frame {
-  transform: translateY(-8px);
-}
-.phone__island {
+.phone::before {
+  /* dynamic island */
+  content: "";
   position: absolute;
   top: 0.7rem;
   left: 50%;
@@ -630,22 +624,23 @@ body::after {
   background: #000;
   border-radius: 1rem;
 }
-.phone__frame img {
+.phone img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.phone__ui {
+.phone figcaption {
   position: absolute;
   inset: auto 0 0 0;
   z-index: 3;
-  padding: 1rem 0.9rem 1.2rem;
-  background: linear-gradient(0deg, rgba(6, 8, 7, 0.9), transparent);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 1rem 0.9rem 1.2rem;
+  background: linear-gradient(0deg, rgba(6, 8, 7, 0.9), transparent);
 }
-.phone__live {
+.phone figcaption > span {
+  /* format badge (LIVE, REEL, STORY) */
   align-self: flex-start;
   font-size: 0.6rem;
   font-weight: 700;
@@ -655,42 +650,34 @@ body::after {
   padding: 0.28em 0.6em;
   border-radius: 4px;
 }
-.phone__meta b {
-  display: block;
-  font-size: 0.86rem;
-  color: #fff;
-  font-weight: 600;
-}
-.phone__meta span {
+.phone figcaption p {
   font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.7);
 }
-.phone__review {
-  position: absolute;
+.phone figcaption b {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #fff;
+}
+/* review variant: the overlay covers the whole screen so the quote stays legible */
+.phone--review figcaption {
   inset: 0;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
   justify-content: flex-end;
   padding: 1.2rem 1rem 1.4rem;
   background: linear-gradient(0deg, rgba(6, 8, 7, 0.92) 25%, transparent);
 }
-.phone__review .stars {
-  color: var(--gold);
-  letter-spacing: 0.12em;
+.phone .rating {
   font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--gold);
 }
-.phone__review p {
+.phone blockquote {
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.05rem;
-  color: #fff;
-  margin: 0.5rem 0 0.4rem;
   line-height: 1.3;
-}
-.phone__review span {
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: #fff;
 }
 
 /* ---- TEAM ---- */

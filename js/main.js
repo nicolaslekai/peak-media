@@ -143,7 +143,9 @@ function __boot() {
   /* smooth anchor links */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
-      const el = document.querySelector(a.getAttribute('href'));
+      const href = a.getAttribute('href');
+      if (href === '#') { e.preventDefault(); return; }   // placeholder link (F5): no jump, no error
+      const el = document.querySelector(href);
       if (!el) return;
       e.preventDefault();
       if (lenis) lenis.scrollTo(el, { duration: 1.3 });

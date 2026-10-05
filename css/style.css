@@ -793,6 +793,662 @@ body::after {
   color: #fff;
 }
 
+/* ---- CHARTS (figures section): a card with a readout, a plot of buttons, an axis,
+   a legend, a note and the source. The plot is static HTML; js/evidence.js only adds
+   the readout on hover/tap, the view toggle and the bar growth (.chart--wait). ---- */
+.chart {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(20, 24, 26, 0.7), rgba(12, 14, 13, 0.4));
+  padding: clamp(1.2rem, 3vw, 2.4rem);
+}
+
+.chart__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.4rem;
+  margin-bottom: 2rem;
+}
+
+.chart__readout {
+  /* fixed height (figure + two lines): a changing readout must not move the plot */
+  height: 6.4rem;
+  overflow: hidden;
+  font-size: 0.84rem;
+  color: var(--text-soft);
+}
+
+.chart__readout b {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  line-height: 1.05;
+  color: var(--gold-soft);
+}
+
+.chart__plot {
+  position: relative;
+  height: clamp(220px, 30vw, 320px);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(4px, 1.2vw, 14px);
+  align-items: end;
+  margin-left: 2.8rem;
+}
+
+.chart__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chart__grid span {
+  position: absolute;
+  left: -2.8rem;
+  right: 0;
+  border-top: 1px solid rgba(243, 237, 225, 0.07);
+  font-size: 0.66rem;
+  line-height: 0;
+  color: rgba(243, 237, 225, 0.35);
+  pointer-events: none;
+}
+
+.chart__axis {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(4px, 1.2vw, 14px);
+  margin: 0.7rem 0 0 2.8rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: rgba(243, 237, 225, 0.5);
+}
+
+.chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  margin-top: 1.6rem;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+}
+
+.chart__key::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  background: currentColor;
+}
+
+.chart__key--fill::before {
+  background: rgba(230, 212, 168, 0.55);
+}
+
+.chart__key--empty::before {
+  background: none;
+  border: 1px solid rgba(243, 237, 225, 0.25);
+}
+
+.chart__key--typ::before {
+  background: rgba(243, 237, 225, 0.35);
+}
+
+.chart__key--top::before {
+  background: var(--gold);
+}
+
+.chart__note {
+  margin-top: 1.4rem;
+  max-width: 70ch;
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}
+
+.chart__source {
+  margin-top: 1.2rem;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: rgba(243, 237, 225, 0.4);
+}
+
+/* plot buttons: the text is the accessible name, the bars are drawn with CSS */
+.month,
+.level {
+  position: relative;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.month:focus-visible,
+.level:focus-visible {
+  outline: none;
+}
+
+/* month: ::before = all beds (outline), ::after = occupied beds (--v %) */
+.month {
+  font-size: 0;
+  color: transparent;
+}
+
+.month::before,
+.month::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.month::before {
+  top: 0;
+  border: 1px solid rgba(243, 237, 225, 0.08);
+  border-bottom: 0;
+  transition: border-color 0.3s;
+}
+
+.month::after {
+  height: calc(var(--v) * 1%);
+  background: linear-gradient(180deg, rgba(230, 212, 168, 0.55), rgba(198, 164, 92, 0.25));
+  transition: height 0.9s var(--ease);
+}
+
+.month--peak::after {
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+}
+
+.month--quiet::after {
+  background: linear-gradient(180deg, rgba(243, 237, 225, 0.32), rgba(243, 237, 225, 0.1));
+}
+
+.month:hover::before,
+.month:focus-visible::before,
+.month[aria-pressed="true"]::before {
+  border-color: var(--gold);
+}
+
+/* level: a typical post and the best 10 % side by side (--h % of the scale) */
+.chart__plot--levels,
+.chart__axis--levels {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(8px, 2.4vw, 32px);
+}
+
+.level {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: rgba(243, 237, 225, 0.45);
+}
+
+.level::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.level:hover::after,
+.level:focus-visible::after,
+.level[aria-pressed="true"]::after {
+  border-color: var(--gold);
+}
+
+.level--none {
+  align-items: flex-end;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed rgba(243, 237, 225, 0.3);
+}
+
+.level__typ,
+.level__top {
+  position: relative;
+  width: min(38%, 46px);
+  height: calc(var(--h) * 1%);
+  transition: height 0.9s var(--ease);
+}
+
+.level__typ {
+  background: rgba(243, 237, 225, 0.35);
+}
+
+.level__top {
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+}
+
+.level i {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 0.35rem;
+  font-family: var(--serif);
+  font-style: normal;
+  font-size: 0.95rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--paper);
+}
+
+.level__typ i {
+  font-size: 0.75rem;
+  color: rgba(243, 237, 225, 0.55);
+}
+
+.chart__axis--levels {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+}
+
+.chart__axis--levels b {
+  display: block;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* growth: four lines in a 52 × 100 viewBox, labels at their end points */
+.chart__plot--growth {
+  display: block;
+}
+
+.chart__plot--growth svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.chart__plot--growth polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart__ends span {
+  position: absolute;
+  right: 0.4rem;
+  transform: translateY(-120%);
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.chart__axis--growth {
+  display: flex;
+  justify-content: space-between;
+}
+
+.line-1 {
+  color: rgba(243, 237, 225, 0.3);
+}
+
+.line-2 {
+  color: rgba(243, 237, 225, 0.55);
+}
+
+.line-3 {
+  color: var(--gold);
+}
+
+.line-4 {
+  color: var(--gold-soft);
+}
+
+.chart__legend .line-1,
+.chart__legend .line-2,
+.chart__legend .line-3,
+.chart__legend .line-4 {
+  color: var(--text-soft);
+}
+
+.chart__legend .line-1::before {
+  background: rgba(243, 237, 225, 0.3);
+}
+
+.chart__legend .line-2::before {
+  background: rgba(243, 237, 225, 0.55);
+}
+
+.chart__legend .line-3::before {
+  background: var(--gold);
+}
+
+.chart__legend .line-4::before {
+  background: var(--gold-soft);
+}
+
+.chart__legend [class*="line-"]::before {
+  height: 2px;
+}
+
+/* bars start at zero until the chart scrolls into view (set by js/evidence.js) */
+.chart--wait .month::after,
+.chart--wait .level__typ,
+.chart--wait .level__top {
+  height: 0;
+}
+
+/* view toggle (pill buttons) */
+.toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.toggle button {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.7rem;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  background: none;
+  border: 1px solid rgba(243, 237, 225, 0.22);
+  border-radius: 999px;
+  padding: 0.75em 1.2em;
+  cursor: pointer;
+  transition: 0.3s var(--ease);
+}
+
+.toggle button:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+}
+
+.toggle button[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+/* ---- CHAIN: seen first → booked direct → commission saved (hairlines as in .tiles) ---- */
+.chain {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 3.4rem 0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  counter-reset: step;
+}
+
+.chain li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.8rem 1.6rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.chain li::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+}
+
+.chain li:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -0.6rem;
+  top: 1.7rem;
+  z-index: 1;
+  padding: 0 0.2rem;
+  background: var(--ink);
+  color: var(--gold);
+}
+
+.chain h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.chain .metric {
+  color: var(--text-soft);
+}
+
+.chain .metric b {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: clamp(2.2rem, 3.6vw, 3rem);
+}
+
+.chain .metric+p {
+  margin-top: 0.9rem;
+}
+
+.chain small {
+  margin-top: auto;
+  padding-top: 1.2rem;
+  font-size: 0.66rem;
+  color: rgba(243, 237, 225, 0.38);
+}
+
+.chain a {
+  color: var(--gold-soft);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---- CALCULATOR: tabs per business type, then inputs left, result card right ---- */
+.calc-tabs {
+  margin-bottom: 2.4rem;
+}
+
+.calc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(1.6rem, 4vw, 4rem);
+  align-items: start;
+}
+
+.calc[hidden] {
+  display: none;
+}
+
+.range {
+  margin-bottom: 1.9rem;
+}
+
+.range label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.86rem;
+  color: var(--text-soft);
+}
+
+.range output {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.7rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--paper);
+}
+
+.range small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.68rem;
+  color: rgba(243, 237, 225, 0.38);
+}
+
+/* evidence band under a scenario slider: --from/--to are fractions of the range,
+   offset by half the thumb width so the band lines up with the thumb positions */
+.range__band {
+  position: relative;
+  display: block;
+  height: 1.5rem;
+  padding: 0.45rem 0 0 calc(10px + (100% - 20px) * var(--from));
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-soft);
+}
+
+.range__band::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(10px + (100% - 20px) * var(--from));
+  width: calc((100% - 20px) * (var(--to) - var(--from)));
+  height: 3px;
+  background: rgba(230, 212, 168, 0.55);
+}
+
+/* --p = filled share of the track, set by js/evidence.js */
+.range input {
+  --p: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range input::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold) var(--p), rgba(243, 237, 225, 0.18) var(--p));
+}
+
+.range input::-moz-range-track {
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold) var(--p), rgba(243, 237, 225, 0.18) var(--p));
+}
+
+.range input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid var(--gold-soft);
+  transition: transform 0.2s var(--ease);
+}
+
+.range input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid var(--gold-soft);
+}
+
+.range input:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 4px rgba(198, 164, 92, 0.25);
+}
+
+.calc details {
+  border-top: 1px solid var(--line);
+  padding-top: 1.2rem;
+}
+
+.calc summary {
+  list-style: none;
+  cursor: pointer;
+  margin-bottom: 1.6rem;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.calc summary::-webkit-details-marker {
+  display: none;
+}
+
+.calc summary::after {
+  content: " +";
+}
+
+.calc details[open] summary::after {
+  content: " –";
+}
+
+.calc__result {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(20, 24, 26, 0.85), rgba(12, 14, 13, 0.6));
+  padding: clamp(1.4rem, 3vw, 2.6rem);
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+.calc__total {
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.8rem;
+  font-size: 0.8rem;
+  color: rgba(243, 237, 225, 0.5);
+}
+
+.calc__total b {
+  display: block;
+  margin: 0.4rem 0 0.5rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(3rem, 7vw, 5.2rem);
+  line-height: 1;
+  color: var(--gold-soft);
+}
+
+.calc__result .range {
+  margin-bottom: 0.6rem;
+}
+
+.calc__out {
+  margin-bottom: 1.8rem;
+}
+
+.calc__out b {
+  margin-right: 0.6rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.1rem;
+  line-height: 1;
+  color: var(--paper);
+}
+
+.calc__out small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: rgba(243, 237, 225, 0.5);
+}
+
+.calc__note {
+  margin: 1.6rem 0 1.8rem;
+  font-size: 0.7rem;
+  line-height: 1.55;
+  color: rgba(243, 237, 225, 0.4);
+}
+
 /* ---- TEAM ---- */
 .team__grid {
   display: grid;
@@ -1067,6 +1723,10 @@ body::after {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+
+  .calc {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---- MOBILE cinematic: 5:7 portrait crop with the caption overlaid on it ---- */
@@ -1223,6 +1883,49 @@ body::after {
     gap: 1.2rem;
   }
 
+  /* charts: shorter scale labels, every other month, frequency only under the levels */
+  .chart__plot,
+  .chart__axis {
+    margin-left: 1.9rem;
+  }
+
+  .chart__grid span {
+    left: -1.9rem;
+  }
+
+  .chart__readout {
+    height: 7.4rem;
+  }
+
+  .chart__axis:not(.chart__axis--levels) span:nth-child(even) {
+    visibility: hidden;
+  }
+
+  .chart__axis--levels {
+    font-size: 0.6rem;
+  }
+
+  .chart__axis--levels b,
+  .level__typ i {
+    display: none;
+  }
+
+  .level i {
+    font-size: 0.78rem;
+  }
+
+  .chain {
+    grid-template-columns: 1fr;
+  }
+
+  .chain li:not(:last-child)::after {
+    content: "↓";
+    top: auto;
+    right: auto;
+    bottom: -0.8rem;
+    left: 1.6rem;
+  }
+
   .foot {
     grid-template-columns: 1fr;
   }
@@ -1236,6 +1939,12 @@ body::after {
   .reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .month::after,
+  .level__typ,
+  .level__top {
     transition: none;
   }
 

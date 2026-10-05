@@ -12,7 +12,7 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=48" />
+  <link rel="stylesheet" href="css/style.css?v=50" />
 </head>
 
 <body>
@@ -306,6 +306,405 @@
       </div>
     </section>
 
+    <!-- FIGURES: the empty months, why visibility leads to direct bookings, what activity does.
+         Static markup works without JS; js/evidence.js adds the readouts, toggle and bar growth. -->
+    <section class="section evidence" id="zahlen">
+      <header>
+        <p class="kicker reveal">Die Zahlen dahinter</p>
+        <h2 class="reveal">
+          In den ruhigen Monaten bleiben in Bayern zwei von drei Betten leer.
+        </h2>
+        <p class="reveal">
+          Die Saison hat Lücken – und es sind jedes Jahr dieselben. Amtliche
+          Zahlen für alle Beherbergungsbetriebe ab zehn Betten, Monat für Monat.
+        </p>
+      </header>
+
+      <!-- one column = all beds, the fill = occupied beds (LfStat 2025, Bavaria) -->
+      <figure class="chart reveal" id="season">
+        <div class="chart__head">
+          <p class="chart__readout" aria-live="polite">
+            <b>70,7 % der Betten leer</b>
+            <span>im Januar – im ruhigsten Monat des Jahres.</span>
+          </p>
+        </div>
+        <div class="chart__plot">
+          <div class="chart__grid" aria-hidden="true">
+            <span style="bottom: 100%">100 %</span>
+            <span style="bottom: 75%">75 %</span>
+            <span style="bottom: 50%">50 %</span>
+            <span style="bottom: 25%">25 %</span>
+          </div>
+          <button class="month month--quiet" type="button" aria-pressed="true" style="--v: 29.3" data-month="Januar">Januar: 29,3 % belegt</button>
+          <button class="month month--quiet" type="button" style="--v: 32.1" data-month="Februar">Februar: 32,1 % belegt</button>
+          <button class="month month--quiet" type="button" style="--v: 31.6" data-month="März">März: 31,6 % belegt</button>
+          <button class="month" type="button" style="--v: 37.9" data-month="April">April: 37,9 % belegt</button>
+          <button class="month" type="button" style="--v: 40.1" data-month="Mai">Mai: 40,1 % belegt</button>
+          <button class="month" type="button" style="--v: 45" data-month="Juni">Juni: 45,0 % belegt</button>
+          <button class="month" type="button" style="--v: 49.3" data-month="Juli">Juli: 49,3 % belegt</button>
+          <button class="month month--peak" type="button" style="--v: 51.8" data-month="August">August: 51,8 % belegt</button>
+          <button class="month" type="button" style="--v: 44.8" data-month="September">September: 44,8 % belegt</button>
+          <button class="month" type="button" style="--v: 41.7" data-month="Oktober">Oktober: 41,7 % belegt</button>
+          <button class="month month--quiet" type="button" style="--v: 32.6" data-month="November">November: 32,6 % belegt</button>
+          <button class="month" type="button" style="--v: 35" data-month="Dezember">Dezember: 35,0 % belegt</button>
+        </div>
+        <p class="chart__axis" aria-hidden="true">
+          <span>Jan</span><span>Feb</span><span>Mär</span><span>Apr</span><span>Mai</span><span>Jun</span>
+          <span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
+        </p>
+        <p class="chart__legend" aria-hidden="true">
+          <span class="chart__key chart__key--fill">belegte Betten</span>
+          <span class="chart__key chart__key--empty">leere Betten</span>
+        </p>
+        <p class="chart__note">
+          Gezählt werden Betten, nicht Zimmer: Ein Doppelzimmer mit nur einem Gast
+          ist zur Hälfte leer. Deshalb liegt die Bettenauslastung unter der
+          Zimmerauslastung – und selbst im August bleibt fast jedes zweite Bett frei.
+        </p>
+        <figcaption class="chart__source">
+          Quelle: Bayerisches Landesamt für Statistik, Tourismus in Bayern 2025 –
+          Auslastung der angebotenen Betten, alle Betriebe ab 10 Betten
+          einschließlich Camping.
+        </figcaption>
+      </figure>
+
+      <ol class="chain">
+        <li class="reveal">
+          <h3>Zuerst gesehen werden</h3>
+          <p class="metric">
+            <b>99 %</b> der Gäste, die ein Hotel erst auf Booking.com finden,
+            buchen es auch dort.
+          </p>
+          <p>
+            Darum zählt, wo man Sie zuerst sieht: auf Instagram und TikTok –
+            bevor jemand überhaupt ein Portal öffnet.
+          </p>
+          <small>Bundeskartellamt 2020</small>
+        </li>
+        <li class="reveal">
+          <h3>Direkt gebucht</h3>
+          <p class="metric">
+            <b>2 von 3</b> Direktbuchungen kommen von Gästen, die das Haus schon
+            kannten.
+          </p>
+          <p>
+            Wer Sie über Social Media kennenlernt, kennt auch den Weg zu Ihnen:
+            Profil, Website, Telefon.
+          </p>
+          <small>Bundeskartellamt 2020</small>
+        </li>
+        <li class="reveal">
+          <h3>Provision gespart</h3>
+          <p class="metric">
+            <b>halb so oft</b> werden Direktbuchungen storniert wie Buchungen über
+            Booking.com.
+          </p>
+          <p>
+            Und seit 2024 dürfen Sie direkt günstiger sein als auf dem Portal. Wie
+            viel Provision das ausmacht, zeigt der <a href="#rechner">Rechner</a>.
+          </p>
+          <small>Stornoquote 9 % zu 19 %: HOTREC 2026 · Preisfreiheit: EU Digital Markets Act</small>
+        </li>
+      </ol>
+
+      <!-- what posting frequency does: TikTok hits and Instagram growth (Buffer 2025) -->
+      <figure class="chart reveal" id="activity">
+        <div class="chart__head">
+          <p class="chart__readout" aria-live="polite">
+            <b>1,9× größere Treffer</b>
+            <span>schon mit 2–5 Posts pro Woche statt einem: Die besten Posts
+              erreichen 6.983 statt 3.722 Aufrufe.</span>
+          </p>
+          <div class="toggle" role="group" aria-label="Ansicht wählen">
+            <button type="button" aria-pressed="true" aria-controls="activity-hits">Große Treffer</button>
+            <button type="button" aria-pressed="false" aria-controls="activity-growth">Wachstum</button>
+          </div>
+        </div>
+
+        <div id="activity-hits">
+          <div class="chart__plot chart__plot--levels">
+            <div class="chart__grid" aria-hidden="true">
+              <span style="bottom: 100%">15.000</span>
+              <span style="bottom: 66.67%">10.000</span>
+              <span style="bottom: 33.33%">5.000</span>
+            </div>
+            <button class="level level--none" type="button" aria-label="Ohne Social Media: keine Reichweite" data-label="Ohne Social Media" data-med="0" data-top="0">
+              keine Reichweite
+            </button>
+            <button class="level" type="button" aria-label="Gelegentlich, 1× pro Woche: typischer Post 489, beste 10 % 3.722 Aufrufe" data-label="Gelegentlich, 1× pro Woche" data-med="489" data-top="3722">
+              <span class="level__typ" style="--h: 3.26"><i>489</i></span>
+              <span class="level__top" style="--h: 24.81"><i>3.722</i></span>
+            </button>
+            <button class="level" type="button" aria-pressed="true" aria-label="Regelmäßig, 2–5× pro Woche: typischer Post 506, beste 10 % 6.983 Aufrufe" data-label="Regelmäßig, 2–5× pro Woche" data-med="506" data-top="6983">
+              <span class="level__typ" style="--h: 3.37"><i>506</i></span>
+              <span class="level__top" style="--h: 46.55"><i>6.983</i></span>
+            </button>
+            <button class="level" type="button" aria-label="Aktiv, 6–10× pro Woche: typischer Post 487, beste 10 % 10.092 Aufrufe" data-label="Aktiv, 6–10× pro Woche" data-med="487" data-top="10092">
+              <span class="level__typ" style="--h: 3.25"><i>487</i></span>
+              <span class="level__top" style="--h: 67.28"><i>10.092</i></span>
+            </button>
+            <button class="level" type="button" aria-label="Sehr aktiv, 11× und öfter pro Woche: typischer Post 459, beste 10 % 14.401 Aufrufe" data-label="Sehr aktiv, 11× und öfter pro Woche" data-med="459" data-top="14401">
+              <span class="level__typ" style="--h: 3.06"><i>459</i></span>
+              <span class="level__top" style="--h: 96.01"><i>14.401</i></span>
+            </button>
+          </div>
+          <p class="chart__axis chart__axis--levels" aria-hidden="true">
+            <span><b>Ohne Social Media</b>keine Posts</span>
+            <span><b>Gelegentlich</b>1× pro Woche</span>
+            <span><b>Regelmäßig</b>2–5× pro Woche</span>
+            <span><b>Aktiv</b>6–10× pro Woche</span>
+            <span><b>Sehr aktiv</b>11×+ pro Woche</span>
+          </p>
+          <p class="chart__legend" aria-hidden="true">
+            <span class="chart__key chart__key--typ">typischer Post (Median)</span>
+            <span class="chart__key chart__key--top">die besten 10 % der Posts</span>
+          </p>
+          <p class="chart__note">
+            Der typische Post erreicht etwa gleich viele Menschen, egal wie oft Sie
+            posten. Was mit der Aktivität wächst, sind die Ausreißer nach oben: Wer
+            regelmäßig postet, hat öfter einen Treffer, der weit über die eigenen
+            Follower hinausgeht.
+          </p>
+          <p class="chart__source">
+            Quelle: Buffer, TikTok-Studie 2025 – 11,4 Mio. Posts von über 150.000
+            Konten, Aufrufe pro Post nach Posting-Frequenz (Median und 90.
+            Perzentil). Durchschnittswerte über alle Branchen, keine Zusage.
+          </p>
+        </div>
+
+        <div id="activity-growth" hidden>
+          <div class="chart__plot chart__plot--growth">
+            <div class="chart__grid" aria-hidden="true">
+              <span style="bottom: 100%">1.500</span>
+              <span style="bottom: 50%">1.250</span>
+              <span style="bottom: 0%">1.000</span>
+            </div>
+            <svg viewBox="0 0 52 100" preserveAspectRatio="none" role="img"
+              aria-label="Follower nach einem Jahr, ausgehend von 1.000: 1–2 Posts pro Woche plus 6 Prozent, 3–5 plus 14, 6–9 plus 26, 10 und mehr plus 41 Prozent">
+              <polyline class="line-1" points="0,100.0 4,99.0 8,98.1 12,97.1 16,96.1 20,95.1 24,94.2 28,93.2 32,92.2 36,91.2 40,90.2 44,89.2 48,88.1 52,87.1" />
+              <polyline class="line-2" points="0,100.0 4,97.9 8,95.8 12,93.7 16,91.5 20,89.3 24,87.1 28,84.9 32,82.7 36,80.4 40,78.1 44,75.8 48,73.5 52,71.1" />
+              <polyline class="line-3" points="0,100.0 4,96.5 8,92.9 12,89.2 16,85.4 20,81.6 24,77.8 28,73.8 32,69.8 36,65.8 40,61.6 44,57.4 48,53.1 52,48.7" />
+              <polyline class="line-4" points="0,100.0 4,94.7 8,89.2 12,83.6 16,77.8 20,71.9 24,65.8 28,59.6 32,53.1 36,46.6 40,39.8 44,32.9 48,25.7 52,18.4" />
+            </svg>
+            <p class="chart__ends" aria-hidden="true">
+              <span class="line-1" style="top: 87.1%">+6 %</span>
+              <span class="line-2" style="top: 71.1%">+14 %</span>
+              <span class="line-3" style="top: 48.7%">+26 %</span>
+              <span class="line-4" style="top: 18.4%">+41 %</span>
+            </p>
+          </div>
+          <p class="chart__axis chart__axis--growth" aria-hidden="true">
+            <span>heute</span><span>3 Monate</span><span>6 Monate</span><span>9 Monate</span><span>1 Jahr</span>
+          </p>
+          <p class="chart__legend" aria-hidden="true">
+            <span class="chart__key line-1">1–2 Posts pro Woche</span>
+            <span class="chart__key line-2">3–5 Posts pro Woche</span>
+            <span class="chart__key line-3">6–9 Posts pro Woche</span>
+            <span class="chart__key line-4">10+ Posts pro Woche</span>
+          </p>
+          <p class="chart__note">
+            Follower aus 1.000 heute, hochgerechnet aus dem durchschnittlichen
+            wöchentlichen Wachstum. Wochen ganz ohne Posts liegen sogar unter dem
+            eigenen Durchschnitt – Follower gehen eher verloren.
+          </p>
+          <p class="chart__source">
+            Quelle: Buffer, Instagram-Studie 2025 – 2,1 Mio. Posts von 102.000
+            Konten, wöchentliches Follower-Wachstum nach Posting-Frequenz, auf 52
+            Wochen hochgerechnet. Durchschnittswerte, keine Zusage.
+          </p>
+        </div>
+      </figure>
+    </section>
+
+    <!-- CALCULATORS: one panel per business type (hotel, Bergbahn, region), switched by
+         the tabs; formulas in js/evidence.js (MODELS). Example values with sources next
+         to each default; the static results match the default inputs. -->
+    <section class="section calculator" id="rechner">
+      <header>
+        <p class="kicker reveal">Rechner</p>
+        <h2 class="reveal">Was das für Sie bedeutet.</h2>
+        <p class="reveal">
+          Wählen Sie Ihren Betrieb. Wenige Angaben genügen; die übrigen Werte sind
+          Durchschnitte mit Quelle – passen Sie sie an.
+        </p>
+      </header>
+
+      <div class="toggle calc-tabs reveal" role="group" aria-label="Betrieb wählen">
+        <button type="button" aria-pressed="true" aria-controls="calc-hotel">Hotel &amp; Resort</button>
+        <button type="button" aria-pressed="false" aria-controls="calc-bahn">Bergbahn</button>
+        <button type="button" aria-pressed="false" aria-controls="calc-region">Region</button>
+      </div>
+
+      <div class="calc" id="calc-hotel" data-model="hotel">
+        <form class="calc__inputs reveal" onsubmit="return false">
+          <div class="range">
+            <label for="c-rooms">Zimmer <output for="c-rooms">40</output></label>
+            <input type="range" id="c-rooms" name="rooms" data-format="int" min="5" max="250" step="1" value="40" />
+          </div>
+          <div class="range">
+            <label for="c-occ">Zimmerauslastung im Jahr <output for="c-occ">60 %</output></label>
+            <input type="range" id="c-occ" name="occ" data-format="pct" min="20" max="95" step="1" value="60" />
+          </div>
+          <div class="range">
+            <label for="c-adr">Ø Zimmerpreis pro Nacht <output for="c-adr">120 €</output></label>
+            <input type="range" id="c-adr" name="adr" data-format="eur" min="50" max="500" step="5" value="120" />
+          </div>
+
+          <details>
+            <summary>Annahmen anpassen</summary>
+            <div class="range">
+              <label for="c-ota">Anteil über Buchungsportale <output for="c-ota">31,9 %</output></label>
+              <input type="range" id="c-ota" name="ota" data-format="pct1" min="0" max="80" step="0.1" value="31.9" />
+              <small>Standard: 31,9 % – kleine und mittlere Hotels in Deutschland (HOTREC 2026)</small>
+            </div>
+            <div class="range">
+              <label for="c-com">Provision der Portale <output for="c-com">15,0 %</output></label>
+              <input type="range" id="c-com" name="com" data-format="pct1" min="8" max="30" step="0.5" value="15" />
+              <small>Standard: 15 % – Booking.com 10–15 % Grundprovision, mit Ranking-Programmen mehr
+                (Bundeskartellamt)</small>
+            </div>
+            <div class="range">
+              <label for="c-dir">Kosten einer Direktbuchung <output for="c-dir">6,0 %</output></label>
+              <input type="range" id="c-dir" name="dir" data-format="pct1" min="0" max="15" step="0.5" value="6" />
+              <small>Standard: 6 % – Schätzung des Hotelverbands IHA: rund 5–7 % inkl. Marketing</small>
+            </div>
+          </details>
+        </form>
+
+        <div class="calc__result reveal" aria-live="polite">
+          <p>Provision, die Sie heute pro Jahr an Portale zahlen</p>
+          <p class="calc__total"><b>≈ 50.300 €</b> ≈ 1.260 € pro Zimmer und Jahr</p>
+
+          <div class="range">
+            <label for="c-shift">Gäste, die künftig direkt statt über Portale buchen <output for="c-shift">10 %</output></label>
+            <input type="range" id="c-shift" name="shift" data-format="pct" min="0" max="50" step="1" value="10" />
+            <small>Anteil Ihrer heutigen Portal-Buchungen</small>
+          </div>
+          <p class="calc__out"><b>≈ 3.000 €</b> weniger Provision pro Jahr
+            <small>≈ 280 Zimmernächte direkt statt über Portale</small>
+          </p>
+
+          <div class="range">
+            <label for="c-low">Mehr belegte Zimmer in den drei schwächsten Monaten <output for="c-low">+5 Punkte</output></label>
+            <input type="range" id="c-low" name="low" data-format="pts" min="0" max="20" step="1" value="5" />
+            <small>In Prozentpunkten: +5 heißt z. B. 35 % statt 30 % belegte Zimmer. Frei wählbar, kein
+              Erfahrungswert.</small>
+          </div>
+          <p class="calc__out"><b>≈ 21.600 €</b> zusätzlicher Zimmerumsatz
+            <small>≈ 180 zusätzliche Zimmernächte (40 Zimmer × 90 Nächte × 5 %)</small>
+          </p>
+
+          <p class="calc__note">
+            Beispielrechnung auf Basis Ihrer Angaben und der genannten
+            Durchschnittswerte. Umsatz, nicht Gewinn; keine Zusage über Ergebnisse.
+            Die tatsächliche Provision hängt von Ihrem Vertrag ab.
+          </p>
+          <a class="btn btn--gold" href="#contact">Mit diesen Werten anfragen</a>
+        </div>
+      </div>
+
+      <div class="calc" id="calc-bahn" data-model="bahn" hidden>
+        <form class="calc__inputs" onsubmit="return false">
+          <div class="range">
+            <label for="b-guests">Gäste pro Jahr (Ersteintritte) <output for="b-guests">100.000</output></label>
+            <input type="range" id="b-guests" name="guests" data-format="int" min="10000" max="1000000" step="5000" value="100000" />
+          </div>
+          <div class="range">
+            <label for="b-ticket">Ø Ticketumsatz pro Gast <output for="b-ticket">19 €</output></label>
+            <input type="range" id="b-ticket" name="ticket" data-format="eur" min="5" max="60" step="1" value="19" />
+            <small>Standard: 19 € – Sommer 2025: 118 Mio. € Umsatz / 6,09 Mio. Ersteintritte (VDS); im Winter rund 25 €</small>
+          </div>
+
+          <details>
+            <summary>Annahmen anpassen</summary>
+            <div class="range">
+              <label for="b-gastro">Gastronomie am Berg pro Gast <output for="b-gastro">9 €</output></label>
+              <input type="range" id="b-gastro" name="gastro" data-format="eur" min="0" max="30" step="1" value="9" />
+              <small>Standard: 9 € – Bayerische Zugspitzbahn 2023/24: 10,6 Mio. € Gastronomieumsatz / 1,2 Mio.
+                Fahrgäste</small>
+            </div>
+          </details>
+        </form>
+
+        <div class="calc__result" aria-live="polite">
+          <p>Jeder zusätzliche Gast bringt</p>
+          <p class="calc__total"><b>≈ 28 €</b> Ticket 19 € + Gastronomie 9 €</p>
+
+          <div class="range">
+            <label for="b-more">Mehr Gäste im Sommer und an ruhigen Tagen <output for="b-more">+10 %</output></label>
+            <input type="range" id="b-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
+            <span class="range__band" style="--from: 0.5333; --to: 0.7333" aria-hidden="true">Studie: +16–22 %</span>
+            <small>Bei hoher Social-Media-Präsenz kamen 16–22 % mehr Besucher – US-Nationalparks, PNAS 2024. Frei
+              wählbar, keine Zusage.</small>
+          </div>
+          <p class="calc__out"><b>≈ 280.000 €</b> zusätzlicher Umsatz pro Jahr
+            <small>≈ 10.000 zusätzliche Gäste × 28 €</small>
+          </p>
+
+          <p class="calc__note">
+            Beispielrechnung auf Basis Ihrer Angaben und der genannten
+            Durchschnittswerte. Außerhalb der Spitzenzeiten fährt die Bahn ohnehin:
+            zusätzliche Fahrgäste kosten dort kaum mehr, die Gastronomie hat
+            Wareneinsatz. Umsatz, nicht Gewinn; keine Zusage über Ergebnisse.
+          </p>
+          <a class="btn btn--gold" href="#contact">Mit diesen Werten anfragen</a>
+        </div>
+      </div>
+
+      <div class="calc" id="calc-region" data-model="region" hidden>
+        <form class="calc__inputs" onsubmit="return false">
+          <div class="range">
+            <label for="r-nights">Übernachtungen pro Jahr im Ort <output for="r-nights">500.000</output></label>
+            <input type="range" id="r-nights" name="nights" data-format="int" min="20000" max="3000000" step="10000" value="500000" />
+            <small>Zum Vergleich 2025: Berchtesgaden rund 670.000, Garmisch-Partenkirchen rund 1,3 Mio. (LfStat)</small>
+          </div>
+          <div class="range">
+            <label for="r-kur">Kurbeitrag pro Nacht <output for="r-kur">3,00 €</output></label>
+            <input type="range" id="r-kur" name="kur" data-format="eur2" min="0" max="5" step="0.1" value="3" />
+            <small>Standard: 3,00 € – z. B. Garmisch-Partenkirchen, Bad Tölz, Füssen, Tegernseer Tal; Spanne 2,00 € bis
+              4,70 € (Kurbeitragssatzungen 2025/26). Nur in anerkannten Kur- und Erholungsorten, sonst 0 €</small>
+          </div>
+
+          <details>
+            <summary>Annahmen anpassen</summary>
+            <div class="range">
+              <label for="r-spend">Ausgaben pro Gast und Tag im Ort <output for="r-spend">115 €</output></label>
+              <input type="range" id="r-spend" name="spend" data-format="eur" min="30" max="250" step="1" value="115" />
+              <small>Standard: 115 € – Übernachtungsgäste im Allgäu 2024; Bayern gesamt 141,70 € (dwif, Wirtschaftsfaktor
+                Tourismus 2024). Brutto, ohne An- und Abreise</small>
+            </div>
+          </details>
+        </form>
+
+        <div class="calc__result" aria-live="polite">
+          <p>Jede zusätzliche Übernachtung bringt dem Ort</p>
+          <p class="calc__total"><b>≈ 118 €</b> Ausgaben 115 € + Kurbeitrag 3,00 €</p>
+
+          <div class="range">
+            <label for="r-more">Mehr Übernachtungen, vor allem in ruhigen Monaten <output for="r-more">+10 %</output></label>
+            <input type="range" id="r-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
+            <span class="range__band" style="--from: 0.5333; --to: 0.7333" aria-hidden="true">Studie: +16–22 %</span>
+            <small>Bei hoher Social-Media-Präsenz kamen 16–22 % mehr Besucher – US-Nationalparks, PNAS 2024. Frei
+              wählbar, keine Zusage.</small>
+          </div>
+          <p class="calc__out"><b>≈ 5.750.000 €</b> Ausgaben der Gäste im Ort
+            <small>≈ 50.000 zusätzliche Übernachtungen</small>
+          </p>
+          <p class="calc__out"><b>≈ 150.000 €</b> mehr Kurbeitrag
+            <small>für die Gemeinde, bei 3,00 € pro Nacht</small>
+          </p>
+
+          <p class="calc__note">
+            Beispielrechnung auf Basis Ihrer Angaben und der genannten
+            Durchschnittswerte. Die Ausgaben sind Umsatz für Hotels, Gastronomie,
+            Handel und Freizeitbetriebe im Ort. Kinder und Ermäßigungen senken den
+            Kurbeitrag; keine Zusage über Ergebnisse.
+          </p>
+          <a class="btn btn--gold" href="#contact">Mit diesen Werten anfragen</a>
+        </div>
+      </div>
+    </section>
+
     <!-- TEAM -->
     <section class="section team" id="team">
       <header>
@@ -444,6 +843,7 @@
 
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
   <script src="js/main.js?v=46"></script>
+  <script src="js/evidence.js?v=3"></script>
 </body>
 
 </html>

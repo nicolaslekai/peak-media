@@ -589,20 +589,21 @@ body::after {
 }
 
 /* ---- TILES: hairline grid of cards with a heading and a description
-   (services, channels) ---- */
+   (services, channels). The grid draws the top and left hairline, each card its
+   right and bottom one, so no background shows through while cards fade in. ---- */
 .tiles {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
 }
 
 .tiles>article {
   display: flex;
   flex-direction: column;
   padding: 2.6rem 1.8rem;
-  background: var(--ink);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   transition: background 0.5s var(--ease);
 }
 

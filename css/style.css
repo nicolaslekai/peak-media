@@ -313,7 +313,7 @@ body::after {
 }
 
 .nav.scrolled {
-  background: rgba(12, 14, 13, 0.82);
+  background: rgba(12, 14, 13, 0.5);
   backdrop-filter: blur(14px);
   padding-top: 1rem;
   padding-bottom: 1rem;

@@ -22,19 +22,15 @@ function smoothstep(a, b, x) {
   return t * t * (3 - 2 * t);
 }
 
-const TAIL_FRAMES = 8;   // last N frames double as the hand-off into the next section
-
 function initScrub(cfg) {
   const section = document.querySelector(cfg.section);
   if (!section) return null;
   const canvas = section.querySelector('canvas');
-  const stage = section.querySelector('.cine__stage');
   const ctx = canvas.getContext('2d', { alpha: false });
   const lines = [...section.querySelectorAll('.cine-line')];
   const bg = cfg.bg || '#0c0e0d';
   const images = [];
   let firstDrawn = false;
-  const tailStart = (cfg.frameCount - TAIL_FRAMES) / (cfg.frameCount - 1);
 
   for (let i = 0; i < cfg.frameCount; i++) {
     const img = new Image();
@@ -96,15 +92,8 @@ function initScrub(cfg) {
     shown += (target - shown) * 0.15;                 // ease toward target = smooth, jerk-free scrub
     if (Math.abs(target - shown) < 0.002) shown = target;
     if (Math.abs(shown - drawn) > 0.002 && draw(shown)) drawn = shown;
-    if (stage && !IS_MOBILE) {
-      // desktop: gentle parallax lift at the very end — the image stays visible while the
-      // next section slides up behind it, so there's never a black hole in the hand-off.
-      // mobile skips this — the stage is exactly the 5:7 crop and scrolls off naturally.
-      const t = p > tailStart ? (p - tailStart) / (1 - tailStart) : 0;
-      const e = t * t * (3 - 2 * t);
-      stage.style.transform = t > 0 ? `translate3d(0,${(-e * window.innerHeight * 0.22).toFixed(1)}px,0)` : '';
-      stage.style.opacity = t > 0 ? (1 - e * 0.4).toFixed(3) : '';
-    }
+    // no hand-off effect: the sticky stage stays put until the section ends and then
+    // scrolls off with it, so the image edge is the section edge (no black band)
     // trapezoidal caption fade: in early, hold, out late — wide bands + a short
     // travel distance keep the text drifting gently instead of popping
     for (const el of lines) {

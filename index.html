@@ -12,7 +12,7 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=50" />
+  <link rel="stylesheet" href="css/style.css?v=52" />
 </head>
 
 <body>
@@ -26,7 +26,7 @@
       <a href="#work">Arbeiten</a>
       <a href="#channels">Kanäle</a>
       <a href="#impact">Ergebnisse</a>
-      <a href="#team">Studio</a>
+      <a href="#team">Team</a>
       <a href="#contact" class="nav__cta">Projekt starten</a>
     </nav>
   </header>
@@ -60,22 +60,28 @@
     <section class="section mission" id="approach">
       <header>
         <p class="kicker reveal">Wie wir helfen</p>
-        <h2 class="reveal">
-          Ein schönes Haus sollte keine leeren Zimmer haben. Wir arbeiten
-          Seite an Seite mit Ihrem Team und machen aus stillen Wochen
-          ausgebuchte — mit Geschichten, bei denen Menschen wirklich
-          hängenbleiben.
-        </h2>
-        <p class="reveal">
-          Wir sind vier Leute, die ein Jahrzehnt lang Kampagnen für große
-          Marken gemacht haben — und dieses Handwerk lieber für die Orte
-          einsetzen, die wir lieben. Deshalb arbeiten wir partnerschaftlich
-          mit Ihnen: Wir lernen Ihre Zimmer, Ihre Saisons und Ihre Gäste
-          kennen — und liefern Content, der den Kalender voll hält. Kein
-          Fachjargon, keine Knebelverträge. Nur ein kleines Team, das Ihre
-          Auslastung wie die eigene behandelt.
-        </p>
+        <h2 class="reveal">Ein schönes Haus sollte keine leeren Zimmer haben.</h2>
       </header>
+      <div class="mission__text">
+        <article class="reveal">
+          <h3>Was wir lösen</h3>
+          <p>
+            Stille Wochen zwischen den Saisons und immer mehr Buchungen über
+            Portale – das kennt fast jedes Haus. Wir machen Sie dort sichtbar, wo
+            Gäste ihre Reise heute beginnen: mit Geschichten, bei denen Menschen
+            wirklich hängenbleiben, und mit Gästen, die direkt bei Ihnen buchen.
+          </p>
+        </article>
+        <article class="reveal">
+          <h3>Wie wir arbeiten</h3>
+          <p>
+            Wir kommen zu Ihnen, lernen Ihre Zimmer, Ihre Saisons und Ihre Gäste
+            kennen und arbeiten Seite an Seite mit Ihrem Team. Kein Fachjargon,
+            keine Knebelverträge – nur ein kleines Team, das Ihre Auslastung wie
+            die eigene behandelt.
+          </p>
+        </article>
+      </div>
       <ul class="metrics">
         <li class="metric reveal">
           <b>38%</b> Mehr direkte Buchungsanfragen bei unseren Partnern
@@ -91,14 +97,17 @@
       </ul>
     </section>
 
-    <div id="work">
+    <div>
       <!-- SCENE 1 — WELLNESS (spa star-timelapse) -->
       <section class="cine scene" id="scene-spa">
+        <!-- anchor target for "Arbeiten": scroll progress 0.32, where every caption line is
+             fully visible (data-in + 0.16 fade ≤ 0.30, data-out − 0.16 ≥ 0.74) -->
+        <span class="cine__mark" id="work" style="--at: 0.32" aria-hidden="true"></span>
         <div class="cine__stage">
           <canvas></canvas>
           <div class="cine__scrim"></div>
           <div class="cine__copy">
-            <p class="kicker cine-line" data-in="0.06" data-out="0.94">
+            <p class="kicker kicker--light cine-line" data-in="0.06" data-out="0.94">
               01 — Wellness
             </p>
             <h2 class="cine-line" data-in="0.08" data-out="0.94">
@@ -177,12 +186,12 @@
       </section>
 
       <!-- SCENE 2 — POWDER (skier) -->
-      <section class="cine scene" id="scene-ski">
+      <section class="cine scene scene--bright" id="scene-ski">
         <div class="cine__stage">
           <canvas></canvas>
           <div class="cine__scrim"></div>
-          <div class="cine__copy cine__copy--end">
-            <p class="kicker cine-line" data-in="0.06" data-out="0.94">
+          <div class="cine__copy">
+            <p class="kicker kicker--light cine-line" data-in="0.06" data-out="0.94">
               02 — Powder
             </p>
             <h2 class="cine-line" data-in="0.08" data-out="0.94">
@@ -204,42 +213,38 @@
     </div>
     <!-- /#work -->
 
-    <!-- SERVICES -->
+    <!-- SERVICES — how working with us runs, as a process -->
     <section class="section services">
       <header>
         <p class="kicker reveal">Was wir machen</p>
         <h2 class="reveal">Ein komplettes Social-Team, am Berg.</h2>
+        <p class="reveal">
+          Zweimal im Jahr sind wir bei Ihnen vor Ort, dazwischen arbeitet unser
+          System – mit Ihrem Team und mit Menschen, die jeden Beitrag prüfen.
+        </p>
       </header>
-      <div class="tiles">
-        <article class="reveal">
-          <h3>Social &amp; Short-Form</h3>
-          <p>
-            Always-on Reels, TikTok und Stories, gebaut fürs Wandern durchs
-            Netz — Hooks, Pacing und Formate für den Algorithmus.
-          </p>
-        </article>
-        <article class="reveal">
-          <h3>Filme &amp; Markenstories</h3>
-          <p>
-            Signature-Hero-Filme und Saisonkampagnen, die Ihrem Haus eine
-            cineastische Identität über alle Kanäle geben.
-          </p>
-        </article>
-        <article class="reveal">
-          <h3>Fotografie</h3>
-          <p>
-            Editorial-Aufnahmen für Web, Print und OTA — Architektur,
-            Wellness, Kulinarik und Lifestyle in einer Bildsprache.
-          </p>
-        </article>
-        <article class="reveal">
-          <h3>Wachstum &amp; Strategie</h3>
-          <p>
-            Contentpläne, Creator-Kooperationen und Reportings, die aus Views,
-            Saves und Shares direkte Buchungen machen.
-          </p>
-        </article>
-      </div>
+      <ol class="steps">
+        <li class="reveal">
+          <h3>Kennenlernen vor Ort</h3>
+          <p>Wir besuchen Ihr Haus, verstehen Ort, Konzept und Gäste und machen die ersten Aufnahmen.</p>
+        </li>
+        <li class="reveal">
+          <h3>Shootings im Sommer und Winter</h3>
+          <p>Zweimal im Jahr drehen und fotografieren wir Material für viele Reels und Posts.</p>
+        </li>
+        <li class="reveal">
+          <h3>Ihr Team liefert mit</h3>
+          <p>Was im Alltag schön ist, schickt Ihr Team mit wenigen Klicks vom Handy an uns.</p>
+        </li>
+        <li class="reveal">
+          <h3>Auswählen, bearbeiten, planen</h3>
+          <p>Unser System wählt aus, bearbeitet und plant nach Trends und Saison. Jeder Beitrag wird von uns freigegeben.</p>
+        </li>
+        <li class="reveal">
+          <h3>Posten, antworten, messen</h3>
+          <p>Wir veröffentlichen, beantworten Kommentare und zeigen Ihnen, was davon bei den Buchungen ankommt.</p>
+        </li>
+      </ol>
     </section>
 
     <!-- IMPACT / RESULTS — iPhone-framed social proof -->
@@ -708,11 +713,11 @@
     <!-- TEAM -->
     <section class="section team" id="team">
       <header>
-        <p class="kicker reveal">Das Studio</p>
-        <h2 class="reveal">Zwei Gründer, ein Alpenstudio.</h2>
+        <p class="kicker reveal">Das Team</p>
+        <h2 class="reveal">Wir kennen Ihr Geschäft – von innen.</h2>
         <p class="reveal">
-          Die Leute, die die Agenturwelt verlassen haben, um den Content zu
-          machen, den der Tourismus verdient.
+          Drei Menschen aus Werbung, Gastronomie und Hotellerie, die wissen, wie
+          sich eine stille Woche anfühlt – und was dagegen hilft.
         </p>
       </header>
       <div class="team__grid">
@@ -722,7 +727,9 @@
           </div>
           <figcaption>
             <h3>Nicolas Lekai</h3>
-            <p>Gründer &amp; Creative Director</p>
+            <p>Creative Direction</p>
+            <p class="member__bio">Profi für Werbung und Marketing – sorgt dafür, dass Ihr Haus so aussieht, wie es sich
+              anfühlt.</p>
           </figcaption>
         </figure>
 
@@ -732,7 +739,9 @@
           </div>
           <figcaption>
             <h3>Daniel</h3>
-            <p>Gründer &amp; Executive Producer</p>
+            <p>Management</p>
+            <p class="member__bio">Ehemaliger Gastronom mit Erfahrung in Unternehmensführung und Architektur – kennt
+              Betriebe von innen.</p>
           </figcaption>
         </figure>
 
@@ -744,7 +753,8 @@
           </div>
           <figcaption>
             <h3>Raffaele Fusco</h3>
-            <p>Technical Director</p>
+            <p>Technik &amp; Systeme</p>
+            <p class="member__bio">Viele Jahre in der Hotellerie, heute in der IT – verbindet beides in unserem System.</p>
           </figcaption>
         </figure>
       </div>
@@ -789,8 +799,8 @@
         <h2 class="reveal">Erzählen Sie uns von Ihrem Haus.</h2>
         <p class="reveal">
           Egal, wo Ihre Auslastung heute steht — wir helfen gern. Schreiben
-          Sie uns kurz zu Ihrem Hotel, Spa oder Resort, und wir melden uns
-          innerhalb von zwei Werktagen mit Ideen — kein Pitch, kein Druck.
+          Sie uns kurz zu Ihrem Hotel, Ihrer Bergbahn oder Ihrer Region, und wir
+          melden uns innerhalb von zwei Werktagen mit Ideen — kein Pitch, kein Druck.
         </p>
       </header>
       <form class="contact__form reveal" onsubmit="return false;">
@@ -819,20 +829,27 @@
     <div class="foot__cols">
       <div>
         <p>Studio</p>
-        <a href="#">München · Bayern</a>
+        <span>München · Bayern</span>
         <a href="mailto:hallo@peakstories.studio">hallo@peakstories.studio</a>
       </div>
       <div>
         <p>Social</p>
-        <a href="#">Instagram</a>
-        <a href="#">TikTok</a>
-        <a href="#">YouTube</a>
+        <!-- profile URLs pending; glyphs in assets/icons/social.svg (one colour, never gold) -->
+        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#instagram" /></svg>Instagram</a>
+        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#tiktok" /></svg>TikTok</a>
+        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#youtube" /></svg>YouTube</a>
       </div>
       <div>
         <p>Entdecken</p>
         <a href="#work">Arbeiten</a>
-        <a href="#team">Studio</a>
+        <a href="#rechner">Rechner</a>
+        <a href="#team">Team</a>
         <a href="#contact">Kontakt</a>
+      </div>
+      <div>
+        <p>Rechtliches</p>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
       </div>
     </div>
     <p class="foot__legal">

@@ -96,6 +96,8 @@
   --text-soft: rgba(243, 237, 225, 0.72);
   --container: 1300px;
   --gutter: clamp(1.2rem, 5vw, 4rem);
+  /* distance to the screen edge for full-width bands: nav, footer, wide hero copy */
+  --edge: clamp(1.2rem, 4vw, 3.5rem);
   --section-y: clamp(2.8rem, 5vh, 4.5rem);
 }
 
@@ -305,7 +307,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.6rem clamp(1.2rem, 4vw, 3.5rem);
+  padding: 1.6rem var(--edge);
   transition:
     background 0.5s var(--ease),
     padding 0.5s var(--ease),
@@ -418,8 +420,18 @@ body::after {
   will-change: opacity, transform;
 }
 
+/* invisible anchor inside a scrub section: progress p = scrolled / (height − viewport),
+   so top = --at × (100% − 100vh) lands the jump at that progress */
+.cine__mark {
+  position: absolute;
+  top: calc(var(--at) * (100% - 100vh));
+  left: 0;
+  width: 1px;
+  height: 1px;
+}
+
 /* ---- CINE TEXT LAYER (hero + scenes): above the scrim, same container as the
-   content sections. --end aligns the whole block to the right. ---- */
+   content sections up to 1000px ---- */
 .cine__copy {
   position: relative;
   z-index: 2;
@@ -432,9 +444,18 @@ body::after {
   padding: 0 var(--gutter);
 }
 
-.cine__copy--end {
-  align-items: flex-end;
-  text-align: right;
+/* wide screens: hero and scenes put their copy bottom-left at the nav's edge, the same
+   place in all three, off the images' focal areas and where the scrims are darkest */
+@media (min-width: 1001px) {
+  .cine__stage {
+    align-items: flex-end;
+  }
+
+  .cine__copy {
+    max-width: none;
+    margin: 0;
+    padding: 0 var(--edge) clamp(4.5rem, 11vh, 7rem);
+  }
 }
 
 .cine__copy :is(h1, h2)+p {
@@ -493,7 +514,7 @@ body::after {
 }
 
 .hero h1+p {
-  max-width: 34ch;
+  max-width: 44ch;
   margin-bottom: 2.4rem;
 }
 
@@ -549,11 +570,23 @@ body::after {
   }
 }
 
-/* ---- MISSION ---- */
-.mission h2 {
-  /* a statement rather than a title: smaller than the other section headings */
-  font-size: clamp(1.7rem, 3.6vw, 3rem);
-  line-height: 1.18;
+/* ---- MISSION: short heading, then two articles side by side on the full width ---- */
+.mission__text {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.6rem, 5vw, 5rem);
+  margin-bottom: 3rem;
+}
+
+.mission__text h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  margin-bottom: 0.8rem;
+}
+
+.mission__text p {
+  max-width: 60ch;
+  font-size: 1.05rem;
+  color: var(--text-soft);
 }
 
 .mission .metrics {
@@ -567,9 +600,24 @@ body::after {
 }
 
 /* ---- CINEMATIC SCENES ---- */
+/* darkest where the copy sits (bottom-left on wide screens); checked for WCAG AA over
+   the real frames, incl. the bright snow of the ski scene */
 .scene .cine__scrim {
   background:
-    radial-gradient(120% 100% at 20% 60%,
+    radial-gradient(120% 100% at 18% 78%,
+      rgba(8, 10, 9, 0.72),
+      rgba(8, 10, 9, 0.2) 60%),
+    linear-gradient(0deg, rgba(8, 10, 9, 0.6), transparent 40%);
+}
+
+/* bright footage (snow): an extra side gradient behind the copy, as in the hero */
+.scene--bright .cine__scrim {
+  background:
+    linear-gradient(90deg,
+      rgba(8, 10, 9, 0.7) 0%,
+      rgba(8, 10, 9, 0.35) 40%,
+      transparent 65%),
+    radial-gradient(120% 100% at 18% 78%,
       rgba(8, 10, 9, 0.72),
       rgba(8, 10, 9, 0.2) 60%),
     linear-gradient(0deg, rgba(8, 10, 9, 0.6), transparent 40%);
@@ -604,11 +652,6 @@ body::after {
   padding: 2.6rem 1.8rem;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  transition: background 0.5s var(--ease);
-}
-
-.tiles>article:hover {
-  background: var(--ink-2);
 }
 
 .tiles p {
@@ -638,25 +681,52 @@ body::after {
   line-height: 1.5;
 }
 
-/* ---- SERVICES: numbered tiles ---- */
-.services .tiles {
-  counter-reset: service;
+/* ---- SERVICES: the process as numbered steps on one line (a column on phones);
+   ::before = the number, ::after = the dot on the line ---- */
+.steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  counter-reset: step;
 }
 
-.services article::before {
-  counter-increment: service;
-  content: counter(service, decimal-leading-zero);
+/* each step draws its piece of the line, so it stays continuous at 5, 2 or 1 columns */
+.steps li {
+  position: relative;
+  padding: 2.2rem clamp(1rem, 2vw, 2rem) 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.steps li::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.steps li::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  margin-bottom: 1.2rem;
   font-family: var(--serif);
   font-size: 1.4rem;
   color: var(--gold);
-  margin-bottom: 2.4rem;
 }
 
-.services h3 {
-  font-size: 1.6rem;
-  min-height: 2.2em;
-  /* keeps descriptions aligned when a title wraps */
+.steps h3 {
+  font-size: 1.45rem;
+  line-height: 1.15;
   margin-bottom: 0.8rem;
+}
+
+.steps p {
+  font-size: 0.92rem;
+  color: rgba(243, 237, 225, 0.66);
 }
 
 /* ---- IMPACT ---- */
@@ -1511,6 +1581,16 @@ body::after {
   margin-top: 0.2rem;
 }
 
+/* what each person brings: plain text under the role */
+.member .member__bio {
+  margin-top: 0.7rem;
+  max-width: 34ch;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-soft);
+}
+
 /* ---- REGIONS marquee (decorative) ----
    Two identical lists side by side, each moving left by its own width, so the
    second list takes the first one's place and the loop is seamless. Each list
@@ -1645,15 +1725,29 @@ body::after {
   cursor: pointer;
 }
 
-/* ---- FOOTER ---- */
+/* ---- LEGAL placeholder pages (impressum.html, datenschutz.html) ---- */
+.legal {
+  min-height: 100vh;
+  padding-top: clamp(2rem, 6vh, 4rem);
+}
+
+.legal .brand {
+  margin-bottom: clamp(3rem, 12vh, 7rem);
+}
+
+.legal h1 {
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  line-height: 1.05;
+}
+
+/* ---- FOOTER: a full-width band like the nav (same --edge); both hairlines run
+   from screen edge to screen edge ---- */
 .foot {
   border-top: 1px solid var(--line);
-  padding: 2.8rem var(--gutter) 2rem;
+  padding: 2.8rem var(--edge) 2rem;
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 3rem;
-  max-width: var(--container);
-  margin: 0 auto;
 }
 
 .foot .brand {
@@ -1662,7 +1756,7 @@ body::after {
 
 .foot__cols {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
 }
 
@@ -1674,7 +1768,8 @@ body::after {
   margin-bottom: 1rem;
 }
 
-.foot__cols a {
+.foot__cols a,
+.foot__cols span {
   display: block;
   font-size: 0.9rem;
   color: rgba(243, 237, 225, 0.66);
@@ -1686,10 +1781,31 @@ body::after {
   color: var(--gold-soft);
 }
 
+.foot__cols a[href^="mailto:"] {
+  overflow-wrap: anywhere;
+}
+
+/* platform glyphs stay monochrome (light, never gold): brand rules allow one-colour
+   versions of the marks, not recoloured ones */
+.foot__cols .foot__social {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.foot__social svg {
+  width: 16px;
+  height: 16px;
+  fill: rgba(243, 237, 225, 0.8);
+  flex-shrink: 0;
+}
+
 .foot__legal {
   grid-column: 1/-1;
   border-top: 1px solid var(--line);
-  padding-top: 1.6rem;
+  /* the hairline runs past the footer padding to both screen edges */
+  margin-inline: calc(-1 * var(--edge));
+  padding: 1.6rem var(--edge) 0;
   font-size: 0.76rem;
   color: rgba(243, 237, 225, 0.4);
 }
@@ -1701,7 +1817,7 @@ body::after {
   }
 
   .nav {
-    padding: 1.1rem 1.2rem;
+    padding: 1.1rem var(--edge);
   }
 
   .nav .nav__cta {
@@ -1726,6 +1842,16 @@ body::after {
 
   .calc {
     grid-template-columns: 1fr;
+  }
+
+  /* the brand gets its own row, the four link columns the full width */
+  .foot {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2.6rem;
   }
 }
 
@@ -1768,12 +1894,6 @@ body::after {
         rgba(8, 10, 9, 0.55) 0%,
         rgba(8, 10, 9, 0.28) 42%,
         rgba(8, 10, 9, 0.5) 100%);
-  }
-
-  /* the copy sits on the narrow crop: always left-aligned */
-  .cine__copy--end {
-    align-items: flex-start;
-    text-align: left;
   }
 
   .hero h1 {
@@ -1849,7 +1969,7 @@ body::after {
   }
 
   .foot {
-    padding: 2.5rem 1.2rem 1.8rem;
+    padding: 2.5rem var(--edge) 1.8rem;
     gap: 1.8rem;
   }
 }
@@ -1926,12 +2046,13 @@ body::after {
     left: 1.6rem;
   }
 
-  .foot {
-    grid-template-columns: 1fr;
-  }
-
   .foot__cols {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .mission__text,
+  .steps {
+    grid-template-columns: 1fr;
   }
 }
 

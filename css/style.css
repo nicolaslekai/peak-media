@@ -188,6 +188,9 @@ body::after {
 .section>header {
   max-width: 52rem;
   margin-bottom: 2.4rem;
+  /* anchor jumps land on the header (kicker first) below the fixed nav: 4.6rem ≈ the
+     scrolled nav (73px), plus the usual section spacing. main.js passes it to Lenis */
+  scroll-margin-top: calc(4.6rem + var(--section-y));
 }
 
 .section>header h2 {
@@ -307,6 +310,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 1.6rem var(--edge);
   transition:
     background 0.5s var(--ease),
@@ -1960,6 +1964,11 @@ body::after {
     border: none;
   }
 
+  /* no fixed nav to clear on phones */
+  .section>header {
+    scroll-margin-top: var(--section-y);
+  }
+
   /* the stage IS the 5:7 crop (height 140vw, matches cw * 1.4 in main.js;
      no full-screen black bands baked into the canvas):
      it pins vertically centered, and surrounding content follows right behind it.
@@ -2064,6 +2073,12 @@ body::after {
 
 /* ---- SMALL PHONES: single-column grids ---- */
 @media (max-width: 640px) {
+
+  /* "Potenzial berechnen" next to the two-line brand at 360px: tighter tracking */
+  .nav .nav__cta {
+    letter-spacing: 0.08em;
+    padding-inline: 0.85em;
+  }
 
   .tiles,
   .impact .metrics,

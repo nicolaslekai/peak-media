@@ -148,8 +148,12 @@ function __boot() {
       const el = document.querySelector(href);
       if (!el) return;
       e.preventDefault();
-      if (lenis) lenis.scrollTo(el, { duration: 1.3 });
-      else el.scrollIntoView({ behavior: 'smooth' });
+      // a section lands on its header (kicker first), clear of the fixed nav: the gap is the
+      // header's scroll-margin-top in style.css, which Lenis does not read by itself
+      const goal = el.querySelector(':scope > header') || el;
+      const gap = parseFloat(getComputedStyle(goal).scrollMarginTop) || 0;
+      if (lenis) lenis.scrollTo(goal, { offset: -gap, duration: 1.3 });
+      else goal.scrollIntoView({ behavior: 'smooth' });
     });
   });
 

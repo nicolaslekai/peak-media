@@ -795,9 +795,10 @@ body::after {
 /* ---- TEAM ---- */
 .team__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.4rem;
-  max-width: 760px;
+  /* three cards at the size the two founder cards had (~370px each) */
+  max-width: 1150px;
 }
 
 .member__img {
@@ -821,6 +822,20 @@ body::after {
 .member:hover .member__img img {
   transform: scale(1.05);
   filter: grayscale(0) contrast(1.02);
+}
+
+/* placeholder until the photo exists: initials on the card background */
+.member__img--empty {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+}
+
+.member__img--empty span {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  letter-spacing: 0.04em;
+  color: var(--gold-soft);
 }
 
 .member figcaption {
@@ -1188,8 +1203,15 @@ body::after {
   }
 
   .team__grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    /* the two founders stay side by side, phones included */
+  }
+
+  /* two cards side by side, an odd last card centred under them */
+  .member:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 0.5rem);
   }
 
   .phones {

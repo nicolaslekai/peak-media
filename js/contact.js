@@ -35,7 +35,6 @@
     const v = el.validity;
     if (v.valueMissing) return el.tagName === 'SELECT' ? 'Bitte wählen Sie eine Option.' : 'Bitte füllen Sie dieses Feld aus.';
     if (v.typeMismatch || v.patternMismatch) return 'Bitte geben Sie eine gültige E-Mail-Adresse ein, z. B. name@hotel.de.';
-    if (v.rangeUnderflow || v.badInput) return 'Bitte geben Sie eine gültige Zahl ein.';
     return '';
   };
   for (const el of form.querySelectorAll('input, select, textarea')) {
@@ -44,7 +43,14 @@
     el.addEventListener('change', () => el.setCustomValidity(''));
   }
 
-  // calculator → form: business type, size field and a one-line summary
+  // the size fields are ranges: a calculator number picks the first option whose
+  // data-max covers it, the last option ("über …") takes the rest
+  const pickRange = (select, n) => {
+    const opts = [...select.options].filter(o => o.value);
+    select.value = (opts.find(o => n <= Number(o.dataset.max)) || opts[opts.length - 1]).value;
+  };
+
+  // calculator → form: business type, size range and a one-line summary
   const FROM_CALC = {
     hotel: { type: 'hotel', field: 'zimmer', input: 'rooms' },
     bahn: { type: 'bergbahn', field: 'gaeste', input: 'guests' },
@@ -57,7 +63,7 @@
       if (!map) return;
       type.value = map.type;
       showGroup();
-      form.elements[map.field].value = panel.querySelector(`input[name="${map.input}"]`).value;
+      pickRange(form.elements[map.field], Number(panel.querySelector(`input[name="${map.input}"]`).value));
       const clean = el => el.textContent.replace(/\s+/g, ' ').trim();
       const summary = [
         ...[...panel.querySelectorAll('.range label')].map(clean),

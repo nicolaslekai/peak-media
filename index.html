@@ -12,7 +12,7 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=52" />
+  <link rel="stylesheet" href="css/style.css?v=53" />
 </head>
 
 <body>
@@ -803,21 +803,109 @@
           melden uns innerhalb von zwei Werktagen mit Ideen — kein Pitch, kein Druck.
         </p>
       </header>
-      <form class="contact__form reveal" onsubmit="return false;">
-        <div class="field">
-          <input type="text" required placeholder=" " id="f-name" /><label for="f-name">Ihr Name</label>
-        </div>
-        <div class="field">
-          <input type="text" required placeholder=" " id="f-prop" /><label for="f-prop">Haus / Betrieb</label>
-        </div>
-        <div class="field">
-          <input type="email" required placeholder=" " id="f-mail" /><label for="f-mail">E-Mail</label>
-        </div>
+      <!-- enquiry: base fields for everyone, extra fields per business type (D-28; no budget
+           field). js/contact.js shows the matching group, validates in German, takes over the
+           calculator values and shows the confirmation dialog. Delivery is open (D-04, F1). -->
+      <form class="contact__form reveal" id="enquiry" onsubmit="return false;">
         <div class="field field--full">
-          <textarea rows="3" placeholder=" " id="f-msg"></textarea><label for="f-msg">Was schwebt Ihnen vor?</label>
+          <select id="f-type" name="betriebsart" required>
+            <option value="" selected disabled hidden></option>
+            <option value="hotel">Hotel / Resort</option>
+            <option value="bergbahn">Bergbahn</option>
+            <option value="region">Region / Tourismus</option>
+            <option value="gastronomie">Gastronomie</option>
+            <option value="andere">Andere</option>
+          </select><label for="f-type">Betriebsart</label>
         </div>
+        <div class="field">
+          <input type="text" name="name" autocomplete="name" required placeholder=" " id="f-name" /><label for="f-name">Ihr Name</label>
+        </div>
+        <div class="field">
+          <input type="text" name="betrieb" autocomplete="organization" required placeholder=" " id="f-prop" /><label for="f-prop">Name des Betriebs</label>
+        </div>
+        <div class="field">
+          <input type="email" name="email" autocomplete="email" required placeholder=" " id="f-mail"
+            pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" /><label for="f-mail">E-Mail</label>
+        </div>
+        <div class="field">
+          <input type="text" name="ort" autocomplete="address-level2" placeholder=" " id="f-place" /><label for="f-place">Ort</label>
+        </div>
+
+        <div class="contact__extra" data-for="hotel" hidden>
+          <div class="field">
+            <input type="number" name="zimmer" min="1" inputmode="numeric" placeholder=" " id="f-rooms" /><label for="f-rooms">Zimmer</label>
+          </div>
+          <div class="field">
+            <input type="number" name="mitarbeitende" min="0" inputmode="numeric" placeholder=" " id="f-staff" /><label for="f-staff">Mitarbeitende</label>
+          </div>
+        </div>
+        <div class="contact__extra" data-for="bergbahn" hidden>
+          <div class="field">
+            <input type="number" name="gaeste" min="0" inputmode="numeric" placeholder=" " id="f-guests" /><label for="f-guests">Gäste pro Jahr (ungefähr)</label>
+          </div>
+          <div class="field">
+            <select id="f-season" name="saison" required>
+              <option value="" selected disabled hidden></option>
+              <option>Sommer</option>
+              <option>Winter</option>
+              <option>Ganzjährig</option>
+            </select><label for="f-season">Saison</label>
+          </div>
+        </div>
+        <div class="contact__extra" data-for="region" hidden>
+          <div class="field">
+            <input type="number" name="uebernachtungen" min="0" inputmode="numeric" placeholder=" " id="f-nights" /><label for="f-nights">Übernachtungen pro Jahr</label>
+          </div>
+          <div class="field">
+            <select id="f-kur" name="kurort" required>
+              <option value="" selected disabled hidden></option>
+              <option>Ja</option>
+              <option>Nein</option>
+              <option>Weiß nicht</option>
+            </select><label for="f-kur">Kur- oder Erholungsort</label>
+          </div>
+        </div>
+        <div class="contact__extra" data-for="gastronomie" hidden>
+          <div class="field">
+            <input type="number" name="sitzplaetze" min="1" inputmode="numeric" placeholder=" " id="f-seats" /><label for="f-seats">Sitzplätze</label>
+          </div>
+          <div class="field">
+            <input type="number" name="mitarbeitende" min="0" inputmode="numeric" placeholder=" " id="f-gstaff" /><label for="f-gstaff">Mitarbeitende</label>
+          </div>
+        </div>
+
+        <div class="field field--full">
+          <textarea name="nachricht" rows="3" placeholder=" " id="f-msg"></textarea><label for="f-msg">Was schwebt Ihnen vor?</label>
+        </div>
+
+        <p class="contact__calc" hidden>Ihre Werte aus dem Rechner werden mitgeschickt: <span></span></p>
+        <input type="hidden" name="rechner" />
+        <!-- honeypot: invisible to people, bots fill it in -->
+        <div class="contact__hp" aria-hidden="true">
+          <label for="f-web">Website</label><input type="text" name="website" id="f-web" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <p class="contact__note">
+          Wir nutzen Ihre Angaben nur, um Ihre Anfrage zu beantworten. Mehr dazu in der
+          <a href="datenschutz.html">Datenschutzerklärung</a>.
+        </p>
+        <p class="contact__error" role="alert" hidden>
+          Das hat leider nicht geklappt. Bitte versuchen Sie es später noch einmal.
+        </p>
         <button class="btn btn--gold" type="submit">Anfrage senden</button>
       </form>
+
+      <dialog class="dialog" id="enquiry-sent" aria-labelledby="enquiry-sent-title">
+        <p class="kicker">Anfrage</p>
+        <h2 id="enquiry-sent-title">Danke für Ihre Nachricht.</h2>
+        <p>Wir melden uns innerhalb von zwei Werktagen bei Ihnen – mit Ideen, ohne Druck.</p>
+        <p class="dialog__test" hidden>
+          Testmodus: Der Versand wird mit dem Hosting eingerichtet. Diese Anfrage wurde noch nicht übermittelt.
+        </p>
+        <form method="dialog">
+          <button class="btn btn--gold">Schließen</button>
+        </form>
+      </dialog>
     </section>
   </main>
 
@@ -861,6 +949,7 @@
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
   <script src="js/main.js?v=47"></script>
   <script src="js/evidence.js?v=3"></script>
+  <script src="js/contact.js?v=1"></script>
 </body>
 
 </html>

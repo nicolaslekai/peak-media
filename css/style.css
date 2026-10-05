@@ -1678,6 +1678,7 @@ body::after {
 }
 
 .field input,
+.field select,
 .field textarea {
   width: 100%;
   background: transparent;
@@ -1692,9 +1693,24 @@ body::after {
 }
 
 .field input:focus,
+.field select:focus,
 .field textarea:focus {
   outline: none;
   border-color: var(--gold);
+}
+
+/* select: same underline field, a small gold caret instead of the native arrow */
+.field select {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+  cursor: pointer;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c6a45c' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 0.2rem center;
+}
+
+.field select option {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .field label {
@@ -1709,6 +1725,8 @@ body::after {
 
 .field input:focus+label,
 .field input:not(:placeholder-shown)+label,
+.field select:focus+label,
+.field select:valid+label,
 .field textarea:focus+label,
 .field textarea:not(:placeholder-shown)+label {
   top: -0.7rem;
@@ -1722,6 +1740,76 @@ body::after {
   grid-column: 1/-1;
   justify-self: start;
   margin-top: 0.6rem;
+  cursor: pointer;
+}
+
+/* extra fields per business type: their fields join the form grid when shown */
+.contact__extra:not([hidden]) {
+  display: contents;
+}
+
+.contact__calc,
+.contact__note,
+.contact__error {
+  grid-column: 1/-1;
+  font-size: 0.8rem;
+  color: rgba(243, 237, 225, 0.55);
+}
+
+.contact__calc span {
+  color: var(--gold-soft);
+}
+
+.contact__note a {
+  color: var(--gold-soft);
+  border-bottom: 1px solid var(--line);
+}
+
+.contact__error {
+  color: #e8a0a0;
+}
+
+/* honeypot: off screen, still in the form */
+.contact__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* confirmation after sending (native <dialog>, top layer above the page overlays) */
+.dialog {
+  max-width: min(32rem, calc(100% - 2.4rem));
+  margin: auto;
+  padding: clamp(1.8rem, 5vw, 3rem);
+  border: 1px solid var(--line);
+  background: var(--ink-2);
+  color: var(--paper);
+}
+
+.dialog::backdrop {
+  background: rgba(12, 14, 13, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.dialog h2 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  margin-bottom: 1rem;
+}
+
+.dialog p:not(.kicker) {
+  color: var(--text-soft);
+}
+
+.dialog .dialog__test {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: rgba(243, 237, 225, 0.5);
+}
+
+.dialog .btn {
+  margin-top: 2rem;
   cursor: pointer;
 }
 

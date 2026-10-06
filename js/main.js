@@ -27,7 +27,9 @@ const SCRUB_SECTIONS = [
 ];
 // decoded frames kept on each side of the playhead (phone frames ≈ 6 MB decoded, 2560 ≈ 15 MB)
 const WINDOW = PHONE ? 6 : 8;
-const MAX_FETCH = 6, MAX_DECODE = 3;
+// decodes in flight: a 2560 frame takes ~25 ms (1920: ~18 ms); with 3 a quick scroll
+// outran the window and the scrub showed a stand-in frame, a visible jump (P12)
+const MAX_FETCH = 6, MAX_DECODE = 6;
 
 function smoothstep(a, b, x) {
   if (a === b) return x < a ? 0 : 1;

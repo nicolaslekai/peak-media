@@ -131,6 +131,7 @@
   }
 
   // ---- loop: only while the section is on screen; redraw only when progress or size changed
+  const STATIONS = [0, 0.5, 1];   // ride progress at each link's station
   let running = false, last = -1, lastW = 0, lastH = 0;
   function frame() {
     if (!running) return;
@@ -139,8 +140,18 @@
     const p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
     if (Math.abs(p - last) > 0.0004) {
       draw(p); last = p;
+      // each link fades with the scroll, like the captions over the frames: the current
+      // one fades out, a short pause, then the next one fades in and rises (12 % each)
+      const k = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
+      const show = [1 - k(0.12, 0.24), k(0.26, 0.38) * (1 - k(0.62, 0.74)), k(0.76, 0.88)];
+      items.forEach((li, i) => {
+        const o = show[i], y = p < STATIONS[i] ? (1 - o) * 1.2 : -(1 - o) * 0.6;
+        li.style.opacity = o.toFixed(3);
+        li.style.transform = o < 1 ? `translateY(${y.toFixed(2)}rem)` : '';
+        li.style.visibility = o > 0.005 ? 'visible' : 'hidden';
+        li.classList.toggle('is-active', o >= 0.5);
+      });
       const active = p < 0.25 ? 0 : p < 0.75 ? 1 : 2;
-      items.forEach((li, i) => li.classList.toggle('is-active', i === active));
       dots.forEach((d, i) => d.classList.toggle('on', i <= active));
       ride.classList.toggle('ride--top', p > 0.9);
     }

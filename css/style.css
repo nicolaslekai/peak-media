@@ -1796,12 +1796,10 @@ html:not(.js) #scene-ski .cine__stage {
   opacity: 0;
   visibility: hidden;
   transform: translateY(1.2rem);
-  transition:
-    opacity 0.7s var(--ease),
-    transform 0.7s var(--ease),
-    visibility 0.7s;
 }
 
+/* opacity, rise and visibility follow the scroll (js/bergfahrt.js); the first link is
+   shown before the first frame */
 .chain--ride li.is-active {
   opacity: 1;
   visibility: visible;

@@ -56,7 +56,7 @@
     bahn: { type: 'bergbahn', field: 'gaeste', input: 'guests' },
     region: { type: 'region', field: 'uebernachtungen', input: 'nights' },
   };
-  document.querySelectorAll('.calc[data-model] .calc__result a[href="#contact"]').forEach(link => {
+  document.querySelectorAll('.calc[data-model] .calc__result a[href="#kontakt"]').forEach(link => {
     link.addEventListener('click', () => {
       const panel = link.closest('.calc');
       const map = FROM_CALC[panel.dataset.model];

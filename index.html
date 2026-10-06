@@ -12,7 +12,7 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=66" />
+  <link rel="stylesheet" href="css/style.css?v=77" />
 </head>
 
 <body>
@@ -25,10 +25,10 @@
     <!-- on screens up to 1000px this <nav> becomes the full-screen menu (js/nav.js);
          without JS only the CTA shows there -->
     <nav id="menu" aria-label="Hauptmenü">
-      <a href="#leistungen">Leistungen</a>
-      <a href="#impact">Ergebnisse</a>
-      <a href="#team">Team</a>
-      <a href="#contact">Kontakt</a>
+      <a href="#warum">Warum</a>
+      <a href="#ablauf">So arbeiten wir</a>
+      <a href="#ueber-uns">Über uns</a>
+      <a href="#kontakt">Kontakt</a>
       <a href="#rechner" class="nav__cta">Potenzial berechnen</a>
       <!-- only in the menu on phones and tablets -->
       <div class="nav__meta">
@@ -59,18 +59,18 @@
             Weniger stille Wochen, mehr volle Häuser.
           </p>
           <div class="hero__actions">
-            <a href="#work" class="btn btn--gold">Arbeiten ansehen</a>
-            <a href="#contact" class="btn btn--ghost">Sprechen wir</a>
+            <a href="#rechner" class="btn btn--gold">Potenzial berechnen</a>
+            <a href="#kontakt" class="btn btn--ghost">Sprechen wir</a>
           </div>
         </div>
         <div class="hero__cue" aria-hidden="true">Scrollen</div>
       </div>
     </section>
 
-    <!-- MISSION -->
-    <section class="section mission" id="approach">
+    <!-- MISSION ("Warum"): the problem and how we solve it, then three selling points -->
+    <section class="section mission" id="warum">
       <header>
-        <p class="kicker">Wie wir helfen</p>
+        <p class="kicker">Warum Blaue Stunde</p>
         <h2>Ein schönes Haus sollte keine leeren Zimmer haben.</h2>
       </header>
       <div class="mission__text">
@@ -84,7 +84,7 @@
           </p>
         </article>
         <article>
-          <h3>Wie wir arbeiten</h3>
+          <h3>Wie wir sind</h3>
           <p>
             Wir kommen zu Ihnen, lernen Ihre Zimmer, Ihre Saisons und Ihre Gäste
             kennen und arbeiten Seite an Seite mit Ihrem Team. Kein Fachjargon,
@@ -95,15 +95,18 @@
       </div>
       <ul class="metrics">
         <li class="metric">
-          <b>38%</b> Mehr direkte Buchungsanfragen bei unseren Partnern
+          <b>Vor Ort.</b> Zweimal im Jahr drehen wir bei Ihnen – im Sommer und
+          im Winter. Echte Bilder von Ihrem Haus, keine Stockfotos.
         </li>
         <li class="metric">
-          <b>70%</b> Der Reisen werden heute zuerst auf Social &amp; Video
-          recherchiert
+          <b>Jede Woche.</b> Ihr Team hält schöne Momente fest: Foto oder Video,
+          zehn Sekunden, abschicken. Den Kanal dafür richten wir ein, alles
+          Weitere übernehmen wir.
         </li>
         <li class="metric">
-          <b>4×</b> Mehr Saves auf einem Hero-Reel als auf einem statischen
-          Post
+          <b>Direkt.</b> Gäste, die Sie auf Social Media entdecken,
+          buchen dort, wo es sich für Sie lohnt: auf Ihrer Website, ohne
+          Portalprovision.
         </li>
       </ul>
     </section>
@@ -111,15 +114,12 @@
     <div>
       <!-- SCENE 1 — WELLNESS (spa star-timelapse) -->
       <section class="cine scene" id="scene-spa">
-        <!-- anchor target for "Arbeiten": scroll progress 0.32, where every caption line is
-             fully visible (data-in + 0.16 fade ≤ 0.30, data-out − 0.16 ≥ 0.74) -->
-        <span class="cine__mark" id="work" style="--at: 0.32" aria-hidden="true"></span>
         <div class="cine__stage">
           <canvas></canvas>
           <div class="cine__scrim"></div>
           <div class="cine__copy">
             <p class="kicker kicker--light cine-line" data-in="0.06" data-out="0.94">
-              01 — Wellness
+              Wellness
             </p>
             <h2 class="cine-line" data-in="0.08" data-out="0.94">
               Ruhe, die den Scroll stoppt.
@@ -138,8 +138,9 @@
         </div>
       </section>
 
-      <!-- CHANNELS — non-scroll break between scenes -->
-      <section class="section channels" id="channels">
+      <!-- CHANNELS — non-scroll break between scenes: what each channel is for and the
+           formats we make; no figures of our own until a pilot exists (D-05) -->
+      <section class="section channels" id="kanaele">
         <header>
           <p class="kicker">Jeder Kanal, aus einer Hand</p>
           <h2>
@@ -153,47 +154,41 @@
         <div class="tiles">
           <article>
             <h3><span aria-hidden="true">▶</span>Instagram</h3>
-            <p class="metric"><b>4,2%</b> Ø Engagement</p>
+            <p class="metric"><b>Bühne.</b> Reels · Carousels · Stories</p>
             <p>
-              Reels, Carousels und Stories, abgestimmt auf Explore — die
-              Entdeckungs-Engine fürs Reisen.
+              Zeigt, wie sich ein Aufenthalt bei Ihnen anfühlt – dort, wo
+              Reisende ihre nächste Auszeit finden.
             </p>
           </article>
           <article>
             <h3><span aria-hidden="true">♪</span>TikTok</h3>
-            <p class="metric"><b>3,4 Mio.</b> Ø Views / Hero</p>
+            <p class="metric"><b>Reichweite.</b> Kurzvideos, vertikal</p>
             <p>
-              Nativ, schnell geschnitten, vertikal — macht aus einem Haus
-              einen Ort, den man screenshottet.
+              Schnell und nah dran: Momente, die Gäste erreichen, die Ihr Haus
+              noch nicht kennen – weit über Ihre Follower hinaus.
             </p>
           </article>
           <article>
             <h3><span aria-hidden="true">▷</span>YouTube</h3>
-            <p class="metric"><b>45s</b> Shorts + Filme</p>
+            <p class="metric"><b>Entscheidung.</b> Shorts · Filme</p>
             <p>
-              Shorts für Reichweite, längere Markenfilme für die Suche, die
-              die Buchung abschließt.
+              Für Gäste, die es genau wissen wollen: Shorts für den ersten
+              Eindruck, längere Filme über Zimmer, Spa und Umgebung.
             </p>
           </article>
           <article>
-            <h3><span aria-hidden="true">✦</span>Meta &amp; Paid</h3>
-            <p class="metric"><b>25×</b> Peak ROAS</p>
+            <h3><span aria-hidden="true">f</span>Facebook</h3>
+            <p class="metric"><b>Nähe.</b> Beiträge · Veranstaltungen</p>
             <p>
-              Die besten organischen Cuts, mit Budget verstärkt, um Zimmer in
-              der Nebensaison zu füllen.
+              Neuigkeiten, Veranstaltungen und Angebote für Stammgäste, die
+              wiederkommen – und für die Menschen in der Region.
             </p>
           </article>
         </div>
-        <ul class="metrics metrics--inline">
-          <li class="metric">
-            <b>70%</b> der Reisenden buchen, nachdem sie ein Video gesehen
-            haben
-          </li>
-          <li class="metric">
-            <b>4×</b> mehr Saves auf Hero-Reels als auf Statischem
-          </li>
-          <li class="metric"><b>5/Wo</b> Posting-Frequenz, die wir fahren</li>
-        </ul>
+        <p class="channels__note">
+          Welche Kanäle wir bespielen, entscheiden wir mit Ihnen – je nach Haus,
+          Gästen und Zielen.
+        </p>
       </section>
 
       <!-- SCENE 2 — POWDER (skier) -->
@@ -203,7 +198,7 @@
           <div class="cine__scrim"></div>
           <div class="cine__copy">
             <p class="kicker kicker--light cine-line" data-in="0.06" data-out="0.94">
-              02 — Powder
+              Powder
             </p>
             <h2 class="cine-line" data-in="0.08" data-out="0.94">
               Views, die viral gehen.
@@ -222,12 +217,11 @@
         </div>
       </section>
     </div>
-    <!-- /#work -->
 
     <!-- SERVICES — how working with us runs, as a process -->
-    <section class="section services" id="leistungen">
+    <section class="section services" id="ablauf">
       <header>
-        <p class="kicker">Was wir machen</p>
+        <p class="kicker">So arbeiten wir</p>
         <h2>Ein komplettes Social-Team, am Berg.</h2>
         <p>
           Zweimal im Jahr sind wir bei Ihnen vor Ort, dazwischen arbeitet unser
@@ -260,65 +254,53 @@
       </ol>
     </section>
 
-    <!-- IMPACT / RESULTS — iPhone-framed social proof -->
-    <section class="section impact" id="impact">
+    <!-- EXAMPLES — iPhone-framed formats, how content can look; no client figures until a
+         pilot exists (D-05) -->
+    <section class="section impact" id="beispiele">
       <header>
-        <p class="kicker">Beweise, keine Versprechen</p>
+        <p class="kicker">So kann es aussehen</p>
         <h2>
           Wir jagen keine Likes. Wir helfen, Zimmer zu füllen.
         </h2>
         <p>
-          Ein Jahr Hand in Hand mit einem alpinen Wellnessresort — das hat der
-          Content für den Kalender getan.
+          So kann Content für Ihr Haus aussehen – Beispiele, keine Kundenzahlen.
+          Stil und Kampagne richten sich nach Ihnen.
         </p>
       </header>
 
-      <ul class="metrics">
-        <li class="metric"><b>4,8 Mio.</b> Views auf dem Hero-Reel</li>
-        <li class="metric">
-          <b>567%</b> Follower-Wachstum in 12 Monaten
-        </li>
-        <li class="metric">
-          <b>6,2%</b> Ø Engagement-Rate <em>(Branche ≈0,5 %)</em>
-        </li>
-        <li class="metric">
-          <b>38%</b> Mehr direkte Buchungsanfragen
-        </li>
-      </ul>
-
-      <!-- iPhone reel wall -->
+      <!-- iPhone reel wall (example images, see the footer note) -->
       <div class="phones">
         <figure class="phone">
-          <img src="assets/img/G1_reel_pool.png" alt="Pool-Reel" loading="lazy" />
+          <img src="assets/img/G1_reel_pool.png" alt="Beispiel-Reel: Morgen am Pool" loading="lazy" />
           <figcaption>
-            <span>LIVE</span>
-            <p><b>@alpenglow.retreat</b> 1,2 Mio. Views · 84k Likes</p>
+            <span>REEL</span>
+            <p><b>Morgen am Pool</b> Atmosphäre, die man speichert</p>
           </figcaption>
         </figure>
         <figure class="phone phone--review">
-          <img src="assets/img/G6_chalet_interior.png" alt="Gästebewertung" loading="lazy" />
+          <img src="assets/img/G6_chalet_interior.png" alt="Beispiel: Gästestimme als Story" loading="lazy" />
           <figcaption>
             <p class="rating" role="img" aria-label="5 von 5 Sternen">
               ★★★★★
             </p>
             <blockquote>
-              „Gebucht, sobald ich ihr Reel gesehen habe.“
+              „Genau so schön wie auf den Bildern.“
             </blockquote>
-            <p>— Gästebewertung</p>
+            <p>— Gästestimme als Story, Beispiel</p>
           </figcaption>
         </figure>
         <figure class="phone">
-          <img src="assets/img/G5_ski_action.png" alt="Powder-Reel" loading="lazy" />
+          <img src="assets/img/G5_ski_action.png" alt="Beispiel-Reel: Powder Day" loading="lazy" />
           <figcaption>
             <span>REEL</span>
-            <p><b>Powder Day</b> 2,1 Mio. Views · 12k Saves</p>
+            <p><b>Powder Day</b> Action, die im Feed hängen bleibt</p>
           </figcaption>
         </figure>
         <figure class="phone">
-          <img src="assets/img/G4_champagne.png" alt="Sunset-Moment" loading="lazy" />
+          <img src="assets/img/G4_champagne.png" alt="Beispiel-Story: Sunset Service" loading="lazy" />
           <figcaption>
             <span>STORY</span>
-            <p><b>Sunset Service</b> +42% Saves diese Woche</p>
+            <p><b>Sunset Service</b> Ein Moment, den Gäste teilen</p>
           </figcaption>
         </figure>
       </div>
@@ -388,42 +370,64 @@
         </figcaption>
       </figure>
 
+      <!-- the chain: a sourced fact per link and our answer ("Was wir tun"); on a vertical
+           rail that draws itself from link to link while scrolling (CSS only, static
+           without support or with reduced motion) -->
       <ol class="chain">
         <li>
-          <h3>Zuerst gesehen werden</h3>
-          <p class="metric">
-            <b>99 %</b> der Gäste, die ein Hotel erst auf Booking.com finden,
-            buchen es auch dort.
-          </p>
-          <p>
-            Darum zählt, wo man Sie zuerst sieht: auf Instagram und TikTok –
-            bevor jemand überhaupt ein Portal öffnet.
-          </p>
-          <small>Bundeskartellamt 2020</small>
+          <div class="chain__fact">
+            <h3>Zuerst gesehen werden</h3>
+            <p class="metric">
+              <b>99 %</b> der Gäste, die ein Hotel erst auf Booking.com finden,
+              buchen es auch dort.
+            </p>
+            <small>Bundeskartellamt 2020</small>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Wir machen Ihr Haus dort sichtbar, wo Reisen beginnen: auf Instagram
+              und TikTok, regelmäßig und im Stil Ihres Hauses – bevor jemand
+              überhaupt ein Portal öffnet.
+            </p>
+          </div>
         </li>
         <li>
-          <h3>Direkt gebucht</h3>
-          <p class="metric">
-            <b>2 von 3</b> Direktbuchungen kommen von Gästen, die das Haus schon
-            kannten.
-          </p>
-          <p>
-            Wer Sie über Social Media kennenlernt, kennt auch den Weg zu Ihnen:
-            Profil, Website, Telefon.
-          </p>
-          <small>Bundeskartellamt 2020</small>
+          <div class="chain__fact">
+            <h3>Direkt gebucht</h3>
+            <p class="metric">
+              <b>2 von 3</b> Direktbuchungen kommen von Gästen, die das Haus schon
+              kannten.
+            </p>
+            <small>Bundeskartellamt 2020</small>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Jeder Beitrag führt zu Ihnen: Profil, Website, Telefon. Wer Sie über
+              Social Media kennenlernt, findet den direkten Weg – nicht den über
+              das Portal.
+            </p>
+          </div>
         </li>
         <li>
-          <h3>Provision gespart</h3>
-          <p class="metric">
-            <b>halb so oft</b> werden Direktbuchungen storniert wie Buchungen über
-            Booking.com.
-          </p>
-          <p>
-            Und seit 2024 dürfen Sie direkt günstiger sein als auf dem Portal. Wie
-            viel Provision das ausmacht, zeigt der <a href="#rechner">Rechner</a>.
-          </p>
-          <small>Stornoquote 9 % zu 19 %: HOTREC 2026 · Preisfreiheit: EU Digital Markets Act</small>
+          <div class="chain__fact">
+            <h3>Provision gespart</h3>
+            <p class="metric">
+              <b>halb so oft</b> werden Direktbuchungen storniert wie Buchungen über
+              Booking.com.
+            </p>
+            <small>Stornoquote 9 % zu 19 %: HOTREC 2026 · Preisfreiheit: EU Digital Markets Act</small>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Seit 2024 dürfen Sie direkt günstiger sein als auf dem Portal. Wir
+              zeigen Ihre Direktangebote Ihren Gästen und messen, was bei den
+              Buchungen ankommt. Wie viel Provision das ausmacht, zeigt der
+              <a href="#rechner">Rechner</a>.
+            </p>
+          </div>
         </li>
       </ol>
 
@@ -619,7 +623,7 @@
             Durchschnittswerte. Umsatz, nicht Gewinn; keine Zusage über Ergebnisse.
             Die tatsächliche Provision hängt von Ihrem Vertrag ab.
           </p>
-          <a class="btn btn--gold" href="#contact">Mit diesen Werten anfragen</a>
+          <a class="btn btn--gold" href="#kontakt">Mit diesen Werten anfragen</a>
         </div>
       </div>
 
@@ -667,7 +671,7 @@
             zusätzliche Fahrgäste kosten dort kaum mehr, die Gastronomie hat
             Wareneinsatz. Umsatz, nicht Gewinn; keine Zusage über Ergebnisse.
           </p>
-          <a class="btn btn--gold" href="#contact">Mit diesen Werten anfragen</a>
+          <a class="btn btn--gold" href="#kontakt">Mit diesen Werten anfragen</a>
         </div>
       </div>
 
@@ -720,15 +724,15 @@
             Handel und Freizeitbetriebe im Ort. Kinder und Ermäßigungen senken den
             Kurbeitrag; keine Zusage über Ergebnisse.
           </p>
-          <a class="btn btn--gold" href="#contact">Mit diesen Werten anfragen</a>
+          <a class="btn btn--gold" href="#kontakt">Mit diesen Werten anfragen</a>
         </div>
       </div>
     </section>
 
     <!-- TEAM -->
-    <section class="section team" id="team">
+    <section class="section team" id="ueber-uns">
       <header>
-        <p class="kicker">Das Team</p>
+        <p class="kicker">Über uns</p>
         <h2>Wir kennen Ihr Geschäft – von innen.</h2>
         <p>
           Drei Menschen aus Werbung, Gastronomie und Hotellerie, die wissen, wie
@@ -808,7 +812,7 @@
     </div>
 
     <!-- CONTACT -->
-    <section class="section contact" id="contact">
+    <section class="section contact" id="kontakt">
       <header>
         <p class="kicker">Sprechen wir</p>
         <h2>Erzählen Sie uns von Ihrem Haus.</h2>
@@ -983,13 +987,6 @@
         <a href="#" class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#youtube" /></svg>YouTube</a>
       </div>
       <div>
-        <p>Entdecken</p>
-        <a href="#leistungen">Leistungen</a>
-        <a href="#rechner">Rechner</a>
-        <a href="#team">Team</a>
-        <a href="#contact">Kontakt</a>
-      </div>
-      <div>
         <p>Rechtliches</p>
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
@@ -1004,7 +1001,7 @@
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
   <script src="js/main.js?v=51"></script>
   <script src="js/evidence.js?v=3"></script>
-  <script src="js/contact.js?v=2"></script>
+  <script src="js/contact.js?v=3"></script>
   <script src="js/steps.js?v=5"></script>
   <script src="js/nav.js?v=2"></script>
 </body>

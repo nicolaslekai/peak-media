@@ -79,7 +79,8 @@
     b.type = 'button';
     b.textContent = String(i + 1).padStart(2, '0');
     b.setAttribute('aria-controls', li.id);
-    b.setAttribute('aria-label', `Schritt ${i + 1}: ${li.querySelector('h3').textContent}`);
+    // the name must contain the visible number (WCAG 2.5.3, label in name)
+    b.setAttribute('aria-label', `Schritt ${b.textContent}: ${li.querySelector('h3').textContent}`);
     b.addEventListener('click', () => show(i));
     nav.append(b);
     return b;

@@ -26,6 +26,7 @@ function initScrub(cfg) {
   const section = document.querySelector(cfg.section);
   if (!section) return null;
   const canvas = section.querySelector('canvas');
+  if (!canvas) return null;
   const ctx = canvas.getContext('2d', { alpha: false });
   const lines = [...section.querySelectorAll('.cine-line')];
   const bg = cfg.bg || '#0c0e0d';
@@ -107,15 +108,26 @@ function initScrub(cfg) {
 function __boot() {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const scrubs = SCRUB_SECTIONS.map(initScrub).filter(Boolean);
+  // each part is isolated (T1): a broken scene must not stop the others, the scroll
+  // or the anchor links
+  const scrubs = SCRUB_SECTIONS.map(cfg => {
+    try { return initScrub(cfg); } catch (err) { console.error(err); return null; }
+  }).filter(Boolean);
 
   /* Lenis smooth scroll — also drives the canvas update loop */
   let lenis = null;
   if (window.Lenis && !reduce) {
-    lenis = new Lenis({ lerp: 0.075, smoothWheel: true, wheelMultiplier: 0.9 });
-    window.lenis = lenis;
+    try {
+      lenis = new Lenis({ lerp: 0.075, smoothWheel: true, wheelMultiplier: 0.9 });
+      window.lenis = lenis;
+    } catch (err) { console.error(err); }   // native scrolling still works
   }
-  const updateAll = () => { for (const s of scrubs) s.update(); };
+  const updateAll = () => {
+    for (const s of scrubs) {
+      if (s.failed) continue;
+      try { s.update(); } catch (err) { s.failed = true; console.error(err); }   // report once, keep the loop
+    }
+  };
   function raf(t) {
     if (lenis) lenis.raf(t);
     updateAll();
@@ -128,7 +140,7 @@ function __boot() {
   /* nav bg + scroll cue */
   const nav = document.getElementById('nav');
   const onScroll = (y) => {
-    nav.classList.toggle('scrolled', y > 60);
+    if (nav) nav.classList.toggle('scrolled', y > 60);
     document.querySelectorAll('.hero__cue').forEach(h => h.style.opacity = y > 80 ? '0' : '');
   };
   if (lenis) lenis.on('scroll', ({ scroll }) => onScroll(scroll));

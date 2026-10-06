@@ -2350,7 +2350,7 @@ body::after {
   position: absolute;
   left: 0;
   top: 0.9rem;
-  color: rgba(243, 237, 225, 0.45);
+  color: rgba(243, 237, 225, 0.55);
   font-size: 1rem;
   pointer-events: none;
   transition: 0.3s var(--ease);
@@ -2536,7 +2536,7 @@ body::after {
   margin-inline: calc(-1 * var(--edge));
   padding: 1.6rem var(--edge) 0;
   font-size: 0.76rem;
-  color: rgba(243, 237, 225, 0.4);
+  color: rgba(243, 237, 225, 0.55);
 }
 
 /* ---- NARROW DESKTOP (1001–1200px): brand, four links and the CTA on one line; labels

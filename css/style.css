@@ -1728,7 +1728,8 @@ html:not(.js) #scene-ski .cine__stage {
 }
 
 .chain a,
-.contact__note a {
+.contact__note a,
+.calc__nojs a {
   color: var(--gold-soft);
   border-bottom: 1px solid var(--line);
 }
@@ -2476,6 +2477,17 @@ html:not(.js) #scene-ski .cine__stage {
   grid-column: 1/-1;
   justify-self: start;
   margin-top: 0.6rem;
+}
+
+/* without JS the calculator cannot react: a note replaces tabs and sliders */
+html:not(.js) .calc-tabs,
+html:not(.js) .calc {
+  display: none;
+}
+
+.calc__nojs {
+  max-width: 60ch;
+  color: var(--text-soft);
 }
 
 /* without JS nothing can be sent (D-04): a note with the address replaces the button */

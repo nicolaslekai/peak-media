@@ -147,20 +147,15 @@ function __boot() {
       // header's scroll-margin-top in style.css, which Lenis does not read by itself
       const goal = el.querySelector(':scope > header') || el;
       const gap = parseFloat(getComputedStyle(goal).scrollMarginTop) || 0;
-      if (lenis) lenis.scrollTo(goal, { offset: -gap, duration: 1.3 });
-      else goal.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
-
-  /* reveals */
-  if (reduce) {
-    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
-  } else {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (!en.isIntersecting) return;
-        en.target.classList.add('in');
-        io.unobserve(en.target);
+      if (!lenis) { goal.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
+      // soft jump: a long way is cut short instantly (no scrubbing through every scene),
+      // then the last stretch of under one screen glides in with a gentle in-out curve
+      const dest = goal.getBoundingClientRect().top + lenis.animatedScroll - gap;
+      const dist = dest - lenis.animatedScroll, glide = window.innerHeight * 0.85;
+      if (Math.abs(dist) > glide) lenis.scrollTo(dest - Math.sign(dist) * glide, { immediate: true });
+      lenis.scrollTo(dest, {
+        duration: 0.6 + 0.6 * Math.min(1, Math.abs(dist) / glide),
+        easing: t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
       });
     });
   });

@@ -22,13 +22,24 @@
       <img src="assets/brand/blaue-stunde-logo-white.svg" width="240" height="172" alt="" />
       Blaue Stunde
     </a>
-    <nav>
+    <!-- on screens up to 1000px this <nav> becomes the full-screen menu (js/nav.js);
+         without JS only the CTA shows there -->
+    <nav id="menu" aria-label="Hauptmenü">
       <a href="#leistungen">Leistungen</a>
       <a href="#impact">Ergebnisse</a>
       <a href="#team">Team</a>
       <a href="#contact">Kontakt</a>
       <a href="#rechner" class="nav__cta">Potenzial berechnen</a>
+      <!-- only in the menu on phones and tablets -->
+      <div class="nav__meta">
+        <a href="mailto:hallo@peakstories.studio">hallo@peakstories.studio</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </div>
     </nav>
+    <button class="nav__toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Menü öffnen" hidden>
+      <span></span>
+    </button>
   </header>
 
   <main id="top">
@@ -951,10 +962,11 @@
   </main>
 
   <footer class="foot">
-    <div class="brand">
+    <!-- back to the top of the home page; on other pages this links to index.html -->
+    <a class="brand" href="#top">
       <img src="assets/brand/blaue-stunde-logo-white.svg" width="240" height="172" alt="" />
       Blaue Stunde
-    </div>
+    </a>
     <div class="foot__cols">
       <div>
         <p>Studio</p>
@@ -992,6 +1004,7 @@
   <script src="js/evidence.js?v=3"></script>
   <script src="js/contact.js?v=2"></script>
   <script src="js/steps.js?v=5"></script>
+  <script src="js/nav.js?v=2"></script>
 </body>
 
 </html>

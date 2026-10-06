@@ -154,9 +154,9 @@ function initScrub(cfg, wake) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     draw(drawn < 0 ? 0 : drawn);
   }
-  let shown = -1;   // interpolated (float) frame position, eased toward the scroll target
+  let shown = -1;   // float frame position on screen
   let drawn = -1;   // float position of the last paint
-  let lastP = -1;
+  let lastP = -1, lastTarget = -1, rest = 0;
   // returns true while the scrub is still easing toward the scroll position
   function update() {
     // if the canvas box changed size (viewport/toolbar/orientation), re-sync the backing buffer to avoid stretch
@@ -166,9 +166,19 @@ function initScrub(cfg, wake) {
     const scrollable = rect.height - window.innerHeight;
     const p = Math.min(Math.max(-rect.top / scrollable, 0), 1);
     const target = p * (n - 1);
-    if (shown < 0) shown = target;
-    shown += (target - shown) * 0.15;                 // ease toward target = smooth, jerk-free scrub
-    if (Math.abs(target - shown) < 0.002) shown = target;
+    // the frame follows the scroll directly (Lenis already smooths it; a second easing
+    // made the image trail and drift after the scroll stopped, P10). Once the scroll
+    // rests, the image settles on the nearest whole frame: a still picture is one sharp
+    // frame, never a blend of two
+    // at rest = Lenis has stopped (its slow tail must not count as rest, or the image
+    // flickers between a blend and a whole frame); without Lenis: the target holds
+    const still = window.lenis ? !window.lenis.isScrolling : Math.abs(target - lastTarget) < 0.001;
+    rest = still ? rest + 1 : 0;
+    lastTarget = target;
+    const goal = rest > 2 ? Math.round(target) : target;
+    if (shown < 0 || rest <= 2) shown = goal;
+    else shown += (goal - shown) * 0.3;
+    if (Math.abs(goal - shown) < 0.002) shown = goal;
     if (Math.round(shown) !== Math.round(center)) { center = shown; refill(); }
     if ((dirty || Math.abs(shown - drawn) > 0.002) && draw(shown)) { drawn = shown; dirty = false; }
     // no hand-off effect: the sticky stage stays put until the section ends and then
@@ -185,7 +195,7 @@ function initScrub(cfg, wake) {
         el.style.transform = `translateY(${((1 - o) * 24).toFixed(1)}px)`;
       }
     }
-    return shown !== target;
+    return shown !== goal || rest <= 2;
   }
   window.addEventListener('resize', resize);
   resize();

@@ -146,7 +146,7 @@
       for (const el of inputs) {
         v[el.name] = parseFloat(el.value);
         el.style.setProperty('--p', `${((v[el.name] - el.min) / (el.max - el.min)) * 100}%`);
-        el.labels[0].querySelector('output').textContent = FORMAT[el.dataset.format](v[el.name]);
+        el.parentElement.querySelector('output').textContent = FORMAT[el.dataset.format](v[el.name]);
       }
       const r = model(v);
       total.innerHTML = r.total;

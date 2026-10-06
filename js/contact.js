@@ -62,7 +62,7 @@
       pickRange(form.elements[map.field], Number(panel.querySelector(`input[name="${map.input}"]`).value));
       const clean = el => el.textContent.replace(/\s+/g, ' ').trim();
       const summary = [
-        ...[...panel.querySelectorAll('.range label')].map(clean),
+        ...[...panel.querySelectorAll('.range')].map(r => `${clean(r.querySelector('label'))} ${clean(r.querySelector('output'))}`),
         clean(panel.querySelector('.calc__total')),
         ...[...panel.querySelectorAll('.calc__out b')].map(clean),
       ].join(' · ');

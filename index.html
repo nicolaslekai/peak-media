@@ -12,7 +12,7 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=80" />
+  <link rel="stylesheet" href="css/style.css?v=81" />
 </head>
 
 <body>
@@ -111,7 +111,6 @@
       </ul>
     </section>
 
-    <div>
       <!-- SCENE 1 — WELLNESS (spa star-timelapse) -->
       <section class="cine scene" id="scene-spa">
         <div class="cine__stage">
@@ -216,7 +215,6 @@
           </div>
         </div>
       </section>
-    </div>
 
     <!-- SERVICES — how working with us runs, as a process -->
     <section class="section services" id="ablauf">
@@ -570,33 +568,33 @@
       <div class="calc" id="calc-hotel" data-model="hotel">
         <form class="calc__inputs">
           <div class="range">
-            <label for="c-rooms">Zimmer <output for="c-rooms">40</output></label>
+            <label for="c-rooms">Zimmer</label> <output for="c-rooms">40</output>
             <input type="range" id="c-rooms" name="rooms" data-format="int" min="5" max="250" step="1" value="40" />
           </div>
           <div class="range">
-            <label for="c-occ">Zimmerauslastung im Jahr <output for="c-occ">60 %</output></label>
+            <label for="c-occ">Zimmerauslastung im Jahr</label> <output for="c-occ">60 %</output>
             <input type="range" id="c-occ" name="occ" data-format="pct" min="20" max="95" step="1" value="60" />
           </div>
           <div class="range">
-            <label for="c-adr">Ø Zimmerpreis pro Nacht <output for="c-adr">120 €</output></label>
+            <label for="c-adr">Ø Zimmerpreis pro Nacht</label> <output for="c-adr">120 €</output>
             <input type="range" id="c-adr" name="adr" data-format="eur" min="50" max="500" step="5" value="120" />
           </div>
 
           <details>
             <summary>Annahmen anpassen</summary>
             <div class="range">
-              <label for="c-ota">Anteil über Buchungsportale <output for="c-ota">31,9 %</output></label>
+              <label for="c-ota">Anteil über Buchungsportale</label> <output for="c-ota">31,9 %</output>
               <input type="range" id="c-ota" name="ota" data-format="pct1" min="0" max="80" step="0.1" value="31.9" />
               <small>Standard: 31,9 % – kleine und mittlere Hotels in Deutschland (HOTREC 2026)</small>
             </div>
             <div class="range">
-              <label for="c-com">Provision der Portale <output for="c-com">15,0 %</output></label>
+              <label for="c-com">Provision der Portale</label> <output for="c-com">15,0 %</output>
               <input type="range" id="c-com" name="com" data-format="pct1" min="8" max="30" step="0.5" value="15" />
               <small>Standard: 15 % – Booking.com 10–15 % Grundprovision, mit Ranking-Programmen mehr
                 (Bundeskartellamt)</small>
             </div>
             <div class="range">
-              <label for="c-dir">Kosten einer Direktbuchung <output for="c-dir">6,0 %</output></label>
+              <label for="c-dir">Kosten einer Direktbuchung</label> <output for="c-dir">6,0 %</output>
               <input type="range" id="c-dir" name="dir" data-format="pct1" min="0" max="15" step="0.5" value="6" />
               <small>Standard: 6 % – Schätzung des Hotelverbands IHA: rund 5–7 % inkl. Marketing</small>
             </div>
@@ -608,7 +606,7 @@
           <p class="calc__total"><b>≈ 50.300 €</b> ≈ 1.260 € pro Zimmer und Jahr</p>
 
           <div class="range">
-            <label for="c-shift">Gäste, die künftig direkt statt über Portale buchen <output for="c-shift">10 %</output></label>
+            <label for="c-shift">Gäste, die künftig direkt statt über Portale buchen</label> <output for="c-shift">10 %</output>
             <input type="range" id="c-shift" name="shift" data-format="pct" min="0" max="50" step="1" value="10" />
             <small>Anteil Ihrer heutigen Portal-Buchungen</small>
           </div>
@@ -617,7 +615,7 @@
           </p>
 
           <div class="range">
-            <label for="c-low">Mehr belegte Zimmer in den drei schwächsten Monaten <output for="c-low">+5 Punkte</output></label>
+            <label for="c-low">Mehr belegte Zimmer in den drei schwächsten Monaten</label> <output for="c-low">+5 Punkte</output>
             <input type="range" id="c-low" name="low" data-format="pts" min="0" max="20" step="1" value="5" />
             <small>In Prozentpunkten: +5 heißt z. B. 35 % statt 30 % belegte Zimmer. Frei wählbar, kein
               Erfahrungswert.</small>
@@ -638,11 +636,11 @@
       <div class="calc" id="calc-bahn" data-model="bahn" hidden>
         <form class="calc__inputs">
           <div class="range">
-            <label for="b-guests">Gäste pro Jahr (Ersteintritte) <output for="b-guests">100.000</output></label>
+            <label for="b-guests">Gäste pro Jahr (Ersteintritte)</label> <output for="b-guests">100.000</output>
             <input type="range" id="b-guests" name="guests" data-format="int" min="10000" max="1000000" step="5000" value="100000" />
           </div>
           <div class="range">
-            <label for="b-ticket">Ø Ticketumsatz pro Gast <output for="b-ticket">19 €</output></label>
+            <label for="b-ticket">Ø Ticketumsatz pro Gast</label> <output for="b-ticket">19 €</output>
             <input type="range" id="b-ticket" name="ticket" data-format="eur" min="5" max="60" step="1" value="19" />
             <small>Standard: 19 € – Sommer 2025: 118 Mio. € Umsatz / 6,09 Mio. Ersteintritte (VDS); im Winter rund 25 €</small>
           </div>
@@ -650,7 +648,7 @@
           <details>
             <summary>Annahmen anpassen</summary>
             <div class="range">
-              <label for="b-gastro">Gastronomie am Berg pro Gast <output for="b-gastro">9 €</output></label>
+              <label for="b-gastro">Gastronomie am Berg pro Gast</label> <output for="b-gastro">9 €</output>
               <input type="range" id="b-gastro" name="gastro" data-format="eur" min="0" max="30" step="1" value="9" />
               <small>Standard: 9 € – Bayerische Zugspitzbahn 2023/24: 10,6 Mio. € Gastronomieumsatz / 1,2 Mio.
                 Fahrgäste</small>
@@ -663,7 +661,7 @@
           <p class="calc__total"><b>≈ 28 €</b> Ticket 19 € + Gastronomie 9 €</p>
 
           <div class="range">
-            <label for="b-more">Mehr Gäste im Sommer und an ruhigen Tagen <output for="b-more">+10 %</output></label>
+            <label for="b-more">Mehr Gäste im Sommer und an ruhigen Tagen</label> <output for="b-more">+10 %</output>
             <input type="range" id="b-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
             <span class="range__band" style="--from: 0.5333; --to: 0.7333" aria-hidden="true">Studie: +16–22 %</span>
             <small>Bei hoher Social-Media-Präsenz kamen 16–22 % mehr Besucher – US-Nationalparks, PNAS 2024. Frei
@@ -686,12 +684,12 @@
       <div class="calc" id="calc-region" data-model="region" hidden>
         <form class="calc__inputs">
           <div class="range">
-            <label for="r-nights">Übernachtungen pro Jahr im Ort <output for="r-nights">500.000</output></label>
+            <label for="r-nights">Übernachtungen pro Jahr im Ort</label> <output for="r-nights">500.000</output>
             <input type="range" id="r-nights" name="nights" data-format="int" min="20000" max="3000000" step="10000" value="500000" />
             <small>Zum Vergleich 2025: Berchtesgaden rund 670.000, Garmisch-Partenkirchen rund 1,3 Mio. (LfStat)</small>
           </div>
           <div class="range">
-            <label for="r-kur">Kurbeitrag pro Nacht <output for="r-kur">3,00 €</output></label>
+            <label for="r-kur">Kurbeitrag pro Nacht</label> <output for="r-kur">3,00 €</output>
             <input type="range" id="r-kur" name="kur" data-format="eur2" min="0" max="5" step="0.1" value="3" />
             <small>Standard: 3,00 € – z. B. Garmisch-Partenkirchen, Bad Tölz, Füssen, Tegernseer Tal; Spanne 2,00 € bis
               4,70 € (Kurbeitragssatzungen 2025/26). Nur in anerkannten Kur- und Erholungsorten, sonst 0 €</small>
@@ -700,7 +698,7 @@
           <details>
             <summary>Annahmen anpassen</summary>
             <div class="range">
-              <label for="r-spend">Ausgaben pro Gast und Tag im Ort <output for="r-spend">115 €</output></label>
+              <label for="r-spend">Ausgaben pro Gast und Tag im Ort</label> <output for="r-spend">115 €</output>
               <input type="range" id="r-spend" name="spend" data-format="eur" min="30" max="250" step="1" value="115" />
               <small>Standard: 115 € – Übernachtungsgäste im Allgäu 2024; Bayern gesamt 141,70 € (dwif, Wirtschaftsfaktor
                 Tourismus 2024). Brutto, ohne An- und Abreise</small>
@@ -713,7 +711,7 @@
           <p class="calc__total"><b>≈ 118 €</b> Ausgaben 115 € + Kurbeitrag 3,00 €</p>
 
           <div class="range">
-            <label for="r-more">Mehr Übernachtungen, vor allem in ruhigen Monaten <output for="r-more">+10 %</output></label>
+            <label for="r-more">Mehr Übernachtungen, vor allem in ruhigen Monaten</label> <output for="r-more">+10 %</output>
             <input type="range" id="r-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
             <span class="range__band" style="--from: 0.5333; --to: 0.7333" aria-hidden="true">Studie: +16–22 %</span>
             <small>Bei hoher Social-Media-Präsenz kamen 16–22 % mehr Besucher – US-Nationalparks, PNAS 2024. Frei
@@ -1012,8 +1010,8 @@
 
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
   <script src="js/main.js?v=55"></script>
-  <script src="js/evidence.js?v=3"></script>
-  <script src="js/contact.js?v=4"></script>
+  <script src="js/evidence.js?v=4"></script>
+  <script src="js/contact.js?v=5"></script>
   <script src="js/steps.js?v=15"></script>
   <script src="js/nav.js?v=2"></script>
   <script src="js/bergfahrt.js?v=2"></script>

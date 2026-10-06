@@ -430,6 +430,56 @@ body::after {
   z-index: 1;
 }
 
+/* without JS (no .js on <html>, set in <head>): no scrub, so each scene is one screen
+   with a still frame behind its copy; the image is only requested in this case (F9) */
+html:not(.js) .cine {
+  height: auto;
+}
+
+html:not(.js) .cine__stage {
+  background: var(--ink) center / cover no-repeat;
+}
+
+html:not(.js) .cine__stage canvas {
+  display: none;
+}
+
+html:not(.js) #hero .cine__stage {
+  background-image: url("../assets/frames/hero/frame_0001.webp");
+}
+
+html:not(.js) #scene-spa .cine__stage {
+  background-image: url("../assets/frames/spa/frame_0060.webp");
+}
+
+html:not(.js) #scene-ski .cine__stage {
+  background-image: url("../assets/frames/skilift/frame_0060.webp");
+}
+
+/* phones: the lighter frame set, the hero kept on its focal point like the scrub */
+@media (max-width: 767px) {
+  html:not(.js) #hero .cine__stage {
+    background-image: url("../assets/framesm/hero/frame_0001.webp");
+    background-position: 62% center;
+  }
+
+  html:not(.js) #scene-spa .cine__stage {
+    background-image: url("../assets/framesm/spa/frame_0030.webp");
+  }
+
+  html:not(.js) #scene-ski .cine__stage {
+    background-image: url("../assets/framesm/skilift/frame_0030.webp");
+  }
+}
+
+/* without JS the brand text runs into the bar's CTA below ~430px (measured); the hero
+   shows the same button right below */
+@media (max-width: 440px) {
+  html:not(.js) .nav .nav__cta {
+    display: none;
+  }
+}
+
 .cine-line {
   will-change: opacity, transform;
 }
@@ -2369,6 +2419,11 @@ body::after {
   margin-top: 0.6rem;
 }
 
+/* without JS nothing can be sent (D-04): a note with the address replaces the button */
+html:not(.js) .contact__form .btn {
+  display: none;
+}
+
 /* extra fields per business type (<fieldset>): their fields join the form grid when shown */
 .contact__extra {
   min-width: 0;
@@ -3017,7 +3072,7 @@ body::after {
 /* ---- SMALL PHONES: single-column grids ---- */
 @media (max-width: 640px) {
 
-  /* without JS: "Potenzial berechnen" next to the two-line brand at 360px, tighter */
+  /* without JS: "Potenzial berechnen" next to the brand, tighter */
   .nav:not(.nav--menu) .nav__cta {
     letter-spacing: 0.08em;
     padding-inline: 0.85em;

@@ -2203,19 +2203,6 @@ html:not(.js) #scene-ski .cine__stage {
 }
 
 /* placeholder until the photo exists: initials on the card background */
-.member__img--empty {
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--line);
-}
-
-.member__img--empty span {
-  font-family: var(--serif);
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  letter-spacing: 0.04em;
-  color: var(--gold-soft);
-}
-
 .member figcaption {
   padding: 1.1rem 0.2rem 0;
 }

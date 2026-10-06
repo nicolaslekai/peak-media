@@ -12,7 +12,7 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=78" />
+  <link rel="stylesheet" href="css/style.css?v=79" />
 </head>
 
 <body>
@@ -560,7 +560,7 @@
       </div>
 
       <div class="calc" id="calc-hotel" data-model="hotel">
-        <form class="calc__inputs" onsubmit="return false">
+        <form class="calc__inputs">
           <div class="range">
             <label for="c-rooms">Zimmer <output for="c-rooms">40</output></label>
             <input type="range" id="c-rooms" name="rooms" data-format="int" min="5" max="250" step="1" value="40" />
@@ -628,7 +628,7 @@
       </div>
 
       <div class="calc" id="calc-bahn" data-model="bahn" hidden>
-        <form class="calc__inputs" onsubmit="return false">
+        <form class="calc__inputs">
           <div class="range">
             <label for="b-guests">Gäste pro Jahr (Ersteintritte) <output for="b-guests">100.000</output></label>
             <input type="range" id="b-guests" name="guests" data-format="int" min="10000" max="1000000" step="5000" value="100000" />
@@ -676,7 +676,7 @@
       </div>
 
       <div class="calc" id="calc-region" data-model="region" hidden>
-        <form class="calc__inputs" onsubmit="return false">
+        <form class="calc__inputs">
           <div class="range">
             <label for="r-nights">Übernachtungen pro Jahr im Ort <output for="r-nights">500.000</output></label>
             <input type="range" id="r-nights" name="nights" data-format="int" min="20000" max="3000000" step="10000" value="500000" />
@@ -825,7 +825,7 @@
       <!-- enquiry: base fields for everyone, extra fields per business type (D-28; no budget
            field). js/contact.js shows the matching group, validates in German, takes over the
            calculator values and shows the confirmation dialog. Delivery is open (D-04, F1). -->
-      <form class="contact__form" id="enquiry" onsubmit="return false;">
+      <form class="contact__form" id="enquiry" method="post">
         <div class="field field--full">
           <select id="f-type" name="betriebsart" required>
             <option value="" selected disabled hidden></option>
@@ -852,7 +852,7 @@
 
         <!-- sizes as ranges, not exact numbers; data-max = upper bound, used to pick the range
              for a calculator value (js/contact.js) -->
-        <div class="contact__extra" data-for="hotel" hidden>
+        <fieldset class="contact__extra" data-for="hotel" hidden disabled>
           <div class="field">
             <select id="f-rooms" name="zimmer" required>
               <option value="" selected disabled hidden></option>
@@ -872,8 +872,8 @@
               <option>über 100</option>
             </select><label for="f-staff">Mitarbeitende</label>
           </div>
-        </div>
-        <div class="contact__extra" data-for="bergbahn" hidden>
+        </fieldset>
+        <fieldset class="contact__extra" data-for="bergbahn" hidden disabled>
           <div class="field">
             <select id="f-guests" name="gaeste" required>
               <option value="" selected disabled hidden></option>
@@ -884,15 +884,15 @@
             </select><label for="f-guests">Gäste pro Jahr</label>
           </div>
           <div class="field">
-            <select id="f-season" name="betrieb" required>
+            <select id="f-season" name="saison" required>
               <option value="" selected disabled hidden></option>
               <option>nur im Winter</option>
               <option>nur im Sommer</option>
               <option>Sommer und Winter</option>
             </select><label for="f-season">In Betrieb</label>
           </div>
-        </div>
-        <div class="contact__extra" data-for="region" hidden>
+        </fieldset>
+        <fieldset class="contact__extra" data-for="region" hidden disabled>
           <div class="field">
             <select id="f-nights" name="uebernachtungen" required>
               <option value="" selected disabled hidden></option>
@@ -910,8 +910,8 @@
               <option>Weiß nicht</option>
             </select><label for="f-kur">Kur- oder Erholungsort</label>
           </div>
-        </div>
-        <div class="contact__extra" data-for="gastronomie" hidden>
+        </fieldset>
+        <fieldset class="contact__extra" data-for="gastronomie" hidden disabled>
           <div class="field">
             <select id="f-seats" name="sitzplaetze" required>
               <option value="" selected disabled hidden></option>
@@ -930,7 +930,7 @@
               <option>über 100</option>
             </select><label for="f-gstaff">Mitarbeitende</label>
           </div>
-        </div>
+        </fieldset>
 
         <div class="field field--full">
           <textarea name="nachricht" rows="3" placeholder=" " id="f-msg"></textarea><label for="f-msg">Was schwebt Ihnen vor?</label>
@@ -999,10 +999,10 @@
   </footer>
 
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
-  <script src="js/main.js?v=52"></script>
+  <script src="js/main.js?v=53"></script>
   <script src="js/evidence.js?v=3"></script>
-  <script src="js/contact.js?v=3"></script>
-  <script src="js/steps.js?v=14"></script>
+  <script src="js/contact.js?v=4"></script>
+  <script src="js/steps.js?v=15"></script>
   <script src="js/nav.js?v=2"></script>
   <script src="js/bergfahrt.js?v=2"></script>
 </body>

@@ -18,14 +18,10 @@
   const error = form.querySelector('.contact__error');
   const dialog = document.getElementById('enquiry-sent');
 
-  // only the group of the chosen type is visible; hidden fields are disabled, so they
-  // are neither validated nor sent
+  // only the group of the chosen type is visible; the others are disabled <fieldset>s,
+  // so their fields are neither validated nor sent (the markup starts all disabled)
   const showGroup = () => {
-    for (const g of groups) {
-      const on = g.dataset.for === type.value;
-      g.hidden = !on;
-      g.querySelectorAll('input, select').forEach(el => { el.disabled = !on; });
-    }
+    for (const g of groups) g.hidden = g.disabled = g.dataset.for !== type.value;
   };
   type.addEventListener('change', showGroup);
   showGroup();

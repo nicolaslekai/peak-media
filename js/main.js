@@ -5,15 +5,16 @@
 
 // Phones cap decoded-image memory, so serve a lighter frame set there.
 const IS_MOBILE = window.matchMedia('(max-width: 767px)').matches;
-const frameCfg = (section, name, bg, focalX = 0.5, focalY = 0.5) => {
+// focalX: the horizontal point kept in view when phones crop the frame's sides
+const frameCfg = (section, name, bg, focalX = 0.5) => {
   const dir = IS_MOBILE ? `assets/framesm/${name}` : `assets/frames/${name}`;
   const frameCount = IS_MOBILE ? 60 : 120;
-  return { section, frameCount, bg, focalX, focalY, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
+  return { section, frameCount, bg, focalX, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
 };
 const SCRUB_SECTIONS = [
-  frameCfg('#hero', 'hero', '#0c0e0d', 0.62, 0.5),      // keep the sun + pool in frame
-  frameCfg('#scene-spa', 'spa', '#0a0c12', 0.5, 0.42),  // keep the starry window in frame
-  frameCfg('#scene-ski', 'skilift', '#0c0e0d', 0.5, 0.5),
+  frameCfg('#hero', 'hero', '#0c0e0d', 0.62),   // keep the sun + pool in frame
+  frameCfg('#scene-spa', 'spa', '#0a0c12'),
+  frameCfg('#scene-ski', 'skilift', '#0c0e0d'),
 ];
 
 function smoothstep(a, b, x) {
@@ -29,7 +30,7 @@ function initScrub(cfg) {
   if (!canvas) return null;
   const ctx = canvas.getContext('2d', { alpha: false });
   const lines = [...section.querySelectorAll('.cine-line')];
-  const bg = cfg.bg || '#0c0e0d';
+  const bg = cfg.bg;
   const images = [];
   let firstDrawn = false;
 

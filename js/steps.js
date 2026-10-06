@@ -250,7 +250,7 @@
     ol.classList.toggle('steps--profile', !tabs);
     ol.classList.toggle('steps--tabs', tabs);
     nav.hidden = onward.hidden = !tabs;
-    logo.hidden = tabs;
+    logo.toggleAttribute('hidden', tabs);   // an <svg> has no .hidden property (T9)
     if (tabs) { ol.style.paddingTop = ''; ol.classList.remove('steps--drawing'); pin.classList.remove('steps-pin--on'); drawNav(); } else drawLine();
   }
 

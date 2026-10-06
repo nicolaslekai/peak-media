@@ -107,10 +107,6 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: auto;
-}
-
 /* open menu on phones (js/nav.js): the page behind it does not scroll */
 html.menu-open {
   overflow: hidden;
@@ -210,18 +206,13 @@ body::after {
 }
 
 /* ---- METRICS: key figures, <b> = the figure, the rest = its label ----
-   .metrics is a list of them (layout per section); --inline runs the figure
-   in front of the label. A single .metric also appears inside channel tiles. */
+   .metrics is a list of them (layout per section). A single .metric also
+   appears inside channel tiles. */
 .metric b {
   font-family: var(--serif);
   font-weight: 500;
   line-height: 1;
   color: var(--gold-soft);
-}
-
-.metric em {
-  font-size: 0.9em;
-  color: rgba(243, 237, 225, 0.4);
 }
 
 .metrics {
@@ -831,6 +822,11 @@ body::after {
   pointer-events: none;
 }
 
+/* the browser's [hidden] rule covers HTML elements only, not an <svg> (T9) */
+.steps__logo[hidden] {
+  display: none;
+}
+
 .steps__ridge {
   fill: none;
   stroke: var(--gold);
@@ -1015,8 +1011,6 @@ body::after {
   color: rgba(243, 237, 225, 0.66);
 }
 
-/* ---- EXAMPLES (.impact) ---- */
-
 /* ---- CHANNELS (non-scroll break): denser tiles with an icon label and a metric ---- */
 .channels article {
   padding: 2rem 1.6rem;
@@ -1103,7 +1097,7 @@ body::after {
 }
 
 .phone figcaption>span {
-  /* format badge (LIVE, REEL, STORY) */
+  /* format badge (REEL, STORY) */
   align-self: flex-start;
   font-size: 0.6rem;
   font-weight: 700;
@@ -1363,7 +1357,6 @@ body::after {
 }
 
 .level--none {
-  align-items: flex-end;
   padding-bottom: 0.4rem;
   border-bottom: 1px dashed rgba(243, 237, 225, 0.3);
 }
@@ -2376,7 +2369,14 @@ body::after {
   cursor: pointer;
 }
 
-/* extra fields per business type: their fields join the form grid when shown */
+/* extra fields per business type (<fieldset>): their fields join the form grid when shown */
+.contact__extra {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
 .contact__extra:not([hidden]) {
   display: contents;
 }
@@ -2912,14 +2912,6 @@ body::after {
 
   .tiles>article {
     padding: 1.6rem 1.4rem;
-  }
-
-  .services article::before {
-    margin-bottom: 1rem;
-  }
-
-  .services h3 {
-    min-height: 0;
   }
 
   .channels article {

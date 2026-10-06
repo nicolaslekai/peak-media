@@ -1,6 +1,11 @@
 /* ============ BLAUE STUNDE — canvas frame-sequence scroll engine ============
-   The smooth "3D scroll" technique: preload numbered WebP frames and paint the frame
-   matched to scroll progress onto a <canvas>. No <video> seeking = no jank.
+   The smooth "3D scroll" technique: numbered WebP frames painted onto a <canvas>,
+   the frame matched to scroll progress. No <video> seeking = no jank.
+   Loading and memory (P1, P2, P10): every frame is fetched once and kept compressed
+   (~300 KB); only a window of frames around the playhead is decoded (~8 MB each),
+   off the main thread, and released again when the playhead moves on. The scene on
+   screen loads first, a scene within one screen next, the rest waits; each scene
+   loads coarse to fine, so its scrub works after a few frames.
    ============================================================================ */
 
 // Phones cap decoded-image memory, so serve a lighter frame set there.
@@ -16,6 +21,8 @@ const SCRUB_SECTIONS = [
   frameCfg('#scene-spa', 'spa', '#0a0c12'),
   frameCfg('#scene-ski', 'skilift', '#0c0e0d'),
 ];
+const WINDOW = IS_MOBILE ? 10 : 8;   // decoded frames kept on each side of the playhead
+const MAX_FETCH = 6, MAX_DECODE = 3;
 
 function smoothstep(a, b, x) {
   if (a === b) return x < a ? 0 : 1;
@@ -23,7 +30,34 @@ function smoothstep(a, b, x) {
   return t * t * (3 - 2 * t);
 }
 
-function initScrub(cfg) {
+// one fetch queue for all scenes: the scene on screen first, then a scene within one
+// screen of the viewport; scenes further away are not loaded yet
+// The very first frame goes alone, so it does not share the bandwidth with others.
+const loader = { scenes: [], active: 0, started: false };
+function pump() {
+  while (loader.active < (loader.started ? MAX_FETCH : 1)) {
+    const s = loader.scenes.find(x => x.visible && x.queue.length) || loader.scenes.find(x => x.near && x.queue.length);
+    if (!s) return;
+    loader.active++;
+    s.fetchFrame(s.queue.shift()).finally(() => { loader.active--; pump(); });
+  }
+}
+// first and last frame, then every 16th, 8th, 4th, … frame
+function coarseToFine(n) {
+  const order = [0, n - 1], seen = new Set(order);
+  for (let step = 16; step >= 1; step >>= 1)
+    for (let i = 0; i < n; i += step) if (!seen.has(i)) { seen.add(i); order.push(i); }
+  return order;
+}
+// decode off the main thread; an <img> where createImageBitmap is missing (old Safari)
+const decodeBlob = blob => window.createImageBitmap ? createImageBitmap(blob) : new Promise((ok, fail) => {
+  const img = new Image();
+  img.onload = () => { URL.revokeObjectURL(img.src); ok(img); };
+  img.onerror = fail;
+  img.src = URL.createObjectURL(blob);
+});
+
+function initScrub(cfg, wake) {
   const section = document.querySelector(cfg.section);
   if (!section) return null;
   const canvas = section.querySelector('canvas');
@@ -31,26 +65,71 @@ function initScrub(cfg) {
   const ctx = canvas.getContext('2d', { alpha: false });
   const lines = [...section.querySelectorAll('.cine-line')];
   const bg = cfg.bg;
-  const images = [];
-  let firstDrawn = false;
+  const n = cfg.frameCount;
+  const blobs = new Array(n).fill(null);   // compressed frames, kept once loaded
+  const frames = new Map();                // frame index → decoded frame (the window only)
+  const decoding = new Set(), failed = new Set();
+  const entry = [0, n - 1];                // stay decoded while the scene is near, so it
+  let center = 0;                          // shows at once from either side
+  let dirty = false;                       // a frame arrived: paint again
 
-  for (let i = 0; i < cfg.frameCount; i++) {
-    const img = new Image();
-    img.decoding = 'async';
-    img.src = cfg.path(i + 1);
-    img.onload = () => { if (!firstDrawn) { firstDrawn = true; draw(0); } };
-    images[i] = img;
+  const scene = {
+    visible: false, near: false, queue: coarseToFine(n),
+    fetchFrame(i) {
+      return fetch(cfg.path(i + 1), i === 0 ? { priority: 'high' } : undefined)
+        .then(r => { if (!r.ok) throw new Error(`${r.status} ${r.url}`); return r.blob(); })
+        .then(b => { blobs[i] = b; refill(); })
+        .finally(() => { loader.started = true; })
+        .catch(() => {   // one retry, then the scrub uses the nearest frame (T5)
+          if (failed.has(i)) return;
+          failed.add(i);
+          setTimeout(() => { scene.queue.push(i); pump(); }, 1000);
+        });
+    },
+  };
+
+  // on screen: decode the frames around the playhead (nearest first); near: only the
+  // entry frames; everything else is released
+  function refill() {
+    const c = Math.round(center), lo = c - WINDOW, hi = c + WINDOW;
+    const keep = i => (scene.visible && i >= lo && i <= hi) || (scene.near && entry.includes(i));
+    for (const [i, f] of frames) if (!keep(i)) { if (f.close) f.close(); frames.delete(i); }
+    if (!scene.near) return;
+    const want = [];
+    if (scene.visible) for (let d = 0; d <= WINDOW; d++) want.push(c + d, c - d);
+    want.push(...entry);
+    for (const i of want) {
+      if (decoding.size >= MAX_DECODE) break;
+      if (i < 0 || i >= n || !blobs[i] || frames.has(i) || decoding.has(i)) continue;
+      decoding.add(i);
+      decodeBlob(blobs[i]).then(f => {
+        decoding.delete(i);
+        if (keep(i)) { frames.set(i, f); dirty = true; wake(); }
+        else if (f.close) f.close();
+        refill();
+      }, () => decoding.delete(i));
+    }
+  }
+
+  // the nearest decoded frame stands in while the window is still decoding
+  function nearest(i) {
+    for (let d = 0; d < n; d++) {
+      if (frames.has(i - d)) return i - d;
+      if (frames.has(i + d)) return i + d;
+    }
+    return -1;
   }
 
   // draw() takes a FLOAT frame position and cross-blends the two neighbouring
   // frames by the fraction — the scrub has no visible stepping between frames.
   function draw(pos) {
-    const i0 = Math.max(0, Math.min(cfg.frameCount - 1, Math.floor(pos)));
+    const i0 = Math.max(0, Math.min(n - 1, Math.floor(pos)));
     const f = Math.min(1, Math.max(0, pos - i0));
-    const base = images[i0];
-    if (!base || !base.complete || !base.naturalWidth) return false;
+    const k = nearest(i0);
+    if (k < 0) return false;
+    const base = frames.get(k);
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
-    const ir = base.naturalWidth / base.naturalHeight, cr = cw / ch;
+    const ir = base.width / base.height, cr = cw / ch;
     let dw, dh, dx, dy;
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
     // cover the whole canvas; on phones (full-height portrait stage, so the frame is
@@ -58,8 +137,8 @@ function initScrub(cfg) {
     if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) * (IS_MOBILE ? cfg.focalX : 0.5); dy = 0; }
     else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
     ctx.drawImage(base, dx, dy, dw, dh);
-    const nxt = images[i0 + 1];
-    if (f > 0.01 && nxt && nxt.complete && nxt.naturalWidth) {
+    const nxt = k === i0 && frames.get(i0 + 1);
+    if (f > 0.01 && nxt) {
       ctx.globalAlpha = f;
       ctx.drawImage(nxt, dx, dy, dw, dh);
       ctx.globalAlpha = 1;
@@ -76,43 +155,66 @@ function initScrub(cfg) {
     draw(drawn < 0 ? 0 : drawn);
   }
   let shown = -1;   // interpolated (float) frame position, eased toward the scroll target
-  let drawn = -1;   // float position of the last successful paint
+  let drawn = -1;   // float position of the last paint
+  let lastP = -1;
+  // returns true while the scrub is still easing toward the scroll position
   function update() {
     // if the canvas box changed size (viewport/toolbar/orientation), re-sync the backing buffer to avoid stretch
     if (canvas.clientWidth !== cssW || canvas.clientHeight !== cssH) resize();
     const rect = section.getBoundingClientRect();
-    if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight) return;
+    if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight) return false;
     const scrollable = rect.height - window.innerHeight;
     const p = Math.min(Math.max(-rect.top / scrollable, 0), 1);
-    const target = p * (cfg.frameCount - 1);
+    const target = p * (n - 1);
     if (shown < 0) shown = target;
     shown += (target - shown) * 0.15;                 // ease toward target = smooth, jerk-free scrub
     if (Math.abs(target - shown) < 0.002) shown = target;
-    if (Math.abs(shown - drawn) > 0.002 && draw(shown)) drawn = shown;
+    if (Math.round(shown) !== Math.round(center)) { center = shown; refill(); }
+    if ((dirty || Math.abs(shown - drawn) > 0.002) && draw(shown)) { drawn = shown; dirty = false; }
     // no hand-off effect: the sticky stage stays put until the section ends and then
     // scrolls off with it, so the image edge is the section edge (no black band)
     // trapezoidal caption fade: in early, hold, out late — wide bands + a short
     // travel distance keep the text drifting gently instead of popping
-    for (const el of lines) {
-      const a = parseFloat(el.dataset.in), b = parseFloat(el.dataset.out);
-      const fade = 0.16;
-      const o = smoothstep(a, a + fade, p) * (1 - smoothstep(b - fade, b, p));
-      el.style.opacity = o.toFixed(3);
-      el.style.transform = `translateY(${((1 - o) * 24).toFixed(1)}px)`;
+    if (p !== lastP) {
+      lastP = p;
+      for (const el of lines) {
+        const a = parseFloat(el.dataset.in), b = parseFloat(el.dataset.out);
+        const fade = 0.16;
+        const o = smoothstep(a, a + fade, p) * (1 - smoothstep(b - fade, b, p));
+        el.style.opacity = o.toFixed(3);
+        el.style.transform = `translateY(${((1 - o) * 24).toFixed(1)}px)`;
+      }
     }
+    return shown !== target;
   }
   window.addEventListener('resize', resize);
   resize();
+
+  // near = within one screen of the viewport: load and keep the entry frames decoded;
+  // further away the decoded frames are released (the compressed ones stay)
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { scene.near = e.isIntersecting; refill(); pump(); }, { rootMargin: '100% 0px' }).observe(section);
+    new IntersectionObserver(([e]) => { scene.visible = e.isIntersecting; refill(); pump(); wake(); }).observe(section);
+  } else {
+    scene.near = scene.visible = true;
+  }
+  loader.scenes.push(scene);
+  pump();
   return { update, resize };
 }
 
 function __boot() {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let running = false, quiet = 0;
+  function wake() {
+    quiet = 0;
+    if (!running) { running = true; requestAnimationFrame(raf); }
+  }
 
   // each part is isolated (T1): a broken scene must not stop the others, the scroll
   // or the anchor links
   const scrubs = SCRUB_SECTIONS.map(cfg => {
-    try { return initScrub(cfg); } catch (err) { console.error(err); return null; }
+    try { return initScrub(cfg, wake); } catch (err) { console.error(err); return null; }
   }).filter(Boolean);
 
   /* Lenis smooth scroll — also drives the canvas update loop */
@@ -124,29 +226,46 @@ function __boot() {
     } catch (err) { console.error(err); }   // native scrolling still works
   }
   const updateAll = () => {
+    let busy = false;
     for (const s of scrubs) {
       if (s.failed) continue;
-      try { s.update(); } catch (err) { s.failed = true; console.error(err); }   // report once, keep the loop
+      try { busy = s.update() || busy; } catch (err) { s.failed = true; console.error(err); }   // report once, keep the loop
     }
+    return busy;
   };
+  // the loop runs only while something moves (P3): Lenis scrolling or a scrub easing.
+  // After half a second of stillness it sleeps; any input, scroll, resize or newly
+  // decoded frame wakes it again.
   function raf(t) {
     if (lenis) lenis.raf(t);
-    updateAll();
-    requestAnimationFrame(raf);   // always keep the loop alive
+    const busy = updateAll() || (lenis && (lenis.isScrolling || lenis.animate.isRunning));
+    quiet = busy ? 0 : quiet + 1;
+    if (quiet > 30) { running = false; return; }
+    requestAnimationFrame(raf);
   }
-  requestAnimationFrame(raf);
+  for (const type of ['wheel', 'touchstart', 'touchmove', 'pointerdown', 'keydown', 'scroll', 'resize'])
+    window.addEventListener(type, wake, { passive: true });
+  wake();
   // NOTE: the rAF loop is the SOLE driver of the frame interpolation — do not also call
   // updateAll() on scroll events, or the lerp advances several times per frame and jitters.
 
   /* nav bg + scroll cue */
   const nav = document.getElementById('nav');
+  const cue = document.querySelector('.hero__cue');
   const onScroll = (y) => {
     if (nav) nav.classList.toggle('scrolled', y > 60);
-    document.querySelectorAll('.hero__cue').forEach(h => h.style.opacity = y > 80 ? '0' : '');
+    if (cue) cue.classList.toggle('is-gone', y > 80);
   };
   if (lenis) lenis.on('scroll', ({ scroll }) => onScroll(scroll));
   else window.addEventListener('scroll', () => onScroll(window.scrollY), { passive: true });
   onScroll(0);
+
+  /* the endless CSS animations (scroll cue, regions marquee, swipe cue) pause while off
+     screen: they kept the main thread busy on an idle page (P3) */
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { for (const e of es) e.target.classList.toggle('is-offscreen', !e.isIntersecting); });
+    document.querySelectorAll('.hero__cue, .regions ul, .phones__hint').forEach(el => io.observe(el));
+  }
 
   /* smooth anchor links */
   document.querySelectorAll('a[href^="#"]').forEach(a => {

@@ -547,6 +547,19 @@ body::after {
   animation: cue 2s var(--ease) infinite;
 }
 
+/* gone once the page is scrolled (main.js) */
+.hero__cue.is-gone {
+  opacity: 0;
+}
+
+/* the endless animations pause while hidden or off screen (main.js, P3) */
+.hero__cue.is-gone::before,
+.hero__cue.is-offscreen::before,
+.regions ul.is-offscreen,
+.phones__hint.is-offscreen::before {
+  animation-play-state: paused;
+}
+
 @keyframes cue {
   0% {
     transform: scaleY(0);

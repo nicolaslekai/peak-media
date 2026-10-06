@@ -279,8 +279,9 @@ body::after {
   top: 0;
   left: 0;
   width: 100%;
-  /* above the page overlays (vignette 9997, grain 9999) so the brand keeps its real colour */
-  z-index: 10000;
+  /* above the page overlays (vignette 9997, grain 9999) so the brand keeps its real colour,
+     and above the footer brand (10000), so the open menu covers it */
+  z-index: 10001;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2832,8 +2833,12 @@ html:not(.js) .contact__form .btn {
     outline-offset: 2px;
   }
 
-  .nav {
-    padding: 1.1rem var(--edge);
+  /* one height scrolled or not: the bar's padding change moved brand and toggle by
+     fractions of a pixel for half a second, which made the toggle strokes shimmer */
+  .nav,
+  .nav.scrolled {
+    padding-block: 1.1rem;
+    padding-inline: var(--edge);
   }
 
   .nav .nav__cta {

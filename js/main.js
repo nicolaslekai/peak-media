@@ -2,26 +2,31 @@
    The smooth "3D scroll" technique: numbered WebP frames painted onto a <canvas>,
    the frame matched to scroll progress. No <video> seeking = no jank.
    Loading and memory (P1, P2, P10): every frame is fetched once and kept compressed
-   (~300 KB); only a window of frames around the playhead is decoded (~8 MB each),
+   (50–300 KB); only a window of frames around the playhead is decoded (6–15 MB each),
    off the main thread, and released again when the playhead moves on. The scene on
    screen loads first, a scene within one screen next, the rest waits; each scene
    loads coarse to fine, so its scrub works after a few frames.
    ============================================================================ */
 
-// Phones cap decoded-image memory, so serve a lighter frame set there.
+// Two frame sets, both cut from the 4K sources (D-55), 120 frames each, the hero running
+// backwards in both (D-11): phones held upright get a portrait strip at their own size
+// (878×1688, framed on each scene's focal point at the source); every other screen gets
+// 2560×1440 (a 1920 screen draws it scaled down, at about the same file size per frame).
 const IS_MOBILE = window.matchMedia('(max-width: 767px)').matches;
-// focalX: the horizontal point kept in view when phones crop the frame's sides
+const PHONE = window.matchMedia('(max-width: 767px) and (orientation: portrait)').matches;
+// focalX: the horizontal point kept in view when the canvas crops the frame's sides (a
+// small phone held sideways on the 16:9 set; the portrait set is framed already)
 const frameCfg = (section, name, bg, focalX = 0.5) => {
-  const dir = IS_MOBILE ? `assets/framesm/${name}` : `assets/frames/${name}`;
-  const frameCount = IS_MOBILE ? 60 : 120;
-  return { section, frameCount, bg, focalX, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
+  const dir = `assets/${PHONE ? 'frames-phone' : 'frames-hd'}/${name}`;
+  return { section, frameCount: 120, bg, focalX: PHONE ? 0.5 : focalX, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
 };
 const SCRUB_SECTIONS = [
   frameCfg('#hero', 'hero', '#0c0e0d', 0.62),   // keep the sun + pool in frame
   frameCfg('#scene-spa', 'spa', '#0a0c12'),
   frameCfg('#scene-ski', 'skilift', '#0c0e0d'),
 ];
-const WINDOW = IS_MOBILE ? 10 : 8;   // decoded frames kept on each side of the playhead
+// decoded frames kept on each side of the playhead (phone frames ≈ 6 MB decoded, 2560 ≈ 15 MB)
+const WINDOW = PHONE ? 6 : 8;
 const MAX_FETCH = 6, MAX_DECODE = 3;
 
 function smoothstep(a, b, x) {

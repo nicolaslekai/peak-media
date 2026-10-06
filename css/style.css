@@ -462,30 +462,29 @@ html:not(.js) .cine__stage canvas {
 }
 
 html:not(.js) #hero .cine__stage {
-  background-image: url("../assets/frames/hero/frame_0001.webp");
+  background-image: url("../assets/frames-hd/hero/frame_0001.webp");
 }
 
 html:not(.js) #scene-spa .cine__stage {
-  background-image: url("../assets/frames/spa/frame_0060.webp");
+  background-image: url("../assets/frames-hd/spa/frame_0060.webp");
 }
 
 html:not(.js) #scene-ski .cine__stage {
-  background-image: url("../assets/frames/skilift/frame_0060.webp");
+  background-image: url("../assets/frames-hd/skilift/frame_0060.webp");
 }
 
-/* phones: the lighter frame set, the hero kept on its focal point like the scrub */
-@media (max-width: 767px) {
+/* phones held upright: the portrait set, framed on each scene's focal point (D-55) */
+@media (max-width: 767px) and (orientation: portrait) {
   html:not(.js) #hero .cine__stage {
-    background-image: url("../assets/framesm/hero/frame_0001.webp");
-    background-position: 62% center;
+    background-image: url("../assets/frames-phone/hero/frame_0001.webp");
   }
 
   html:not(.js) #scene-spa .cine__stage {
-    background-image: url("../assets/framesm/spa/frame_0030.webp");
+    background-image: url("../assets/frames-phone/spa/frame_0060.webp");
   }
 
   html:not(.js) #scene-ski .cine__stage {
-    background-image: url("../assets/framesm/skilift/frame_0030.webp");
+    background-image: url("../assets/frames-phone/skilift/frame_0060.webp");
   }
 }
 

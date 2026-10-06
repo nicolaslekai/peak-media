@@ -183,7 +183,8 @@ function initScrub(cfg, wake) {
     rest = still ? rest + 1 : 0;
     lastTarget = target;
     const goal = rest > 2 ? Math.round(target) : target;
-    if (shown < 0 || rest <= 2) shown = goal;
+    // the settle eases only the last half frame; after a jump (D-45) the image is simply there
+    if (shown < 0 || rest <= 2 || Math.abs(goal - shown) > 1) shown = goal;
     else shown += (goal - shown) * 0.3;
     if (Math.abs(goal - shown) < 0.002) shown = goal;
     if (Math.round(shown) !== Math.round(center)) { center = shown; refill(); }
@@ -316,7 +317,7 @@ function __boot() {
     });
   }
 
-  /* smooth anchor links */
+  /* anchor links */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const href = a.getAttribute('href');
@@ -326,26 +327,19 @@ function __boot() {
       e.preventDefault();
       const goal = goalOf(el);
       const gap = gapOf(goal);
-      if (!lenis) { goal.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
-      const dest = goal.getBoundingClientRect().top + lenis.animatedScroll - gap;
-      const dist = dest - lenis.animatedScroll;
-      const inOut = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-      // soft jump (D-45): up to two screens glide; a longer way is skipped under a short
-      // dark veil (no rushing through every scene), then the last two screens glide in
-      const glide = window.innerHeight * 2;
-      const land = () => lenis.scrollTo(dest, {
-        duration: 0.8 + 0.8 * Math.min(1, Math.abs(dist) / glide),
-        easing: inOut,
-      });
-      if (Math.abs(dist) <= glide) { land(); return; }
-      const cut = () => lenis.scrollTo(dest - Math.sign(dist) * glide, { immediate: true });
-      veil(() => { cut(); land(); });
+      // jump (D-45): a short dark veil, the page moves at full dark, the veil lifts on the
+      // section; nothing scrolls past on the way. Reduced motion: an instant jump
+      const jump = lenis
+        ? () => lenis.scrollTo(goal.getBoundingClientRect().top + lenis.animatedScroll - gap, { immediate: true })
+        : () => goal.scrollIntoView({ behavior: 'instant' });
+      if (reduce || Math.abs(goal.getBoundingClientRect().top - gap) < 2) jump();
+      else veil(jump);
     });
   });
 }
 
-// the dark veil of a long jump (.jump-veil in style.css): fades in, the page moves
-// underneath at full dark, then it lifts while the last stretch glides
+// the dark veil of a jump (.jump-veil in style.css): fades in, the page moves underneath
+// at full dark, then it lifts on the new place
 function veil(atDark) {
   let v = document.querySelector('.jump-veil');
   if (!v) {

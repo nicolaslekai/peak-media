@@ -745,6 +745,146 @@ body::after {
     linear-gradient(var(--line), var(--line)) right bottom 4px / calc(100% - var(--ridge-x) - var(--ridge-w)) 1px no-repeat;
 }
 
+/* option: one mountain profile (data-line="profile", js/steps.js sets the class while
+   the steps sit on one row). The whole line is --profile, an SVG with the logo ridge as
+   wide as the list; its base runs along the steps' top edge. Each dot sits --rise px
+   above the base, ringed and cut out of the line; a raised dot gets a dashed drop line
+   to --drop px below the base, towards its number. */
+.steps--profile {
+  padding-top: 180px;
+  background: var(--profile) left top 10px no-repeat;
+}
+
+.steps--profile li::after {
+  top: calc(-9px - var(--rise));
+  left: -5px;
+  width: 19px;
+  /* from the ring's top to --drop below the base, at least the ring itself */
+  height: calc(9.5px + var(--rise) + max(9.5px, var(--drop)));
+  background:
+    radial-gradient(circle, var(--gold) 0 4px, var(--ink) 4.75px 7.5px, rgba(198, 164, 92, 0.35) 8px 8.75px, transparent 9.25px) center top / 19px 19px no-repeat,
+    repeating-linear-gradient(to bottom, rgba(198, 164, 92, 0.45) 0 3px, transparent 3px 7px) center bottom / 1px calc(100% - 21px) no-repeat;
+}
+
+/* phones and tablets (js/steps.js): the profile is the navigation, numbered dots on the
+   ridge; the list shows one step at a time. All steps share one grid cell, so the panel
+   keeps the height of the longest step and nothing below it jumps. */
+.steps__nav {
+  position: relative;
+  margin-bottom: 0.6rem;
+  background: var(--profile) left top var(--ridge-top) no-repeat;
+}
+
+.steps__nav button {
+  /* a 44px-wide touch target; the dot (::before) sits 42px down, on the line, with the
+     number above it in the kicker style */
+  position: absolute;
+  width: 44px;
+  height: 62px;
+  margin: -42px 0 0 -22px;
+  padding: 6px 0 0 0.16em;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  border: 0;
+  background: none;
+  color: var(--text-soft);
+  font: 600 0.68rem/1 var(--sans);
+  letter-spacing: 0.16em;
+  font-variant-numeric: lining-nums tabular-nums;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+/* the same ringed dot as on wide screens, cut out of the line; the chosen step gets a
+   gold ring and grows a little */
+.steps__nav button::before {
+  content: "";
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  width: 19px;
+  height: 19px;
+  margin: -9.5px 0 0 -9.5px;
+  background: radial-gradient(circle, var(--gold) 0 4px, var(--ink) 4.75px 7.5px, rgba(198, 164, 92, 0.35) 8px 8.75px, transparent 9.25px);
+  transition: transform 0.3s var(--ease);
+}
+
+.steps__nav button[aria-pressed="true"] {
+  color: var(--gold);
+}
+
+.steps__nav button[aria-pressed="true"]::before {
+  background: radial-gradient(circle, var(--gold) 0 4px, var(--ink) 4.75px 7.25px, var(--gold) 7.75px 8.75px, transparent 9.25px);
+  transform: scale(1.3);
+}
+
+.steps__nav button:focus-visible,
+.steps__next:focus-visible {
+  outline: 1px solid var(--gold-soft);
+  outline-offset: 3px;
+}
+
+.steps.steps--tabs {
+  grid-template-columns: 1fr;
+  padding-top: 0;
+}
+
+.steps.steps--tabs li {
+  grid-area: 1 / 1;
+  padding-top: 1.2rem;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.35s var(--ease),
+    visibility 0.35s;
+}
+
+.steps.steps--tabs li.is-active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.steps.steps--tabs li::after {
+  display: none;
+}
+
+.steps__next:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.8rem;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 1.6rem;
+  padding: 1rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: none;
+  color: var(--text-soft);
+  font: 300 0.95rem/1.4 var(--sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.steps__next span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.steps__next i {
+  font-style: normal;
+  color: var(--gold-soft);
+  transition: transform 0.3s var(--ease);
+}
+
+.steps__next:hover i {
+  transform: translateX(4px);
+}
+
 .steps li::before {
   counter-increment: step;
   content: counter(step, decimal-leading-zero);

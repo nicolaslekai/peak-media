@@ -285,6 +285,35 @@ function __boot() {
     document.querySelectorAll('.hero__cue, .regions ul, .phones__hint').forEach(el => io.observe(el));
   }
 
+  // a section lands on its header (kicker first), clear of the fixed nav: the gap is the
+  // header's scroll-margin-top in style.css, which Lenis does not read by itself
+  const goalOf = el => el.querySelector(':scope > header') || el;
+  const gapOf = goal => parseFloat(getComputedStyle(goal).scrollMarginTop) || 0;
+
+  /* a link from outside to a section (index.html#kontakt, F6): the <head> script kept the
+     browser from jumping before the pinned sections above it were built; jump now, once
+     they and the fonts are in place, and put the hash back */
+  const landing = document.documentElement.dataset.hash;
+  if (landing) {
+    delete document.documentElement.dataset.hash;
+    const frames2 = new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    Promise.all([document.fonts ? document.fonts.ready : null, frames2]).then(() => {
+      history.replaceState(null, '', landing);
+      let el = null;
+      try { el = document.querySelector(landing); } catch { return; }   // not a selector
+      if (!el) return;
+      const goal = goalOf(el), gap = gapOf(goal);
+      const land = () => {
+        const dest = goal.getBoundingClientRect().top + window.scrollY - gap;
+        if (lenis) lenis.scrollTo(dest, { immediate: true });
+        else window.scrollTo(0, dest);
+      };
+      land();
+      // once more if something above still changed height (seen once in 16 runs)
+      setTimeout(() => { if (Math.abs(goal.getBoundingClientRect().top - gap) > 8) land(); }, 600);
+    });
+  }
+
   /* smooth anchor links */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
@@ -293,10 +322,8 @@ function __boot() {
       const el = document.querySelector(href);
       if (!el) return;
       e.preventDefault();
-      // a section lands on its header (kicker first), clear of the fixed nav: the gap is the
-      // header's scroll-margin-top in style.css, which Lenis does not read by itself
-      const goal = el.querySelector(':scope > header') || el;
-      const gap = parseFloat(getComputedStyle(goal).scrollMarginTop) || 0;
+      const goal = goalOf(el);
+      const gap = gapOf(goal);
       if (!lenis) { goal.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
       const dest = goal.getBoundingClientRect().top + lenis.animatedScroll - gap;
       const dist = dest - lenis.animatedScroll;

@@ -12,9 +12,17 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <!-- .js marks a page with scripts; without it the CSS shows the no-JS state (F9) -->
-  <script>document.documentElement.classList.add('js');</script>
-  <link rel="stylesheet" href="css/style.css?v=82" />
+  <!-- .js marks a page with scripts; without it the CSS shows the no-JS state (F9). A link
+       to a section (index.html#rechner) is followed by main.js once the pinned sections
+       above it exist: the browser's own early jump left the page shifting (CLS 0.41) -->
+  <script>
+    document.documentElement.classList.add('js');
+    if (location.hash.length > 1) {
+      document.documentElement.dataset.hash = location.hash;
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css?v=87" />
 </head>
 
 <body>
@@ -464,20 +472,20 @@
               keine Reichweite
             </button>
             <button class="level" type="button" aria-label="Gelegentlich, 1× pro Woche: typischer Post 489, beste 10 % 3.722 Aufrufe" data-label="Gelegentlich, 1× pro Woche" data-med="489" data-top="3722">
-              <span class="level__typ" style="--h: 3.26"><i>489</i></span>
-              <span class="level__top" style="--h: 24.81"><i>3.722</i></span>
+              <span class="level__typ" aria-hidden="true" style="--h: 3.26"><i>489</i></span>
+              <span class="level__top" aria-hidden="true" style="--h: 24.81"><i>3.722</i></span>
             </button>
             <button class="level" type="button" aria-pressed="true" aria-label="Regelmäßig, 2–5× pro Woche: typischer Post 506, beste 10 % 6.983 Aufrufe" data-label="Regelmäßig, 2–5× pro Woche" data-med="506" data-top="6983">
-              <span class="level__typ" style="--h: 3.37"><i>506</i></span>
-              <span class="level__top" style="--h: 46.55"><i>6.983</i></span>
+              <span class="level__typ" aria-hidden="true" style="--h: 3.37"><i>506</i></span>
+              <span class="level__top" aria-hidden="true" style="--h: 46.55"><i>6.983</i></span>
             </button>
             <button class="level" type="button" aria-label="Aktiv, 6–10× pro Woche: typischer Post 487, beste 10 % 10.092 Aufrufe" data-label="Aktiv, 6–10× pro Woche" data-med="487" data-top="10092">
-              <span class="level__typ" style="--h: 3.25"><i>487</i></span>
-              <span class="level__top" style="--h: 67.28"><i>10.092</i></span>
+              <span class="level__typ" aria-hidden="true" style="--h: 3.25"><i>487</i></span>
+              <span class="level__top" aria-hidden="true" style="--h: 67.28"><i>10.092</i></span>
             </button>
             <button class="level" type="button" aria-label="Sehr aktiv, 11× und öfter pro Woche: typischer Post 459, beste 10 % 14.401 Aufrufe" data-label="Sehr aktiv, 11× und öfter pro Woche" data-med="459" data-top="14401">
-              <span class="level__typ" style="--h: 3.06"><i>459</i></span>
-              <span class="level__top" style="--h: 96.01"><i>14.401</i></span>
+              <span class="level__typ" aria-hidden="true" style="--h: 3.06"><i>459</i></span>
+              <span class="level__top" aria-hidden="true" style="--h: 96.01"><i>14.401</i></span>
             </button>
           </div>
           <p class="chart__axis chart__axis--levels" aria-hidden="true">
@@ -1023,7 +1031,7 @@
   </footer>
 
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
-  <script src="js/main.js?v=55"></script>
+  <script src="js/main.js?v=63"></script>
   <script src="js/evidence.js?v=4"></script>
   <script src="js/contact.js?v=5"></script>
   <script src="js/steps.js?v=17"></script>

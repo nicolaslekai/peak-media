@@ -801,9 +801,67 @@ body::after {
    wide as the list; its base runs along the steps' top edge. Each dot sits --rise px
    above the base, ringed and cut out of the line; a raised dot gets a dashed drop line
    to --drop px below the base, towards its number. */
+/* pinned stage (js/steps.js, wide screens): the page stops for 160vh of scrolling while
+   the logo draws and the steps appear; logo and steps sit centred below the bar */
+.steps-pin--on {
+  height: calc(100svh + 160vh);
+}
+
+.steps-pin--on .steps-pin__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 4.6rem;
+}
+
+/* the logo above the steps (js/steps.js sets the padding to its height): ridge line,
+   sun behind the mountains, arc */
 .steps--profile {
-  padding-top: 180px;
-  background: var(--profile) left top 10px no-repeat;
+  position: relative;
+}
+
+.steps__logo {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.steps__ridge {
+  fill: none;
+  stroke: var(--gold);
+  stroke-opacity: 0.45;
+}
+
+.steps__arc {
+  fill: none;
+  stroke: var(--gold);
+  stroke-opacity: 0.7;
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+}
+
+.steps__sun {
+  fill: var(--gold-soft);
+  fill-opacity: 0.9;
+}
+
+/* while drawing, a step (its dot and its text) appears when the line reaches it */
+.steps--drawing li {
+  opacity: 0;
+  translate: 0 0.8rem;
+  transition:
+    opacity 0.6s var(--ease),
+    translate 0.6s var(--ease);
+}
+
+.steps--drawing li.is-on {
+  opacity: 1;
+  translate: none;
 }
 
 .steps--profile li::after {

@@ -1,9 +1,10 @@
 /* ============ BLAUE STUNDE — process line as one mountain profile ============
    Option for <ol class="steps" data-line="profile">. The logo ridge (both mountains,
    real proportions) becomes the line:
-   - wide screens (five columns): one profile across the steps, small summit on the
-     4th dot, every dot on the line, raised dots with a drop line to their number
-     (.steps--profile in style.css);
+   - wide screens (five columns): the whole logo across the steps, small summit on the
+     4th dot, every dot on the line, raised dots with a drop line to their number; the
+     line, the rising sun and the arc are drawn while scrolling (.steps--profile,
+     .steps--drawing in style.css);
    - phones and tablets: the profile becomes the navigation, ringed dots with their
      number above them along the ridge as a route (foot, halfway up, both summits,
      other foot), and the list shows one step at a time: tap a number, tap the line
@@ -98,6 +99,15 @@
   ol.before(nav);
   ol.after(onward);
 
+  // wide screens: the list sits in a pinned stage (like the cine scenes); while it is
+  // pinned, scrolling only draws the logo and reveals the steps (.steps-pin--on)
+  const host = ol.parentElement;
+  const pin = document.createElement('div');
+  pin.className = 'steps-pin';
+  pin.innerHTML = '<div class="steps-pin__stage"></div>';
+  ol.before(pin);
+  pin.firstElementChild.append(ol);
+
   let current = 0;
   function show(i) {
     current = Math.max(0, Math.min(items.length - 1, i));
@@ -138,31 +148,112 @@
     dots.forEach((b, i) => { b.style.left = `${f(xs[i])}px`; b.style.top = `${f(base - p.rise(xs[i]))}px`; });
   }
 
-  // ---- wide screens: the profile along the five columns ----
+  // ---- wide screens: the whole logo along the five columns, drawn while scrolling ----
+  // The ridge line runs flat, over both mountains (small summit on the 4th dot) and flat
+  // again; above it the sun (the logo's disc, behind the logo's own mountain mask) and the
+  // arc. Scrolling draws the line from dot to dot (each step appears when the line reaches
+  // it), the sun rises behind the mountains, and the arc closes the logo at the end.
+  // Reduced motion: drawn at once.
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const logo = document.createElementNS(SVGNS, 'svg');
+  logo.classList.add('steps__logo');
+  logo.setAttribute('aria-hidden', 'true');
+  ol.append(logo);          // last child, so li:nth-child() stays as it is
+  const ARC_TOP = 3;        // top of the logo's arc (logo units; the ridge starts at 90.3)
+  let line = null, arc = null, sun = null, total = 0, arcLen = 0, dotLen = [];
+
   function drawLine() {
-    const box = ol.getBoundingClientRect();
+    const box = ol.getBoundingClientRect(), W = box.width;
     const xs = items.map(li => li.getBoundingClientRect().left - box.left + DOT);
-    const p = profile(box.width, S, xs[3]);
-    ol.style.setProperty('--profile', p.url);
+    // the logo shrinks on short screens so that it and the tallest step fit below the bar
+    const textH = Math.max(...items.map(li => li.offsetHeight));
+    const sL = still ? S : Math.min(S, Math.max(1.1, (innerHeight - 110 - textH - 40) / 172));
+    const left = xs[3] - 177 * sL, h = 78.7 * sL, top = f((90.3 - ARC_TOP) * sL + 4);
+    const X = x => f(left + (x - 4) * sL), Y = y => f((y - 90.3) * sL + top + 0.5);
+    const base = f(top + h + 0.5);
+    let dl = `M0 ${base}H${X(4)}`;
+    for (const [, a, b, c] of RIDGE) dl += `C${X(a[0])} ${Y(a[1])} ${X(b[0])} ${Y(b[1])} ${X(c[0])} ${Y(c[1])}`;
+    dl += `H${f(W)}`;
+    // logo units → px for the disc and its mask (blaue-stunde-logo-white.svg); the arc and
+    // the line are drawn in px, since Chromium dashes a scaled path wrongly
+    const m = `matrix(${sL} 0 0 ${sL} ${f(left - 4 * sL)} ${f(top + 0.5 - 90.3 * sL)})`;
+    logo.setAttribute('viewBox', `0 0 ${f(W)} ${Math.ceil(base + 1)}`);
+    logo.style.height = `${Math.ceil(base + 1)}px`;
+    logo.innerHTML = `<defs><mask id="steps-sun" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="172">
+        <rect width="240" height="172" fill="#fff"/>
+        <g fill="#000" stroke="#000" stroke-width="9" stroke-linejoin="round">
+          <path d="M4 169C33.9 138.1 82 90.3 98 90.3C114 90.3 152.1 138.9 178 169L178 172L4 172Z"/>
+          <path d="M151 139.9C160.7 131.6 169 120.7 181 120.7C193 120.7 213.8 146.8 236 169L236 172L151 172Z"/>
+        </g></mask></defs>
+      <g transform="${m}">
+        <g mask="url(#steps-sun)"><circle class="steps__sun" cx="150" cy="103" r="62"/></g>
+      </g>
+      <path class="steps__arc" d="M${X(26)} ${Y(137.2)}A${f(100 * sL)} ${f(100 * sL)} 0 1 1 ${X(214)} ${Y(137.2)}"/>
+      <path class="steps__ridge" d="${dl}"/>`;
+    line = logo.querySelector('.steps__ridge');
+    arc = logo.querySelector('.steps__arc');
+    sun = logo.querySelector('.steps__sun');
+    total = line.getTotalLength();
+    arcLen = arc.getTotalLength();
+    // dash = the stroke's length, gap twice that: with a gap equal to the length Chromium
+    // drew only the start of the arc
+    line.style.strokeDasharray = `${total} ${total * 2}`;
+    arc.style.strokeDasharray = `${arcLen} ${arcLen * 2}`;
+    // length along the line at each dot (the line runs left to right)
+    dotLen = xs.map(x => {
+      let lo = 0, hi = total;
+      for (let k = 0; k < 28; k++) { const mid = (lo + hi) / 2; if (line.getPointAtLength(mid).x < x) lo = mid; else hi = mid; }
+      return lo;
+    });
+    ol.style.paddingTop = `${Math.ceil(base) + 10}px`;
+    logo.style.top = '10px';
     items.forEach((li, i) => {
-      const rise = p.rise(xs[i]);
+      const rise = riseAt((xs[i] - left) / sL + 4) * sL;
       li.style.setProperty('--rise', `${f(rise)}px`);
       li.style.setProperty('--drop', rise > 12 ? '18px' : '0px');
     });
+    ol.classList.toggle('steps--drawing', !still);
+    pin.classList.toggle('steps-pin--on', !still);
+    progress();
   }
+
+  // scroll progress over the pinned stretch: 0 when the stage pins, 1 after 90 % of it
+  // (the finished logo holds for a moment before the page moves on); the line takes
+  // 80 %, the arc the last 20 %
+  const clamp = v => Math.max(0, Math.min(1, v));
+  function progress() {
+    if (!line || !ol.classList.contains('steps--profile')) return;
+    const r = pin.getBoundingClientRect();
+    const p = still ? 1 : clamp(-r.top / ((r.height - innerHeight) * 0.9));
+    const lp = clamp(p / 0.8), len = lp * total;
+    line.style.strokeDashoffset = f(total - len);
+    arc.style.strokeDashoffset = f(arcLen * (1 - clamp((p - 0.8) / 0.2)));
+    // the sun rises from fully behind the mountains (110 logo units lower) to its place
+    // ... once the line has passed the big summit, so it never floats over a missing ridge
+    const sp = clamp((p - 0.45) / 0.4);
+    sun.setAttribute('transform', `translate(0 ${f(110 * (1 - sp * sp * (3 - 2 * sp)))})`);
+    items.forEach((li, i) => li.classList.toggle('is-on', i === 0 || len >= dotLen[i] - 1));
+  }
+  let queued = false;
+  const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; progress(); }); } };
+  if (window.lenis) window.lenis.on('scroll', onScroll);
+  else addEventListener('scroll', onScroll, { passive: true });
 
   let last = '';
   function draw() {
     const tabs = !wide.matches;
-    const key = `${tabs}:${ol.parentElement.clientWidth}`;
+    const key = `${tabs}:${host.clientWidth}:${tabs ? 0 : innerHeight}`;
     if (key === last) return;           // height-only changes (fonts, panel): nothing to redraw
     last = key;
     ol.classList.toggle('steps--profile', !tabs);
     ol.classList.toggle('steps--tabs', tabs);
     nav.hidden = onward.hidden = !tabs;
-    if (tabs) drawNav(); else drawLine();
+    logo.hidden = tabs;
+    if (tabs) { ol.style.paddingTop = ''; ol.classList.remove('steps--drawing'); pin.classList.remove('steps-pin--on'); drawNav(); } else drawLine();
   }
 
   // first call on observe, then on every width change of the section
-  new ResizeObserver(draw).observe(ol.parentElement);
+  new ResizeObserver(draw).observe(host);
+  addEventListener('resize', draw);
 })();

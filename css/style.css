@@ -873,19 +873,63 @@ html:not(.js) #scene-ski .cine__stage {
    above the base, ringed and cut out of the line; a raised dot gets a dashed drop line
    to --drop px below the base, towards its number. */
 /* pinned stage (js/steps.js, wide screens): the page stops for 160vh of scrolling while
-   the logo draws and the steps appear; logo and steps sit centred below the bar */
+   the logo draws and the steps appear */
 .steps-pin--on {
   height: calc(100svh + 160vh);
 }
 
+/* phones and tablets with motion (js/steps.js): the stage pins longer, so each of the
+   five steps gets its own stretch of scrolling */
+.steps-pin--on.steps-pin--tabs {
+  height: calc(100svh + 280vh);
+}
+
+/* there the step shows its own number; the dots stay as touch targets, the drawn line
+   replaces the faint profile, and the steps' fades follow the scroll (no transition) */
+.steps__nav.steps__nav--scroll {
+  background: none;
+}
+
+.steps__nav.steps__nav--scroll button {
+  font-size: 0;
+}
+
+.steps.steps--scroll li {
+  transition: none;
+}
+
+/* the pinned phone stage is filled, not top-heavy: the block sits centred below the bar,
+   the drawing runs almost to the screen edges (the gutter is given back to it) and the
+   step is set larger */
+.steps-pin--on.steps-pin--tabs .steps-pin__stage {
+  justify-content: center;
+  padding-top: 5rem;
+  padding-bottom: 1rem;
+}
+
+.steps__nav.steps__nav--scroll {
+  margin: 0 calc(-1 * var(--gutter) + 0.75rem) 1.2rem;
+}
+
+.steps.steps--scroll h3 {
+  font-size: 1.8rem;
+}
+
+.steps.steps--scroll p {
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+/* from the top, a fixed gap below the bar: centred, tall screens left ~300px of empty
+   stage between the section text and the logo */
 .steps-pin--on .steps-pin__stage {
   position: sticky;
   top: 0;
   height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-top: 4.6rem;
+  justify-content: flex-start;
+  padding-top: calc(4.6rem + clamp(1.5rem, 4vh, 3rem));
 }
 
 /* the logo above the steps (js/steps.js sets the padding to its height): ridge line,

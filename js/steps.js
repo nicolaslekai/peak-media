@@ -5,11 +5,11 @@
      4th dot, every dot on the line, raised dots with a drop line to their number; the
      line, the rising sun and the arc are drawn while scrolling (.steps--profile,
      .steps--drawing in style.css);
-   - phones and tablets: the profile becomes the navigation, ringed dots with their
-     number above them along the ridge as a route (foot, halfway up, both summits,
-     other foot), and the list shows one step at a time: tap a number, tap the line
-     under the step that names the next one, or swipe (.steps--tabs, .steps__nav,
-     .steps__next).
+   - phones and tablets: the same pinned drawing over the logo's own ridge, dots as a
+     route (foot, halfway up, both summits, other foot); one step at a time, fading
+     with the scroll; a dot jumps to its step (.steps--tabs, .steps--scroll,
+     .steps__nav). With reduced motion: not pinned, the numbered dots and the line
+     under the step choose the step (tap or swipe, .steps__next).
    Without JS each step keeps its own ridge. Own file, like evidence.js: an error here
    cannot stop the scroll engine.
    ============================================================================ */
@@ -81,7 +81,7 @@
     b.setAttribute('aria-controls', li.id);
     // the name must contain the visible number (WCAG 2.5.3, label in name)
     b.setAttribute('aria-label', `Schritt ${b.textContent}: ${li.querySelector('h3').textContent}`);
-    b.addEventListener('click', () => show(i));
+    b.addEventListener('click', () => (scrolling ? goTo(i) : show(i)));
     nav.append(b);
     return b;
   });
@@ -107,7 +107,7 @@
   pin.className = 'steps-pin';
   pin.innerHTML = '<div class="steps-pin__stage"></div>';
   ol.before(pin);
-  pin.firstElementChild.append(ol);
+  pin.firstElementChild.append(nav, ol);
 
   let current = 0;
   function show(i) {
@@ -124,7 +124,7 @@
   let x0 = null, y0 = 0;
   ol.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
   ol.addEventListener('touchend', e => {
-    if (x0 === null || !ol.classList.contains('steps--tabs')) return;
+    if (x0 === null || !ol.classList.contains('steps--tabs') || scrolling) return;
     const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
     x0 = null;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1));
@@ -163,13 +163,11 @@
   ol.append(logo);          // last child, so li:nth-child() stays as it is
   const ARC_TOP = 3;        // top of the logo's arc (logo units; the ridge starts at 90.3)
   let line = null, arc = null, sun = null, total = 0, arcLen = 0, dotLen = [];
+  let scrolling = false;    // phones and tablets with motion: pinned, steps follow the scroll
 
-  function drawLine() {
-    const box = ol.getBoundingClientRect(), W = box.width;
-    const xs = items.map(li => li.getBoundingClientRect().left - box.left + DOT);
-    // the logo shrinks on short screens so that it and the tallest step fit below the bar
-    const textH = Math.max(...items.map(li => li.offsetHeight));
-    const sL = still ? S : Math.min(S, Math.max(1.1, (innerHeight - 110 - textH - 40) / 172));
+  // the logo for the dots at xs (px, the 4th on the small summit) at sL px per logo unit,
+  // W wide: ridge line through the dots, the sun behind the mountains and the arc
+  function buildLogo(W, xs, sL) {
     const left = xs[3] - 177 * sL, h = 78.7 * sL, top = f((90.3 - ARC_TOP) * sL + 4);
     const X = x => f(left + (x - 4) * sL), Y = y => f((y - 90.3) * sL + top + 0.5);
     const base = f(top + h + 0.5);
@@ -207,6 +205,17 @@
       for (let k = 0; k < 28; k++) { const mid = (lo + hi) / 2; if (line.getPointAtLength(mid).x < x) lo = mid; else hi = mid; }
       return lo;
     });
+    return { base, left };
+  }
+
+  function drawLine() {
+    const box = ol.getBoundingClientRect(), W = box.width;
+    const xs = items.map(li => li.getBoundingClientRect().left - box.left + DOT);
+    // the logo shrinks on short screens so that it and the tallest step fit below the bar
+    const textH = Math.max(...items.map(li => li.offsetHeight));
+    const sL = still ? S : Math.min(S, Math.max(1.1, (innerHeight - 110 - textH - 40) / 172));
+    if (logo.parentNode !== ol) ol.append(logo);
+    const { base, left } = buildLogo(W, xs, sL);
     ol.style.paddingTop = `${Math.ceil(base) + 10}px`;
     logo.style.top = '10px';
     items.forEach((li, i) => {
@@ -219,22 +228,74 @@
     progress();
   }
 
+  // phones and tablets: the same logo over the route of dots, in the nav above the list
+  function drawScrollNav() {
+    const W = nav.clientWidth, pad = 16;
+    const s = Math.min(S, (W - 2 * pad) / 232);
+    const left = (W - 232 * s) / 2;
+    const xs = ROUTE.map(u => left + (u - 4) * s);
+    if (logo.parentNode !== nav) nav.prepend(logo);
+    const { base } = buildLogo(W, xs, s);
+    logo.style.top = '0px';
+    nav.style.height = `${Math.ceil(base) + pad}px`;
+    nav.style.setProperty('--profile', 'none');   // the drawn line replaces the faint one
+    dots.forEach((b, i) => { b.style.left = `${f(xs[i])}px`; b.style.top = `${f(base - riseAt(ROUTE[i]) * s)}px`; });
+    progress();
+  }
+
+  // phones: each step gets an equal stretch of the line's 80 % (the line reaches dot i at
+  // reach()[i]); a step fades out over FADE just before the next dot, the next fades in
+  // over FADE just after it, GAP apart
+  const FADE = 0.04, GAP = 0.008;
+  const reach = () => items.map((_, i) => (i * 0.8) / (items.length - 1));
+  function goTo(i) {
+    const at = reach(), p = i === 0 ? 0 : at[i] + GAP + FADE;
+    const span = (pin.offsetHeight - innerHeight) * 0.9;
+    const y = pin.getBoundingClientRect().top + scrollY + p * span + 1;
+    if (window.lenis) window.lenis.scrollTo(y, { duration: 0.9 });
+    else scrollTo({ top: y, behavior: 'smooth' });
+  }
+
   // scroll progress over the pinned stretch: 0 when the stage pins, 1 after 90 % of it
   // (the finished logo holds for a moment before the page moves on); the line takes
   // 80 %, the arc the last 20 %
   const clamp = v => Math.max(0, Math.min(1, v));
   function progress() {
-    if (!line || !ol.classList.contains('steps--profile')) return;
+    if (!line || !(ol.classList.contains('steps--profile') || scrolling)) return;
     const r = pin.getBoundingClientRect();
     const p = still ? 1 : clamp(-r.top / ((r.height - innerHeight) * 0.9));
-    const lp = clamp(p / 0.8), len = lp * total;
+    const lp = clamp(p / 0.8);
+    let len = lp * total;
+    if (scrolling) {   // phones: equal stretches, so the line speeds up or slows between dots
+      const n = items.length - 1, seg = lp * n, k = Math.min(n - 1, Math.floor(seg));
+      len = dotLen[k] + (dotLen[k + 1] - dotLen[k]) * (seg - k) + (total - dotLen[n]) * clamp((p - 0.8) / 0.2);
+    }
     line.style.strokeDashoffset = f(total - len);
-    arc.style.strokeDashoffset = f(arcLen * (1 - clamp((p - 0.8) / 0.2)));
+    const ap = clamp((p - 0.8) / 0.2);
+    arc.style.strokeDashoffset = f(arcLen * (1 - ap));
+    // a zero-length dash with round caps still paints a dot: hide the arc until it starts
+    arc.style.visibility = ap > 0 ? '' : 'hidden';
     // the sun rises from fully behind the mountains (110 logo units lower) to its place
     // ... once the line has passed the big summit, so it never floats over a missing ridge
     const sp = clamp((p - 0.45) / 0.4);
     sun.setAttribute('transform', `translate(0 ${f(110 * (1 - sp * sp * (3 - 2 * sp)))})`);
-    items.forEach((li, i) => li.classList.toggle('is-on', i === 0 || len >= dotLen[i] - 1));
+    if (!scrolling) {
+      items.forEach((li, i) => li.classList.toggle('is-on', i === 0 || len >= dotLen[i] - 1));
+      return;
+    }
+    // phones: one step at a time, out before the line reaches the next dot, in after it
+    const at = reach();
+    let best = 0, top = -1;
+    items.forEach((li, i) => {
+      const fin = i === 0 ? 1 : clamp((p - at[i] - GAP) / FADE);
+      const fout = i === items.length - 1 ? 0 : clamp((p - (at[i + 1] - GAP - FADE)) / FADE);
+      const o = fin * (1 - fout), y = fout > 0 ? -(1 - o) * 0.6 : (1 - o) * 1.2;
+      li.style.opacity = o.toFixed(3);
+      li.style.transform = o < 1 ? `translateY(${f(y)}rem)` : '';
+      li.style.visibility = o > 0.005 ? 'visible' : 'hidden';
+      if (o > top) { top = o; best = i; }
+    });
+    dots.forEach((b, k) => b.setAttribute('aria-pressed', String(k === best)));
   }
   let queued = false;
   const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; progress(); }); } };
@@ -247,11 +308,23 @@
     const key = `${tabs}:${host.clientWidth}:${tabs ? 0 : innerHeight}`;
     if (key === last) return;           // height-only changes (fonts, panel): nothing to redraw
     last = key;
+    scrolling = tabs && !still;
     ol.classList.toggle('steps--profile', !tabs);
     ol.classList.toggle('steps--tabs', tabs);
-    nav.hidden = onward.hidden = !tabs;
-    logo.toggleAttribute('hidden', tabs);   // an <svg> has no .hidden property (T9)
-    if (tabs) { ol.style.paddingTop = ''; ol.classList.remove('steps--drawing'); pin.classList.remove('steps-pin--on'); drawNav(); } else drawLine();
+    ol.classList.toggle('steps--scroll', scrolling);
+    nav.classList.toggle('steps__nav--scroll', scrolling);
+    pin.classList.toggle('steps-pin--tabs', scrolling);
+    nav.hidden = !tabs;
+    onward.hidden = !tabs || scrolling;
+    logo.toggleAttribute('hidden', tabs && !scrolling);   // an <svg> has no .hidden property (T9)
+    if (!scrolling) for (const li of items) li.style.opacity = li.style.transform = li.style.visibility = '';
+    if (!tabs) { drawLine(); return; }
+    ol.style.paddingTop = '';
+    ol.classList.remove('steps--drawing');
+    pin.classList.toggle('steps-pin--on', scrolling);
+    if (scrolling) { drawScrollNav(); return; }
+    drawNav();
+    show(current);
   }
 
   // first call on observe, then on every width change of the section

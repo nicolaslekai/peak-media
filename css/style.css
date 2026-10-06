@@ -430,6 +430,22 @@ body::after {
   z-index: 1;
 }
 
+/* dark veil of a long anchor jump (main.js, D-45): quick in, slower out; under the bar */
+.jump-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease-out;
+}
+
+.jump-veil--on {
+  opacity: 1;
+  transition: opacity 0.18s ease-in;
+}
+
 /* without JS (no .js on <html>, set in <head>): no scrub, so each scene is one screen
    with a still frame behind its copy; the image is only requested in this case (F9) */
 html:not(.js) .cine {

@@ -223,6 +223,9 @@ function __boot() {
     try {
       lenis = new Lenis({ lerp: 0.075, smoothWheel: true, wheelMultiplier: 0.9 });
       window.lenis = lenis;
+      // a scroll started from code must wake the sleeping loop too, or Lenis never moves
+      const scrollTo = lenis.scrollTo.bind(lenis);
+      lenis.scrollTo = (...args) => { scrollTo(...args); wake(); };
     } catch (err) { console.error(err); }   // native scrolling still works
   }
   const updateAll = () => {
@@ -280,17 +283,34 @@ function __boot() {
       const goal = el.querySelector(':scope > header') || el;
       const gap = parseFloat(getComputedStyle(goal).scrollMarginTop) || 0;
       if (!lenis) { goal.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
-      // soft jump: a long way is cut short instantly (no scrubbing through every scene),
-      // then the last stretch of under one screen glides in with a gentle in-out curve
       const dest = goal.getBoundingClientRect().top + lenis.animatedScroll - gap;
-      const dist = dest - lenis.animatedScroll, glide = window.innerHeight * 0.85;
-      if (Math.abs(dist) > glide) lenis.scrollTo(dest - Math.sign(dist) * glide, { immediate: true });
-      lenis.scrollTo(dest, {
-        duration: 0.6 + 0.6 * Math.min(1, Math.abs(dist) / glide),
-        easing: t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+      const dist = dest - lenis.animatedScroll;
+      const inOut = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+      // soft jump (D-45): up to two screens glide; a longer way is skipped under a short
+      // dark veil (no rushing through every scene), then the last two screens glide in
+      const glide = window.innerHeight * 2;
+      const land = () => lenis.scrollTo(dest, {
+        duration: 0.8 + 0.8 * Math.min(1, Math.abs(dist) / glide),
+        easing: inOut,
       });
+      if (Math.abs(dist) <= glide) { land(); return; }
+      const cut = () => lenis.scrollTo(dest - Math.sign(dist) * glide, { immediate: true });
+      veil(() => { cut(); land(); });
     });
   });
+}
+
+// the dark veil of a long jump (.jump-veil in style.css): fades in, the page moves
+// underneath at full dark, then it lifts while the last stretch glides
+function veil(atDark) {
+  let v = document.querySelector('.jump-veil');
+  if (!v) {
+    v = document.createElement('div');
+    v.className = 'jump-veil';
+    document.body.append(v);
+  }
+  requestAnimationFrame(() => v.classList.add('jump-veil--on'));
+  setTimeout(() => { atDark(); v.classList.remove('jump-veil--on'); }, 200);
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', __boot);
 else __boot();

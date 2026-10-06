@@ -162,12 +162,8 @@ function __boot() {
         en.target.classList.add('in');
         io.unobserve(en.target);
       });
-    }, { threshold: 0.2, rootMargin: '0px 0px -6% 0px' });
-    document.querySelectorAll('.reveal').forEach((el, i) => {
-      el.style.transitionDelay = (i % 4) * 0.06 + 's';
-      io.observe(el);
     });
-  }
+  });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', __boot);
 else __boot();

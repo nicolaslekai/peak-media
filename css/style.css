@@ -290,20 +290,6 @@ body::after {
   color: var(--gold-soft);
 }
 
-/* ---- reveal anim ---- */
-.reveal {
-  opacity: 0;
-  transform: translateY(26px);
-  transition:
-    opacity 1s var(--ease),
-    transform 1s var(--ease);
-}
-
-.reveal.in {
-  opacity: 1;
-  transform: none;
-}
-
 /* ---- NAV ---- */
 .nav {
   position: fixed;
@@ -711,8 +697,8 @@ body::after {
 }
 
 /* ---- TILES: hairline grid of cards with a heading and a description
-   (services, channels). The grid draws the top and left hairline, each card its
-   right and bottom one, so no background shows through while cards fade in. ---- */
+   (channels). The grid draws the top and left hairline, each card its right and
+   bottom one, so every line is a real border at any column count. ---- */
 .tiles {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2808,12 +2794,6 @@ body::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
   .month::after,
   .level__typ,
   .level__top {

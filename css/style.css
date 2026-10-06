@@ -615,6 +615,35 @@ body::after {
   }
 }
 
+/* the same stroke, sideways: grows to the right, then leaves to the right */
+@keyframes cue-x {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  45% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  55% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+@keyframes hint-out {
+  to {
+    opacity: 0;
+  }
+}
+
 /* ---- MISSION: short heading, then two articles side by side on the full width ---- */
 .mission__text {
   display: grid;
@@ -989,6 +1018,11 @@ body::after {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.8rem;
+}
+
+/* swipe cue, only on touch screens where the phones become a swipe row (<=1000px) */
+.phones__hint {
+  display: none;
 }
 
 .phone {
@@ -2389,9 +2423,26 @@ body::after {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* the reels as a swipe row, like a feed (tablets and phones): edge to edge, about two
+     and a half phones in view on tablets (one and a half on phones, <=640px), snapping
+     to each phone */
   .phones {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.4rem;
+    display: flex;
+    gap: 1rem;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    /* a mouse needs the scrollbar to move the row; touch screens hide it (below) */
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+
+  .phone {
+    flex: 0 0 36%;
+    scroll-snap-align: start;
   }
 
   .mission .metrics {
@@ -2415,50 +2466,46 @@ body::after {
   }
 }
 
-/* ---- MOBILE cinematic: 5:7 portrait crop with the caption overlaid on it ---- */
+/* ---- MOBILE cinematic: full-height portrait stage with the caption overlaid on it ---- */
 @media (max-width: 767px) {
   .brand img {
     height: 36px;
   }
 
-  /* let the top menu scroll away so the frame sits centered in the phone */
-  .nav {
-    position: absolute;
-  }
-
-  .nav.scrolled {
-    background: none;
-    backdrop-filter: none;
-    border: none;
-  }
-
-  /* no fixed nav to clear on phones */
-  .section>header {
-    scroll-margin-top: var(--section-y);
-  }
-
-  /* the stage IS the 5:7 crop (height 140vw, matches cw * 1.4 in main.js;
-     no full-screen black bands baked into the canvas):
-     it pins vertically centered, and surrounding content follows right behind it.
-     svh = stable visible height (doesn't change as toolbars hide/show), so no stretch on scroll */
+  /* the stage fills the phone: full height, the frame cropped around the scene's focal
+     point (main.js). svh = the visible height with the toolbars shown, stable while
+     they hide and show, so the canvas does not stretch while scrolling */
   .cine__stage {
-    align-items: center;
-    height: min(100svh, 140vw);
+    height: 100svh;
     min-height: 0;
-    top: calc((100svh - min(100svh, 140vw)) / 2);
   }
 
-  .hero.cine .cine__stage {
-    margin-top: calc((100svh - min(100svh, 140vw)) / 2);
-  }
-
-  /* one even scrim for both variants (same specificity as the desktop ones, declared later) */
-  .hero .cine__scrim,
+  /* scenes on phones, like a reel: kicker, heading, paragraph and tags in the bottom
+     third on a bottom-weighted scrim, the image free above (one scrim for both scenes:
+     same specificity as the desktop ones, declared later; WCAG AA over the real frames,
+     see notes/reports/mobile-cine-copy-2026-10-06.md) */
   .scene .cine__scrim {
     background: linear-gradient(0deg,
-        rgba(8, 10, 9, 0.55) 0%,
-        rgba(8, 10, 9, 0.28) 42%,
-        rgba(8, 10, 9, 0.5) 100%);
+        rgba(8, 10, 9, 0.9) 0%,
+        rgba(8, 10, 9, 0.78) 38%,
+        rgba(8, 10, 9, 0.25) 68%,
+        rgba(8, 10, 9, 0.45) 100%);
+  }
+
+  .scene .cine__stage {
+    align-items: flex-end;
+  }
+
+  .scene .cine__copy {
+    padding-bottom: clamp(2rem, 7svh, 3.5rem);
+  }
+
+  .scene h2+p {
+    max-width: 36ch;
+    margin-bottom: 1.4rem;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: rgba(243, 237, 225, 0.9);
   }
 
   .hero h1 {
@@ -2467,8 +2514,48 @@ body::after {
     margin-bottom: 1.4rem;
   }
 
-  /* trim the mobile copy — let the visuals carry it */
-  .cine__copy :is(h1, h2)+p {
+  /* hero on phones, kept clean: kicker, heading and two equal buttons in the bottom third
+     on a bottom-weighted scrim (WCAG AA over the real frames, see
+     notes/reports/mobile-cine-copy-2026-10-06.md); no lead paragraph, no scroll cue */
+  .hero .cine__stage {
+    align-items: flex-end;
+  }
+
+  .hero .cine__copy {
+    padding-bottom: clamp(2rem, 7svh, 3.5rem);
+  }
+
+  .hero .cine__scrim {
+    background: linear-gradient(0deg,
+        rgba(8, 10, 9, 0.9) 0%,
+        rgba(8, 10, 9, 0.72) 35%,
+        rgba(8, 10, 9, 0.15) 65%,
+        rgba(8, 10, 9, 0.45) 100%);
+  }
+
+  .hero__cue {
+    display: none;
+  }
+
+  .hero__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    width: 100%;
+  }
+
+  /* labels centred both ways, so the pair stays even when one label takes two lines */
+  .hero__actions .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.15em 0.6em;
+    letter-spacing: 0.12em;
+    text-align: center;
+  }
+
+  /* the hero stays clean on phones: no lead paragraph (D-47) */
+  .hero h1+p {
     display: none;
   }
 
@@ -2537,6 +2624,98 @@ body::after {
     padding: 2.5rem var(--edge) 1.8rem;
     gap: 1.8rem;
   }
+
+}
+
+/* ---- TOUCH SCREENS (phones, tablets, large iPads; not a mouse): touch targets of
+   about 44px. Toggles, the assumptions switch, footer links (the padding replaces their
+   bottom margin), and the sliders' hit area (the visible track stays 2px) ---- */
+@media (pointer: coarse) {
+  .toggle button {
+    min-height: 44px;
+  }
+
+  .calc summary {
+    padding-block: 0.9rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .calc details {
+    padding-top: 0.3rem;
+  }
+
+  .foot__cols a {
+    padding-block: 0.55rem;
+    margin-bottom: 0;
+  }
+
+  .range input {
+    height: 44px;
+  }
+}
+
+/* ---- SWIPE ROW ON TOUCH SCREENS (<=1000px): no scrollbar, a "Wischen" cue with a stroke
+   that runs to the right, like "Scrollen" in the hero. Where scroll-driven animations
+   exist the cue fades out over the first 120px of swiping (the row's scroll timeline,
+   shared with the section) ---- */
+@media (max-width: 1000px) and (pointer: coarse) {
+  .phones {
+    scrollbar-width: none;
+  }
+
+  .phones::-webkit-scrollbar {
+    display: none;
+  }
+
+  .impact {
+    timeline-scope: --phones;
+  }
+
+  .phones {
+    scroll-timeline: --phones x;
+  }
+
+  .phones__hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    margin-top: 1.4rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(243, 237, 225, 0.6);
+  }
+
+  .phones__hint::before {
+    content: "";
+    width: 46px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    animation: cue-x 2s var(--ease) infinite;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .phones__hint {
+      animation: hint-out linear both;
+      animation-timeline: --phones;
+      animation-range: 0 120px;
+    }
+  }
+}
+
+/* ---- TALL PHONES (780px+ high, iPhone X and later): the hero has room for its lead
+   paragraph above the buttons; the kicker keeps WCAG AA (5.6–7.2 measured over the
+   frames), the image stays free in the upper half ---- */
+@media (max-width: 767px) and (min-height: 780px) {
+  .hero h1+p {
+    display: block;
+    max-width: 36ch;
+    margin-bottom: 1.6rem;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: rgba(243, 237, 225, 0.9);
+  }
 }
 
 /* ---- SMALL PHONES: single-column grids ---- */
@@ -2566,8 +2745,9 @@ body::after {
     width: calc(50% - 0.5rem);
   }
 
-  .phones {
-    gap: 1rem;
+  /* phones: one reel in view with the next one peeking in */
+  .phone {
+    flex-basis: 58%;
   }
 
   .metrics--inline {
@@ -2642,6 +2822,7 @@ body::after {
 
   .regions ul,
   .hero__cue::before,
+  .phones__hint::before,
   .hero h1 {
     animation: none;
   }

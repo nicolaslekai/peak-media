@@ -51,13 +51,9 @@ function initScrub(cfg) {
     const ir = base.naturalWidth / base.naturalHeight, cr = cw / ch;
     let dw, dh, dx, dy;
     ctx.fillStyle = bg; ctx.fillRect(0, 0, cw, ch);
-    ctx.save();
-    if (IS_MOBILE) {
-      // taller crop, centered, caption overlaid — fills more of the phone, smaller bands
-      const boxH = Math.min(ch, cw * 1.4), boxY = (ch - boxH) / 2;
-      dh = boxH; dw = boxH * ir; dx = (cw - dw) * (cfg.focalX ?? 0.5); dy = boxY;
-      ctx.beginPath(); ctx.rect(0, boxY, cw, boxH); ctx.clip();
-    } else if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
+    // cover the whole canvas; on phones (full-height portrait stage, so the frame is
+    // cropped hard) the scene's focal point stays in view instead of the centre
+    if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) * (IS_MOBILE ? cfg.focalX : 0.5); dy = 0; }
     else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
     ctx.drawImage(base, dx, dy, dw, dh);
     const nxt = images[i0 + 1];
@@ -66,7 +62,6 @@ function initScrub(cfg) {
       ctx.drawImage(nxt, dx, dy, dw, dh);
       ctx.globalAlpha = 1;
     }
-    ctx.restore();
     return true;
   }
   let cssW = 0, cssH = 0;

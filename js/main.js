@@ -290,7 +290,8 @@ function __boot() {
 
   // a section lands on its header (kicker first), clear of the fixed nav: the gap is the
   // header's scroll-margin-top in style.css, which Lenis does not read by itself
-  const goalOf = el => el.querySelector(':scope > header') || el;
+  // (the process section's header may sit inside its pinned stage, js/steps.js)
+  const goalOf = el => el.querySelector(':scope > header, :scope > .steps-pin > .steps-pin__stage > header') || el;
   const gapOf = goal => parseFloat(getComputedStyle(goal).scrollMarginTop) || 0;
 
   /* a link from outside to a section (index.html#kontakt, F6): the <head> script kept the

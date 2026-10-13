@@ -108,6 +108,16 @@
   pin.innerHTML = '<div class="steps-pin__stage"></div>';
   ol.before(pin);
   pin.firstElementChild.append(nav, ol);
+  // the section's title and text: on wide screens the drawing starts once they are in view
+  // below the bar, not only when the stage pins, so the stage never waits empty
+  const head = host.querySelector(':scope > header');
+  const bar = document.getElementById('nav');
+  // a cue at the bottom of the screen while the drawing has only begun ("keep scrolling")
+  const cue = document.createElement('p');
+  cue.className = 'steps__cue is-gone';
+  cue.setAttribute('aria-hidden', 'true');
+  cue.textContent = 'Scrollen';
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) pin.firstElementChild.append(cue);
 
   let current = 0;
   function show(i) {
@@ -213,7 +223,16 @@
     const xs = items.map(li => li.getBoundingClientRect().left - box.left + DOT);
     // the logo shrinks on short screens so that it and the tallest step fit below the bar
     const textH = Math.max(...items.map(li => li.offsetHeight));
-    const sL = still ? S : Math.min(S, Math.max(1.1, (innerHeight - 110 - textH - 40) / 172));
+    const room = innerHeight - 110 - textH - 40;
+    // the section's title and text pin with the drawing when all of it fits on one screen
+    // with the logo at 60 % of its size or more (Raffaele: tall screens); otherwise they
+    // scroll away above the stage and the drawing starts once they are below the bar
+    // (+ 24px: the steps keep some air above the screen's bottom edge)
+    const headH = head ? head.offsetHeight + parseFloat(getComputedStyle(head).marginBottom) + 24 : 0;
+    const withHead = !still && head && (room - headH) / 172 >= S * 0.6;
+    if (withHead) pin.firstElementChild.prepend(head);
+    else if (head && head.parentNode !== host) pin.before(head);
+    const sL = still ? S : Math.min(S, Math.max(1.1, (room - (withHead ? headH : 0)) / 172));
     if (logo.parentNode !== ol) ol.append(logo);
     const { base, left } = buildLogo(W, xs, sL);
     ol.style.paddingTop = `${Math.ceil(base) + 10}px`;
@@ -256,14 +275,26 @@
     else scrollTo({ top: y, behavior: 'smooth' });
   }
 
-  // scroll progress over the pinned stretch: 0 when the stage pins, 1 after 90 % of it
-  // (the finished logo holds for a moment before the page moves on); the line takes
-  // 80 %, the arc the last 20 %
+  // scroll progress: 0 when the stage pins (wide screens: earlier, once the section's
+  // header sits below the bar), 1 after 90 % of the pinned stretch (the finished logo
+  // holds for a moment before the page moves on); the line takes 80 %, the arc the last 20 %
   const clamp = v => Math.max(0, Math.min(1, v));
   function progress() {
     if (!line || !(ol.classList.contains('steps--profile') || scrolling)) return;
     const r = pin.getBoundingClientRect();
-    const p = still ? 1 : clamp(-r.top / ((r.height - innerHeight) * 0.9));
+    let p = 1;
+    if (!still) {
+      let at = -r.top, span = (r.height - innerHeight) * 0.9;
+      if (!scrolling && head) {
+        // the pin's top when the header's top reaches the bar's bottom edge
+        const pre = Math.max(0, r.top - head.getBoundingClientRect().top + (bar ? bar.offsetHeight : 0));
+        at += pre;
+        span += pre;
+      }
+      p = clamp(at / span);
+      // the cue shows while the section is on screen and the line has only begun
+      cue.classList.toggle('is-gone', scrolling || p > 0.06 || head.getBoundingClientRect().top > innerHeight * 0.6 || r.bottom < innerHeight);
+    }
     const lp = clamp(p / 0.8);
     let len = lp * total;
     if (scrolling) {   // phones: equal stretches, so the line speeds up or slows between dots
@@ -319,6 +350,7 @@
     logo.toggleAttribute('hidden', tabs && !scrolling);   // an <svg> has no .hidden property (T9)
     if (!scrolling) for (const li of items) li.style.opacity = li.style.transform = li.style.visibility = '';
     if (!tabs) { drawLine(); return; }
+    if (head && head.parentNode !== host) pin.before(head);   // phones and tablets: header above
     ol.style.paddingTop = '';
     ol.classList.remove('steps--drawing');
     pin.classList.toggle('steps-pin--on', scrolling);

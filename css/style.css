@@ -186,7 +186,10 @@ body::after {
   padding: var(--section-y) var(--gutter);
 }
 
-.section>header {
+/* .steps-pin__stage>header: the process section's header, moved into its pinned stage on
+   tall wide screens (js/steps.js), keeps the same look */
+.section>header,
+.steps-pin__stage>header {
   max-width: 52rem;
   margin-bottom: 2.4rem;
   /* anchor jumps land on the header (kicker first) below the fixed nav: 4.6rem ≈ the
@@ -194,18 +197,21 @@ body::after {
   scroll-margin-top: calc(4.6rem + var(--section-y));
 }
 
-.section>header h2 {
+.section>header h2,
+.steps-pin__stage>header h2 {
   text-wrap: balance;
 }
 
 .section>header h2+p,
+.steps-pin__stage>header h2+p,
 .mission__text p {
   max-width: 60ch;
   font-size: 1.05rem;
   color: var(--text-soft);
 }
 
-.section>header h2+p {
+.section>header h2+p,
+.steps-pin__stage>header h2+p {
   margin-top: 1.4rem;
 }
 
@@ -623,7 +629,40 @@ html:not(.js) #scene-ski .cine__stage {
   opacity: 0;
 }
 
+/* the same cue for the process line on wide screens (js/steps.js): fixed at the bottom of
+   the screen while the drawing has only begun */
+.steps__cue {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(243, 237, 225, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease);
+}
+
+.steps__cue::before {
+  content: "";
+  width: 1px;
+  height: 46px;
+  background: linear-gradient(var(--gold), transparent);
+  animation: cue 2s var(--ease) infinite;
+}
+
+.steps__cue.is-gone {
+  opacity: 0;
+}
+
 /* the endless animations pause while hidden or off screen (main.js, P3) */
+.steps__cue.is-gone::before,
 .hero__cue.is-gone::before,
 .hero__cue.is-offscreen::before,
 .regions ul.is-offscreen,

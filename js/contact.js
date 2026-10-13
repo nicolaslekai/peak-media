@@ -1,7 +1,7 @@
 /* ============ BLAUE STUNDE — enquiry form ============
-   Shows the extra fields for the chosen business type, validates in German, takes
-   over the calculator values ("Mit diesen Werten anfragen") and confirms with a
-   dialog. Delivery is not set up yet (D-04): while ENDPOINT is empty nothing is
+   On the Kontakt page (kontakt/): shows the extra fields for the chosen business
+   type, validates in German, takes over the calculator values from the home page
+   ("Mit diesen Werten anfragen") and confirms with a dialog. Delivery is not set up yet (D-04): while ENDPOINT is empty nothing is
    sent and the dialog says so. Own file, like evidence.js: an error here cannot
    stop the scroll engine.
    ===================================================== */
@@ -46,37 +46,33 @@
     select.value = (opts.find(o => n <= Number(o.dataset.max)) || opts[opts.length - 1]).value;
   };
 
-  // calculator → form: business type, size range and a one-line summary
-  const FROM_CALC = {
-    hotel: { type: 'hotel', field: 'zimmer', input: 'rooms' },
-    bahn: { type: 'bergbahn', field: 'gaeste', input: 'guests' },
-    region: { type: 'region', field: 'uebernachtungen', input: 'nights' },
-  };
-  document.querySelectorAll('.calc[data-model] .calc__result a[href="#kontakt"]').forEach(link => {
-    link.addEventListener('click', () => {
-      const panel = link.closest('.calc');
-      const map = FROM_CALC[panel.dataset.model];
-      if (!map) return;
-      type.value = map.type;
-      showGroup();
-      pickRange(form.elements[map.field], Number(panel.querySelector(`input[name="${map.input}"]`).value));
-      const clean = el => el.textContent.replace(/\s+/g, ' ').trim();
-      const summary = [
-        ...[...panel.querySelectorAll('.range')].map(r => `${clean(r.querySelector('label'))} ${clean(r.querySelector('output'))}`),
-        clean(panel.querySelector('.calc__total')),
-        ...[...panel.querySelectorAll('.calc__out b')].map(clean),
-      ].join(' · ');
-      form.elements.rechner.value = summary;
-      calcNote.querySelector('span').textContent = summary;
-      calcNote.hidden = false;
-    });
-  });
+  // the page is opened with ?typ=hotel|bergbahn|therme from a segment page or the
+  // calculator; with werte=1 the calculator values follow from js/evidence.js
+  // (sessionStorage "bs-rechner"): the size range and a one-line summary
+  const params = new URLSearchParams(location.search);
+  if ([...type.options].some(o => o.value && o.value === params.get('typ'))) {
+    type.value = params.get('typ');
+    showGroup();
+  }
+  const SIZE_FIELD = { hotel: 'zimmer', thermen: 'besuche' };
+  let fromCalc = null;
+  if (params.get('werte') === '1') {
+    try { fromCalc = JSON.parse(sessionStorage.getItem('bs-rechner')); } catch { /* blocked or invalid */ }
+  }
+  if (fromCalc && fromCalc.summary) {
+    const field = form.elements[SIZE_FIELD[fromCalc.model]];
+    if (field && fromCalc.size) pickRange(field, fromCalc.size);
+    form.elements.rechner.value = fromCalc.summary;
+    calcNote.querySelector('span').textContent = fromCalc.summary;
+    calcNote.hidden = false;
+  }
 
   const reset = () => {
     form.reset();
     showGroup();
     form.elements.rechner.value = '';
     calcNote.hidden = true;
+    try { sessionStorage.removeItem('bs-rechner'); } catch { /* nothing to remove */ }
   };
 
   form.addEventListener('submit', async (e) => {

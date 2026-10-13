@@ -122,7 +122,17 @@
         outs: [[money(extra * perGuest), `≈ ${count(extra)} zusätzliche Gäste × ${num0.format(perGuest)} €`]],
       };
     },
-    // region: Kurbeitrag and guest spending per extra overnight stay
+    // thermal baths: the client's own numbers only (no defensible public defaults):
+    // extra visits in the quiet months × revenue per visit
+    thermen: v => {
+      const quiet = v.visits * (v.quiet / 100);
+      const extra = quiet * (v.more / 100);
+      return {
+        total: `<b>≈ ${count(quiet)}</b> von ${num0.format(v.visits)} Besuchen im Jahr`,
+        outs: [[money(extra * v.spend), `≈ ${count(extra)} zusätzliche Besuche × ${FORMAT.eur(v.spend)}`]],
+      };
+    },
+    // region: Kurbeitrag and guest spending per extra overnight stay (no panel since D-57)
     region: v => {
       const extra = v.nights * (v.more / 100);
       return {
@@ -159,7 +169,8 @@
     update();
   });
 
-  // tabs: show one calculator panel at a time
+  // tabs (home page): show one calculator panel at a time; a segment page has its own panel
+  // and no tabs
   const tabs = [...document.querySelectorAll('.calc-tabs button')];
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -168,6 +179,29 @@
         o.setAttribute('aria-pressed', on ? 'true' : 'false');
         document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
       });
+    });
+  });
+
+  /* calculator → Kontakt page: "Mit diesen Werten anfragen" keeps the values in this
+     browser tab (sessionStorage, key "bs-rechner"); js/contact.js fills the form with them
+     when the link carries werte=1. Nothing leaves the browser until the form is sent (D-04). */
+  const clean = el => el.textContent.replace(/\s+/g, ' ').trim();
+  // the input that picks the form's size range (the Bergbahn panel counts summer guests,
+  // the form asks for the year, so it hands over no size)
+  const SIZE = { hotel: 'rooms', thermen: 'visits' };
+  document.querySelectorAll('.calc[data-model] .calc__result a[href*="werte=1"]').forEach(link => {
+    link.addEventListener('click', () => {
+      const panel = link.closest('.calc');
+      const model = panel.dataset.model;
+      const size = panel.querySelector(`input[name="${SIZE[model]}"]`);
+      const summary = [
+        ...[...panel.querySelectorAll('.range')].map(r => `${clean(r.querySelector('label'))} ${clean(r.querySelector('output'))}`),
+        clean(panel.querySelector('.calc__total')),
+        ...[...panel.querySelectorAll('.calc__out b')].map(clean),
+      ].join(' · ');
+      try {
+        sessionStorage.setItem('bs-rechner', JSON.stringify({ model, size: size ? Number(size.value) : null, summary }));
+      } catch { /* storage blocked: the form opens without the values */ }
     });
   });
 })();

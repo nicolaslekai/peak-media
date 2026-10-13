@@ -2020,28 +2020,6 @@ html:not(.js) #scene-ski .cine__stage {
   color: rgba(243, 237, 225, 0.38);
 }
 
-/* evidence band under a scenario slider: --from/--to are fractions of the range,
-   offset by half the thumb width so the band lines up with the thumb positions */
-.range__band {
-  position: relative;
-  display: block;
-  height: 1.5rem;
-  padding: 0.45rem 0 0 calc(10px + (100% - 20px) * var(--from));
-  font-size: 0.66rem;
-  letter-spacing: 0.04em;
-  color: var(--gold-soft);
-}
-
-.range__band::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: calc(10px + (100% - 20px) * var(--from));
-  width: calc((100% - 20px) * (var(--to) - var(--from)));
-  height: 3px;
-  background: rgba(230, 212, 168, 0.55);
-}
-
 /* --p = filled share of the track, set by js/evidence.js */
 .range input {
   --p: 50%;
@@ -2567,6 +2545,110 @@ html:not(.js) .contact__form .btn {
   line-height: 1.05;
 }
 
+/* ---- PLACEHOLDERS (D-38): where Nicolas's frames, images or video will go; the text
+   names the shot that is wanted, so the page doubles as a shot list ---- */
+.ph {
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  aspect-ratio: var(--ratio, 16 / 9);
+  padding: 1.5rem;
+  border: 1px dashed var(--line);
+  background: linear-gradient(160deg, var(--ink-2), var(--ink));
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+.ph b {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* sourced figures on the segment pages: one card per figure, its source in small print */
+.facts {
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.facts .metric {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.facts small {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.66rem;
+  line-height: 1.5;
+  /* 0.55 on --ink = 5.5:1, the same as .foot__legal (A1) */
+  color: rgba(243, 237, 225, 0.55);
+}
+
+/* a row of placeholders, as many columns as fit */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.6rem;
+}
+
+/* ---- SEGMENT PAGES (hotels-resorts/, bergbahnen/, wellness-thermen/, kontakt/): the
+   opening screen has the media placeholder behind the copy, at the cine hero's place ---- */
+.page-hero {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: 100svh;
+  padding: 7rem var(--edge) clamp(3rem, 10vh, 6rem);
+}
+
+.page-hero>.ph {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  place-content: start center;
+  padding-top: 8rem;
+  border-width: 0 0 1px;
+}
+
+.page-hero__copy {
+  position: relative;
+  max-width: 46rem;
+}
+
+.page-hero h1,
+.contact h1 {
+  font-size: clamp(2.6rem, 7vw, 5.6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.page-hero__copy>p:not(.kicker) {
+  max-width: 52ch;
+  margin: 1.4rem 0 2rem;
+  font-size: 1.1rem;
+  color: var(--text-soft);
+}
+
+/* the Kontakt page starts below the fixed bar */
+.page-top {
+  padding-top: calc(var(--section-y) + 6rem);
+}
+
+/* the closing call to action of pages without the form */
+.contact .hero__actions {
+  justify-content: center;
+}
+
+/* the page the visitor is on */
+.nav nav a[aria-current="page"] {
+  color: var(--gold-soft);
+}
+
 /* ---- FOOTER: a full-width band like the nav (same --edge); both hairlines run
    from screen edge to screen edge ---- */
 .foot {
@@ -2645,9 +2727,9 @@ html:not(.js) .contact__form .btn {
   color: rgba(243, 237, 225, 0.55);
 }
 
-/* ---- NARROW DESKTOP (1001–1200px): brand, four links and the CTA on one line; labels
+/* ---- NARROW DESKTOP (1001–1400px): brand, five links and the CTA on one line; labels
    never wrap, a little tighter and smaller than on wide screens ---- */
-@media (min-width: 1001px) and (max-width: 1200px) {
+@media (min-width: 1001px) and (max-width: 1400px) {
   .nav nav {
     gap: 1.4rem;
   }
@@ -2655,6 +2737,32 @@ html:not(.js) .contact__form .btn {
   .nav nav a {
     font-size: 0.76rem;
     letter-spacing: 0.1em;
+  }
+}
+
+/* five links since "So arbeiten wir" (D-38): up to 1260px the bar needs tighter labels,
+   a smaller brand and a slimmer CTA to keep everything on one line (measured: brand–links
+   gap 13px at 1001, at least ~80px above 1260) */
+@media (min-width: 1001px) and (max-width: 1260px) {
+  .nav {
+    gap: 0.8rem;
+  }
+
+  .nav nav {
+    gap: 0.95rem;
+  }
+
+  .nav nav a {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+
+  .nav .nav__cta {
+    padding: 0.65em 0.9em;
+  }
+
+  .nav .brand {
+    font-size: 0.85rem;
   }
 }
 

@@ -14,12 +14,14 @@
   if (items.length !== 3) return;
 
   // ---- markup: tall section > pinned stage > canvas + the list + progress + CTA ----
+  // the CTA goes to the calculator; data-cta on the list says where it is on this page
   const ride = document.createElement('div');
   ride.className = 'ride';
   ride.innerHTML =
     '<div class="ride__stage"><canvas aria-hidden="true"></canvas>' +
     '<p class="ride__dots" aria-hidden="true"><span>01</span><span>02</span><span>03</span></p>' +
-    '<a class="btn btn--gold ride__cta" href="#rechner">Potenzial berechnen</a></div>';
+    '<a class="btn btn--gold ride__cta">Potenzial berechnen</a></div>';
+  ride.querySelector('.ride__cta').href = chain.dataset.cta || '#rechner';
   chain.before(ride);
   const stage = ride.firstElementChild;
   stage.insertBefore(chain, stage.querySelector('.ride__dots'));

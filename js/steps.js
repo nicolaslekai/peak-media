@@ -244,6 +244,7 @@
     });
     ol.classList.toggle('steps--drawing', !still);
     pin.classList.toggle('steps-pin--on', !still);
+    shown = -1;   // the logo was rebuilt: paint its progress again
     progress();
   }
 
@@ -259,6 +260,7 @@
     nav.style.height = `${Math.ceil(base) + pad}px`;
     nav.style.setProperty('--profile', 'none');   // the drawn line replaces the faint one
     dots.forEach((b, i) => { b.style.left = `${f(xs[i])}px`; b.style.top = `${f(base - riseAt(ROUTE[i]) * s)}px`; });
+    shown = -1;
     progress();
   }
 
@@ -279,6 +281,7 @@
   // header sits below the bar), 1 after 90 % of the pinned stretch (the finished logo
   // holds for a moment before the page moves on); the line takes 80 %, the arc the last 20 %
   const clamp = v => Math.max(0, Math.min(1, v));
+  let shown = -1;   // the progress last painted; -1 forces a repaint (after every redraw)
   function progress() {
     if (!line || !(ol.classList.contains('steps--profile') || scrolling)) return;
     const r = pin.getBoundingClientRect();
@@ -295,6 +298,10 @@
       // the cue shows while the section is on screen and the line has only begun
       cue.classList.toggle('is-gone', scrolling || p > 0.06 || head.getBoundingClientRect().top > innerHeight * 0.6 || r.bottom < innerHeight);
     }
+    // nothing to repaint when the progress has not moved (off screen it stays at 0 or 1):
+    // no style writes while the visitor scrolls elsewhere on the page
+    if (p === shown) return;
+    shown = p;
     const lp = clamp(p / 0.8);
     let len = lp * total;
     if (scrolling) {   // phones: equal stretches, so the line speeds up or slows between dots

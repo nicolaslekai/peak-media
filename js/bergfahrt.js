@@ -28,7 +28,8 @@
   chain.classList.add('chain--ride');
   items[0].classList.add('is-active');
   const canvas = stage.querySelector('canvas');
-  const ctx = canvas.getContext('2d');
+  // opaque: the ride paints its own background, so the compositor need not blend it
+  const ctx = canvas.getContext('2d', { alpha: false });
   const dots = [...stage.querySelectorAll('.ride__dots span')];
 
   // ---- terrain: the logo's two summits (big left, small right), side ridges, a little noise
@@ -57,14 +58,29 @@
   const cabinT = p => { const s = Math.min(2, p * 2), seg = Math.min(1, Math.floor(s)), u = s - seg; return (seg + ease(u)) / 2; };
 
   let W = 0, H = 0, dpr = 1;
+  // at most ~4.2 million canvas pixels: a 2560×1440 screen keeps 1×, a 1440×900 retina
+  // laptop draws at ~1.8× instead of 2× (invisible on these lines, ~20 % less raster work)
+  const BUDGET = 4.2e6;
   function size() {
-    dpr = Math.min(devicePixelRatio || 1, 2);
     W = canvas.clientWidth; H = canvas.clientHeight;
+    dpr = Math.min(devicePixelRatio || 1, 2, Math.sqrt(BUDGET / Math.max(1, W * H)));
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  const INK = '#0c0e0d', GOLD = '198,164,92', SOFT = '230,212,168';
+  const INK = '#0c0e0d', GOLD = '198,164,92', SOFT = '230,212,168', WARM = '230,180,90';
+  const COL = 8;                   // px between the columns of the hidden-line envelope
+  let env = new Float32Array(0);   // per column: the lowest ridge drawn so far (screen y)
+  // the soft light around lamps and windows: a radial gradient, not shadowBlur (which
+  // blurs in an extra pass on every frame)
+  function glow(x, y, r, rgb, a) {
+    if (a <= 0) return;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, `rgba(${rgb},${a})`);
+    g.addColorStop(1, `rgba(${rgb},0)`);
+    ctx.fillStyle = g;
+    ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+  }
   function draw(p) {
     const phone = W < 768, t = cabinT(p);
     // the camera rises and moves towards the summit with the cabin
@@ -73,21 +89,30 @@
     const P = (x, y, z) => { const d = z - cam.z; return d <= 0.05 ? null : { x: cx + (x - cam.x) / d * f, y: horizon - (y - cam.y) / d * f, d }; };
 
     ctx.fillStyle = INK; ctx.fillRect(0, 0, W, H);
-    // ridgelines back to front: fill below in the page colour (hides what is behind),
-    // stroke in gold, fainter with depth. The fill only has to cover what is already drawn,
-    // so it stops at the lowest line so far (or its own lowest point) instead of the canvas
-    // bottom: the same picture with far fewer pixels, which made large screens lag
-    let low = 0;
+    // ridgelines back to front: each one hides, in the page colour, the lines already drawn
+    // below it, then is stroked in gold, fainter with depth. Only the band that hides
+    // something is filled: between the ridge and the lowest line drawn so far, column by
+    // column (env, every COL px). Filling down to the canvas bottom repainted the whole
+    // canvas dozens of times per frame, which made large screens lag
+    const cols = Math.ceil(W / COL) + 2;
+    if (env.length !== cols) env = new Float32Array(cols);
+    env.fill(-1e4);
     for (let r = ROWS - 1; r >= 0; r--) {
       const pts = [];
-      let own = 0;
-      for (const [x, y, z] of ridges[r]) { const q = P(x, y, z); if (q) { pts.push(q); if (q.y > own) own = q.y; } }
+      for (const [x, y, z] of ridges[r]) { const q = P(x, y, z); if (q) pts.push(q); }
       if (pts.length < 2) continue;
-      const bottom = Math.min(H + 10, Math.max(low, own) + 2);
+      // the ridge's height at screen x (a row has one depth, so x is evenly spaced)
+      const x0 = pts[0].x, x1 = pts.at(-1).x, n = pts.length - 1;
+      const yAt = x => { const u = Math.min(n, Math.max(0, (x - x0) / (x1 - x0) * n)), i = Math.min(n - 1, Math.floor(u)); return pts[i].y + (pts[i + 1].y - pts[i].y) * (u - i); };
+      const c0 = Math.max(0, Math.ceil(x0 / COL)), c1 = Math.min(cols - 1, Math.floor(x1 / COL));
       ctx.beginPath(); pts.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
-      ctx.lineTo(pts.at(-1).x, bottom); ctx.lineTo(pts[0].x, bottom); ctx.closePath();
+      // back along the lower edge: the lowest line so far where it is below this ridge
+      ctx.lineTo(x1, Math.max(yAt(x1), env[Math.min(cols - 1, Math.round(x1 / COL))]) + 2);
+      for (let c = c1; c >= c0; c--) ctx.lineTo(c * COL, Math.max(yAt(c * COL), env[c]) + 2);
+      ctx.lineTo(x0, Math.max(yAt(x0), env[Math.max(0, Math.round(x0 / COL))]) + 2);
+      ctx.closePath();
       ctx.fillStyle = INK; ctx.fill();
-      low = Math.max(low, own);
+      for (let c = c0; c <= c1; c++) env[c] = Math.max(env[c], yAt(c * COL));
       ctx.beginPath(); pts.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
       const near = 1 - r / ROWS;
       ctx.strokeStyle = `rgba(${GOLD},${(0.12 + 0.5 * near * near).toFixed(3)})`;
@@ -106,9 +131,10 @@
       const on = t >= i / 2 - 0.01;
       ctx.strokeStyle = `rgba(${SOFT},${on ? 0.95 : 0.35})`; ctx.lineWidth = 1.2;
       ctx.beginPath(); ctx.moveTo(foot.x, foot.y); ctx.lineTo(top.x, top.y); ctx.stroke();
+      if (on) glow(top.x, top.y, 16, SOFT, 0.5);
       ctx.beginPath(); ctx.arc(top.x, top.y, on ? 5 : 3.5, 0, Math.PI * 2);
       ctx.fillStyle = on ? `rgb(${SOFT})` : `rgba(${SOFT},.4)`;
-      ctx.shadowColor = `rgb(${SOFT})`; ctx.shadowBlur = on ? 16 : 0; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.fill();
     });
 
     // summit hut next to the top station: its window lights up at the end of the ride
@@ -120,9 +146,9 @@
       ctx.moveTo(hut.x - k, hut.y); ctx.lineTo(hut.x - k, hut.y - k * 0.8); ctx.lineTo(hut.x, hut.y - k * 1.5);
       ctx.lineTo(hut.x + k, hut.y - k * 0.8); ctx.lineTo(hut.x + k, hut.y); ctx.closePath();
       ctx.fillStyle = INK; ctx.fill(); ctx.stroke();
-      ctx.fillStyle = `rgba(230,180,90,${(0.15 + 0.8 * lit).toFixed(2)})`;
-      ctx.shadowColor = '#e6b45a'; ctx.shadowBlur = 18 * lit;
-      ctx.fillRect(hut.x - k * 0.35, hut.y - k * 0.65, k * 0.7, k * 0.45); ctx.shadowBlur = 0;
+      glow(hut.x, hut.y - k * 0.42, k * 0.35 + 18, WARM, 0.45 * lit);
+      ctx.fillStyle = `rgba(${WARM},${(0.15 + 0.8 * lit).toFixed(2)})`;
+      ctx.fillRect(hut.x - k * 0.35, hut.y - k * 0.65, k * 0.7, k * 0.45);
     }
 
     // cabin: hanger and a rounded glass body with a warm light inside
@@ -133,8 +159,9 @@
       ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       ctx.beginPath(); ctx.roundRect(b.x - s * 0.6, b.y, s * 1.2, s, s * 0.25);
       ctx.fillStyle = 'rgba(12,14,13,.95)'; ctx.fill(); ctx.stroke();
-      ctx.fillStyle = 'rgba(230,180,90,.85)'; ctx.shadowColor = '#e6b45a'; ctx.shadowBlur = 14;
-      ctx.fillRect(b.x - s * 0.45, b.y + s * 0.2, s * 0.9, s * 0.45); ctx.shadowBlur = 0;
+      glow(b.x, b.y + s * 0.42, s * 0.45 + 14, WARM, 0.4);
+      ctx.fillStyle = `rgba(${WARM},.85)`;
+      ctx.fillRect(b.x - s * 0.45, b.y + s * 0.2, s * 0.9, s * 0.45);
     }
   }
 

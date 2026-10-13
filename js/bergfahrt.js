@@ -74,14 +74,20 @@
 
     ctx.fillStyle = INK; ctx.fillRect(0, 0, W, H);
     // ridgelines back to front: fill below in the page colour (hides what is behind),
-    // stroke in gold, fainter with depth
+    // stroke in gold, fainter with depth. The fill only has to cover what is already drawn,
+    // so it stops at the lowest line so far (or its own lowest point) instead of the canvas
+    // bottom: the same picture with far fewer pixels, which made large screens lag
+    let low = 0;
     for (let r = ROWS - 1; r >= 0; r--) {
       const pts = [];
-      for (const [x, y, z] of ridges[r]) { const q = P(x, y, z); if (q) pts.push(q); }
+      let own = 0;
+      for (const [x, y, z] of ridges[r]) { const q = P(x, y, z); if (q) { pts.push(q); if (q.y > own) own = q.y; } }
       if (pts.length < 2) continue;
+      const bottom = Math.min(H + 10, Math.max(low, own) + 2);
       ctx.beginPath(); pts.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
-      ctx.lineTo(pts.at(-1).x, H + 10); ctx.lineTo(pts[0].x, H + 10); ctx.closePath();
+      ctx.lineTo(pts.at(-1).x, bottom); ctx.lineTo(pts[0].x, bottom); ctx.closePath();
       ctx.fillStyle = INK; ctx.fill();
+      low = Math.max(low, own);
       ctx.beginPath(); pts.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
       const near = 1 - r / ROWS;
       ctx.strokeStyle = `rgba(${GOLD},${(0.12 + 0.5 * near * near).toFixed(3)})`;

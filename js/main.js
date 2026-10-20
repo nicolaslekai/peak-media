@@ -2,10 +2,13 @@
    The smooth "3D scroll" technique: numbered WebP frames painted onto a <canvas>,
    the frame matched to scroll progress. No <video> seeking = no jank.
    Loading and memory (P1, P2, P10): every frame is fetched once and kept compressed
-   (50–300 KB); only a window of frames around the playhead is decoded (6–15 MB each),
-   off the main thread, and released again when the playhead moves on. The scene on
-   screen loads first, a scene within one screen next, the rest waits; each scene
-   loads coarse to fine, so its scrub works after a few frames.
+   (50–300 KB). Two decoded tiers, both off the main thread (P13):
+   - preview: every frame of a scene near the viewport at a quarter of its width
+     (~0.9 MB each), so a fast scroll always shows the right frame, a little soft;
+   - sharp: a window of full frames (6–15 MB each) around the playhead, longer in the
+     direction of the scroll, released again when the playhead moves on.
+   The scene on screen loads first, a scene within one screen next, the rest waits;
+   each scene loads coarse to fine, so its scrub works after a few frames.
    ============================================================================ */
 
 // Two frame sets, both cut from the 4K sources (D-55), 120 frames each, the hero running
@@ -14,22 +17,32 @@
 // 2560×1440 (a 1920 screen draws it scaled down, at about the same file size per frame).
 const IS_MOBILE = window.matchMedia('(max-width: 767px)').matches;
 const PHONE = window.matchMedia('(max-width: 767px) and (orientation: portrait)').matches;
-// focalX: the horizontal point kept in view when the canvas crops the frame's sides (a
-// small phone held sideways on the 16:9 set; the portrait set is framed already)
-const frameCfg = (section, name, bg, focalX = 0.5) => {
-  const dir = `assets/${PHONE ? 'frames-phone' : 'frames-hd'}/${name}`;
-  return { section, frameCount: 120, bg, focalX: PHONE ? 0.5 : focalX, path: i => `${dir}/frame_${String(i).padStart(4, '0')}.webp` };
+// a page names its scenes: <section class="cine" data-scene="hero|spa|skilift">; the
+// folder is found from this script's own URL, so pages in subfolders work too (D-64)
+const ASSETS = new URL('../assets/', document.currentScript ? document.currentScript.src : location.href);
+// per clip: the colour behind the frame, and focalX, the horizontal point kept in view
+// when the canvas crops the frame's sides (a small phone held sideways on the 16:9 set;
+// the portrait set is framed already)
+const SCENES = {
+  hero: { bg: '#0c0e0d', focalX: 0.62 },   // keep the sun + pool in frame
+  spa: { bg: '#0a0c12' },
+  skilift: { bg: '#0c0e0d' },
 };
-const SCRUB_SECTIONS = [
-  frameCfg('#hero', 'hero', '#0c0e0d', 0.62),   // keep the sun + pool in frame
-  frameCfg('#scene-spa', 'spa', '#0a0c12'),
-  frameCfg('#scene-ski', 'skilift', '#0c0e0d'),
-];
-// decoded frames kept on each side of the playhead (phone frames ≈ 6 MB decoded, 2560 ≈ 15 MB)
-const WINDOW = PHONE ? 6 : 8;
+const frameCfg = section => {
+  const name = section.dataset.scene, clip = SCENES[name] || { bg: '#0c0e0d' };
+  const dir = new URL(`${PHONE ? 'frames-phone' : 'frames-hd'}/${name}/`, ASSETS).href;
+  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp` };
+};
+// sharp frames kept around the playhead (phone ≈ 6 MB decoded, 2560 ≈ 15 MB): at rest
+// WINDOW on each side; while scrolling AHEAD in the direction of travel, BEHIND the other way
+const WINDOW = PHONE ? 6 : 8, AHEAD = PHONE ? 9 : 12, BEHIND = PHONE ? 3 : 4;
+// preview width (a quarter of the frame): 640×360 ≈ 0.9 MB, 220×422 ≈ 0.4 MB decoded
+const LO_W = PHONE ? 220 : 640;
+let loOK = !!window.createImageBitmap;   // off when the browser ignores resizeWidth
 // decodes in flight: a 2560 frame takes ~25 ms (1920: ~18 ms); with 3 a quick scroll
-// outran the window and the scrub showed a stand-in frame, a visible jump (P12)
-const MAX_FETCH = 6, MAX_DECODE = 6;
+// outran the window and the scrub showed a stand-in frame, a visible jump (P12).
+// Sharp decodes go first; previews take what is left, at most LO_DECODE at a time
+const MAX_FETCH = 6, MAX_DECODE = 6, LO_DECODE = 3;
 
 function smoothstep(a, b, x) {
   if (a === b) return x < a ? 0 : 1;
@@ -63,25 +76,28 @@ const decodeBlob = blob => window.createImageBitmap ? createImageBitmap(blob) : 
   img.onerror = fail;
   img.src = URL.createObjectURL(blob);
 });
+const decodePreview = blob => createImageBitmap(blob, { resizeWidth: LO_W, resizeQuality: 'medium' });
 
 function initScrub(cfg, wake) {
-  const section = document.querySelector(cfg.section);
-  if (!section) return null;
+  const section = cfg.section;
   const canvas = section.querySelector('canvas');
   if (!canvas) return null;
   const ctx = canvas.getContext('2d', { alpha: false });
   const lines = [...section.querySelectorAll('.cine-line')];
   const bg = cfg.bg;
   const n = cfg.frameCount;
+  const order = coarseToFine(n);
   const blobs = new Array(n).fill(null);   // compressed frames, kept once loaded
-  const frames = new Map();                // frame index → decoded frame (the window only)
-  const decoding = new Set(), failed = new Set();
+  const frames = new Map();                // frame index → sharp frame (the window only)
+  const lows = new Map();                  // frame index → preview (every frame, while near)
+  const decoding = new Set(), loDecoding = new Set(), failed = new Set();
   const entry = [0, n - 1];                // stay decoded while the scene is near, so it
   let center = 0;                          // shows at once from either side
+  let dir = 0;                             // direction of the scroll: 1, -1, 0 at rest
   let dirty = false;                       // a frame arrived: paint again
 
   const scene = {
-    visible: false, near: false, queue: coarseToFine(n),
+    visible: false, near: false, queue: order.slice(),
     fetchFrame(i) {
       return fetch(cfg.path(i + 1), i === 0 ? { priority: 'high' } : undefined)
         .then(r => { if (!r.ok) throw new Error(`${r.status} ${r.url}`); return r.blob(); })
@@ -95,18 +111,24 @@ function initScrub(cfg, wake) {
     },
   };
 
-  // on screen: decode the frames around the playhead (nearest first); near: only the
-  // entry frames; everything else is released
+  const release = (map, keep) => { for (const [i, f] of map) if (!keep(i)) { if (f.close) f.close(); map.delete(i); } };
+  // on screen: decode the sharp frames around the playhead (nearest first, ahead before
+  // behind); near: the entry frames and every preview; everything else is released
   function refill() {
-    const c = Math.round(center), lo = c - WINDOW, hi = c + WINDOW;
+    const c = Math.round(center);
+    const lo = c - (dir < 0 ? AHEAD : dir > 0 ? BEHIND : WINDOW), hi = c + (dir > 0 ? AHEAD : dir < 0 ? BEHIND : WINDOW);
     const keep = i => (scene.visible && i >= lo && i <= hi) || (scene.near && entry.includes(i));
-    for (const [i, f] of frames) if (!keep(i)) { if (f.close) f.close(); frames.delete(i); }
-    if (!scene.near) return;
+    release(frames, keep);
+    if (!scene.near) { release(lows, () => false); return; }
     const want = [];
-    if (scene.visible) for (let d = 0; d <= WINDOW; d++) want.push(c + d, c - d);
+    if (scene.visible) for (let d = 0; d <= Math.max(c - lo, hi - c); d++) {
+      const a = dir < 0 ? c - d : c + d, b = dir < 0 ? c + d : c - d;
+      if (a >= lo && a <= hi) want.push(a);
+      if (d && b >= lo && b <= hi) want.push(b);
+    }
     want.push(...entry);
     for (const i of want) {
-      if (decoding.size >= MAX_DECODE) break;
+      if (decoding.size + loDecoding.size >= MAX_DECODE) return;
       if (i < 0 || i >= n || !blobs[i] || frames.has(i) || decoding.has(i)) continue;
       decoding.add(i);
       decodeBlob(blobs[i]).then(f => {
@@ -116,25 +138,53 @@ function initScrub(cfg, wake) {
         refill();
       }, () => decoding.delete(i));
     }
+    if (!loOK) return;
+    for (const i of order) {
+      if (loDecoding.size >= LO_DECODE || decoding.size + loDecoding.size >= MAX_DECODE) return;
+      if (!blobs[i] || lows.has(i) || loDecoding.has(i)) continue;
+      loDecoding.add(i);
+      decodePreview(blobs[i]).then(f => {
+        loDecoding.delete(i);
+        // a browser that ignores resizeWidth hands back the full frame: no preview tier
+        if (f.width > LO_W * 1.5) { loOK = false; f.close(); release(lows, () => false); return; }
+        if (scene.near) {
+          lows.set(i, f);
+          // repaint only when this preview is what the screen lacks
+          if (Math.abs(i - shown) <= 1 && !frames.has(i)) { dirty = true; wake(); }
+        }
+        else f.close();
+        refill();
+      }, () => { loDecoding.delete(i); loOK = false; });
+    }
   }
 
-  // the nearest decoded frame stands in while the window is still decoding
+  // the nearest decoded frame stands in while neither tier has the one asked for
   function nearest(i) {
     for (let d = 0; d < n; d++) {
-      if (frames.has(i - d)) return i - d;
-      if (frames.has(i + d)) return i + d;
+      if (frames.has(i - d) || lows.has(i - d)) return i - d;
+      if (frames.has(i + d) || lows.has(i + d)) return i + d;
     }
     return -1;
   }
 
   // draw() takes a FLOAT frame position and cross-blends the two neighbouring
   // frames by the fraction — the scrub has no visible stepping between frames.
+  // Both frames of a blend come from the same tier (a sharp and a soft one would
+  // flicker); the sharp tier wins whenever it has what the paint needs
   function draw(pos) {
-    const i0 = Math.max(0, Math.min(n - 1, Math.floor(pos)));
-    const f = Math.min(1, Math.max(0, pos - i0));
-    const k = nearest(i0);
-    if (k < 0) return false;
-    const base = frames.get(k);
+    let i0 = Math.max(0, Math.min(n - 1, Math.floor(pos)));
+    let f = Math.min(1, Math.max(0, pos - i0));
+    const blend = f > 0.01 && i0 + 1 < n;
+    let tier = frames.has(i0) && (!blend || frames.has(i0 + 1)) ? frames
+      : lows.has(i0) && (!blend || lows.has(i0 + 1)) ? lows
+      : frames.has(i0) ? frames : lows.has(i0) ? lows : null;
+    if (!tier) {
+      i0 = nearest(i0);
+      if (i0 < 0) return false;
+      f = 0;
+      tier = frames.has(i0) ? frames : lows;
+    }
+    const base = tier.get(i0);
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
     const ir = base.width / base.height, cr = cw / ch;
     let dw, dh, dx, dy;
@@ -144,8 +194,8 @@ function initScrub(cfg, wake) {
     if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) * (IS_MOBILE ? cfg.focalX : 0.5); dy = 0; }
     else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
     ctx.drawImage(base, dx, dy, dw, dh);
-    const nxt = k === i0 && frames.get(i0 + 1);
-    if (f > 0.01 && nxt) {
+    const nxt = f > 0.01 && tier.get(i0 + 1);
+    if (nxt) {
       ctx.globalAlpha = f;
       ctx.drawImage(nxt, dx, dy, dw, dh);
       ctx.globalAlpha = 1;
@@ -181,13 +231,17 @@ function initScrub(cfg, wake) {
     // flickers between a blend and a whole frame); without Lenis: the target holds
     const still = window.lenis ? !window.lenis.isScrolling : Math.abs(target - lastTarget) < 0.001;
     rest = still ? rest + 1 : 0;
+    // the sharp window leans toward where the scroll is going; at rest it is even again
+    const was = dir;
+    if (lastTarget >= 0 && Math.abs(target - lastTarget) > 0.01) dir = Math.sign(target - lastTarget);
+    else if (rest > 2) dir = 0;
     lastTarget = target;
     const goal = rest > 2 ? Math.round(target) : target;
     // the settle eases only the last half frame; after a jump (D-45) the image is simply there
     if (shown < 0 || rest <= 2 || Math.abs(goal - shown) > 1) shown = goal;
     else shown += (goal - shown) * 0.3;
     if (Math.abs(goal - shown) < 0.002) shown = goal;
-    if (Math.round(shown) !== Math.round(center)) { center = shown; refill(); }
+    if (Math.round(shown) !== Math.round(center) || dir !== was) { center = shown; refill(); }
     if ((dirty || Math.abs(shown - drawn) > 0.002) && draw(shown)) { drawn = shown; dirty = false; }
     // no hand-off effect: the sticky stage stays put until the section ends and then
     // scrolls off with it, so the image edge is the section edge (no black band)
@@ -231,8 +285,8 @@ function __boot() {
 
   // each part is isolated (T1): a broken scene must not stop the others, the scroll
   // or the anchor links
-  const scrubs = SCRUB_SECTIONS.map(cfg => {
-    try { return initScrub(cfg, wake); } catch (err) { console.error(err); return null; }
+  const scrubs = [...document.querySelectorAll('.cine[data-scene]')].map(section => {
+    try { return initScrub(frameCfg(section), wake); } catch (err) { console.error(err); return null; }
   }).filter(Boolean);
 
   /* Lenis smooth scroll — also drives the canvas update loop */

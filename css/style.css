@@ -2183,13 +2183,68 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 .check__form {
   display: grid;
   gap: 1.8rem;
+  align-content: start;
 }
 
-@media (min-width: 1001px) {
-  .check__result {
-    position: sticky;
-    top: 6.5rem;
-  }
+/* one question at a time (js/check.js): the question larger, its answers below, then the
+   step and the way back and on */
+.check__form .choice-group legend {
+  margin-bottom: 1.2rem;
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--paper);
+}
+
+.check__form .choice-group[hidden],
+.check__nav[hidden],
+.check__done[hidden] {
+  display: none;
+}
+
+.check__nav,
+.check__done {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.check__step {
+  margin-right: auto;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.check__done p {
+  flex: 1 1 100%;
+  color: var(--text-soft);
+}
+
+.check__go {
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--gold-soft);
+  cursor: pointer;
+}
+
+.check__go:hover {
+  border-color: var(--gold);
+}
+
+.check__go:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .check__level {

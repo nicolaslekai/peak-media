@@ -40,6 +40,55 @@
   form.addEventListener('change', update);
   update();
 
+  // ---- one question at a time (Raffaele, 2026-10-22): a click on an answer moves on; "Zurück"
+  // and "Weiter" for the keyboard (arrow keys choose without moving on); after the last one a
+  // short note, the result card beside it (below it on phones)
+  const nav = document.createElement('div');
+  nav.className = 'check__nav';
+  nav.innerHTML = '<span class="check__step"></span><button type="button" class="check__go" data-dir="-1">Zurück</button><button type="button" class="check__go" data-dir="1">Weiter</button>';
+  const done = document.createElement('div');
+  done.className = 'check__done';
+  done.innerHTML = '<p>Fertig – Ihr Ergebnis und was am meisten bringt, sehen Sie ' +
+    '<span class="check__where">rechts</span>.</p><button type="button" class="check__go" data-dir="restart">Antworten ändern</button>';
+  form.append(nav, done);
+  const stepLabel = nav.querySelector('.check__step');
+  const [back, next] = nav.querySelectorAll('.check__go');
+  let current = 0;
+  const show = i => {
+    current = i;
+    const finished = i >= groups.length;
+    groups.forEach((g, k) => { g.hidden = k !== i; });
+    nav.hidden = finished; done.hidden = !finished;
+    if (!finished) {
+      stepLabel.textContent = `Frage ${i + 1} von ${groups.length}`;
+      back.hidden = i === 0;
+      next.disabled = !groups[i].querySelector('input:checked');
+      next.textContent = i === groups.length - 1 ? 'Ergebnis' : 'Weiter';
+    }
+  };
+  form.addEventListener('click', e => {
+    const go = e.target.closest('.check__go');
+    if (go) {
+      const d = go.dataset.dir;
+      show(d === 'restart' ? 0 : Math.max(0, current + Number(d)));
+      (d === 'restart' ? groups[0] : groups[current] || done).querySelector('input, button').focus({ preventScroll: true });
+      return;
+    }
+    // an answer chosen with the pointer (detail > 0; keyboard "clicks" on radios have 0)
+    if (e.target.matches('input[type="radio"]') && e.detail > 0) {
+      setTimeout(() => {
+        show(current + 1);
+        // on phones the result card is below: bring it into view once everything is answered
+        if (current >= groups.length && matchMedia('(max-width: 1000px)').matches) {
+          panel.querySelector('.check__result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 220);   // the chosen answer lights up first
+    }
+  });
+  form.addEventListener('change', () => { next.disabled = !groups[current]?.querySelector('input:checked'); });
+  done.querySelector('.check__where').textContent = matchMedia('(max-width: 1000px)').matches ? 'unten' : 'rechts';
+  show(0);
+
   // the answers travel to the Kontakt form only when the visitor sends it (D-04)
   const link = panel.querySelector('.check__result a[href*="werte=1"]');
   link.addEventListener('click', () => {

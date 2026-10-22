@@ -168,8 +168,9 @@
     </section>
 
     <!-- FIGURES (D-77, from the home page): the evidence chain, a sourced fact per link and our
-         answer; a static list for now, later the content of this page's own drawn scene.
-         Copy provisional, figures to be corrected (ISSUES C3) -->
+         answer, as this page's drawn scene (js/hotel-scene.js: the way to the house, D-79); the
+         ride's button leads to the calculator. Without JS or with reduced motion: the vertical
+         list. Copy provisional, figures to be corrected (ISSUES C3) -->
     <section class="section evidence" id="zahlen">
       <header>
         <p class="kicker">Die Zahlen dahinter</p>
@@ -185,7 +186,7 @@
       <!-- the chain: a sourced fact per link and our answer ("Was wir tun"); on a vertical
            rail that draws itself from link to link while scrolling (CSS only, static
            without support or with reduced motion) -->
-      <ol class="chain">
+      <ol class="chain" data-cta="#rechner" data-cta-label="Potenzial berechnen">
         <li>
           <div class="chain__fact">
             <h3>Zuerst gesehen werden</h3>
@@ -539,6 +540,7 @@
   <script src="../js/main.js?v=67"></script>
   <script src="../js/evidence.js?v=8"></script>
   <script src="../js/nav.js?v=2"></script>
+  <script src="../js/hotel-scene.js?v=1"></script>
 </body>
 
 </html>

@@ -14,8 +14,11 @@
   const lenis = window.lenis;
   const links = [...menu.querySelectorAll('a')];
 
-  bar.classList.add('nav--menu');
+  // turning the <nav> into the closed panel must not animate: its slide transition would
+  // play once on every page load (the panel sliding out, a flash of the menu)
+  bar.classList.add('nav--menu', 'nav--setup');
   toggle.hidden = false;
+  requestAnimationFrame(() => requestAnimationFrame(() => bar.classList.remove('nav--setup')));
 
   const isOpen = () => bar.classList.contains('nav--open');
   function setOpen(open) {

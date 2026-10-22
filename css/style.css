@@ -2186,8 +2186,68 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   align-content: start;
 }
 
-/* one question at a time (js/check.js): the question larger, its answers below, then the
-   step and the way back and on */
+/* one question at a time in a card (js/check.js adds .check--steps): on top the step and
+   a progress bar, then the question and its answers as wide buttons, Zurück/Weiter below;
+   after the last answer the card shows the result instead (.check--done) */
+.check--steps {
+  display: block;
+  max-width: 46rem;
+}
+
+.check--steps .check__form {
+  gap: 1.4rem;
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(20, 24, 26, 0.85), rgba(12, 14, 13, 0.6));
+}
+
+.check--steps .check__result,
+.check--done .check__form {
+  display: none;
+}
+
+.check--done .check__result {
+  display: block;
+}
+
+.check__head {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.check__step {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.check__progress {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
+  list-style: none;
+}
+
+.check__progress li {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--line);
+  transition: background-color 0.4s;
+}
+
+.check__progress li.is-done {
+  background: var(--gold);
+}
+
+.check__progress li.is-now {
+  background: var(--gold-soft);
+}
+
+.check__form .choice-group[hidden] {
+  display: none;
+}
+
 .check__form .choice-group legend {
   margin-bottom: 1.2rem;
   font-family: var(--serif);
@@ -2198,33 +2258,44 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   color: var(--paper);
 }
 
-.check__form .choice-group[hidden],
-.check__nav[hidden],
-.check__done[hidden] {
-  display: none;
+/* the answers: one wide button each, with an arrow that says "choose and go on" */
+.check--steps .choices {
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.check__nav,
-.check__done {
+.check--steps .choice span {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.6rem 1.4rem;
-  padding-top: 1.4rem;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  font-size: 1rem;
+}
+
+.check--steps .choice span::after {
+  content: "→";
+  color: var(--gold);
+  opacity: 0.45;
+  transition: opacity 0.3s, transform 0.3s var(--ease);
+}
+
+.check--steps .choice:hover span::after,
+.check--steps .choice input:checked+span::after {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.check__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.2rem;
   border-top: 1px solid var(--line);
 }
 
-.check__step {
-  margin-right: auto;
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-.check__done p {
-  flex: 1 1 100%;
-  color: var(--text-soft);
+.check__nav [data-dir="1"] {
+  margin-left: auto;
 }
 
 .check__go {
@@ -2242,9 +2313,19 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   border-color: var(--gold);
 }
 
+.check__go[hidden] {
+  display: none;
+}
+
 .check__go:disabled {
   opacity: 0.35;
   cursor: default;
+}
+
+/* in the result card: back to the first question */
+.check__again {
+  display: block;
+  margin-top: 1.4rem;
 }
 
 .check__level {
@@ -3037,6 +3118,13 @@ html:not(.js) .wizard__step+.wizard__step {
   background: var(--gold);
 }
 
+/* while js/nav.js turns the <nav> into the closed panel (two frames): no transition, or the
+   panel would slide out once on every page load */
+.nav--setup nav,
+.nav--setup nav * {
+  transition: none !important;
+}
+
 /* on phones and tablets the bar shows the page's name next to the menu button */
 .nav__here {
   display: none;
@@ -3331,6 +3419,49 @@ html:not(.js) .wizard__step+.wizard__step {
   .doors__list .door p {
     margin-bottom: 0.6rem;
     font-size: 0.88rem;
+  }
+}
+
+/* phones: the four example phones two by two instead of the swipe row (Raffaele,
+   2026-10-22): all four in view, no hidden content; tablets keep the row */
+@media (max-width: 640px) {
+  .impact .phones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 0.8rem;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .impact .phone {
+    border-radius: 1.6rem;
+    box-shadow:
+      0 2px 0 #000 inset,
+      0 18px 36px -16px rgba(0, 0, 0, 0.75),
+      0 0 0 4px rgba(20, 22, 24, 0.6);
+  }
+
+  .impact .phone::before {
+    top: 0.5rem;
+    height: 0.85rem;
+  }
+
+  .impact .phone figcaption {
+    padding: 0.8rem 0.7rem 0.9rem;
+  }
+
+  .impact .phone figcaption b {
+    font-size: 0.82rem;
+  }
+
+  .impact .phone figcaption p {
+    font-size: 0.7rem;
+  }
+
+  .impact .phones__hint {
+    display: none;
   }
 }
 
@@ -4055,7 +4186,10 @@ html:not(.js) .wizard__step+.wizard__step {
     padding-top: 0.3rem;
   }
 
-  .foot__cols a {
+  /* the plain-text entries (place, social names until their profiles exist) take the same
+     rows as the links, so the three footer columns line up */
+  .foot__cols a,
+  .foot__cols span {
     padding-block: 0.55rem;
     margin-bottom: 0;
   }
@@ -4198,21 +4332,16 @@ html:not(.js) .wizard__step+.wizard__step {
     padding-bottom: 3.2rem;
   }
 
-  /* footer on two columns: symbol over the name | Studio, then Social | Rechtliches.
-     The column boxes join the footer grid (display: contents), so Studio and
-     Rechtliches start on one line; the second column is as wide as the email, which
-     stays on one line */
+  /* footer: the symbol over the name, centred on its own row, then Studio, Social and
+     Rechtliches as three equal columns, each centred (Raffaele, 2026-10-22; the earlier
+     two-column layout was sized for the email address, which left the footer, D-76) */
   .foot {
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: 1.5rem;
+    grid-template-columns: 1fr;
     row-gap: 2.2rem;
   }
 
-  .foot__cols {
-    display: contents;
-  }
-
   .foot .brand {
+    justify-self: center;
     flex-direction: column;
     align-items: center;
     gap: 0.8rem;
@@ -4220,18 +4349,34 @@ html:not(.js) .wizard__step+.wizard__step {
     text-align: center;
   }
 
-  /* brand and Social centred on the first column's axis, away from the screen edge */
-  .foot .brand,
-  .foot__cols div:has(.foot__social) {
-    justify-self: center;
-  }
-
   .foot .brand img {
     height: 48px;
   }
 
-  .foot__cols a[href^="mailto:"] {
-    white-space: nowrap;
+  .foot__cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-content: stretch;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .foot__cols p {
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+  }
+
+  .foot__cols a,
+  .foot__cols span {
+    font-size: 0.84rem;
+  }
+
+  .foot__cols .foot__social {
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .foot__legal {
+    text-align: center;
   }
 
   .mission__text,

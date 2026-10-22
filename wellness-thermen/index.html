@@ -21,7 +21,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=93" />
+  <link rel="stylesheet" href="../css/style.css?v=99" />
 </head>
 
 <body>
@@ -34,12 +34,12 @@
     <!-- the same header in every page, copied by hand (D-38): change it in all of them.
          On screens up to 1000px this <nav> becomes the full-screen menu (js/nav.js) -->
     <nav id="menu" aria-label="Hauptmenü">
+      <a href="../">Home</a>
       <a href="../hotels-resorts/">Hotels &amp; Resorts</a>
       <a href="../bergbahnen/">Bergbahnen</a>
       <a href="../wellness-thermen/" aria-current="page">Wellness &amp; Thermen</a>
-      <a href="../#ablauf">So arbeiten wir</a>
-      <a href="../#ueber-uns">Über uns</a>
-      <a href="#rechner" class="nav__cta">Potenzial berechnen</a>
+      <a href="../ueber-uns/">Über uns</a>
+      <a href="../kontakt/?typ=therme" class="nav__cta">Anfrage starten</a>
       <!-- only in the menu on phones and tablets -->
       <div class="nav__meta">
         <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
@@ -48,59 +48,123 @@
         <a href="../datenschutz.html">Datenschutz</a>
       </div>
     </nav>
+    <!-- the page the visitor is on, next to the menu button on phones and tablets -->
+    <span class="nav__here" aria-hidden="true">Thermen</span>
     <button class="nav__toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Menü öffnen" hidden>
       <span></span>
     </button>
   </header>
 
-  <!-- SEGMENT PAGE (D-38): placeholders (.ph) mark where Nicolas's frames, images or video
-       go; copy provisional, figures to be corrected (ISSUES C3) -->
+  <!-- SEGMENT PAGE (D-38, order D-64/D-71): the opening scene, at a glance, the process,
+       examples, figures and calculator, scope, price, questions, enquiry with the team, the
+       other areas. Copy provisional (drafts for Nicolas and Daniel), figures to be corrected
+       (ISSUES C3); the concept frames stand in until Nicolas's material exists -->
   <main id="top">
-    <section class="page-hero">
-      <div class="ph"><b>Platzhalter · Frames oder Video</b>Therme am Abend: Dampf über dem Becken, Lichter, Ruheraum – Querformat für große Bildschirme, Hochformat für Handys</div>
-      <div class="page-hero__copy">
-        <p class="kicker kicker--light">Wellness &amp; Thermen</p>
-        <h1>Ruhe, die man sehen kann – auch im November.</h1>
-        <p>Wärme, Wasser, Stille: Wir zeigen, wie sich ein Tag bei Ihnen anfühlt, und holen Gäste in den Monaten, in denen es ruhiger ist.</p>
-        <div class="hero__actions">
-          <a href="#rechner" class="btn btn--gold">Potenzial berechnen</a>
-          <a href="../kontakt/?typ=therme" class="btn btn--ghost">Projekt besprechen</a>
+    <!-- OPENING SCENE (D-64): the spa frames scrubbed by the scroll (js/main.js reads
+         data-scene); the copy stays put. Without JS a still frame (style.css) -->
+    <section class="cine hero hero--page" data-scene="spa">
+      <div class="cine__stage">
+        <canvas aria-hidden="true"></canvas>
+        <div class="cine__scrim"></div>
+        <div class="cine__copy">
+          <nav class="crumbs kicker kicker--light" aria-label="Pfad">
+            <a href="../">Home</a> <span aria-hidden="true">›</span> <span aria-current="page">Wellness &amp; Thermen</span>
+          </nav>
+          <h1>Ruhe, die man sehen kann – auch im November.</h1>
+          <p>Wärme, Wasser, Stille: Wir zeigen, wie sich ein Tag bei Ihnen anfühlt, und holen Gäste in den Monaten, in denen es ruhiger ist.</p>
+          <div class="hero__actions">
+            <a href="#check" class="btn btn--gold">Sichtbarkeit prüfen</a>
+            <a href="#kontakt" class="btn btn--ghost">Anfrage starten</a>
+          </div>
         </div>
+        <div class="hero__cue" aria-hidden="true">Scrollen</div>
       </div>
     </section>
 
-    <!-- CONTEXT: this segment, its season and its problem (copy is a first draft) -->
-    <section class="section" id="kontext">
+    <!-- AT A GLANCE (D-71, replaces the context block): for whom, what, where, how the
+         offer comes about, with the date of the text -->
+    <section class="section glance section--split" id="ueberblick">
       <header>
-        <p class="kicker">Wellness &amp; Thermen</p>
+        <p class="kicker">Auf einen Blick</p>
         <h2>Ruhe hat keine Saison.</h2>
         <p>
           Wenn es draußen warm ist, wird es in Thermen und Spas ruhiger – die Kosten laufen weiter. Wir zeigen, wie sich ein Tag bei Ihnen anfühlt, zu jeder Jahreszeit, und machen aus Gutscheinen und Abendangeboten Gründe für einen Besuch.
         </p>
       </header>
-      <div class="ph" style="--ratio: 21 / 9"><b>Platzhalter · Bild oder Frames</b>Becken, Sauna oder Ruheraum, Querformat</div>
+      <dl class="glance__list">
+        <div>
+          <dt>Für wen</dt>
+          <dd>Thermen, Freizeitbäder und Wellnessbetriebe – privat oder kommunal, ein Standort oder mehrere.</dd>
+        </div>
+        <div>
+          <dt>Was wir machen</dt>
+          <dd>Shootings bei Ihnen im Sommer und im Winter, dazwischen Reels, Posts und Stories für Ihre Kanäle.</dd>
+        </div>
+        <div>
+          <dt>Wo</dt>
+          <dd>Sitz in Füssen im Allgäu, unterwegs im ganzen Alpenraum und darüber hinaus.</dd>
+        </div>
+        <div>
+          <dt>Angebot</dt>
+          <dd>Ein individuelles Angebot, nachdem wir Ihren Betrieb kennengelernt haben – keine Pakete von der Stange.</dd>
+        </div>
+      </dl>
+      <p class="glance__date">Stand: Oktober 2026</p>
+      <div class="hero__actions">
+        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+        <a href="../#ablauf" class="btn btn--ghost">So arbeiten wir</a>
+      </div>
     </section>
 
-    <!-- FIGURES for thermal baths (D-59, research-2026-10-13/wellness-thermen.md); copy is a first draft -->
-    <section class="section" id="zahlen">
+    <!-- EXAMPLES: the phones as a swipe row with AI-generated example images (D-61: labelled
+         in the lead), replaced by real pilot content; format, title and one line each -->
+    <section class="section impact" id="beispiele">
       <header>
-        <p class="kicker">Die Zahlen dahinter</p>
-        <h2>Die Kosten laufen – auch in den ruhigen Monaten.</h2>
+        <p class="kicker">So kann es aussehen</p>
+        <h2>Ihre Therme im Feed.</h2>
+        <p>
+          Beispiele, wie Ihre Beiträge aussehen können – die Bilder sind KI-generiert. Mit dem ersten Pilotprojekt zeigen wir hier echte Beiträge.
+        </p>
       </header>
-      <ul class="metrics facts">
-        <li class="metric">
-          <b>2,0–2,6 Mio. €</b> Die Kosten laufen, ob Gäste kommen oder nicht: In der städtischen Therme Vierordtbad in Karlsruhe lagen sie von 2005 bis 2019 jedes Jahr zwischen 2,0 und 2,6 Mio. € – bei 88.000 bis 133.000 Besuchen.
-          <small>Stadt Karlsruhe, Beschlussvorlage Bäderausschuss vom 11.06.2021 (Therme Vierordtbad: Anpassung der Eintrittspreise), Tabelle Besucher, Erlöse, Kosten 2005–2019.</small>
-        </li>
-        <li class="metric">
-          <b>März–Oktober</b> Für Thermen ist das Sommerhalbjahr die ruhige Zeit: Die Stadt Karlsruhe nennt für ihre Therme März bis Oktober die ‚schwachen‘ Monate; in Münchens Hallenbädern und Saunen war 2019 der Januar der stärkste Monat.
-          <small>Stadt Karlsruhe, Beschlussvorlage Bäderausschuss 11.06.2021; Landeshauptstadt München, Referat für Arbeit und Wirtschaft, Antwort auf Stadtratsanfrage 14-20/F 01648 vom 10.03.2020 (Angaben der SWM).</small>
-        </li>
-        <li class="metric">
-          <b>360.000</b> Gäste pro Jahr zählten rund 450 Freizeitbäder und Thermen in Deutschland 2023 im Schnitt.
-          <small>European Waterpark Association e. V., Fact Sheet ‚Freizeitbäder und Thermen in Deutschland‘ (Benchmarking der EWA, Bäderatlas der DGfdB).</small>
-        </li>
-      </ul>
+      <div class="phones">
+        <figure class="phone">
+          <img src="../assets/img/phone-therme-schnee-473.webp" alt="Beispiel-Reel: Dampf über dem Becken" width="473" height="1024"
+            srcset="../assets/img/phone-therme-schnee-320.webp 320w, ../assets/img/phone-therme-schnee-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Dampf über dem Becken</b> Warm baden im Schnee</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-therme-sauna-473.webp" alt="Beispiel-Story: Sauna mit Fernblick" width="473" height="1024"
+            srcset="../assets/img/phone-therme-sauna-320.webp 320w, ../assets/img/phone-therme-sauna-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Sauna mit Fernblick</b> Aufguss mit Panorama</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-therme-ruheraum-473.webp" alt="Beispiel-Story: Ruheraum" width="473" height="1024"
+            srcset="../assets/img/phone-therme-ruheraum-320.webp 320w, ../assets/img/phone-therme-ruheraum-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Ruheraum</b> Eine Stunde nur für sich</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-therme-naturbad-473.webp" alt="Beispiel-Reel: Naturbad im Sommer" width="473" height="1024"
+            srcset="../assets/img/phone-therme-naturbad-320.webp 320w, ../assets/img/phone-therme-naturbad-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Naturbad im Sommer</b> Ruhe zu jeder Jahreszeit</p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="phones__hint" aria-hidden="true">Wischen</p>
     </section>
 
     <!-- WHY VISIBILITY (D-59): where excursions start and what visibility can do; no study
@@ -126,93 +190,227 @@
       </ul>
     </section>
 
-    <!-- POTENTIAL: a chart of what the calculator's scenario would change (design phase; it
-         shows the visitor's own chosen value, never a promise) -->
-    <section class="section" id="potenzial">
+    <!-- VISIBILITY CHECK (D-78, replaces this page's calculator): five one-click questions,
+         no figures; js/check.js scores them (2/1/0 points each), names the level, shows the tip
+         of every question not yet answered with the best option, and hands the answers to the
+         Kontakt form (sessionStorage "bs-rechner", as the hotel calculator does). A self-check,
+         not a measurement. Copy is a draft for Nicolas and Daniel -->
+    <section class="section check" id="check">
       <header>
-        <p class="kicker">Was möglich ist</p>
-        <h2>Ihre ruhigen Monate, mit mehr Gästen.</h2>
-      </header>
-      <div class="ph" style="--ratio: 21 / 9"><b>Grafik folgt</b>Besuche in Ihren ruhigen Monaten, heute und mit dem Wert, den Sie im Rechner wählen</div>
-    </section>
-
-    <!-- CALCULATOR for this segment (D-59): the same panel as on the home page, copied by hand;
-         a change to its fields, defaults or sources goes into both. Formulas in js/evidence.js -->
-    <section class="section calculator" id="rechner">
-      <header>
-        <p class="kicker">Rechner</p>
-        <h2>Was das für Ihre Therme bedeutet.</h2>
+        <p class="kicker">Sichtbarkeits-Check</p>
+        <h2>Wie sichtbar ist Ihre Therme?</h2>
         <p>
-          Für Thermen und Spas rechnen wir mit Ihren eigenen Zahlen.
+          Fünf Fragen, ein Klick pro Frage – Sie sehen sofort, wo Sie stehen und was am meisten bringt.
         </p>
       </header>
 
       <noscript>
         <p class="calc__nojs">
-          Der Rechner braucht JavaScript. Gern rechnen wir Ihr Potenzial gemeinsam durch –
-          <a href="../kontakt/">schreiben Sie uns</a>.
+          Der Check braucht JavaScript. Gern schauen wir uns Ihre Kanäle gemeinsam an –
+          <a href="../kontakt/?typ=therme">schreiben Sie uns</a>.
         </p>
       </noscript>
-      <!-- thermal baths: no defensible public defaults (research-2026-10-13), so the client's own
-           numbers, with comparison values in the small print -->
-      <div class="calc" id="calc-thermen" data-model="thermen">
-        <form class="calc__inputs">
-          <div class="range">
-            <label for="t-visits">Besuche pro Jahr</label> <output for="t-visits">150.000</output>
-            <input type="range" id="t-visits" name="visits" data-format="int" min="20000" max="1000000" step="5000" value="150000" />
-            <small>Ihre Zahl. Zum Vergleich: Watzmann Therme Berchtesgaden rund 272.000 Besuche (2025).</small>
-          </div>
-          <div class="range">
-            <label for="t-spend">Umsatz pro Besuch (Eintritt, Sauna, Gastronomie)</label> <output for="t-spend">20 €</output>
-            <input type="range" id="t-spend" name="spend" data-format="eur" min="5" max="80" step="1" value="20" />
-            <small>Ihre Zahl: Jahresumsatz geteilt durch Besuche – nicht der Tageskartenpreis. Zum Vergleich: Therme
-              Vierordtbad Karlsruhe 2019 rund 12,60 € (ohne Hotel); 39 Thermen in Österreich 2019 rund 44 € (mit
-              Thermenhotels).</small>
-          </div>
-          <div class="range">
-            <label for="t-quiet">Anteil der Besuche in Ihren ruhigen Monaten</label> <output for="t-quiet">25 %</output>
-            <input type="range" id="t-quiet" name="quiet" data-format="pct" min="5" max="50" step="1" value="25" />
-            <small>Ihre Schätzung. Für Bayern gibt es keine veröffentlichten Monatszahlen.</small>
-          </div>
+      <div class="calc check__panel">
+        <form class="check__form">
+          <fieldset class="choice-group" data-tip="Regelmäßigkeit zählt: Wer mehrmals pro Woche postet, hat öfter Beiträge, die weit über die eigenen Follower hinaus gesehen werden.">
+            <legend>1 · Wie oft erscheint auf Ihren Kanälen etwas Neues?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-1" value="2" data-label="mehrmals pro Woche" /><span>mehrmals pro Woche</span></label>
+              <label class="choice"><input type="radio" name="check-1" value="1" data-label="etwa einmal pro Woche" /><span>etwa einmal pro Woche</span></label>
+              <label class="choice"><input type="radio" name="check-1" value="0" data-label="seltener" /><span>seltener</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Wenn es draußen warm ist, wird es in Thermen ruhiger. Abendangebote, Außenbecken, Sauna mit Blick: Gründe gibt es – sie müssen gezeigt werden.">
+            <legend>2 · Zeigen Sie, warum sich ein Besuch auch in den ruhigen Monaten lohnt?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-2" value="2" data-label="ja, regelmäßig" /><span>ja, regelmäßig</span></label>
+              <label class="choice"><input type="radio" name="check-2" value="1" data-label="manchmal" /><span>manchmal</span></label>
+              <label class="choice"><input type="radio" name="check-2" value="0" data-label="kaum" /><span>kaum</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Kurze Videos sind das Format, über das Menschen auf Instagram, Facebook und YouTube Neues entdecken – auch ohne Ihnen zu folgen.">
+            <legend>3 · Gibt es Reels oder kurze Videos?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-3" value="2" data-label="regelmäßig" /><span>regelmäßig</span></label>
+              <label class="choice"><input type="radio" name="check-3" value="1" data-label="ab und zu" /><span>ab und zu</span></label>
+              <label class="choice"><input type="radio" name="check-3" value="0" data-label="kaum" /><span>kaum</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Ortsangaben, Schlagwörter und gute Texte entscheiden, ob Sie erscheinen, wenn jemand nach Ihrem Ort oder Ausflugszielen sucht.">
+            <legend>4 · Findet man Sie in der Suche auf Instagram und Google, wenn jemand nach Ihrem Ort sucht?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-4" value="2" data-label="ja" /><span>ja</span></label>
+              <label class="choice"><input type="radio" name="check-4" value="1" data-label="weiß nicht" /><span>weiß nicht</span></label>
+              <label class="choice"><input type="radio" name="check-4" value="0" data-label="eher nicht" /><span>eher nicht</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Gutscheine bringen Besucher, die sonst nicht gekommen wären. Zeigen Sie sie vor Weihnachten, zum Muttertag und in den ruhigen Monaten.">
+            <legend>5 · Kann man Gutscheine online kaufen – und zeigen Ihre Beiträge sie?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-5" value="2" data-label="ja, beides" /><span>ja, beides</span></label>
+              <label class="choice"><input type="radio" name="check-5" value="1" data-label="Gutscheine ja, Beiträge kaum" /><span>Gutscheine ja, Beiträge kaum</span></label>
+              <label class="choice"><input type="radio" name="check-5" value="0" data-label="nein" /><span>nein</span></label>
+            </div>
+          </fieldset>
         </form>
 
-        <div class="calc__result" aria-live="polite">
-          <p>Besuche in Ihren ruhigen Monaten</p>
-          <p class="calc__total"><b>≈ 37.500</b> von 150.000 Besuchen im Jahr</p>
-
-          <div class="range">
-            <label for="t-more">Mehr Besuche in den ruhigen Monaten</label> <output for="t-more">+10 %</output>
-            <input type="range" id="t-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
-            <small>Frei wählbar, kein Erfahrungswert. Für Thermen gibt es keine Studie, die die Wirkung eigener
-              Social-Media-Arbeit misst.</small>
-          </div>
-          <p class="calc__out"><b>≈ 75.000 €</b> zusätzlicher Umsatz pro Jahr
-            <small>≈ 3.800 zusätzliche Besuche × 20 €</small>
-          </p>
-
+        <div class="calc__result check__result" aria-live="polite">
+          <p>Ihr Ergebnis</p>
+          <p class="calc__total"><b>– / 10</b> <span class="check__level">Beantworten Sie die fünf Fragen.</span></p>
+          <ol class="check__bar" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li></ol>
+          <ul class="check__tips"></ul>
           <p class="calc__note">
-            Beispielrechnung mit Ihren Angaben. In ruhigen Monaten laufen Personal, Energie und Technik ohnehin:
-            Zusätzliche Gäste kosten dort vor allem Wareneinsatz in Gastronomie und Shop. Umsatz, nicht Gewinn; keine
-            Zusage über Ergebnisse.
+            Ein Selbst-Check, keine Messung: Er zeigt, wo die größten Hebel liegen. Was er Ihnen konkret
+            bringt, schauen wir uns gern gemeinsam an.
           </p>
-          <a class="btn btn--gold" href="../kontakt/?typ=therme&amp;werte=1">Mit diesen Werten anfragen</a>
+          <a class="btn btn--gold" href="../kontakt/?typ=therme&amp;werte=1">Mit diesem Ergebnis anfragen</a>
         </div>
       </div>
     </section>
 
+    <!-- SCOPE (D-71): what the standard package holds (D-24, D-58, D-72) and what it does
+         not. Comment replies and how the work is automated stay out of the copy until they
+         are decided (D-36, Raffaele 2026-10-22) -->
+    <section class="section scope" id="leistungen">
+      <header>
+        <p class="kicker">Leistungen</p>
+        <h2>Was gehört dazu – und was nicht?</h2>
+      </header>
+      <div class="scope__cols">
+        <div>
+          <h3>Das gehört dazu</h3>
+          <ul>
+            <li>Kennenlernen und erste Aufnahmen bei Ihnen vor Ort</li>
+            <li>Zwei Shootings im Jahr, im Sommer und im Winter</li>
+            <li>Reels, Posts und Stories für Ihre Kanäle: ausgewählt, bearbeitet, geplant und veröffentlicht</li>
+            <li>Texte, Schlagwörter und Ortsangaben, mit denen man Sie auch in der Suche findet – auf Instagram, YouTube und Google</li>
+            <li>Jeder Beitrag von unserem Team geprüft – auf Wunsch auch von Ihnen</li>
+            <li>Ein regelmäßiger Bericht, was davon bei Ihren Gästen ankommt</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Nicht im Standardpaket</h3>
+          <ul>
+            <li>Werbeanzeigen, Ihr Google-Unternehmensprofil und Ihre Website – das sind eigene Leistungen</li>
+            <li>Einzelne Produktionen ohne laufende Betreuung – auf Anfrage separat</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICE (D-71, D-34): no prices; what the offer depends on, leading to the enquiry -->
+    <section class="section cost" id="kosten">
+      <header>
+        <p class="kicker">Angebot</p>
+        <h2>Was kostet das?</h2>
+        <p>
+          Feste Pakete gibt es bei uns nicht. Sie bekommen ein individuelles Angebot – es hängt vor allem von vier Dingen ab.
+        </p>
+      </header>
+      <ul class="metrics facts">
+        <li class="metric"><b>Standorte</b> Eine Therme oder mehrere Standorte – und wie weit sie auseinanderliegen.</li>
+        <li class="metric"><b>Bereiche</b> Therme, Sauna, Spa, Hotel, Gastronomie: was wir zeigen sollen.</li>
+        <li class="metric"><b>Umfang</b> Wie viele Reels, Posts und Stories im Monat.</li>
+        <li class="metric"><b>Kanäle</b> Welche Plattformen wir für Sie bespielen.</li>
+      </ul>
+      <div class="hero__actions">
+        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+      </div>
+    </section>
+
+    <!-- FAQ (D-71, D-77): only this segment's own questions, the general ones once, on Über uns;
+         a draft for Nicolas and Daniel -->
+    <section class="section faq" id="fragen">
+      <header>
+        <p class="kicker">Fragen</p>
+        <h2>Fragen zu Social Media für Thermen.</h2>
+      </header>
+      <div class="faq__list">
+        <article>
+          <h3>Bringt Social Media wirklich mehr Besuche?</h3>
+          <p>
+            Wie viele Gäste die eigene Social-Media-Arbeit einer Therme bringt, hat bisher keine Studie gemessen.
+            Deshalb messen wir es bei Ihnen: mit eigenen Links und Codes, etwa für Gutscheine und Abendangebote.
+          </p>
+        </article>
+        <article>
+          <h3>Arbeiten Sie auch für kommunale Bäder?</h3>
+          <p>
+            Ja. Für kommunale Träger planen wir die längeren Abstimmungs- und Vergabewege von Anfang an mit ein.
+          </p>
+        </article>
+      </div>
+      <p class="faq__more">
+        Fragen zu Kosten, Ablauf und Zusammenarbeit beantworten wir
+        <a href="../ueber-uns/#fragen">auf unserer Über-uns-Seite</a>.
+      </p>
+    </section>
+
+    <!-- ENQUIRY: the stepped onboarding form comes here in phase 3 (D-66); until then the
+         Kontakt page -->
     <section class="section contact" id="kontakt">
       <header>
         <p class="kicker">Sprechen wir</p>
-        <h2>Erzählen Sie uns von Ihrem Haus.</h2>
+        <h2>Erzählen Sie uns von Ihrer Therme.</h2>
         <p>
-          Schreiben Sie uns kurz, wo Sie heute stehen – wir melden uns innerhalb
-          von zwei Werktagen mit Ideen, kein Pitch, kein Druck.
+          Schreiben Sie uns kurz, wo Sie heute stehen – Standorte, Besuche und Ihre Kanäle helfen uns für ein
+          erstes Angebot. Wir melden uns innerhalb von zwei Werktagen, kein Pitch, kein Druck.
         </p>
       </header>
       <div class="hero__actions">
         <a href="../kontakt/?typ=therme" class="btn btn--gold">Projekt besprechen</a>
-        <a href="#rechner" class="btn btn--ghost">Potenzial berechnen</a>
+        <a href="#check" class="btn btn--ghost">Sichtbarkeit prüfen</a>
       </div>
+      <!-- the people behind the enquiry, linking to the Über uns page (D-76: the full team
+           is only there) -->
+      <div class="people">
+        <p class="people__title">Ihre Ansprechpartner</p>
+        <ul>
+          <li>
+            <img src="../assets/img/team-nicolas-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Nicolas Lekai</b> <span>Creative Direction</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-daniel-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Daniel Lenzenhuber</b> <span>Management</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-raffaele-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Raffaele Fusco</b> <span>Web Designer &amp; Developer</span>
+          </li>
+        </ul>
+        <a class="people__more" href="../ueber-uns/">Mehr über uns</a>
+      </div>
+    </section>
+
+    <!-- OTHER AREAS (D-71): the other two segment pages -->
+    <section class="section doors doors--more" id="weitere-bereiche">
+      <header>
+        <p class="kicker">Weitere Bereiche</p>
+        <h2>Auch für Hotels und Bergbahnen.</h2>
+      </header>
+      <ul class="doors__list">
+        <li class="door">
+          <a href="../hotels-resorts/">
+            <img src="../assets/img/segment-hotel-720.webp" alt="" width="720" height="480"
+              srcset="../assets/img/segment-hotel-480.webp 480w, ../assets/img/segment-hotel-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Hotels &amp; Resorts</h3>
+            <p>Mehr belegte Zimmer zwischen den Saisons – und mehr Gäste, die direkt bei Ihnen buchen.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+        <li class="door">
+          <a href="../bergbahnen/">
+            <img src="../assets/img/segment-bergbahn-720.webp" alt="" width="720" height="480"
+              srcset="../assets/img/segment-bergbahn-480.webp 480w, ../assets/img/segment-bergbahn-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Bergbahnen</h3>
+            <p>Mehr Gäste im Sommer, an ruhigen Tagen und bei Ihren Events am Berg.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+      </ul>
     </section>
   </main>
 
@@ -226,16 +424,17 @@
     <div class="foot__cols">
       <div>
         <p>Studio</p>
-        <span>München · Bayern</span>
-        <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
+        <span>Füssen · Allgäu</span>
+        <a href="../ueber-uns/">Über uns</a>
         <a href="../kontakt/">Kontakt</a>
       </div>
       <div>
         <p>Social</p>
-        <!-- profile URLs pending; glyphs in assets/icons/social.svg (one colour, never gold) -->
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#tiktok" /></svg>TikTok</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</a>
+        <!-- profile URLs pending: plain text until they exist (C7), then <a href> again;
+             glyphs in assets/icons/social.svg (one colour, never gold) -->
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#facebook" /></svg>Facebook</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</span>
       </div>
       <div>
         <p>Rechtliches</p>
@@ -251,7 +450,7 @@
 
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=67"></script>
-  <script src="../js/evidence.js?v=7"></script>
+  <script src="../js/check.js?v=1"></script>
   <script src="../js/nav.js?v=2"></script>
 </body>
 

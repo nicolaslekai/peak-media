@@ -21,7 +21,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=93" />
+  <link rel="stylesheet" href="../css/style.css?v=99" />
 </head>
 
 <body>
@@ -34,12 +34,12 @@
     <!-- the same header in every page, copied by hand (D-38): change it in all of them.
          On screens up to 1000px this <nav> becomes the full-screen menu (js/nav.js) -->
     <nav id="menu" aria-label="Hauptmenü">
+      <a href="../">Home</a>
       <a href="../hotels-resorts/">Hotels &amp; Resorts</a>
       <a href="../bergbahnen/" aria-current="page">Bergbahnen</a>
       <a href="../wellness-thermen/">Wellness &amp; Thermen</a>
-      <a href="../#ablauf">So arbeiten wir</a>
-      <a href="../#ueber-uns">Über uns</a>
-      <a href="#rechner" class="nav__cta">Potenzial berechnen</a>
+      <a href="../ueber-uns/">Über uns</a>
+      <a href="../kontakt/?typ=bergbahn" class="nav__cta">Anfrage starten</a>
       <!-- only in the menu on phones and tablets -->
       <div class="nav__meta">
         <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
@@ -48,59 +48,188 @@
         <a href="../datenschutz.html">Datenschutz</a>
       </div>
     </nav>
+    <!-- the page the visitor is on, next to the menu button on phones and tablets -->
+    <span class="nav__here" aria-hidden="true">Bergbahnen</span>
     <button class="nav__toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Menü öffnen" hidden>
       <span></span>
     </button>
   </header>
 
-  <!-- SEGMENT PAGE (D-38): placeholders (.ph) mark where Nicolas's frames, images or video
-       go; copy provisional, figures to be corrected (ISSUES C3) -->
+  <!-- SEGMENT PAGE (D-38, order D-64/D-71): the opening scene, at a glance, the process,
+       the cable car ride, examples, figures and calculator, scope, price, questions, enquiry
+       with the team, the other areas. Copy provisional (drafts for Nicolas and Daniel),
+       figures to be corrected (ISSUES C3); the concept frames stand in until Nicolas's
+       material exists -->
   <main id="top">
-    <section class="page-hero">
-      <div class="ph"><b>Platzhalter · Frames oder Video</b>Erste Fahrt am Morgen: Kabine über dem Tal, Gipfel, Hütte, Sommerbetrieb – Querformat für große Bildschirme, Hochformat für Handys</div>
-      <div class="page-hero__copy">
-        <p class="kicker kicker--light">Bergbahnen</p>
-        <h1>Ihr Berg in seinem besten Licht – im Winter wie im Sommer.</h1>
-        <p>Erste Fahrt am Morgen, die Hütte, der Sommer am Berg: Wir zeigen, warum sich der Weg nach oben lohnt – auch an ruhigen Tagen.</p>
-        <div class="hero__actions">
-          <a href="#rechner" class="btn btn--gold">Potenzial berechnen</a>
-          <a href="../kontakt/?typ=bergbahn" class="btn btn--ghost">Projekt besprechen</a>
+    <!-- OPENING SCENE (D-64): the ski frames scrubbed by the scroll (js/main.js reads
+         data-scene); the copy stays put. Without JS a still frame (style.css) -->
+    <section class="cine hero hero--page hero--bright" data-scene="skilift">
+      <div class="cine__stage">
+        <canvas aria-hidden="true"></canvas>
+        <div class="cine__scrim"></div>
+        <div class="cine__copy">
+          <nav class="crumbs kicker kicker--light" aria-label="Pfad">
+            <a href="../">Home</a> <span aria-hidden="true">›</span> <span aria-current="page">Bergbahnen</span>
+          </nav>
+          <h1>Ihr Berg in seinem besten Licht – im Winter wie im Sommer.</h1>
+          <p>Erste Fahrt am Morgen, die Hütte, der Sommer am Berg: Wir zeigen, warum sich der Weg nach oben lohnt – auch an ruhigen Tagen.</p>
+          <div class="hero__actions">
+            <a href="#check" class="btn btn--gold">Sichtbarkeit prüfen</a>
+            <a href="#kontakt" class="btn btn--ghost">Anfrage starten</a>
+          </div>
         </div>
+        <div class="hero__cue" aria-hidden="true">Scrollen</div>
       </div>
     </section>
 
-    <!-- CONTEXT: this segment, its season and its problem (copy is a first draft) -->
-    <section class="section" id="kontext">
+    <!-- AT A GLANCE (D-71, replaces the context block): for whom, what, where, how the
+         offer comes about, with the date of the text -->
+    <section class="section glance section--split" id="ueberblick">
       <header>
-        <p class="kicker">Bergbahnen</p>
+        <p class="kicker">Auf einen Blick</p>
         <h2>Ein Berg für jede Jahreszeit.</h2>
         <p>
           Der Winter ist gelernt, der Sommer wächst – und an Regentagen und unter der Woche bleibt Platz in den Kabinen. Wir zeigen, warum sich der Weg nach oben lohnt: die erste Fahrt am Morgen, die Hütte, der Sommer am Berg.
         </p>
       </header>
-      <div class="ph" style="--ratio: 21 / 9"><b>Platzhalter · Bild oder Frames</b>Kabine über dem Tal oder Sommer am Gipfel, Querformat</div>
+      <dl class="glance__list">
+        <div>
+          <dt>Für wen</dt>
+          <dd>Bergbahnen und Skigebiete – eine Bahn oder ein Verbund, im Winter, im Sommer oder das ganze Jahr.</dd>
+        </div>
+        <div>
+          <dt>Was wir machen</dt>
+          <dd>Shootings am Berg im Sommer und im Winter, dazwischen Reels, Posts und Stories für Ihre Kanäle.</dd>
+        </div>
+        <div>
+          <dt>Wo</dt>
+          <dd>Sitz in Füssen im Allgäu, unterwegs im ganzen Alpenraum und darüber hinaus.</dd>
+        </div>
+        <div>
+          <dt>Angebot</dt>
+          <dd>Ein individuelles Angebot, nachdem wir Ihren Berg kennengelernt haben – keine Pakete von der Stange.</dd>
+        </div>
+      </dl>
+      <p class="glance__date">Stand: Oktober 2026</p>
+      <div class="hero__actions">
+        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+        <a href="../#ablauf" class="btn btn--ghost">So arbeiten wir</a>
+      </div>
     </section>
 
-    <!-- FIGURES for Bergbahnen (D-59, research-2026-10-13/bergbahnen.md); copy is a first draft -->
-    <section class="section" id="zahlen">
+    <!-- BERGFAHRT (D-67): the cable car ride (js/bergfahrt.js) with three stations of a
+         Bergbahn's year instead of the home page's evidence chain; draft copy until Nicolas's
+         content (no figures without a source, C3). The ride ends at the enquiry (data-cta,
+         data-cta-label). Without JS or with reduced motion: the vertical list -->
+    <section class="section evidence" id="bergfahrt">
       <header>
-        <p class="kicker">Die Zahlen dahinter</p>
-        <h2>Der Sommer bringt die Gäste – aber noch nicht den Umsatz.</h2>
+        <p class="kicker">Bergfahrt</p>
+        <h2>Drei Stationen, ein Berg für das ganze Jahr.</h2>
+        <p>
+          Winter, Sommer und alles, was oben passiert: An jeder Station zeigen wir, was wir für Ihren Berg tun.
+        </p>
       </header>
-      <ul class="metrics facts">
-        <li class="metric">
-          <b>18 € statt 25 €</b> Im Sommer zählen Deutschlands Seilbahnen inzwischen mehr Gäste als im Winter – doch jeder Sommergast bringt im Schnitt nur rund 18 € Ticketumsatz, im Winter rund 25 €.
-          <small>VDS: Sommer 2025 117,9 Mio. € Nettoverkehrseinnahmen / 6,6 Mio. Ersteintritte; Winter 2024/25 152,7 Mio. € / 6,0 Mio. (Pressemappe 11/2025). Eigene Rechnung.</small>
+      <ol class="chain" data-cta="#kontakt" data-cta-label="Anfrage starten">
+        <li>
+          <div class="chain__fact">
+            <h3>Winter</h3>
+            <p class="metric">
+              <b>Gelernt.</b> Im Winter kommen die Gäste von selbst – die Frage ist, ob zu Ihnen oder zum Nachbarn.
+            </p>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Wir zeigen, was Ihren Berg unterscheidet: die erste Fahrt am Morgen, die Abfahrt, den Blick von oben –
+              damit Gäste wissen, wohin sie fahren.
+            </p>
+          </div>
         </li>
-        <li class="metric">
-          <b>+51 % · −18 %</b> Wie stark das Wetter zählt, zeigt die Zugspitze: Im sonnigen Juni 2025 kamen 51 % mehr Gäste auf den Gipfel als im Vorjahresjuni. Im verregneten Juli lagen alle drei Gebiete der Zugspitzbahn 18 % unter dem Vorjahr.
-          <small>Bayerische Zugspitzbahn Bergbahn AG, Geschäftsbericht 2024/2025 (Auszug), S. 11.</small>
+        <li>
+          <div class="chain__fact">
+            <h3>Sommer</h3>
+            <p class="metric">
+              <b>Wachsend.</b> Im Sommer zählen Deutschlands Seilbahnen inzwischen mehr Gäste als im Winter – doch
+              jeder bringt im Schnitt weniger Umsatz.
+            </p>
+            <small>VDS, Pressemappe 11/2025</small>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Wandern, Biken, Aussicht, Sonnenaufgang am Gipfel: Wir machen den Sommer am Berg zum Grund für einen
+              Ausflug – auch unter der Woche.
+            </p>
+          </div>
         </li>
-        <li class="metric">
-          <b>10–15 %</b> 205 von 250 österreichischen Seilbahnunternehmen fahren auch im Sommer – doch zwischen Mai und Oktober erwirtschaften sie erst rund 10 bis 15 % des Jahresumsatzes der Branche.
-          <small>WKO, Fachverband der Seilbahnen: „rund 10 %“ (16.03.2026); „15 Prozent“ (27.05.2025).</small>
+        <li>
+          <div class="chain__fact">
+            <h3>Am Gipfel</h3>
+            <p class="metric">
+              <b>Mehr als die Fahrt.</b> Hütte, Terrasse, Events: Was oben passiert, bringt Gäste auch an ruhigen
+              Tagen.
+            </p>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Wir zeigen Ihre Küche, Ihre Terrasse und Ihre Events, bevor sie stattfinden – und Ihre Gäste planen
+              den Ausflug danach.
+            </p>
+          </div>
         </li>
-      </ul>
+      </ol>
+    </section>
+
+    <!-- EXAMPLES: the phones as a swipe row with AI-generated example images (D-61: labelled
+         in the lead), replaced by real pilot content; format, title and one line each -->
+    <section class="section impact" id="beispiele">
+      <header>
+        <p class="kicker">So kann es aussehen</p>
+        <h2>Ihr Berg im Feed.</h2>
+        <p>
+          Beispiele, wie Ihre Beiträge aussehen können – die Bilder sind KI-generiert. Mit dem ersten Pilotprojekt zeigen wir hier echte Beiträge.
+        </p>
+      </header>
+      <div class="phones">
+        <figure class="phone">
+          <img src="../assets/img/phone-bahn-kabine-473.webp" alt="Beispiel-Reel: Erste Fahrt" width="473" height="1024"
+            srcset="../assets/img/phone-bahn-kabine-320.webp 320w, ../assets/img/phone-bahn-kabine-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Erste Fahrt</b> Die Kabine über dem Nebelmeer</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-bahn-wandern-473.webp" alt="Beispiel-Reel: Sommer am Grat" width="473" height="1024"
+            srcset="../assets/img/phone-bahn-wandern-320.webp 320w, ../assets/img/phone-bahn-wandern-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Sommer am Grat</b> Wandern mit Blick auf den See</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-bahn-huette-473.webp" alt="Beispiel-Story: Auf der Hütte" width="473" height="1024"
+            srcset="../assets/img/phone-bahn-huette-320.webp 320w, ../assets/img/phone-bahn-huette-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Auf der Hütte</b> Kaiserschmarrn mit Aussicht</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-bahn-gipfel-473.webp" alt="Beispiel-Story: Sonnenaufgang am Gipfel" width="473" height="1024"
+            srcset="../assets/img/phone-bahn-gipfel-320.webp 320w, ../assets/img/phone-bahn-gipfel-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Sonnenaufgang am Gipfel</b> Mit der ersten Bahn nach oben</p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="phones__hint" aria-hidden="true">Wischen</p>
     </section>
 
     <!-- WHY VISIBILITY (D-59): where excursions start and what visibility can do; no study
@@ -126,99 +255,228 @@
       </ul>
     </section>
 
-    <!-- POTENTIAL: a chart of what the calculator's scenario would change (design phase; it
-         shows the visitor's own chosen value, never a promise) -->
-    <section class="section" id="potenzial">
+    <!-- VISIBILITY CHECK (D-78, replaces this page's calculator): five one-click questions,
+         no figures; js/check.js scores them (2/1/0 points each), names the level, shows the tip
+         of every question not yet answered with the best option, and hands the answers to the
+         Kontakt form (sessionStorage "bs-rechner", as the hotel calculator does). A self-check,
+         not a measurement. Copy is a draft for Nicolas and Daniel -->
+    <section class="section check" id="check">
       <header>
-        <p class="kicker">Was möglich ist</p>
-        <h2>Ihre ruhigen Monate, mit mehr Gästen.</h2>
-      </header>
-      <div class="ph" style="--ratio: 21 / 9"><b>Grafik folgt</b>Gäste im Sommer und an ruhigen Tagen, heute und mit dem Wert, den Sie im Rechner wählen</div>
-    </section>
-
-    <!-- CALCULATOR for this segment (D-59): the same panel as on the home page, copied by hand;
-         a change to its fields, defaults or sources goes into both. Formulas in js/evidence.js -->
-    <section class="section calculator" id="rechner">
-      <header>
-        <p class="kicker">Rechner</p>
-        <h2>Was das für Ihren Berg bedeutet.</h2>
+        <p class="kicker">Sichtbarkeits-Check</p>
+        <h2>Wie sichtbar ist Ihr Berg?</h2>
         <p>
-          Wenige Angaben genügen; die übrigen Werte sind Durchschnitte mit Quelle – passen Sie sie an.
+          Fünf Fragen, ein Klick pro Frage – Sie sehen sofort, wo Sie stehen und was am meisten bringt.
         </p>
       </header>
 
       <noscript>
         <p class="calc__nojs">
-          Der Rechner braucht JavaScript. Gern rechnen wir Ihr Potenzial gemeinsam durch –
-          <a href="../kontakt/">schreiben Sie uns</a>.
+          Der Check braucht JavaScript. Gern schauen wir uns Ihre Kanäle gemeinsam an –
+          <a href="../kontakt/?typ=bergbahn">schreiben Sie uns</a>.
         </p>
       </noscript>
-      <div class="calc" id="calc-bahn" data-model="bahn">
-        <form class="calc__inputs">
-          <div class="range">
-            <label for="b-guests">Gäste im Sommer (Ersteintritte, Mai–Oktober)</label> <output for="b-guests">100.000</output>
-            <input type="range" id="b-guests" name="guests" data-format="int" min="10000" max="1000000" step="5000" value="100000" />
-          </div>
-          <div class="range">
-            <label for="b-ticket">Ticketumsatz pro Gast (Durchschnitt, nicht Listenpreis)</label> <output for="b-ticket">18 €</output>
-            <input type="range" id="b-ticket" name="ticket" data-format="eur" min="5" max="60" step="1" value="18" />
-            <small>Standard: 18 € – Durchschnitt der deutschen Seilbahnen im Sommer 2025: 117,9 Mio. € Nettoverkehrseinnahmen
-              bei 6,6 Mio. Ersteintritten (VDS); im Winter 2024/25 rund 25 €. Einzelne Bahnen liegen deutlich darüber. Für
-              Österreich ist kein Sommerwert veröffentlicht (Winter 2024/25 rund 38 € Kassenumsatz je Ersteintritt, WKO) –
-              tragen Sie Ihren eigenen Wert ein.</small>
-          </div>
-
-          <details>
-            <summary>Annahmen anpassen</summary>
-            <div class="range">
-              <label for="b-gastro">Gastronomie am Berg pro Gast</label> <output for="b-gastro">9 €</output>
-              <input type="range" id="b-gastro" name="gastro" data-format="eur" min="0" max="30" step="1" value="9" />
-              <small>Standard: 9 € – Bayerische Zugspitzbahn 2024/25: 11,6 Mio. € Gastronomie- und Shopumsatz bei 1,27 Mio.
-                Besuchern; Jennerbahn 2024/25: 2,3 Mio. € bei 250.000 Ersteintritten. Kleinere Bahnen liegen darunter. Ist
-                die Gastronomie verpachtet, tragen Sie Ihren Pachtanteil ein.</small>
+      <div class="calc check__panel">
+        <form class="check__form">
+          <fieldset class="choice-group" data-tip="Regelmäßigkeit zählt: Wer mehrmals pro Woche postet, hat öfter Beiträge, die weit über die eigenen Follower hinaus gesehen werden.">
+            <legend>1 · Wie oft erscheint auf Ihren Kanälen etwas Neues?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-1" value="2" data-label="mehrmals pro Woche" /><span>mehrmals pro Woche</span></label>
+              <label class="choice"><input type="radio" name="check-1" value="1" data-label="etwa einmal pro Woche" /><span>etwa einmal pro Woche</span></label>
+              <label class="choice"><input type="radio" name="check-1" value="0" data-label="seltener" /><span>seltener</span></label>
             </div>
-          </details>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Der Winter verkauft sich fast von selbst. Sommer, Abende und Wochentage brauchen eigene Gründe: Wandern, Hütte, Sonnenaufgang, Events.">
+            <legend>2 · Zeigen Sie Ihren Berg auch im Sommer und an ruhigen Tagen?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-2" value="2" data-label="ja, regelmäßig" /><span>ja, regelmäßig</span></label>
+              <label class="choice"><input type="radio" name="check-2" value="1" data-label="manchmal" /><span>manchmal</span></label>
+              <label class="choice"><input type="radio" name="check-2" value="0" data-label="kaum" /><span>kaum</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Kurze Videos sind das Format, über das Menschen auf Instagram, Facebook und YouTube Neues entdecken – auch ohne Ihnen zu folgen.">
+            <legend>3 · Gibt es Reels oder kurze Videos?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-3" value="2" data-label="regelmäßig" /><span>regelmäßig</span></label>
+              <label class="choice"><input type="radio" name="check-3" value="1" data-label="ab und zu" /><span>ab und zu</span></label>
+              <label class="choice"><input type="radio" name="check-3" value="0" data-label="kaum" /><span>kaum</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Ortsangaben, Schlagwörter und gute Texte entscheiden, ob Sie erscheinen, wenn jemand nach Ihrem Ort oder Ausflugszielen sucht.">
+            <legend>4 · Findet man Sie in der Suche auf Instagram und Google, wenn jemand nach Ihrem Ort sucht?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-4" value="2" data-label="ja" /><span>ja</span></label>
+              <label class="choice"><input type="radio" name="check-4" value="1" data-label="weiß nicht" /><span>weiß nicht</span></label>
+              <label class="choice"><input type="radio" name="check-4" value="0" data-label="eher nicht" /><span>eher nicht</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="choice-group" data-tip="Jeder Beitrag sollte zeigen, wie man zu Ihnen kommt: zum Ticket, zum Wetter am Berg, zur Anfahrt.">
+            <legend>5 · Kann man Tickets online kaufen – und führen Ihre Beiträge dorthin?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="check-5" value="2" data-label="ja, beides" /><span>ja, beides</span></label>
+              <label class="choice"><input type="radio" name="check-5" value="1" data-label="Tickets ja, Links kaum" /><span>Tickets ja, Links kaum</span></label>
+              <label class="choice"><input type="radio" name="check-5" value="0" data-label="nein" /><span>nein</span></label>
+            </div>
+          </fieldset>
         </form>
 
-        <div class="calc__result" aria-live="polite">
-          <p>Jeder zusätzliche Gast bringt</p>
-          <p class="calc__total"><b>≈ 27 €</b> Ticket 18 € + Gastronomie 9 €</p>
-
-          <div class="range">
-            <label for="b-more">Mehr Gäste im Sommer und an ruhigen Tagen</label> <output for="b-more">+10 %</output>
-            <input type="range" id="b-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
-            <small>Frei wählbar, kein Erfahrungswert. Für Bergbahnen gibt es keine Studie, die die Wirkung eigener
-              Social-Media-Arbeit misst.</small>
-          </div>
-          <p class="calc__out"><b>≈ 270.000 €</b> zusätzlicher Umsatz pro Jahr
-            <small>≈ 10.000 zusätzliche Gäste × 27 €</small>
-          </p>
-
+        <div class="calc__result check__result" aria-live="polite">
+          <p>Ihr Ergebnis</p>
+          <p class="calc__total"><b>– / 10</b> <span class="check__level">Beantworten Sie die fünf Fragen.</span></p>
+          <ol class="check__bar" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li></ol>
+          <ul class="check__tips"></ul>
           <p class="calc__note">
-            Beispielrechnung mit Ihren Angaben und den genannten Durchschnittswerten. Umsatz, nicht Gewinn. Ein großer
-            Teil der Kosten einer Bergbahn – Personal, Abschreibungen, Wartung – fällt unabhängig von der Gästezahl an;
-            bei der Jennerbahn entfielen 2023/24 nur rund 8 % des Umsatzes auf Material, Strom und Betriebsstoffe. Die
-            Gastronomie hat Wareneinsatz. Keine Zusage über Ergebnisse.
+            Ein Selbst-Check, keine Messung: Er zeigt, wo die größten Hebel liegen. Was er Ihnen konkret
+            bringt, schauen wir uns gern gemeinsam an.
           </p>
-          <a class="btn btn--gold" href="../kontakt/?typ=bergbahn&amp;werte=1">Mit diesen Werten anfragen</a>
+          <a class="btn btn--gold" href="../kontakt/?typ=bergbahn&amp;werte=1">Mit diesem Ergebnis anfragen</a>
         </div>
       </div>
-
     </section>
 
+    <!-- SCOPE (D-71): what the standard package holds (D-24, D-58, D-72) and what it does
+         not. Comment replies and how the work is automated stay out of the copy until they
+         are decided (D-36, Raffaele 2026-10-22) -->
+    <section class="section scope" id="leistungen">
+      <header>
+        <p class="kicker">Leistungen</p>
+        <h2>Was gehört dazu – und was nicht?</h2>
+      </header>
+      <div class="scope__cols">
+        <div>
+          <h3>Das gehört dazu</h3>
+          <ul>
+            <li>Kennenlernen und erste Aufnahmen bei Ihnen am Berg</li>
+            <li>Zwei Shootings im Jahr, im Sommer und im Winter</li>
+            <li>Reels, Posts und Stories für Ihre Kanäle: ausgewählt, bearbeitet, geplant und veröffentlicht</li>
+            <li>Texte, Schlagwörter und Ortsangaben, mit denen man Sie auch in der Suche findet – auf Instagram, YouTube und Google</li>
+            <li>Jeder Beitrag von unserem Team geprüft – auf Wunsch auch von Ihnen</li>
+            <li>Ein regelmäßiger Bericht, was davon bei Ihren Gästen ankommt</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Nicht im Standardpaket</h3>
+          <ul>
+            <li>Werbeanzeigen, Ihr Google-Unternehmensprofil und Ihre Website – das sind eigene Leistungen</li>
+            <li>Einzelne Produktionen ohne laufende Betreuung – auf Anfrage separat</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICE (D-71, D-34): no prices; what the offer depends on, leading to the enquiry -->
+    <section class="section cost" id="kosten">
+      <header>
+        <p class="kicker">Angebot</p>
+        <h2>Was kostet das?</h2>
+        <p>
+          Feste Pakete gibt es bei uns nicht. Sie bekommen ein individuelles Angebot – es hängt vor allem von vier Dingen ab.
+        </p>
+      </header>
+      <ul class="metrics facts">
+        <li class="metric"><b>Bahnen</b> Eine Bahn oder ein Verbund mehrerer Bahnen und Gebiete.</li>
+        <li class="metric"><b>Saisons</b> Winter, Sommer oder das ganze Jahr – und was am Berg dazugehört.</li>
+        <li class="metric"><b>Umfang</b> Wie viele Reels, Posts und Stories im Monat.</li>
+        <li class="metric"><b>Kanäle</b> Welche Plattformen wir für Sie bespielen.</li>
+      </ul>
+      <div class="hero__actions">
+        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+      </div>
+    </section>
+
+    <!-- FAQ (D-71, D-77): only this segment's own questions, the general ones once, on Über uns;
+         a draft for Nicolas and Daniel -->
+    <section class="section faq" id="fragen">
+      <header>
+        <p class="kicker">Fragen</p>
+        <h2>Fragen zu Social Media für Bergbahnen.</h2>
+      </header>
+      <div class="faq__list">
+        <article>
+          <h3>Bringt Social Media wirklich mehr Gäste?</h3>
+          <p>
+            Wie viele Gäste die eigene Social-Media-Arbeit einer Bergbahn bringt, hat bisher keine Studie gemessen.
+            Deshalb messen wir es bei Ihnen: mit eigenen Links und Codes, etwa für Tickets und Events.
+          </p>
+        </article>
+        <article>
+          <h3>Sind Sie im Sommer und im Winter da?</h3>
+          <p>
+            Ja. Wir drehen in beiden Saisons, damit Ihr Berg das ganze Jahr Gründe für einen Ausflug zeigt – Pisten
+            im Winter, Wandern, Biken und Events im Sommer.
+          </p>
+        </article>
+      </div>
+      <p class="faq__more">
+        Fragen zu Kosten, Ablauf und Zusammenarbeit beantworten wir
+        <a href="../ueber-uns/#fragen">auf unserer Über-uns-Seite</a>.
+      </p>
+    </section>
+
+    <!-- ENQUIRY: the stepped onboarding form comes here in phase 3 (D-66); until then the
+         Kontakt page -->
     <section class="section contact" id="kontakt">
       <header>
         <p class="kicker">Sprechen wir</p>
         <h2>Erzählen Sie uns von Ihrem Berg.</h2>
         <p>
-          Schreiben Sie uns kurz, wo Sie heute stehen – wir melden uns innerhalb
-          von zwei Werktagen mit Ideen, kein Pitch, kein Druck.
+          Schreiben Sie uns kurz, wo Sie heute stehen – Bahnen, Saisons und Ihre Kanäle helfen uns für ein
+          erstes Angebot. Wir melden uns innerhalb von zwei Werktagen, kein Pitch, kein Druck.
         </p>
       </header>
       <div class="hero__actions">
         <a href="../kontakt/?typ=bergbahn" class="btn btn--gold">Projekt besprechen</a>
-        <a href="#rechner" class="btn btn--ghost">Potenzial berechnen</a>
+        <a href="#check" class="btn btn--ghost">Sichtbarkeit prüfen</a>
       </div>
+      <!-- the people behind the enquiry, linking to the Über uns page (D-76: the full team
+           is only there) -->
+      <div class="people">
+        <p class="people__title">Ihre Ansprechpartner</p>
+        <ul>
+          <li>
+            <img src="../assets/img/team-nicolas-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Nicolas Lekai</b> <span>Creative Direction</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-daniel-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Daniel Lenzenhuber</b> <span>Management</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-raffaele-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Raffaele Fusco</b> <span>Web Designer &amp; Developer</span>
+          </li>
+        </ul>
+        <a class="people__more" href="../ueber-uns/">Mehr über uns</a>
+      </div>
+    </section>
+
+    <!-- OTHER AREAS (D-71): the other two segment pages -->
+    <section class="section doors doors--more" id="weitere-bereiche">
+      <header>
+        <p class="kicker">Weitere Bereiche</p>
+        <h2>Auch für Hotels und Thermen.</h2>
+      </header>
+      <ul class="doors__list">
+        <li class="door">
+          <a href="../hotels-resorts/">
+            <img src="../assets/img/segment-hotel-720.webp" alt="" width="720" height="480"
+              srcset="../assets/img/segment-hotel-480.webp 480w, ../assets/img/segment-hotel-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Hotels &amp; Resorts</h3>
+            <p>Mehr belegte Zimmer zwischen den Saisons – und mehr Gäste, die direkt bei Ihnen buchen.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+        <li class="door">
+          <a href="../wellness-thermen/">
+            <img src="../assets/img/segment-therme-720.webp" alt="" width="720" height="480"
+              srcset="../assets/img/segment-therme-480.webp 480w, ../assets/img/segment-therme-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Wellness &amp; Thermen</h3>
+            <p>Mehr Besuche in den ruhigen Monaten – und mehr Gutscheine, die verschenkt werden.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+      </ul>
     </section>
   </main>
 
@@ -232,16 +490,17 @@
     <div class="foot__cols">
       <div>
         <p>Studio</p>
-        <span>München · Bayern</span>
-        <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
+        <span>Füssen · Allgäu</span>
+        <a href="../ueber-uns/">Über uns</a>
         <a href="../kontakt/">Kontakt</a>
       </div>
       <div>
         <p>Social</p>
-        <!-- profile URLs pending; glyphs in assets/icons/social.svg (one colour, never gold) -->
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#tiktok" /></svg>TikTok</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</a>
+        <!-- profile URLs pending: plain text until they exist (C7), then <a href> again;
+             glyphs in assets/icons/social.svg (one colour, never gold) -->
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#facebook" /></svg>Facebook</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</span>
       </div>
       <div>
         <p>Rechtliches</p>
@@ -257,8 +516,9 @@
 
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=67"></script>
-  <script src="../js/evidence.js?v=7"></script>
+  <script src="../js/check.js?v=1"></script>
   <script src="../js/nav.js?v=2"></script>
+  <script src="../js/bergfahrt.js?v=7"></script>
 </body>
 
 </html>

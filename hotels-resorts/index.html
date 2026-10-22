@@ -21,7 +21,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=93" />
+  <link rel="stylesheet" href="../css/style.css?v=99" />
 </head>
 
 <body>
@@ -34,12 +34,12 @@
     <!-- the same header in every page, copied by hand (D-38): change it in all of them.
          On screens up to 1000px this <nav> becomes the full-screen menu (js/nav.js) -->
     <nav id="menu" aria-label="Hauptmenü">
+      <a href="../">Home</a>
       <a href="../hotels-resorts/" aria-current="page">Hotels &amp; Resorts</a>
       <a href="../bergbahnen/">Bergbahnen</a>
       <a href="../wellness-thermen/">Wellness &amp; Thermen</a>
-      <a href="../#ablauf">So arbeiten wir</a>
-      <a href="../#ueber-uns">Über uns</a>
-      <a href="#rechner" class="nav__cta">Potenzial berechnen</a>
+      <a href="../ueber-uns/">Über uns</a>
+      <a href="../kontakt/?typ=hotel" class="nav__cta">Anfrage starten</a>
       <!-- only in the menu on phones and tablets -->
       <div class="nav__meta">
         <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
@@ -48,101 +48,200 @@
         <a href="../datenschutz.html">Datenschutz</a>
       </div>
     </nav>
+    <!-- the page the visitor is on, next to the menu button on phones and tablets -->
+    <span class="nav__here" aria-hidden="true">Hotels</span>
     <button class="nav__toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Menü öffnen" hidden>
       <span></span>
     </button>
   </header>
 
-  <!-- SEGMENT PAGE (D-38): placeholders (.ph) mark where Nicolas's frames, images or video
-       go; copy provisional, figures to be corrected (ISSUES C3) -->
+  <!-- SEGMENT PAGE (D-38, order D-64/D-71): the opening scene, at a glance, the process,
+       examples, figures and calculator, scope, price, questions, team, enquiry, the other
+       areas. Copy provisional (drafts for Nicolas and Daniel), figures to be corrected
+       (ISSUES C3); the concept frames stand in until Nicolas's material exists -->
   <main id="top">
-    <section class="page-hero">
-      <div class="ph"><b>Platzhalter · Frames oder Video</b>Hotel im Abendlicht: Fassade, Zimmer mit Ausblick, Spa, Team – Querformat für große Bildschirme, Hochformat für Handys</div>
-      <div class="page-hero__copy">
-        <p class="kicker kicker--light">Hotels &amp; Resorts</p>
-        <h1>Ihr Haus in seinem besten Licht – das ganze Jahr.</h1>
-        <p>Wir drehen bei Ihnen vor Ort und betreuen Ihre Kanäle dazwischen, damit Gäste Sie kennen, bevor sie ein Portal öffnen.</p>
-        <div class="hero__actions">
-          <a href="#rechner" class="btn btn--gold">Potenzial berechnen</a>
-          <a href="../kontakt/?typ=hotel" class="btn btn--ghost">Projekt besprechen</a>
+    <!-- OPENING SCENE (D-64): the hotel frames scrubbed by the scroll (js/main.js reads
+         data-scene); the copy stays put. Without JS a still frame (style.css) -->
+    <section class="cine hero hero--page" data-scene="hero">
+      <div class="cine__stage">
+        <canvas aria-hidden="true"></canvas>
+        <div class="cine__scrim"></div>
+        <div class="cine__copy">
+          <nav class="crumbs kicker kicker--light" aria-label="Pfad">
+            <a href="../">Home</a> <span aria-hidden="true">›</span> <span aria-current="page">Hotels &amp; Resorts</span>
+          </nav>
+          <h1>Ihr Haus in seinem besten Licht – das ganze Jahr.</h1>
+          <p>Wir drehen bei Ihnen vor Ort und betreuen Ihre Kanäle dazwischen, damit Gäste Sie kennen, bevor sie ein Portal öffnen.</p>
+          <div class="hero__actions">
+            <a href="#rechner" class="btn btn--gold">Potenzial berechnen</a>
+            <a href="#kontakt" class="btn btn--ghost">Anfrage starten</a>
+          </div>
         </div>
+        <div class="hero__cue" aria-hidden="true">Scrollen</div>
       </div>
     </section>
 
-    <!-- CONTEXT: this segment, its season and its problem (copy is a first draft) -->
-    <section class="section" id="kontext">
+    <!-- AT A GLANCE (D-71, replaces the context block): for whom, what, where, how the
+         offer comes about, with the date of the text -->
+    <section class="section glance section--split" id="ueberblick">
       <header>
-        <p class="kicker">Hotels &amp; Resorts</p>
+        <p class="kicker">Auf einen Blick</p>
         <h2>Volle Häuser – nicht nur in der Hochsaison.</h2>
         <p>
           Zwischen den Saisons stehen auch in guten Häusern Zimmer leer, und immer mehr Gäste buchen über Portale. Wir zeigen Ihr Haus dort, wo Reisen beginnen: Zimmer, Küche, Wellness und die Menschen, die es prägen – damit Gäste Sie kennen, bevor sie ein Portal öffnen.
         </p>
       </header>
-      <div class="ph" style="--ratio: 21 / 9"><b>Platzhalter · Bild oder Frames</b>Zimmer, Küche oder Spa im besten Licht, Querformat</div>
+      <dl class="glance__list">
+        <div>
+          <dt>Für wen</dt>
+          <dd>Hotels und Resorts in den Alpen – vom inhabergeführten Haus bis zur Gruppe mit mehreren Häusern.</dd>
+        </div>
+        <div>
+          <dt>Was wir machen</dt>
+          <dd>Shootings bei Ihnen im Sommer und im Winter, dazwischen Reels, Posts und Stories für Ihre Kanäle.</dd>
+        </div>
+        <div>
+          <dt>Wo</dt>
+          <dd>Sitz in Füssen im Allgäu, unterwegs im ganzen Alpenraum und darüber hinaus.</dd>
+        </div>
+        <div>
+          <dt>Angebot</dt>
+          <dd>Ein individuelles Angebot, nachdem wir Ihr Haus kennengelernt haben – keine Pakete von der Stange.</dd>
+        </div>
+      </dl>
+      <p class="glance__date">Stand: Oktober 2026</p>
+      <div class="hero__actions">
+        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+        <a href="../#ablauf" class="btn btn--ghost">So arbeiten wir</a>
+      </div>
     </section>
 
-    <!-- FIGURES: the empty months (moved from the home page, D-59). Static markup works
-         without JS; js/evidence.js adds the readout and the bar growth -->
+    <!-- EXAMPLES: the phones as a swipe row with AI-generated example images (D-61: labelled
+         in the lead), replaced by real pilot content; format, title and one line each -->
+    <section class="section impact" id="beispiele">
+      <header>
+        <p class="kicker">So kann es aussehen</p>
+        <h2>Ihr Haus im Feed.</h2>
+        <p>
+          Beispiele, wie Ihre Beiträge aussehen können – die Bilder sind KI-generiert. Mit dem ersten Pilotprojekt zeigen wir hier echte Beiträge.
+        </p>
+      </header>
+      <div class="phones">
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-zimmer-473.webp" alt="Beispiel-Story: Zimmer mit Ausblick" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-zimmer-320.webp 320w, ../assets/img/phone-hotel-zimmer-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Zimmer mit Ausblick</b> Der erste Blick am Morgen</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-terrasse-473.webp" alt="Beispiel-Reel: Sommer auf der Terrasse" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-terrasse-320.webp 320w, ../assets/img/phone-hotel-terrasse-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Sommer auf der Terrasse</b> Ankommen und durchatmen</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-winterabend-473.webp" alt="Beispiel-Reel: Winterabend" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-winterabend-320.webp 320w, ../assets/img/phone-hotel-winterabend-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Winterabend</b> Das Haus zur blauen Stunde</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-pool-473.webp" alt="Beispiel-Story: Infinity-Pool" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-pool-320.webp 320w, ../assets/img/phone-hotel-pool-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Infinity-Pool</b> Schwimmen mit Bergblick</p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="phones__hint" aria-hidden="true">Wischen</p>
+    </section>
+
+    <!-- FIGURES (D-77, from the home page): the evidence chain, a sourced fact per link and our
+         answer; a static list for now, later the content of this page's own drawn scene.
+         Copy provisional, figures to be corrected (ISSUES C3) -->
     <section class="section evidence" id="zahlen">
       <header>
         <p class="kicker">Die Zahlen dahinter</p>
         <h2>
-          In den ruhigen Monaten bleiben in Bayern zwei von drei Betten leer.
+          Erst gesehen, dann direkt gebucht.
         </h2>
         <p>
-          Die Saison hat Lücken – und es sind jedes Jahr dieselben. Amtliche
-          Zahlen für alle Beherbergungsbetriebe ab zehn Betten, Monat für Monat.
+          Warum es zählt, dass Gäste Sie kennen, bevor sie ein Portal öffnen –
+          belegt mit amtlichen Zahlen.
         </p>
       </header>
 
-      <!-- one column = all beds, the fill = occupied beds (LfStat 2025, Bavaria) -->
-      <figure class="chart" id="season">
-        <div class="chart__head">
-          <p class="chart__readout" aria-live="polite">
-            <b>70,7 % der Betten leer</b>
-            <span>im Januar – im ruhigsten Monat des Jahres.</span>
-          </p>
-        </div>
-        <div class="chart__plot">
-          <div class="chart__grid" aria-hidden="true">
-            <span style="bottom: 100%">100 %</span>
-            <span style="bottom: 75%">75 %</span>
-            <span style="bottom: 50%">50 %</span>
-            <span style="bottom: 25%">25 %</span>
+      <!-- the chain: a sourced fact per link and our answer ("Was wir tun"); on a vertical
+           rail that draws itself from link to link while scrolling (CSS only, static
+           without support or with reduced motion) -->
+      <ol class="chain">
+        <li>
+          <div class="chain__fact">
+            <h3>Zuerst gesehen werden</h3>
+            <p class="metric">
+              <b>99 %</b> der Gäste, die ein Hotel erst auf Booking.com finden,
+              buchen es auch dort.
+            </p>
+            <small>Bundeskartellamt 2020</small>
           </div>
-          <button class="month month--quiet" type="button" aria-pressed="true" style="--v: 29.3" data-month="Januar">Januar: 29,3 % belegt</button>
-          <button class="month month--quiet" type="button" style="--v: 32.1" data-month="Februar">Februar: 32,1 % belegt</button>
-          <button class="month month--quiet" type="button" style="--v: 31.6" data-month="März">März: 31,6 % belegt</button>
-          <button class="month" type="button" style="--v: 37.9" data-month="April">April: 37,9 % belegt</button>
-          <button class="month" type="button" style="--v: 40.1" data-month="Mai">Mai: 40,1 % belegt</button>
-          <button class="month" type="button" style="--v: 45" data-month="Juni">Juni: 45,0 % belegt</button>
-          <button class="month" type="button" style="--v: 49.3" data-month="Juli">Juli: 49,3 % belegt</button>
-          <button class="month month--peak" type="button" style="--v: 51.8" data-month="August">August: 51,8 % belegt</button>
-          <button class="month" type="button" style="--v: 44.8" data-month="September">September: 44,8 % belegt</button>
-          <button class="month" type="button" style="--v: 41.7" data-month="Oktober">Oktober: 41,7 % belegt</button>
-          <button class="month month--quiet" type="button" style="--v: 32.6" data-month="November">November: 32,6 % belegt</button>
-          <button class="month" type="button" style="--v: 35" data-month="Dezember">Dezember: 35,0 % belegt</button>
-        </div>
-        <p class="chart__axis" aria-hidden="true">
-          <span>Jan</span><span>Feb</span><span>Mär</span><span>Apr</span><span>Mai</span><span>Jun</span>
-          <span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
-        </p>
-        <p class="chart__legend" aria-hidden="true">
-          <span class="chart__key chart__key--fill">belegte Betten</span>
-          <span class="chart__key chart__key--empty">leere Betten</span>
-        </p>
-        <p class="chart__note">
-          Gezählt werden Betten, nicht Zimmer: Ein Doppelzimmer mit nur einem Gast
-          ist zur Hälfte leer. Deshalb liegt die Bettenauslastung unter der
-          Zimmerauslastung – und selbst im August bleibt fast jedes zweite Bett frei.
-        </p>
-        <figcaption class="chart__source">
-          Quelle: Bayerisches Landesamt für Statistik, Tourismus in Bayern 2025 –
-          Auslastung der angebotenen Betten, alle Betriebe ab 10 Betten
-          einschließlich Camping.
-        </figcaption>
-      </figure>
-
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Wir machen Ihr Haus dort sichtbar, wo Reisen beginnen: auf Instagram,
+              Facebook und YouTube, regelmäßig und im Stil Ihres Hauses – bevor jemand
+              überhaupt ein Portal öffnet.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="chain__fact">
+            <h3>Direkt gebucht</h3>
+            <p class="metric">
+              <b>2 von 3</b> Direktbuchungen kommen von Gästen, die das Haus schon
+              kannten.
+            </p>
+            <small>Bundeskartellamt 2020</small>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Jeder Beitrag führt zu Ihnen: Profil, Website, Telefon. Wer Sie über
+              Social Media kennenlernt, findet den direkten Weg – nicht den über
+              das Portal.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="chain__fact">
+            <h3>Provision gespart</h3>
+            <p class="metric">
+              <b>halb so oft</b> werden Direktbuchungen storniert wie Buchungen über
+              Booking.com.
+            </p>
+            <small>Stornoquote 9 % zu 19 %: HOTREC 2026 · Preisfreiheit: EU Digital Markets Act</small>
+          </div>
+          <div class="chain__answer">
+            <p class="chain__label">Was wir tun</p>
+            <p>
+              Seit 2024 dürfen Sie direkt günstiger sein als auf dem Portal. Wir
+              zeigen Ihre Direktangebote Ihren Gästen und messen, was bei den
+              Buchungen ankommt. Wie viel Provision das ausmacht, zeigt der
+              <a href="#rechner">Rechner</a>.
+            </p>
+          </div>
+        </li>
+      </ol>
     </section>
 
     <!-- WHY VISIBILITY (D-59): where trips start and what visibility can do; no study
@@ -166,16 +265,6 @@
           <small>Wichman, PNAS 2024: 62 US-Nationalparks, 2000–2019. Kein Erfahrungswert für einzelne Betriebe.</small>
         </li>
       </ul>
-    </section>
-
-    <!-- POTENTIAL: a chart of what the calculator's scenario would change (design phase; it
-         shows the visitor's own chosen value, never a promise) -->
-    <section class="section" id="potenzial">
-      <header>
-        <p class="kicker">Was möglich ist</p>
-        <h2>Ihre ruhigen Monate, mit mehr Gästen.</h2>
-      </header>
-      <div class="ph" style="--ratio: 21 / 9"><b>Grafik folgt</b>Bettenauslastung Ihrer Region Monat für Monat, die ruhigen Monate gefüllt mit dem Wert, den Sie im Rechner wählen</div>
     </section>
 
     <!-- CALCULATOR for this segment (D-59): the same panel as on the home page, copied by hand;
@@ -232,8 +321,8 @@
         </form>
 
         <div class="calc__result" aria-live="polite">
-          <p>Provision, die Sie heute pro Jahr an Portale zahlen</p>
-          <p class="calc__total"><b>≈ 50.300 €</b> ≈ 1.260 € pro Zimmer und Jahr</p>
+          <p>Ihr Plus pro Jahr</p>
+          <p class="calc__total"><b>≈ 24.600 €</b> weniger Provision und mehr Zimmerumsatz</p>
 
           <div class="range">
             <label for="c-shift">Gäste, die künftig direkt statt über Portale buchen</label> <output for="c-shift">10 %</output>
@@ -265,19 +354,150 @@
 
     </section>
 
+    <!-- SCOPE (D-71): what the standard package holds (D-24, D-58, D-72) and what it does
+         not. Comment replies and how the work is automated stay out of the copy until they
+         are decided (D-36, Raffaele 2026-10-22) -->
+    <section class="section scope" id="leistungen">
+      <header>
+        <p class="kicker">Leistungen</p>
+        <h2>Was gehört dazu – und was nicht?</h2>
+      </header>
+      <div class="scope__cols">
+        <div>
+          <h3>Das gehört dazu</h3>
+          <ul>
+            <li>Kennenlernen und erste Aufnahmen bei Ihnen vor Ort</li>
+            <li>Zwei Shootings im Jahr, im Sommer und im Winter</li>
+            <li>Reels, Posts und Stories für Ihre Kanäle: ausgewählt, bearbeitet, geplant und veröffentlicht</li>
+            <li>Texte, Schlagwörter und Ortsangaben, mit denen man Sie auch in der Suche findet – auf Instagram, YouTube und Google</li>
+            <li>Jeder Beitrag von unserem Team geprüft – auf Wunsch auch von Ihnen</li>
+            <li>Ein regelmäßiger Bericht, was davon bei Ihren Gästen ankommt</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Nicht im Standardpaket</h3>
+          <ul>
+            <li>Werbeanzeigen, Ihr Google-Unternehmensprofil und Ihre Website – das sind eigene Leistungen</li>
+            <li>Einzelne Produktionen ohne laufende Betreuung – auf Anfrage separat</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICE (D-71, D-34): no prices; what the offer depends on, leading to the enquiry -->
+    <section class="section cost" id="kosten">
+      <header>
+        <p class="kicker">Angebot</p>
+        <h2>Was kostet das?</h2>
+        <p>
+          Feste Pakete gibt es bei uns nicht. Sie bekommen ein individuelles Angebot – es hängt vor allem von vier Dingen ab.
+        </p>
+      </header>
+      <ul class="metrics facts">
+        <li class="metric"><b>Häuser</b> Ein Haus oder eine Gruppe mit mehreren Häusern – und wie weit sie auseinanderliegen.</li>
+        <li class="metric"><b>Saisons</b> Ganzjährig geöffnet oder Sommer und Winter mit Pause dazwischen.</li>
+        <li class="metric"><b>Umfang</b> Wie viele Reels, Posts und Stories im Monat.</li>
+        <li class="metric"><b>Kanäle</b> Welche Plattformen wir für Sie bespielen.</li>
+      </ul>
+      <div class="hero__actions">
+        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+      </div>
+    </section>
+
+    <!-- FAQ (D-71, D-77): only this segment's own questions, the general ones once, on Über uns;
+         a draft for Nicolas and Daniel -->
+    <section class="section faq" id="fragen">
+      <header>
+        <p class="kicker">Fragen</p>
+        <h2>Fragen zu Social Media für Hotels.</h2>
+      </header>
+      <div class="faq__list">
+        <article>
+          <h3>Bringt Social Media wirklich Buchungen?</h3>
+          <p>
+            Wie viele Buchungen die eigene Social-Media-Arbeit einem Hotel bringt, hat bisher keine Studie gemessen.
+            Deshalb messen wir es bei Ihnen: mit eigenen Links und Codes und am Anteil Ihrer Direktbuchungen.
+          </p>
+        </article>
+        <article>
+          <h3>Dürfen wir direkt günstiger sein als auf Booking.com?</h3>
+          <p>
+            Ja. In Deutschland seit 2016 (Bundeskartellamt, bestätigt vom BGH 2021), EU-weit seit dem
+            14.11.2024 durch den Digital Markets Act, in Österreich gesetzlich seit Ende 2016.
+          </p>
+        </article>
+      </div>
+      <p class="faq__more">
+        Fragen zu Kosten, Ablauf und Zusammenarbeit beantworten wir
+        <a href="../ueber-uns/#fragen">auf unserer Über-uns-Seite</a>.
+      </p>
+    </section>
+
+    <!-- ENQUIRY: the stepped onboarding form comes here in phase 3 (D-66); until then the
+         Kontakt page -->
     <section class="section contact" id="kontakt">
       <header>
         <p class="kicker">Sprechen wir</p>
         <h2>Erzählen Sie uns von Ihrem Haus.</h2>
         <p>
-          Schreiben Sie uns kurz, wo Sie heute stehen – wir melden uns innerhalb
-          von zwei Werktagen mit Ideen, kein Pitch, kein Druck.
+          Schreiben Sie uns kurz, wo Sie heute stehen – Größe, Saisons und Ihre Kanäle helfen uns für ein
+          erstes Angebot. Wir melden uns innerhalb von zwei Werktagen, kein Pitch, kein Druck.
         </p>
       </header>
       <div class="hero__actions">
         <a href="../kontakt/?typ=hotel" class="btn btn--gold">Projekt besprechen</a>
         <a href="#rechner" class="btn btn--ghost">Potenzial berechnen</a>
       </div>
+      <!-- the people behind the enquiry, linking to the Über uns page (D-76: the full team
+           is only there) -->
+      <div class="people">
+        <p class="people__title">Ihre Ansprechpartner</p>
+        <ul>
+          <li>
+            <img src="../assets/img/team-nicolas-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Nicolas Lekai</b> <span>Creative Direction</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-daniel-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Daniel Lenzenhuber</b> <span>Management</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-raffaele-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Raffaele Fusco</b> <span>Web Designer &amp; Developer</span>
+          </li>
+        </ul>
+        <a class="people__more" href="../ueber-uns/">Mehr über uns</a>
+      </div>
+    </section>
+
+    <!-- OTHER AREAS (D-71): the other two segment pages -->
+    <section class="section doors doors--more" id="weitere-bereiche">
+      <header>
+        <p class="kicker">Weitere Bereiche</p>
+        <h2>Auch für Bergbahnen und Thermen.</h2>
+      </header>
+      <ul class="doors__list">
+        <li class="door">
+          <a href="../bergbahnen/">
+            <img src="../assets/img/segment-bergbahn-720.webp" alt="" width="720" height="480"
+              srcset="../assets/img/segment-bergbahn-480.webp 480w, ../assets/img/segment-bergbahn-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Bergbahnen</h3>
+            <p>Mehr Gäste im Sommer, an ruhigen Tagen und bei Ihren Events am Berg.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+        <li class="door">
+          <a href="../wellness-thermen/">
+            <img src="../assets/img/segment-therme-720.webp" alt="" width="720" height="480"
+              srcset="../assets/img/segment-therme-480.webp 480w, ../assets/img/segment-therme-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Wellness &amp; Thermen</h3>
+            <p>Mehr Besuche in den ruhigen Monaten – und mehr Gutscheine, die verschenkt werden.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+      </ul>
     </section>
   </main>
 
@@ -291,16 +511,17 @@
     <div class="foot__cols">
       <div>
         <p>Studio</p>
-        <span>München · Bayern</span>
-        <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
+        <span>Füssen · Allgäu</span>
+        <a href="../ueber-uns/">Über uns</a>
         <a href="../kontakt/">Kontakt</a>
       </div>
       <div>
         <p>Social</p>
-        <!-- profile URLs pending; glyphs in assets/icons/social.svg (one colour, never gold) -->
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#tiktok" /></svg>TikTok</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</a>
+        <!-- profile URLs pending: plain text until they exist (C7), then <a href> again;
+             glyphs in assets/icons/social.svg (one colour, never gold) -->
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#facebook" /></svg>Facebook</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</span>
       </div>
       <div>
         <p>Rechtliches</p>
@@ -316,7 +537,7 @@
 
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=67"></script>
-  <script src="../js/evidence.js?v=7"></script>
+  <script src="../js/evidence.js?v=8"></script>
   <script src="../js/nav.js?v=2"></script>
 </body>
 

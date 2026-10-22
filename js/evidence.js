@@ -1,87 +1,13 @@
-/* ============ BLAUE STUNDE — figures section and calculator ============
-   Progressive enhancement for #zahlen and #rechner: the markup already shows every
-   chart and the default calculator result, so this file only adds the readouts,
-   the view toggle, the bar growth and the live calculation. Its own file on purpose:
-   an error here cannot stop the scroll engine in main.js (and vice versa).
-   ======================================================================= */
+/* ============ BLAUE STUNDE — calculator ============
+   Progressive enhancement for #rechner: the markup already shows the default result,
+   so this file only adds the live calculation, the tabs and the hand-off to the Kontakt
+   page. (The charts it also drove were removed with the figures, D-68.) Its own file on
+   purpose: an error here cannot stop the scroll engine in main.js (and vice versa).
+   ==================================================== */
 (() => {
   const num1 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const num0 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 });
   const num2 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // bars start at zero and grow once the chart is on screen
-  function growOnView(chart) {
-    if (reduce || !('IntersectionObserver' in window)) return;
-    chart.classList.add('chart--wait');
-    const io = new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting) return;
-      chart.classList.remove('chart--wait');
-      io.disconnect();
-    }, { threshold: 0.15 });
-    io.observe(chart);
-  }
-
-  // click / tap selects an item and keeps it in the readout; hover and focus only
-  // preview another one and fall back to the selection. The markup's readout text
-  // belongs to the item that starts with aria-pressed="true".
-  function readout(chart, items, render) {
-    const out = chart.querySelector('.chart__readout');
-    let selected = out.innerHTML;
-    const restore = () => { out.innerHTML = selected; };
-    items.forEach(item => {
-      if (!item.hasAttribute('aria-pressed')) item.setAttribute('aria-pressed', 'false');
-      item.addEventListener('mouseenter', () => { out.innerHTML = render(item); });
-      item.addEventListener('focus', () => { out.innerHTML = render(item); });
-      item.addEventListener('mouseleave', restore);
-      item.addEventListener('blur', restore);
-      item.addEventListener('click', () => {
-        items.forEach(o => o.setAttribute('aria-pressed', o === item ? 'true' : 'false'));
-        selected = render(item);
-        restore();
-      });
-    });
-    return { out, restore };
-  }
-
-  /* season: share of empty beds per month */
-  const season = document.getElementById('season');
-  if (season) {
-    const months = [...season.querySelectorAll('.month')];
-    readout(season, months, m => {
-      const v = parseFloat(m.style.getPropertyValue('--v'));
-      return `<b>${num1.format(100 - v)} % der Betten leer</b><span>${m.dataset.month} 2025 · ${num1.format(v)} % belegt</span>`;
-    });
-    growOnView(season);
-  }
-
-  /* activity: hits per posting frequency, and a toggle to the growth view */
-  const activity = document.getElementById('activity');
-  if (activity) {
-    const levels = [...activity.querySelectorAll('.level')];
-    const hits = readout(activity, levels, l => {
-      const med = +l.dataset.med, top = +l.dataset.top;
-      if (!top) return '<b>0 Aufrufe</b><span>Ohne Social Media entdeckt Sie dort niemand – auch kein Algorithmus.</span>';
-      return `<b>${num0.format(top)} Aufrufe</b><span>${l.dataset.label}: die besten 10 % der Posts – ` +
-        `${Math.round(top / med)}× ein typischer Post (${num0.format(med)}).</span>`;
-    });
-    const growthText = '<b>+14 % statt +6 %</b><span>Follower nach einem Jahr mit 3–5 statt 1–2 Posts pro Woche (hochgerechnet).</span>';
-
-    const toggles = [...activity.querySelectorAll('.toggle button')];
-    toggles.forEach(t => {
-      t.addEventListener('click', () => {
-        toggles.forEach(o => {
-          const on = o === t;
-          o.setAttribute('aria-pressed', on ? 'true' : 'false');
-          document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
-        });
-        // the readout belongs to the visible view
-        if (t.getAttribute('aria-controls') === 'activity-growth') hits.out.innerHTML = growthText;
-        else hits.restore();
-      });
-    });
-    growOnView(activity);
-  }
 
   /* calculators: one panel per business type, switched by the tabs above them.
      Each panel declares its inputs (name + data-format) and outputs in the markup;
@@ -97,29 +23,30 @@
     plus: x => `+${x} %`,
     pts: x => `+${x} Punkte`,
   };
+  // each panel leads with what the business gains per year (Nicolas, 2026-10-22: what a
+  // visitor pays today, or might pay, scared people); the parts follow below the sliders
   const MODELS = {
-    // hotel: commission paid today, saving from direct bookings, low-season revenue
+    // hotel: commission saved by direct bookings + room revenue in the three weakest months
     hotel: v => {
       const otaNights = v.rooms * 365 * (v.occ / 100) * (v.ota / 100);
       const otaRevenue = otaNights * v.adr;
-      const paid = otaRevenue * (v.com / 100);
       const saving = otaRevenue * (v.shift / 100) * Math.max(0, (v.com - v.dir) / 100);
       const lowNights = v.rooms * 90 * (v.low / 100);   // three weakest months ≈ 90 nights per room
       return {
-        total: `<b>${money(paid)}</b> ≈ ${num0.format(Math.round(paid / v.rooms / 10) * 10)} € pro Zimmer und Jahr`,
+        total: `<b>${money(saving + lowNights * v.adr)}</b> weniger Provision und mehr Zimmerumsatz`,
         outs: [
           [money(saving), `≈ ${count(otaNights * v.shift / 100)} Zimmernächte direkt statt über Portale`],
           [money(lowNights * v.adr), `≈ ${count(lowNights)} zusätzliche Zimmernächte (${num0.format(v.rooms)} Zimmer × 90 Nächte × ${v.low} %)`],
         ],
       };
     },
-    // bergbahn: revenue per extra guest (ticket + gastronomy) at almost unchanged cost
+    // bergbahn: extra guests × revenue per guest (ticket + gastronomy) at almost unchanged cost
     bahn: v => {
       const perGuest = v.ticket + v.gastro;
       const extra = v.guests * (v.more / 100);
       return {
-        total: `<b>≈ ${num0.format(perGuest)} €</b> Ticket ${FORMAT.eur(v.ticket)} + Gastronomie ${FORMAT.eur(v.gastro)}`,
-        outs: [[money(extra * perGuest), `≈ ${count(extra)} zusätzliche Gäste × ${num0.format(perGuest)} €`]],
+        total: `<b>${money(extra * perGuest)}</b> zusätzlicher Umsatz`,
+        outs: [[`≈ ${count(extra)} Gäste mehr`, `je Gast ≈ ${num0.format(perGuest)} €: Ticket ${FORMAT.eur(v.ticket)} + Gastronomie ${FORMAT.eur(v.gastro)}`]],
       };
     },
     // thermal baths: the client's own numbers only (no defensible public defaults):
@@ -128,8 +55,8 @@
       const quiet = v.visits * (v.quiet / 100);
       const extra = quiet * (v.more / 100);
       return {
-        total: `<b>≈ ${count(quiet)}</b> von ${num0.format(v.visits)} Besuchen im Jahr`,
-        outs: [[money(extra * v.spend), `≈ ${count(extra)} zusätzliche Besuche × ${FORMAT.eur(v.spend)}`]],
+        total: `<b>${money(extra * v.spend)}</b> zusätzlicher Umsatz`,
+        outs: [[`≈ ${count(extra)} Besuche mehr`, `je Besuch ${FORMAT.eur(v.spend)}; heute ≈ ${count(quiet)} von ${num0.format(v.visits)} Besuchen in diesen Monaten`]],
       };
     },
     // region: Kurbeitrag and guest spending per extra overnight stay (no panel since D-57)

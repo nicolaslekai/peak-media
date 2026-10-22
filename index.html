@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blaue Stunde — Social Content, der Gäste zum Buchen bringt</title>
   <meta name="description"
-    content="Blaue Stunde ist ein bayerisches Kreativstudio für scroll-stoppenden Social Content, Filme und Fotografie für Hotels, Spas und Alpenresorts." />
+    content="Blaue Stunde aus Füssen im Allgäu: Social Media, Film und Fotografie für Hotels, Bergbahnen und Thermen im Alpenraum – für mehr Gäste in den ruhigen Monaten." />
   <link rel="icon" href="assets/icons/favicon-32x32.png" type="image/png" sizes="32x32" />
   <link rel="icon" href="assets/icons/favicon-16x16.png" type="image/png" sizes="16x16" />
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
@@ -22,7 +22,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=93" />
+  <link rel="stylesheet" href="css/style.css?v=99" />
 </head>
 
 <body>
@@ -36,12 +36,12 @@
          without JS only the CTA shows there -->
     <!-- the same header in every page, copied by hand (D-38): change it in all of them -->
     <nav id="menu" aria-label="Hauptmenü">
+      <a href="#top" aria-current="page">Home</a>
       <a href="hotels-resorts/">Hotels &amp; Resorts</a>
       <a href="bergbahnen/">Bergbahnen</a>
       <a href="wellness-thermen/">Wellness &amp; Thermen</a>
-      <a href="#ablauf">So arbeiten wir</a>
-      <a href="#ueber-uns">Über uns</a>
-      <a href="#rechner" class="nav__cta">Potenzial berechnen</a>
+      <a href="ueber-uns/">Über uns</a>
+      <a href="kontakt/" class="nav__cta">Anfrage starten</a>
       <!-- only in the menu on phones and tablets -->
       <div class="nav__meta">
         <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
@@ -50,30 +50,37 @@
         <a href="datenschutz.html">Datenschutz</a>
       </div>
     </nav>
+    <!-- the page the visitor is on, next to the menu button on phones and tablets -->
+    <span class="nav__here" aria-hidden="true">Home</span>
     <button class="nav__toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Menü öffnen" hidden>
       <span></span>
     </button>
   </header>
 
   <main id="top">
-    <!-- HERO — canvas frame-sequence scrub -->
-    <section class="cine hero" id="hero" data-scene="hero">
+    <!-- HERO — a still image, no scrub (D-64), not one of the scenes the segment pages use
+         (Raffaele, 2026-10-22; size optimisation later). The home page speaks to all three
+         segments (D-71); kicker and lead are a draft for Nicolas -->
+    <section class="hero hero--still" id="hero">
       <div class="cine__stage">
-        <canvas aria-hidden="true"></canvas>
+        <picture class="cine__still">
+          <img src="assets/img/hero-home.webp" alt="" width="1672" height="941" fetchpriority="high" />
+        </picture>
         <div class="cine__scrim"></div>
         <div class="cine__copy">
           <p class="kicker kicker--light">
-            Bayern · Social Film · Fotografie
+            Social-Media-Marketing · Füssen, Allgäu
           </p>
-          <h1>Wir füllen Ihre Zimmer.</h1>
+          <h1>Wir füllen Ihre ruhigen Monate.</h1>
           <p>
-            Wir machen gemeinsam mit Hotels, Spas und Bergresorts Social
-            Content, in den sich Gäste verlieben — und über den sie buchen.
-            Weniger stille Wochen, mehr volle Häuser.
+            Für Hotels, Bergbahnen und Thermen: Wir kommen zu Ihnen, filmen und
+            fotografieren – beim ersten Besuch und dann zweimal im Jahr. Daraus
+            machen wir Reels und Posts, die Sie sichtbar machen und Gäste direkt
+            zu Ihnen bringen, ohne Provision an Portale.
           </p>
           <div class="hero__actions">
-            <a href="#rechner" class="btn btn--gold">Potenzial berechnen</a>
-            <a href="kontakt/" class="btn btn--ghost">Sprechen wir</a>
+            <a href="kontakt/" class="btn btn--gold">Anfrage starten</a>
+            <a href="#bereiche" class="btn btn--ghost">Unsere Bereiche</a>
           </div>
         </div>
         <div class="hero__cue" aria-hidden="true">Scrollen</div>
@@ -84,22 +91,23 @@
     <section class="section mission" id="warum">
       <header>
         <p class="kicker">Warum Blaue Stunde</p>
-        <h2>Ein schönes Haus sollte keine leeren Zimmer haben.</h2>
+        <h2>Ein schöner Ort sollte keine stillen Wochen haben.</h2>
       </header>
       <div class="mission__text">
         <article>
           <h3>Was wir lösen</h3>
           <p>
-            Stille Wochen zwischen den Saisons und immer mehr Buchungen über
-            Portale – das kennt fast jedes Haus. Wir machen Sie dort sichtbar, wo
-            Gäste ihre Reise heute beginnen: mit Geschichten, bei denen Menschen
-            wirklich hängenbleiben, und mit Gästen, die direkt bei Ihnen buchen.
+            Stille Wochen zwischen den Saisons kennt fast jeder Betrieb in den
+            Alpen – im Hotel, an der Bergbahn, in der Therme. Wir machen Sie dort
+            sichtbar, wo Gäste ihre Reise und ihren nächsten Ausflug heute
+            beginnen: mit Geschichten, bei denen Menschen wirklich hängenbleiben
+            und die sie direkt zu Ihnen bringen.
           </p>
         </article>
         <article>
           <h3>Wie wir sind</h3>
           <p>
-            Wir kommen zu Ihnen, lernen Ihre Zimmer, Ihre Saisons und Ihre Gäste
+            Wir kommen zu Ihnen, lernen Ihren Ort, Ihre Saisons und Ihre Gäste
             kennen und arbeiten Seite an Seite mit Ihrem Team. Kein Fachjargon,
             keine Knebelverträge – nur ein kleines Team, das Ihre Auslastung wie
             die eigene behandelt.
@@ -109,7 +117,7 @@
       <ul class="metrics">
         <li class="metric">
           <b>Vor Ort.</b> Zweimal im Jahr drehen wir bei Ihnen – im Sommer und
-          im Winter. Echte Bilder von Ihrem Haus, keine Stockfotos.
+          im Winter. Echte Bilder von Ihrem Betrieb, keine Stockfotos.
         </li>
         <li class="metric">
           <b>Jede Woche.</b> Ihr Team hält schöne Momente fest: Foto oder Video,
@@ -117,41 +125,61 @@
           Weitere übernehmen wir.
         </li>
         <li class="metric">
-          <b>Direkt.</b> Gäste, die Sie auf Social Media entdecken,
-          buchen dort, wo es sich für Sie lohnt: auf Ihrer Website, ohne
-          Portalprovision.
+          <b>Direkt.</b> Gäste, die Sie auf Social Media entdecken, kommen
+          direkt zu Ihnen: auf Ihre Website, an Ihre Kasse – ohne Umweg über
+          Portale.
         </li>
       </ul>
     </section>
 
-      <!-- SCENE 1 — WELLNESS (spa star-timelapse) -->
-      <section class="cine scene" id="scene-spa" data-scene="spa">
-        <div class="cine__stage">
-          <canvas aria-hidden="true"></canvas>
-          <div class="cine__scrim"></div>
-          <div class="cine__copy">
-            <p class="kicker kicker--light cine-line" data-in="0.06" data-out="0.94">
-              Wellness
-            </p>
-            <h2 class="cine-line" data-in="0.08" data-out="0.94">
-              Ruhe, die den Scroll stoppt.
-            </h2>
-            <p class="cine-line" data-in="0.12" data-out="0.92">
-              Langsamer, warmer, greifbarer Spa-Content, bei dem man ausatmet
-              und anfängt, die eigene Auszeit zu planen. Saves und Shares
-              entstehen aus dem Gefühl, nicht aus Ausstattungslisten.
-            </p>
-            <ul class="tags cine-line" data-in="0.14" data-out="0.9">
-              <li>Reels</li>
-              <li>Markenfilme</li>
-              <li>Story-Sets</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+    <!-- THREE AREAS: the doors to the segment pages (D-64; reverses D-38's "no doors",
+         the home page no longer shows the segments as scenes). Stills from the scenes'
+         frames (workspace tools/stills.mjs) -->
+    <section class="section doors" id="bereiche">
+      <header>
+        <p class="kicker">Drei Bereiche</p>
+        <h2>Für Hotels, Bergbahnen und Thermen.</h2>
+        <p>
+          Jeder Betrieb hat seine eigenen ruhigen Zeiten und seine eigenen Gäste.
+          Wählen Sie Ihren Bereich – dort zeigen wir, wie wir für Sie arbeiten.
+        </p>
+      </header>
+      <ul class="doors__list">
+        <li class="door">
+          <a href="hotels-resorts/">
+            <img src="assets/img/segment-hotel-720.webp" alt="" width="720" height="480"
+              srcset="assets/img/segment-hotel-480.webp 480w, assets/img/segment-hotel-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Hotels &amp; Resorts</h3>
+            <p>Mehr belegte Zimmer zwischen den Saisons – und mehr Gäste, die direkt bei Ihnen buchen.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+        <li class="door">
+          <a href="bergbahnen/">
+            <img src="assets/img/segment-bergbahn-720.webp" alt="" width="720" height="480"
+              srcset="assets/img/segment-bergbahn-480.webp 480w, assets/img/segment-bergbahn-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Bergbahnen</h3>
+            <p>Mehr Gäste im Sommer, an ruhigen Tagen und bei Ihren Events am Berg.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+        <li class="door">
+          <a href="wellness-thermen/">
+            <img src="assets/img/segment-therme-720.webp" alt="" width="720" height="480"
+              srcset="assets/img/segment-therme-480.webp 480w, assets/img/segment-therme-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Wellness &amp; Thermen</h3>
+            <p>Mehr Besuche in den ruhigen Monaten – und mehr Gutscheine, die verschenkt werden.</p>
+            <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+      </ul>
+    </section>
 
-      <!-- CHANNELS — non-scroll break between scenes: what each channel is for and the
-           formats we make; no figures of our own until a pilot exists (D-05) -->
+      <!-- CHANNELS: what each channel is for and the formats we make; no figures of our
+           own until a pilot exists (D-05) -->
       <section class="section channels" id="kanaele">
         <header>
           <p class="kicker">Jeder Kanal, aus einer Hand</p>
@@ -165,7 +193,7 @@
         </header>
         <div class="tiles">
           <article>
-            <h3><span aria-hidden="true">▶</span>Instagram</h3>
+            <h3><svg class="channels__logo" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig-grad" cx="0.25" cy="1.05" r="1.25"><stop offset="0" stop-color="#ffd600" /><stop offset="0.25" stop-color="#ff7a00" /><stop offset="0.5" stop-color="#ff0069" /><stop offset="0.8" stop-color="#d300c5" /><stop offset="1" stop-color="#7638fa" /></radialGradient></defs><path fill="url(#ig-grad)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077" /></svg>Instagram</h3>
             <p class="metric"><b>Bühne.</b> Reels · Carousels · Stories</p>
             <p>
               Zeigt, wie sich ein Aufenthalt bei Ihnen anfühlt – dort, wo
@@ -173,15 +201,7 @@
             </p>
           </article>
           <article>
-            <h3><span aria-hidden="true">♪</span>TikTok</h3>
-            <p class="metric"><b>Reichweite.</b> Kurzvideos, vertikal</p>
-            <p>
-              Schnell und nah dran: Momente, die Gäste erreichen, die Ihr Haus
-              noch nicht kennen – weit über Ihre Follower hinaus.
-            </p>
-          </article>
-          <article>
-            <h3><span aria-hidden="true">▷</span>YouTube</h3>
+            <h3><svg class="channels__logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M9.545 15.568V8.432L15.818 12z" /><path fill="#ff0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>YouTube</h3>
             <p class="metric"><b>Entscheidung.</b> Shorts · Filme</p>
             <p>
               Für Gäste, die es genau wissen wollen: Shorts für den ersten
@@ -189,7 +209,7 @@
             </p>
           </article>
           <article>
-            <h3><span aria-hidden="true">f</span>Facebook</h3>
+            <h3><svg class="channels__logo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.4" fill="#fff" /><path fill="#0866ff" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z" /></svg>Facebook</h3>
             <p class="metric"><b>Nähe.</b> Beiträge · Veranstaltungen</p>
             <p>
               Neuigkeiten, Veranstaltungen und Angebote für Stammgäste, die
@@ -203,40 +223,14 @@
         </p>
       </section>
 
-      <!-- SCENE 2 — POWDER (skier) -->
-      <section class="cine scene scene--bright" id="scene-ski" data-scene="skilift">
-        <div class="cine__stage">
-          <canvas aria-hidden="true"></canvas>
-          <div class="cine__scrim"></div>
-          <div class="cine__copy">
-            <p class="kicker kicker--light cine-line" data-in="0.06" data-out="0.94">
-              Powder
-            </p>
-            <h2 class="cine-line" data-in="0.08" data-out="0.94">
-              Views, die viral gehen.
-            </h2>
-            <p class="cine-line" data-in="0.12" data-out="0.92">
-              First Tracks, tiefer Powder und ein Gesicht voll Schnee — das
-              adrenalingeladene Action-Material, das Daumen mitten im Scroll
-              stoppt und Millionen-Views einfährt.
-            </p>
-            <ul class="tags cine-line" data-in="0.14" data-out="0.9">
-              <li>Action</li>
-              <li>POV</li>
-              <li>Reels</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
     <!-- SERVICES — how working with us runs, as a process -->
     <section class="section services" id="ablauf">
       <header>
         <p class="kicker">So arbeiten wir</p>
         <h2>Ein komplettes Social-Team, am Berg.</h2>
         <p>
-          Zweimal im Jahr sind wir bei Ihnen vor Ort, dazwischen arbeitet unser
-          System – mit Ihrem Team und mit Menschen, die jeden Beitrag prüfen.
+          Zweimal im Jahr sind wir bei Ihnen vor Ort, dazwischen kümmern wir uns
+          um Ihre Kanäle – gemeinsam mit Ihrem Team.
         </p>
       </header>
       <!-- data-line="profile": one mountain profile on desktop (js/steps.js); without
@@ -256,11 +250,11 @@
         </li>
         <li>
           <h3>Auswählen, bearbeiten, planen</h3>
-          <p>Unser System wählt aus, bearbeitet und plant nach Trends und Saison. Jeder Beitrag wird von uns freigegeben.</p>
+          <p>Wir wählen aus, bearbeiten und planen nach Trends und Saison. Jeden Beitrag prüfen wir, bevor er erscheint.</p>
         </li>
         <li>
-          <h3>Posten, antworten, messen</h3>
-          <p>Wir veröffentlichen, beantworten Kommentare und zeigen Ihnen, was davon bei den Buchungen ankommt.</p>
+          <h3>Posten und messen</h3>
+          <p>Wir veröffentlichen auf Ihren Kanälen und zeigen Ihnen, was davon bei den Buchungen ankommt.</p>
         </li>
       </ol>
     </section>
@@ -271,10 +265,10 @@
       <header>
         <p class="kicker">So kann es aussehen</p>
         <h2>
-          Wir jagen keine Likes. Wir helfen, Zimmer zu füllen.
+          Wir jagen keine Likes. Wir füllen ruhige Monate.
         </h2>
         <p>
-          So kann Content für Ihr Haus aussehen – Beispiele, keine Kundenzahlen.
+          So kann Content für Ihren Betrieb aussehen – Beispiele, keine Kundenzahlen.
           Stil und Kampagne richten sich nach Ihnen.
         </p>
       </header>
@@ -290,18 +284,13 @@
             <p><b>Morgen am Pool</b> Atmosphäre, die man speichert</p>
           </figcaption>
         </figure>
-        <figure class="phone phone--review">
-          <img src="assets/img/phone-chalet-473.webp" alt="Beispiel: Gästestimme als Story" width="473" height="1024"
+        <figure class="phone">
+          <img src="assets/img/phone-chalet-473.webp" alt="Beispiel-Story: Abend im Chalet" width="473" height="1024"
             srcset="assets/img/phone-chalet-320.webp 320w, assets/img/phone-chalet-473.webp 473w"
             sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
           <figcaption>
-            <p class="rating" role="img" aria-label="5 von 5 Sternen">
-              ★★★★★
-            </p>
-            <blockquote>
-              „Genau so schön wie auf den Bildern.“
-            </blockquote>
-            <p>— Gästestimme als Story, Beispiel</p>
+            <span>STORY</span>
+            <p><b>Abend im Chalet</b> Ankommen, Feuer an, Ruhe</p>
           </figcaption>
         </figure>
         <figure class="phone">
@@ -325,246 +314,6 @@
       </div>
       <!-- swipe cue for the phone row on small screens, like "Scrollen" in the hero -->
       <p class="phones__hint" aria-hidden="true">Wischen</p>
-    </section>
-
-    <!-- FIGURES on the home page (D-59): the evidence chain (js/bergfahrt.js) and what posting
-         frequency does; the occupancy chart is on the Hotels & Resorts page. Static markup works
-         without JS; js/evidence.js adds the readouts, toggle and bar growth. Copy provisional,
-         figures to be corrected (ISSUES C3) -->
-    <section class="section evidence" id="zahlen">
-      <header>
-        <p class="kicker">Die Zahlen dahinter</p>
-        <h2>
-          Gesehen wird, wer regelmäßig da ist.
-        </h2>
-        <p>
-          Was die Häufigkeit von Beiträgen auf TikTok und Instagram bewirkt –
-          ausgewertet über Millionen Posts.
-        </p>
-      </header>
-
-      <!-- the chain: a sourced fact per link and our answer ("Was wir tun"); on a vertical
-           rail that draws itself from link to link while scrolling (CSS only, static
-           without support or with reduced motion) -->
-      <ol class="chain">
-        <li>
-          <div class="chain__fact">
-            <h3>Zuerst gesehen werden</h3>
-            <p class="metric">
-              <b>99 %</b> der Gäste, die ein Hotel erst auf Booking.com finden,
-              buchen es auch dort.
-            </p>
-            <small>Bundeskartellamt 2020</small>
-          </div>
-          <div class="chain__answer">
-            <p class="chain__label">Was wir tun</p>
-            <p>
-              Wir machen Ihr Haus dort sichtbar, wo Reisen beginnen: auf Instagram
-              und TikTok, regelmäßig und im Stil Ihres Hauses – bevor jemand
-              überhaupt ein Portal öffnet.
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="chain__fact">
-            <h3>Direkt gebucht</h3>
-            <p class="metric">
-              <b>2 von 3</b> Direktbuchungen kommen von Gästen, die das Haus schon
-              kannten.
-            </p>
-            <small>Bundeskartellamt 2020</small>
-          </div>
-          <div class="chain__answer">
-            <p class="chain__label">Was wir tun</p>
-            <p>
-              Jeder Beitrag führt zu Ihnen: Profil, Website, Telefon. Wer Sie über
-              Social Media kennenlernt, findet den direkten Weg – nicht den über
-              das Portal.
-            </p>
-          </div>
-        </li>
-        <li>
-          <div class="chain__fact">
-            <h3>Provision gespart</h3>
-            <p class="metric">
-              <b>halb so oft</b> werden Direktbuchungen storniert wie Buchungen über
-              Booking.com.
-            </p>
-            <small>Stornoquote 9 % zu 19 %: HOTREC 2026 · Preisfreiheit: EU Digital Markets Act</small>
-          </div>
-          <div class="chain__answer">
-            <p class="chain__label">Was wir tun</p>
-            <p>
-              Seit 2024 dürfen Sie direkt günstiger sein als auf dem Portal. Wir
-              zeigen Ihre Direktangebote Ihren Gästen und messen, was bei den
-              Buchungen ankommt. Wie viel Provision das ausmacht, zeigt der
-              <a href="#rechner">Rechner</a>.
-            </p>
-          </div>
-        </li>
-      </ol>
-
-      <!-- what posting frequency does: TikTok hits and Instagram growth (Buffer 2025) -->
-      <figure class="chart" id="activity">
-        <div class="chart__head">
-          <p class="chart__readout" aria-live="polite">
-            <b>1,9× größere Treffer</b>
-            <span>schon mit 2–5 Posts pro Woche statt einem: Die besten Posts
-              erreichen 6.983 statt 3.722 Aufrufe.</span>
-          </p>
-          <div class="toggle" role="group" aria-label="Ansicht wählen">
-            <button type="button" aria-pressed="true" aria-controls="activity-hits">Große Treffer</button>
-            <button type="button" aria-pressed="false" aria-controls="activity-growth">Wachstum</button>
-          </div>
-        </div>
-
-        <div id="activity-hits">
-          <div class="chart__plot chart__plot--levels">
-            <div class="chart__grid" aria-hidden="true">
-              <span style="bottom: 100%">15.000</span>
-              <span style="bottom: 66.67%">10.000</span>
-              <span style="bottom: 33.33%">5.000</span>
-            </div>
-            <button class="level level--none" type="button" aria-label="Ohne Social Media: keine Reichweite" data-label="Ohne Social Media" data-med="0" data-top="0">
-              keine Reichweite
-            </button>
-            <button class="level" type="button" aria-label="Gelegentlich, 1× pro Woche: typischer Post 489, beste 10 % 3.722 Aufrufe" data-label="Gelegentlich, 1× pro Woche" data-med="489" data-top="3722">
-              <span class="level__typ" aria-hidden="true" style="--h: 3.26"><i>489</i></span>
-              <span class="level__top" aria-hidden="true" style="--h: 24.81"><i>3.722</i></span>
-            </button>
-            <button class="level" type="button" aria-pressed="true" aria-label="Regelmäßig, 2–5× pro Woche: typischer Post 506, beste 10 % 6.983 Aufrufe" data-label="Regelmäßig, 2–5× pro Woche" data-med="506" data-top="6983">
-              <span class="level__typ" aria-hidden="true" style="--h: 3.37"><i>506</i></span>
-              <span class="level__top" aria-hidden="true" style="--h: 46.55"><i>6.983</i></span>
-            </button>
-            <button class="level" type="button" aria-label="Aktiv, 6–10× pro Woche: typischer Post 487, beste 10 % 10.092 Aufrufe" data-label="Aktiv, 6–10× pro Woche" data-med="487" data-top="10092">
-              <span class="level__typ" aria-hidden="true" style="--h: 3.25"><i>487</i></span>
-              <span class="level__top" aria-hidden="true" style="--h: 67.28"><i>10.092</i></span>
-            </button>
-            <button class="level" type="button" aria-label="Sehr aktiv, 11× und öfter pro Woche: typischer Post 459, beste 10 % 14.401 Aufrufe" data-label="Sehr aktiv, 11× und öfter pro Woche" data-med="459" data-top="14401">
-              <span class="level__typ" aria-hidden="true" style="--h: 3.06"><i>459</i></span>
-              <span class="level__top" aria-hidden="true" style="--h: 96.01"><i>14.401</i></span>
-            </button>
-          </div>
-          <p class="chart__axis chart__axis--levels" aria-hidden="true">
-            <span><b>Ohne Social Media</b>keine Posts</span>
-            <span><b>Gelegentlich</b>1× pro Woche</span>
-            <span><b>Regelmäßig</b>2–5× pro Woche</span>
-            <span><b>Aktiv</b>6–10× pro Woche</span>
-            <span><b>Sehr aktiv</b>11×+ pro Woche</span>
-          </p>
-          <p class="chart__legend" aria-hidden="true">
-            <span class="chart__key chart__key--typ">typischer Post (Median)</span>
-            <span class="chart__key chart__key--top">die besten 10 % der Posts</span>
-          </p>
-          <p class="chart__note">
-            Der typische Post erreicht etwa gleich viele Menschen, egal wie oft Sie
-            posten. Was mit der Aktivität wächst, sind die Ausreißer nach oben: Wer
-            regelmäßig postet, hat öfter einen Treffer, der weit über die eigenen
-            Follower hinausgeht.
-          </p>
-          <p class="chart__source">
-            Quelle: Buffer, TikTok-Studie 2025 – 11,4 Mio. Posts von über 150.000
-            Konten, Aufrufe pro Post nach Posting-Frequenz (Median und 90.
-            Perzentil). Durchschnittswerte über alle Branchen, keine Zusage.
-          </p>
-        </div>
-
-        <div id="activity-growth" hidden>
-          <div class="chart__plot chart__plot--growth">
-            <div class="chart__grid" aria-hidden="true">
-              <span style="bottom: 100%">1.500</span>
-              <span style="bottom: 50%">1.250</span>
-              <span style="bottom: 0%">1.000</span>
-            </div>
-            <svg viewBox="0 0 52 100" preserveAspectRatio="none" role="img"
-              aria-label="Follower nach einem Jahr, ausgehend von 1.000: 1–2 Posts pro Woche plus 6 Prozent, 3–5 plus 14, 6–9 plus 26, 10 und mehr plus 41 Prozent">
-              <polyline class="line-1" points="0,100.0 4,99.0 8,98.1 12,97.1 16,96.1 20,95.1 24,94.2 28,93.2 32,92.2 36,91.2 40,90.2 44,89.2 48,88.1 52,87.1" />
-              <polyline class="line-2" points="0,100.0 4,97.9 8,95.8 12,93.7 16,91.5 20,89.3 24,87.1 28,84.9 32,82.7 36,80.4 40,78.1 44,75.8 48,73.5 52,71.1" />
-              <polyline class="line-3" points="0,100.0 4,96.5 8,92.9 12,89.2 16,85.4 20,81.6 24,77.8 28,73.8 32,69.8 36,65.8 40,61.6 44,57.4 48,53.1 52,48.7" />
-              <polyline class="line-4" points="0,100.0 4,94.7 8,89.2 12,83.6 16,77.8 20,71.9 24,65.8 28,59.6 32,53.1 36,46.6 40,39.8 44,32.9 48,25.7 52,18.4" />
-            </svg>
-            <p class="chart__ends" aria-hidden="true">
-              <span class="line-1" style="top: 87.1%">+6 %</span>
-              <span class="line-2" style="top: 71.1%">+14 %</span>
-              <span class="line-3" style="top: 48.7%">+26 %</span>
-              <span class="line-4" style="top: 18.4%">+41 %</span>
-            </p>
-          </div>
-          <p class="chart__axis chart__axis--growth" aria-hidden="true">
-            <span>heute</span><span>3 Monate</span><span>6 Monate</span><span>9 Monate</span><span>1 Jahr</span>
-          </p>
-          <p class="chart__legend" aria-hidden="true">
-            <span class="chart__key line-1">1–2 Posts pro Woche</span>
-            <span class="chart__key line-2">3–5 Posts pro Woche</span>
-            <span class="chart__key line-3">6–9 Posts pro Woche</span>
-            <span class="chart__key line-4">10+ Posts pro Woche</span>
-          </p>
-          <p class="chart__note">
-            Follower aus 1.000 heute, hochgerechnet aus dem durchschnittlichen
-            wöchentlichen Wachstum. Wochen ganz ohne Posts liegen sogar unter dem
-            eigenen Durchschnitt – Follower gehen eher verloren.
-          </p>
-          <p class="chart__source">
-            Quelle: Buffer, Instagram-Studie 2025 – 2,1 Mio. Posts von 102.000
-            Konten, wöchentliches Follower-Wachstum nach Posting-Frequenz, auf 52
-            Wochen hochgerechnet. Durchschnittswerte, keine Zusage.
-          </p>
-        </div>
-      </figure>
-    </section>
-
-    <!-- TEAM -->
-    <section class="section team" id="ueber-uns">
-      <header>
-        <p class="kicker">Über uns</p>
-        <h2>Wir kennen Ihr Geschäft – von innen.</h2>
-        <p>
-          Drei Menschen aus Werbung, Gastronomie und Hotellerie, die wissen, wie
-          sich eine stille Woche anfühlt – und was dagegen hilft.
-        </p>
-      </header>
-      <div class="team__grid">
-        <figure class="member">
-          <div class="member__img">
-            <img src="assets/img/team-nicolas-800.webp" alt="Porträt von Nicolas Lekai" width="800" height="1000"
-              srcset="assets/img/team-nicolas-400.webp 400w, assets/img/team-nicolas-600.webp 600w, assets/img/team-nicolas-800.webp 800w"
-              sizes="(max-width: 640px) 44vw, (max-width: 1000px) 29vw, 368px" loading="lazy" decoding="async" />
-          </div>
-          <figcaption>
-            <h3>Nicolas Lekai</h3>
-            <p>Creative Direction</p>
-            <p class="member__bio">Profi für Werbung und Marketing – sorgt dafür, dass Ihr Haus so aussieht, wie es sich
-              anfühlt.</p>
-          </figcaption>
-        </figure>
-
-        <figure class="member">
-          <div class="member__img">
-            <img src="assets/img/team-daniel-800.webp" alt="Porträt von Daniel" width="800" height="1000"
-              srcset="assets/img/team-daniel-400.webp 400w, assets/img/team-daniel-600.webp 600w, assets/img/team-daniel-800.webp 800w"
-              sizes="(max-width: 640px) 44vw, (max-width: 1000px) 29vw, 368px" loading="lazy" decoding="async" />
-          </div>
-          <figcaption>
-            <h3>Daniel</h3>
-            <p>Management</p>
-            <p class="member__bio">Ehemaliger Gastronom mit Erfahrung in Unternehmensführung und Architektur – kennt
-              Betriebe von innen.</p>
-          </figcaption>
-        </figure>
-
-        <figure class="member">
-          <div class="member__img">
-            <img src="assets/img/team-raffaele-800.webp" alt="Porträt von Raffaele Fusco" width="800" height="1000"
-              srcset="assets/img/team-raffaele-400.webp 400w, assets/img/team-raffaele-600.webp 600w, assets/img/team-raffaele-800.webp 800w"
-              sizes="(max-width: 640px) 44vw, (max-width: 1000px) 29vw, 368px" loading="lazy" decoding="async" />
-          </div>
-          <figcaption>
-            <h3>Raffaele Fusco</h3>
-            <p>Technik &amp; Systeme</p>
-            <p class="member__bio">Viele Jahre in der Hotellerie, heute in der IT – verbindet beides in unserem System.</p>
-          </figcaption>
-        </figure>
-      </div>
     </section>
 
     <!-- REGIONS — decorative marquee (two identical lists) -->
@@ -599,205 +348,11 @@
       </ul>
     </div>
 
-    <!-- CALCULATORS: one panel per segment (hotel, Bergbahn, wellness & thermal baths),
-         switched by the tabs; each segment page has a copy of its own panel (D-59).
-         Formulas in js/evidence.js (MODELS). Example values with sources next to each
-         default; the static results match the default inputs. "Mit diesen Werten anfragen"
-         hands the values to the Kontakt page (evidence.js → sessionStorage → contact.js). -->
-    <section class="section calculator" id="rechner">
-      <header>
-        <p class="kicker">Rechner</p>
-        <h2>Was das für Sie bedeutet.</h2>
-        <p>
-          Wählen Sie Ihren Betrieb. Wenige Angaben genügen; die übrigen Werte sind
-          Durchschnitte mit Quelle – passen Sie sie an.
-        </p>
-      </header>
-
-      <noscript>
-        <p class="calc__nojs">
-          Der Rechner braucht JavaScript. Gern rechnen wir Ihr Potenzial gemeinsam durch –
-          <a href="kontakt/">schreiben Sie uns</a>.
-        </p>
-      </noscript>
-      <div class="toggle calc-tabs" role="group" aria-label="Betrieb wählen">
-        <button type="button" aria-pressed="true" aria-controls="calc-hotel">Hotel &amp; Resort</button>
-        <button type="button" aria-pressed="false" aria-controls="calc-bahn">Bergbahn</button>
-        <button type="button" aria-pressed="false" aria-controls="calc-thermen">Wellness &amp; Thermen</button>
-      </div>
-
-      <div class="calc" id="calc-hotel" data-model="hotel">
-        <form class="calc__inputs">
-          <div class="range">
-            <label for="c-rooms">Zimmer</label> <output for="c-rooms">40</output>
-            <input type="range" id="c-rooms" name="rooms" data-format="int" min="5" max="250" step="1" value="40" />
-          </div>
-          <div class="range">
-            <label for="c-occ">Zimmerauslastung im Jahr</label> <output for="c-occ">60 %</output>
-            <input type="range" id="c-occ" name="occ" data-format="pct" min="20" max="95" step="1" value="60" />
-          </div>
-          <div class="range">
-            <label for="c-adr">Zimmerpreis pro Nacht</label> <output for="c-adr">120 €</output>
-            <input type="range" id="c-adr" name="adr" data-format="eur" min="50" max="500" step="5" value="120" />
-          </div>
-
-          <details>
-            <summary>Annahmen anpassen</summary>
-            <div class="range">
-              <label for="c-ota">Anteil über Buchungsportale</label> <output for="c-ota">31,9 %</output>
-              <input type="range" id="c-ota" name="ota" data-format="pct1" min="0" max="80" step="0.1" value="31.9" />
-              <small>Standard: 31,9 % – kleine und mittlere Hotels in Deutschland (HOTREC 2026)</small>
-            </div>
-            <div class="range">
-              <label for="c-com">Provision der Portale</label> <output for="c-com">15,0 %</output>
-              <input type="range" id="c-com" name="com" data-format="pct1" min="8" max="30" step="0.5" value="15" />
-              <small>Standard: 15 % – Booking.com 10–15 % Grundprovision, mit Ranking-Programmen mehr
-                (Bundeskartellamt)</small>
-            </div>
-            <div class="range">
-              <label for="c-dir">Kosten einer Direktbuchung</label> <output for="c-dir">6,0 %</output>
-              <input type="range" id="c-dir" name="dir" data-format="pct1" min="0" max="15" step="0.5" value="6" />
-              <small>Standard: 6 % – Schätzung des Hotelverbands IHA: rund 5–7 % inkl. Marketing</small>
-            </div>
-          </details>
-        </form>
-
-        <div class="calc__result" aria-live="polite">
-          <p>Provision, die Sie heute pro Jahr an Portale zahlen</p>
-          <p class="calc__total"><b>≈ 50.300 €</b> ≈ 1.260 € pro Zimmer und Jahr</p>
-
-          <div class="range">
-            <label for="c-shift">Gäste, die künftig direkt statt über Portale buchen</label> <output for="c-shift">10 %</output>
-            <input type="range" id="c-shift" name="shift" data-format="pct" min="0" max="50" step="1" value="10" />
-            <small>Anteil Ihrer heutigen Portal-Buchungen</small>
-          </div>
-          <p class="calc__out"><b>≈ 3.000 €</b> weniger Provision pro Jahr
-            <small>≈ 280 Zimmernächte direkt statt über Portale</small>
-          </p>
-
-          <div class="range">
-            <label for="c-low">Mehr belegte Zimmer in den drei schwächsten Monaten</label> <output for="c-low">+5 Punkte</output>
-            <input type="range" id="c-low" name="low" data-format="pts" min="0" max="20" step="1" value="5" />
-            <small>In Prozentpunkten: +5 heißt z. B. 35 % statt 30 % belegte Zimmer. Frei wählbar, kein
-              Erfahrungswert.</small>
-          </div>
-          <p class="calc__out"><b>≈ 21.600 €</b> zusätzlicher Zimmerumsatz
-            <small>≈ 180 zusätzliche Zimmernächte (40 Zimmer × 90 Nächte × 5 %)</small>
-          </p>
-
-          <p class="calc__note">
-            Beispielrechnung auf Basis Ihrer Angaben und der genannten
-            Durchschnittswerte. Umsatz, nicht Gewinn; keine Zusage über Ergebnisse.
-            Die tatsächliche Provision hängt von Ihrem Vertrag ab.
-          </p>
-          <a class="btn btn--gold" href="kontakt/?typ=hotel&amp;werte=1">Mit diesen Werten anfragen</a>
-        </div>
-      </div>
-
-      <div class="calc" id="calc-bahn" data-model="bahn" hidden>
-        <form class="calc__inputs">
-          <div class="range">
-            <label for="b-guests">Gäste im Sommer (Ersteintritte, Mai–Oktober)</label> <output for="b-guests">100.000</output>
-            <input type="range" id="b-guests" name="guests" data-format="int" min="10000" max="1000000" step="5000" value="100000" />
-          </div>
-          <div class="range">
-            <label for="b-ticket">Ticketumsatz pro Gast (Durchschnitt, nicht Listenpreis)</label> <output for="b-ticket">18 €</output>
-            <input type="range" id="b-ticket" name="ticket" data-format="eur" min="5" max="60" step="1" value="18" />
-            <small>Standard: 18 € – Durchschnitt der deutschen Seilbahnen im Sommer 2025: 117,9 Mio. € Nettoverkehrseinnahmen
-              bei 6,6 Mio. Ersteintritten (VDS); im Winter 2024/25 rund 25 €. Einzelne Bahnen liegen deutlich darüber. Für
-              Österreich ist kein Sommerwert veröffentlicht (Winter 2024/25 rund 38 € Kassenumsatz je Ersteintritt, WKO) –
-              tragen Sie Ihren eigenen Wert ein.</small>
-          </div>
-
-          <details>
-            <summary>Annahmen anpassen</summary>
-            <div class="range">
-              <label for="b-gastro">Gastronomie am Berg pro Gast</label> <output for="b-gastro">9 €</output>
-              <input type="range" id="b-gastro" name="gastro" data-format="eur" min="0" max="30" step="1" value="9" />
-              <small>Standard: 9 € – Bayerische Zugspitzbahn 2024/25: 11,6 Mio. € Gastronomie- und Shopumsatz bei 1,27 Mio.
-                Besuchern; Jennerbahn 2024/25: 2,3 Mio. € bei 250.000 Ersteintritten. Kleinere Bahnen liegen darunter. Ist
-                die Gastronomie verpachtet, tragen Sie Ihren Pachtanteil ein.</small>
-            </div>
-          </details>
-        </form>
-
-        <div class="calc__result" aria-live="polite">
-          <p>Jeder zusätzliche Gast bringt</p>
-          <p class="calc__total"><b>≈ 27 €</b> Ticket 18 € + Gastronomie 9 €</p>
-
-          <div class="range">
-            <label for="b-more">Mehr Gäste im Sommer und an ruhigen Tagen</label> <output for="b-more">+10 %</output>
-            <input type="range" id="b-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
-            <small>Frei wählbar, kein Erfahrungswert. Für Bergbahnen gibt es keine Studie, die die Wirkung eigener
-              Social-Media-Arbeit misst.</small>
-          </div>
-          <p class="calc__out"><b>≈ 270.000 €</b> zusätzlicher Umsatz pro Jahr
-            <small>≈ 10.000 zusätzliche Gäste × 27 €</small>
-          </p>
-
-          <p class="calc__note">
-            Beispielrechnung mit Ihren Angaben und den genannten Durchschnittswerten. Umsatz, nicht Gewinn. Ein großer
-            Teil der Kosten einer Bergbahn – Personal, Abschreibungen, Wartung – fällt unabhängig von der Gästezahl an;
-            bei der Jennerbahn entfielen 2023/24 nur rund 8 % des Umsatzes auf Material, Strom und Betriebsstoffe. Die
-            Gastronomie hat Wareneinsatz. Keine Zusage über Ergebnisse.
-          </p>
-          <a class="btn btn--gold" href="kontakt/?typ=bergbahn&amp;werte=1">Mit diesen Werten anfragen</a>
-        </div>
-      </div>
-
-      <!-- thermal baths: no defensible public defaults (research-2026-10-13), so the client's own
-           numbers, with comparison values in the small print -->
-      <div class="calc" id="calc-thermen" data-model="thermen" hidden>
-        <form class="calc__inputs">
-          <div class="range">
-            <label for="t-visits">Besuche pro Jahr</label> <output for="t-visits">150.000</output>
-            <input type="range" id="t-visits" name="visits" data-format="int" min="20000" max="1000000" step="5000" value="150000" />
-            <small>Ihre Zahl. Zum Vergleich: Watzmann Therme Berchtesgaden rund 272.000 Besuche (2025).</small>
-          </div>
-          <div class="range">
-            <label for="t-spend">Umsatz pro Besuch (Eintritt, Sauna, Gastronomie)</label> <output for="t-spend">20 €</output>
-            <input type="range" id="t-spend" name="spend" data-format="eur" min="5" max="80" step="1" value="20" />
-            <small>Ihre Zahl: Jahresumsatz geteilt durch Besuche – nicht der Tageskartenpreis. Zum Vergleich: Therme
-              Vierordtbad Karlsruhe 2019 rund 12,60 € (ohne Hotel); 39 Thermen in Österreich 2019 rund 44 € (mit
-              Thermenhotels).</small>
-          </div>
-          <div class="range">
-            <label for="t-quiet">Anteil der Besuche in Ihren ruhigen Monaten</label> <output for="t-quiet">25 %</output>
-            <input type="range" id="t-quiet" name="quiet" data-format="pct" min="5" max="50" step="1" value="25" />
-            <small>Ihre Schätzung. Für Bayern gibt es keine veröffentlichten Monatszahlen.</small>
-          </div>
-        </form>
-
-        <div class="calc__result" aria-live="polite">
-          <p>Besuche in Ihren ruhigen Monaten</p>
-          <p class="calc__total"><b>≈ 37.500</b> von 150.000 Besuchen im Jahr</p>
-
-          <div class="range">
-            <label for="t-more">Mehr Besuche in den ruhigen Monaten</label> <output for="t-more">+10 %</output>
-            <input type="range" id="t-more" name="more" data-format="plus" min="0" max="30" step="1" value="10" />
-            <small>Frei wählbar, kein Erfahrungswert. Für Thermen gibt es keine Studie, die die Wirkung eigener
-              Social-Media-Arbeit misst.</small>
-          </div>
-          <p class="calc__out"><b>≈ 75.000 €</b> zusätzlicher Umsatz pro Jahr
-            <small>≈ 3.800 zusätzliche Besuche × 20 €</small>
-          </p>
-
-          <p class="calc__note">
-            Beispielrechnung mit Ihren Angaben. In ruhigen Monaten laufen Personal, Energie und Technik ohnehin:
-            Zusätzliche Gäste kosten dort vor allem Wareneinsatz in Gastronomie und Shop. Umsatz, nicht Gewinn; keine
-            Zusage über Ergebnisse.
-          </p>
-          <a class="btn btn--gold" href="kontakt/?typ=therme&amp;werte=1">Mit diesen Werten anfragen</a>
-        </div>
-      </div>
-
-    </section>
-
     <!-- CLOSING: the enquiry form has its own page (kontakt/) -->
     <section class="section contact" id="kontakt">
       <header>
         <p class="kicker">Sprechen wir</p>
-        <h2>Erzählen Sie uns von Ihrem Haus.</h2>
+        <h2>Erzählen Sie uns von Ihrem Betrieb.</h2>
         <p>
           Egal, wo Ihre Auslastung heute steht — wir helfen gern. Schreiben
           Sie uns kurz zu Ihrem Hotel, Ihrer Bergbahn oder Ihrer Therme, und wir
@@ -805,8 +360,27 @@
         </p>
       </header>
       <div class="hero__actions">
-        <a href="kontakt/" class="btn btn--gold">Anfrage stellen</a>
-        <a href="#rechner" class="btn btn--ghost">Potenzial berechnen</a>
+        <a href="kontakt/" class="btn btn--gold">Anfrage starten</a>
+      </div>
+      <!-- the people behind the enquiry, linking to the Über uns page (D-76: the full team
+           is only there) -->
+      <div class="people">
+        <p class="people__title">Ihre Ansprechpartner</p>
+        <ul>
+          <li>
+            <img src="assets/img/team-nicolas-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Nicolas Lekai</b> <span>Creative Direction</span>
+          </li>
+          <li>
+            <img src="assets/img/team-daniel-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Daniel Lenzenhuber</b> <span>Management</span>
+          </li>
+          <li>
+            <img src="assets/img/team-raffaele-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Raffaele Fusco</b> <span>Web Designer &amp; Developer</span>
+          </li>
+        </ul>
+        <a class="people__more" href="ueber-uns/">Mehr über uns</a>
       </div>
     </section>
   </main>
@@ -821,16 +395,17 @@
     <div class="foot__cols">
       <div>
         <p>Studio</p>
-        <span>München · Bayern</span>
-        <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
+        <span>Füssen · Allgäu</span>
+        <a href="ueber-uns/">Über uns</a>
         <a href="kontakt/">Kontakt</a>
       </div>
       <div>
         <p>Social</p>
-        <!-- profile URLs pending; glyphs in assets/icons/social.svg (one colour, never gold) -->
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#instagram" /></svg>Instagram</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#tiktok" /></svg>TikTok</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#youtube" /></svg>YouTube</a>
+        <!-- profile URLs pending: plain text until they exist (C7), then <a href> again;
+             glyphs in assets/icons/social.svg (one colour, never gold) -->
+        <span class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#instagram" /></svg>Instagram</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#facebook" /></svg>Facebook</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="assets/icons/social.svg#youtube" /></svg>YouTube</span>
       </div>
       <div>
         <p>Rechtliches</p>
@@ -846,10 +421,8 @@
 
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
   <script src="js/main.js?v=67"></script>
-  <script src="js/evidence.js?v=7"></script>
   <script src="js/steps.js?v=20"></script>
   <script src="js/nav.js?v=2"></script>
-  <script src="js/bergfahrt.js?v=6"></script>
 </body>
 
 </html>

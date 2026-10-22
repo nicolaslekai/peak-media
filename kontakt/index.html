@@ -21,7 +21,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=93" />
+  <link rel="stylesheet" href="../css/style.css?v=99" />
 </head>
 
 <body>
@@ -34,12 +34,12 @@
     <!-- the same header in every page, copied by hand (D-38): change it in all of them.
          On screens up to 1000px this <nav> becomes the full-screen menu (js/nav.js) -->
     <nav id="menu" aria-label="Hauptmenü">
+      <a href="../">Home</a>
       <a href="../hotels-resorts/">Hotels &amp; Resorts</a>
       <a href="../bergbahnen/">Bergbahnen</a>
       <a href="../wellness-thermen/">Wellness &amp; Thermen</a>
-      <a href="../#ablauf">So arbeiten wir</a>
-      <a href="../#ueber-uns">Über uns</a>
-      <a href="../#rechner" class="nav__cta">Potenzial berechnen</a>
+      <a href="../ueber-uns/">Über uns</a>
+      <a href="../kontakt/" aria-current="page" class="nav__cta">Anfrage starten</a>
       <!-- only in the menu on phones and tablets -->
       <div class="nav__meta">
         <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
@@ -48,6 +48,8 @@
         <a href="../datenschutz.html">Datenschutz</a>
       </div>
     </nav>
+    <!-- the page the visitor is on, next to the menu button on phones and tablets -->
+    <span class="nav__here" aria-hidden="true">Kontakt</span>
     <button class="nav__toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Menü öffnen" hidden>
       <span></span>
     </button>
@@ -57,130 +59,191 @@
     <section class="section contact page-top" id="kontakt">
       <header>
         <p class="kicker">Sprechen wir</p>
-        <h1>Erzählen Sie uns von Ihrem Haus.</h1>
+        <h1>Erzählen Sie uns von Ihrem Betrieb.</h1>
         <p>
-          Egal, wo Ihre Auslastung heute steht — wir helfen gern. Schreiben
-          Sie uns kurz zu Ihrem Hotel, Ihrer Bergbahn oder Ihrer Therme, und wir
-          melden uns innerhalb von zwei Werktagen mit Ideen — kein Pitch, kein Druck.
+          Drei kurze Schritte, die meisten Fragen mit einem Klick. Wir melden uns
+          innerhalb von zwei Werktagen mit Ideen und einem ersten Angebot — kein
+          Pitch, kein Druck.
+        </p>
+        <!-- for anyone who only wants the address (D-76); the phone number follows once there
+             is one -->
+        <p class="contact__direct">
+          Lieber direkt? Schreiben Sie an
+          <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
         </p>
       </header>
-      <!-- enquiry: base fields for everyone, extra fields per business type (D-28; no budget
-           field). js/contact.js shows the matching group, validates in German, takes over the
-           calculator values (?typ= and werte=1, see js/contact.js) and shows the confirmation dialog.
+      <!-- enquiry in three steps (D-74, one form for the whole site): 1 the business type as
+           cards, 2 a few one-click questions for that type and the channels today, 3 contact.
+           Required only type, name, email and message (D-60); every answer that changes the
+           offer is optional. js/contact.js shows one step at a time, the group of the chosen
+           type, validates in German, takes over ?typ= and the calculator values (werte=1) and
+           confirms with a dialog. Without JS all steps show at once and nothing can be sent.
            Delivery: a PHP script on Hostinger (D-04), not set up yet (F1). -->
       <form class="contact__form" id="enquiry" method="post">
-        <div class="field field--full">
-          <select id="f-type" name="betriebsart" required>
-            <option value="" selected disabled hidden></option>
-            <option value="hotel">Hotel / Resort</option>
-            <option value="bergbahn">Bergbahn</option>
-            <option value="therme">Wellness / Therme</option>
-            <option value="andere">Andere</option>
-          </select><label for="f-type">Betriebsart</label>
-        </div>
-        <div class="field">
-          <input type="text" name="name" autocomplete="name" required placeholder=" " id="f-name" /><label for="f-name">Ihr Name</label>
-        </div>
-        <div class="field">
-          <input type="text" name="betrieb" autocomplete="organization" required placeholder=" " id="f-prop" /><label for="f-prop">Name des Betriebs</label>
-        </div>
-        <div class="field">
-          <input type="email" name="email" autocomplete="email" required placeholder=" " id="f-mail"
-            pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" /><label for="f-mail">E-Mail</label>
-        </div>
-        <div class="field">
-          <input type="text" name="ort" autocomplete="address-level2" placeholder=" " id="f-place" /><label for="f-place">Ort</label>
-        </div>
+        <ol class="wizard__progress" aria-label="Schritte">
+          <li>Betrieb</li>
+          <li>Eckdaten</li>
+          <li>Kontakt</li>
+        </ol>
 
-        <!-- sizes as ranges, not exact numbers; data-max = upper bound, used to pick the range
-             for a calculator value (js/contact.js) -->
-        <fieldset class="contact__extra" data-for="hotel" hidden disabled>
-          <div class="field">
-            <select id="f-rooms" name="zimmer" required>
-              <option value="" selected disabled hidden></option>
-              <option data-max="20">bis 20</option>
-              <option data-max="50">21–50</option>
-              <option data-max="100">51–100</option>
-              <option data-max="200">101–200</option>
-              <option>über 200</option>
-            </select><label for="f-rooms">Zimmer</label>
+        <fieldset class="wizard__step">
+          <legend class="wizard__title">Was für ein Betrieb sind Sie?</legend>
+          <div class="choices choices--cards">
+            <label class="choice choice--card"><input type="radio" name="betriebsart" value="hotel" required /><span><b>Hotel / Resort</b>Zimmer füllen, direkt gebucht</span></label>
+            <label class="choice choice--card"><input type="radio" name="betriebsart" value="bergbahn" /><span><b>Bergbahn</b>Gäste im Sommer und an ruhigen Tagen</span></label>
+            <label class="choice choice--card"><input type="radio" name="betriebsart" value="therme" /><span><b>Wellness / Therme</b>Besuche und Gutscheine</span></label>
+            <label class="choice choice--card"><input type="radio" name="betriebsart" value="andere" /><span><b>Etwas anderes</b>Erzählen Sie es uns</span></label>
           </div>
-          <div class="field">
-            <select id="f-staff" name="mitarbeitende" required>
-              <option value="" selected disabled hidden></option>
-              <option>1–10</option>
-              <option>11–50</option>
-              <option>51–100</option>
-              <option>über 100</option>
-            </select><label for="f-staff">Mitarbeitende</label>
-          </div>
-        </fieldset>
-        <fieldset class="contact__extra" data-for="bergbahn" hidden disabled>
-          <div class="field">
-            <select id="f-guests" name="gaeste" required>
-              <option value="" selected disabled hidden></option>
-              <option data-max="50000">bis 50.000</option>
-              <option data-max="200000">50.000–200.000</option>
-              <option data-max="500000">200.000–500.000</option>
-              <option>über 500.000</option>
-            </select><label for="f-guests">Gäste pro Jahr</label>
-          </div>
-          <div class="field">
-            <select id="f-season" name="saison" required>
-              <option value="" selected disabled hidden></option>
-              <option>nur im Winter</option>
-              <option>nur im Sommer</option>
-              <option>Sommer und Winter</option>
-            </select><label for="f-season">In Betrieb</label>
+          <div class="wizard__nav">
+            <button class="btn btn--gold" type="button" data-next>Weiter</button>
           </div>
         </fieldset>
 
-        <fieldset class="contact__extra" data-for="therme" hidden disabled>
-          <div class="field">
-            <select id="f-visits" name="besuche" required>
-              <option value="" selected disabled hidden></option>
-              <option data-max="50000">bis 50.000</option>
-              <option data-max="150000">50.000–150.000</option>
-              <option data-max="300000">150.000–300.000</option>
-              <option>über 300.000</option>
-            </select><label for="f-visits">Besuche pro Jahr</label>
-          </div>
-          <div class="field">
-            <select id="f-tstaff" name="mitarbeitende" required>
-              <option value="" selected disabled hidden></option>
-              <option>1–10</option>
-              <option>11–50</option>
-              <option>51–100</option>
-              <option>über 100</option>
-            </select><label for="f-tstaff">Mitarbeitende</label>
+        <fieldset class="wizard__step">
+          <legend class="wizard__title">Ein paar Eckdaten</legend>
+          <p class="wizard__hint">Alles freiwillig – es hilft uns für ein erstes Angebot.</p>
+
+          <!-- per type; data-max = upper bound of a size range, used to pick the range for a
+               calculator value (js/contact.js) -->
+          <fieldset class="contact__extra" data-for="hotel">
+            <fieldset class="choice-group">
+              <legend>Zimmer</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="zimmer" value="bis 20" data-max="20" /><span>bis 20</span></label>
+                <label class="choice"><input type="radio" name="zimmer" value="21–50" data-max="50" /><span>21–50</span></label>
+                <label class="choice"><input type="radio" name="zimmer" value="51–100" data-max="100" /><span>51–100</span></label>
+                <label class="choice"><input type="radio" name="zimmer" value="101–200" data-max="200" /><span>101–200</span></label>
+                <label class="choice"><input type="radio" name="zimmer" value="über 200" /><span>über 200</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="choice-group">
+              <legend>Ein Haus oder mehrere?</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="hotel_struktur" value="Einzelbetrieb" /><span>Einzelbetrieb</span></label>
+                <label class="choice"><input type="radio" name="hotel_struktur" value="Gruppe oder Kette" /><span>Gruppe oder Kette</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="choice-group">
+              <legend>Geöffnet</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="hotel_saison" value="ganzjährig" /><span>ganzjährig</span></label>
+                <label class="choice"><input type="radio" name="hotel_saison" value="Sommer und Winter, mit Pause" /><span>Sommer und Winter, mit Pause</span></label>
+                <label class="choice"><input type="radio" name="hotel_saison" value="nur eine Saison" /><span>nur eine Saison</span></label>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <fieldset class="contact__extra" data-for="bergbahn">
+            <fieldset class="choice-group">
+              <legend>Anlagen</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="anlagen" value="1" /><span>1</span></label>
+                <label class="choice"><input type="radio" name="anlagen" value="2–5" /><span>2–5</span></label>
+                <label class="choice"><input type="radio" name="anlagen" value="6 und mehr" /><span>6 und mehr</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="choice-group">
+              <legend>Ein Betrieb oder ein Verbund?</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="bahn_struktur" value="Einzelbetrieb" /><span>Einzelbetrieb</span></label>
+                <label class="choice"><input type="radio" name="bahn_struktur" value="Verbund" /><span>Verbund</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="choice-group">
+              <legend>In Betrieb</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="bahn_saison" value="nur im Winter" /><span>nur im Winter</span></label>
+                <label class="choice"><input type="radio" name="bahn_saison" value="nur im Sommer" /><span>nur im Sommer</span></label>
+                <label class="choice"><input type="radio" name="bahn_saison" value="Sommer und Winter" /><span>Sommer und Winter</span></label>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <fieldset class="contact__extra" data-for="therme">
+            <fieldset class="choice-group">
+              <legend>Besuche pro Jahr</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="besuche" value="bis 50.000" data-max="50000" /><span>bis 50.000</span></label>
+                <label class="choice"><input type="radio" name="besuche" value="50.000–150.000" data-max="150000" /><span>50.000–150.000</span></label>
+                <label class="choice"><input type="radio" name="besuche" value="150.000–300.000" data-max="300000" /><span>150.000–300.000</span></label>
+                <label class="choice"><input type="radio" name="besuche" value="über 300.000" /><span>über 300.000</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="choice-group">
+              <legend>Träger</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="traeger" value="privat" /><span>privat</span></label>
+                <label class="choice"><input type="radio" name="traeger" value="kommunal" /><span>kommunal</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="choice-group">
+              <legend>Standorte</legend>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="therme_struktur" value="ein Standort" /><span>ein Standort</span></label>
+                <label class="choice"><input type="radio" name="therme_struktur" value="mehrere" /><span>mehrere</span></label>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <!-- for every type: who looks after the channels today -->
+          <fieldset class="choice-group">
+            <legend>Ihre Social-Media-Kanäle heute</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="kanaele" value="betreuen wir selbst" /><span>betreuen wir selbst</span></label>
+              <label class="choice"><input type="radio" name="kanaele" value="macht eine Agentur" /><span>macht eine Agentur</span></label>
+              <label class="choice"><input type="radio" name="kanaele" value="haben wir noch kaum" /><span>haben wir noch kaum</span></label>
+            </div>
+          </fieldset>
+          <div class="wizard__nav">
+            <button class="btn btn--ghost" type="button" data-back>Zurück</button>
+            <button class="btn btn--gold" type="button" data-next>Weiter</button>
           </div>
         </fieldset>
 
-        <div class="field field--full">
-          <textarea name="nachricht" rows="3" placeholder=" " id="f-msg"></textarea><label for="f-msg">Was schwebt Ihnen vor?</label>
-        </div>
+        <fieldset class="wizard__step">
+          <legend class="wizard__title">Wie erreichen wir Sie?</legend>
+          <div class="field">
+            <input type="text" name="name" autocomplete="name" required placeholder=" " id="f-name" /><label for="f-name">Ihr Name</label>
+          </div>
+          <div class="field">
+            <input type="email" name="email" autocomplete="email" required placeholder=" " id="f-mail"
+              pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" /><label for="f-mail">E-Mail</label>
+          </div>
+          <div class="field">
+            <input type="text" name="betrieb" autocomplete="organization" placeholder=" " id="f-prop" /><label for="f-prop">Name des Betriebs</label>
+          </div>
+          <div class="field">
+            <input type="text" name="ort" autocomplete="address-level2" placeholder=" " id="f-place" /><label for="f-place">Ort</label>
+          </div>
+          <div class="field field--full">
+            <textarea name="nachricht" rows="3" required placeholder=" " id="f-msg"></textarea><label for="f-msg">Was schwebt Ihnen vor?</label>
+          </div>
 
-        <p class="contact__calc" hidden>Ihre Werte aus dem Rechner werden mitgeschickt: <span></span></p>
-        <input type="hidden" name="rechner" />
-        <!-- honeypot: invisible to people, bots fill it in -->
-        <div class="contact__hp" aria-hidden="true">
-          <label for="f-web">Website</label><input type="text" name="website" id="f-web" tabindex="-1" autocomplete="off" />
-        </div>
+          <p class="contact__calc" hidden>Ihre Angaben aus dem Rechner oder dem Check werden mitgeschickt: <span></span></p>
+          <input type="hidden" name="rechner" />
+          <!-- honeypot: invisible to people, bots fill it in -->
+          <div class="contact__hp" aria-hidden="true">
+            <label for="f-web">Website</label><input type="text" name="website" id="f-web" tabindex="-1" autocomplete="off" />
+          </div>
 
-        <p class="contact__note">
-          Wir nutzen Ihre Angaben nur, um Ihre Anfrage zu beantworten. Mehr dazu in der
-          <a href="../datenschutz.html">Datenschutzerklärung</a>.
-        </p>
-        <p class="contact__error" role="alert" hidden>
-          Das hat leider nicht geklappt. Bitte versuchen Sie es später noch einmal.
-        </p>
-        <noscript>
           <p class="contact__note">
-            Ohne JavaScript lässt sich das Formular nicht senden. Schreiben Sie uns einfach an
-            <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>.
+            Wir nutzen Ihre Angaben nur, um Ihre Anfrage zu beantworten. Mehr dazu in der
+            <a href="../datenschutz.html">Datenschutzerklärung</a>.
           </p>
-        </noscript>
-        <button class="btn btn--gold" type="submit">Anfrage senden</button>
+          <p class="contact__error" role="alert" hidden>
+            Das hat leider nicht geklappt. Bitte versuchen Sie es später noch einmal.
+          </p>
+          <noscript>
+            <p class="contact__note">
+              Ohne JavaScript lässt sich das Formular nicht senden. Schreiben Sie uns einfach an
+              <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>.
+            </p>
+          </noscript>
+          <div class="wizard__nav">
+            <button class="btn btn--ghost" type="button" data-back>Zurück</button>
+            <button class="btn btn--gold" type="submit">Anfrage senden</button>
+          </div>
+        </fieldset>
       </form>
 
       <dialog class="dialog" id="enquiry-sent" aria-labelledby="enquiry-sent-title">
@@ -194,6 +257,26 @@
           <button class="btn btn--gold">Schließen</button>
         </form>
       </dialog>
+
+      <!-- who answers, and where we are (D-76) -->
+      <div class="people">
+        <p class="people__title">Ihre Ansprechpartner · Füssen im Allgäu</p>
+        <ul>
+          <li>
+            <img src="../assets/img/team-nicolas-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Nicolas Lekai</b> <span>Creative Direction</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-daniel-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Daniel Lenzenhuber</b> <span>Management</span>
+          </li>
+          <li>
+            <img src="../assets/img/team-raffaele-400.webp" alt="" width="400" height="500" loading="lazy" decoding="async" />
+            <b>Raffaele Fusco</b> <span>Web Designer &amp; Developer</span>
+          </li>
+        </ul>
+        <a class="people__more" href="../ueber-uns/">Mehr über uns</a>
+      </div>
     </section>
   </main>
 
@@ -207,16 +290,17 @@
     <div class="foot__cols">
       <div>
         <p>Studio</p>
-        <span>München · Bayern</span>
-        <a href="mailto:hallo@blauestunde.media">hallo@blauestunde.media</a>
+        <span>Füssen · Allgäu</span>
+        <a href="../ueber-uns/">Über uns</a>
         <a href="../kontakt/">Kontakt</a>
       </div>
       <div>
         <p>Social</p>
-        <!-- profile URLs pending; glyphs in assets/icons/social.svg (one colour, never gold) -->
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#tiktok" /></svg>TikTok</a>
-        <a href="#" class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</a>
+        <!-- profile URLs pending: plain text until they exist (C7), then <a href> again;
+             glyphs in assets/icons/social.svg (one colour, never gold) -->
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#facebook" /></svg>Facebook</span>
+        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</span>
       </div>
       <div>
         <p>Rechtliches</p>
@@ -233,7 +317,7 @@
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=67"></script>
   <script src="../js/nav.js?v=2"></script>
-  <script src="../js/contact.js?v=7"></script>
+  <script src="../js/contact.js?v=9"></script>
 </body>
 
 </html>

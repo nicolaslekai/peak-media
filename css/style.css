@@ -271,6 +271,9 @@ body::after {
 
 .btn--ghost {
   border-color: rgba(243, 237, 225, 0.4);
+  /* transparent also on a <button> (the form's "Zurück"), which has a light system
+     background of its own */
+  background: transparent;
   color: var(--paper);
 }
 
@@ -467,29 +470,31 @@ html:not(.js) .cine__stage canvas {
   display: none;
 }
 
-html:not(.js) #hero .cine__stage {
+/* by scene name (D-64: each segment page opens with its own scene); the URLs are relative
+   to this file, so they work from every page */
+html:not(.js) [data-scene="hero"] .cine__stage {
   background-image: url("../assets/frames-hd/hero/frame_0001.webp");
 }
 
-html:not(.js) #scene-spa .cine__stage {
+html:not(.js) [data-scene="spa"] .cine__stage {
   background-image: url("../assets/frames-hd/spa/frame_0060.webp");
 }
 
-html:not(.js) #scene-ski .cine__stage {
+html:not(.js) [data-scene="skilift"] .cine__stage {
   background-image: url("../assets/frames-hd/skilift/frame_0060.webp");
 }
 
 /* phones held upright: the portrait set, framed on each scene's focal point (D-55) */
 @media (max-width: 767px) and (orientation: portrait) {
-  html:not(.js) #hero .cine__stage {
+  html:not(.js) [data-scene="hero"] .cine__stage {
     background-image: url("../assets/frames-phone/hero/frame_0001.webp");
   }
 
-  html:not(.js) #scene-spa .cine__stage {
+  html:not(.js) [data-scene="spa"] .cine__stage {
     background-image: url("../assets/frames-phone/spa/frame_0060.webp");
   }
 
-  html:not(.js) #scene-ski .cine__stage {
+  html:not(.js) [data-scene="skilift"] .cine__stage {
     background-image: url("../assets/frames-phone/skilift/frame_0060.webp");
   }
 }
@@ -1187,16 +1192,22 @@ html:not(.js) #scene-ski .cine__stage {
   letter-spacing: 0.02em;
 }
 
-.channels h3 span {
-  /* platform icon (decorative) */
+/* the platform's own logo in its colours (D-75): recognised without reading */
+.channels__logo {
+  flex: none;
   width: 30px;
   height: 30px;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  display: grid;
-  place-items: center;
-  color: var(--gold);
-  font-size: 0.85rem;
+}
+
+/* three channels since TikTok left (D-75): one row of three, one column on phones */
+.channels .tiles {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 640px) {
+  .channels .tiles {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---- PHONES: iPhone-style mockups (social proof wall) ----
@@ -1278,28 +1289,6 @@ html:not(.js) #scene-ski .cine__stage {
   display: block;
   font-size: 0.86rem;
   font-weight: 600;
-  color: #fff;
-}
-
-/* review variant: the overlay covers the whole screen so the quote stays legible */
-.phone--review figcaption {
-  inset: 0;
-  justify-content: flex-end;
-  padding: 1.2rem 1rem 1.4rem;
-  background: linear-gradient(0deg, rgba(6, 8, 7, 0.92) 25%, transparent);
-}
-
-.phone .rating {
-  font-size: 0.95rem;
-  letter-spacing: 0.12em;
-  color: var(--gold);
-}
-
-.phone blockquote {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.05rem;
-  line-height: 1.3;
   color: #fff;
 }
 
@@ -2189,6 +2178,79 @@ html:not(.js) #scene-ski .cine__stage {
   color: rgba(243, 237, 225, 0.4);
 }
 
+/* ---- VISIBILITY CHECK (D-78, js/check.js): the calculator's grid and result card, the
+   form's one-click choices; a bar with one segment per question and the tips that apply ---- */
+.check__form {
+  display: grid;
+  gap: 1.8rem;
+}
+
+@media (min-width: 1001px) {
+  .check__result {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+.check__level {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.check__bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
+  margin-bottom: 1.6rem;
+  list-style: none;
+}
+
+.check__bar li {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  transition: background-color 0.4s;
+}
+
+.check__bar li[data-points="1"] {
+  background: rgba(198, 164, 92, 0.55);
+}
+
+.check__bar li[data-points="2"] {
+  background: var(--gold);
+}
+
+.check__tips {
+  display: grid;
+  gap: 0.9rem;
+  list-style: none;
+}
+
+.check__tips:empty {
+  display: none;
+}
+
+.check__tips li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+/* the same gold dash as the scope lists */
+.check__tips li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.78em;
+  width: 0.8rem;
+  height: 1px;
+  background: var(--gold);
+}
+
 /* ---- TEAM ---- */
 .team__grid {
   display: grid;
@@ -2223,8 +2285,12 @@ html:not(.js) #scene-ski .cine__stage {
   padding: 1.1rem 0.2rem 0;
 }
 
-.member h3 {
+.member h3,
+.member .member__name {
+  /* on the Über uns page the names are h2s (the page's h1 is above them) */
   font-size: 1.45rem;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 .member p {
@@ -2313,6 +2379,36 @@ html:not(.js) #scene-ski .cine__stage {
 
 .contact h2+p {
   margin-inline: auto;
+}
+
+/* pages that open with their own h1 in a section header (Über uns, Kontakt): the lead
+   below it as under a section's h2 */
+.section>header h1+p {
+  max-width: 60ch;
+  margin-top: 1.4rem;
+  font-size: 1.05rem;
+  color: var(--text-soft);
+}
+
+.contact h1+p {
+  margin-inline: auto;
+}
+
+/* the address for anyone who would rather write directly (Kontakt page, D-76) */
+.contact__direct {
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
+.contact__direct a {
+  color: var(--gold-soft);
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+
+.contact__direct a:hover {
+  border-color: var(--gold);
 }
 
 .contact__form {
@@ -2510,6 +2606,191 @@ html:not(.js) .contact__form .btn {
   display: contents;
 }
 
+/* ---- ENQUIRY IN THREE STEPS (D-74, js/contact.js): progress, steps, one-click choices.
+   Without JS every step shows, one after the other, and the step buttons are hidden ---- */
+.wizard__progress {
+  grid-column: 1/-1;
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+  list-style: none;
+  counter-reset: step;
+}
+
+.wizard__progress li {
+  flex: 1;
+  padding-top: 0.7rem;
+  border-top: 2px solid var(--line);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(243, 237, 225, 0.55);
+  counter-increment: step;
+  transition:
+    border-color 0.4s,
+    color 0.4s;
+}
+
+.wizard__progress li::before {
+  content: counter(step) " · ";
+}
+
+.wizard__progress li.is-done {
+  border-color: var(--gold);
+}
+
+.wizard__progress li[aria-current] {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+}
+
+html:not(.js) .wizard__progress {
+  display: none;
+}
+
+.wizard__step {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.wizard__step[hidden] {
+  display: none;
+}
+
+html:not(.js) .wizard__step+.wizard__step {
+  margin-top: 1.6rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.wizard__title {
+  padding: 0;
+  margin-bottom: 1rem;
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  color: var(--paper);
+  outline: none;
+}
+
+.wizard__hint {
+  grid-column: 1/-1;
+  margin-top: -1rem;
+  font-size: 0.85rem;
+  color: rgba(243, 237, 225, 0.55);
+}
+
+.wizard__nav {
+  grid-column: 1/-1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* a question with one-click answers: the radio stays in the label (focusable, invisible),
+   its <span> is the button */
+.choice-group {
+  grid-column: 1/-1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choice-group legend {
+  padding: 0;
+  margin-bottom: 0.7rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.choices {
+  grid-column: 1/-1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.choice {
+  position: relative;
+  cursor: pointer;
+}
+
+.choice input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.choice span {
+  display: block;
+  height: 100%;
+  padding: 0.65rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  transition:
+    border-color 0.3s,
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.choice:hover span {
+  border-color: rgba(198, 164, 92, 0.6);
+  color: var(--paper);
+}
+
+.choice input:checked+span {
+  border-color: var(--gold);
+  background: rgba(198, 164, 92, 0.12);
+  color: var(--gold-soft);
+}
+
+.choice input:focus-visible+span {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* the business type: four cards, a name and a line each */
+.choices--cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+}
+
+.choice--card span {
+  padding: 1.2rem 1.3rem;
+}
+
+.choice--card b {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--paper);
+}
+
+.choice--card input:checked+span b {
+  color: var(--gold-soft);
+}
+
+@media (max-width: 480px) {
+  .choices--cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 .contact__calc,
 .contact__note,
 .contact__error {
@@ -2659,7 +2940,8 @@ html:not(.js) .contact__form .btn {
 }
 
 .page-hero h1,
-.contact h1 {
+.contact h1,
+.page-top h1 {
   font-size: clamp(2.6rem, 7vw, 5.6rem);
   line-height: 1;
   letter-spacing: -0.02em;
@@ -2683,9 +2965,427 @@ html:not(.js) .contact__form .btn {
   justify-content: center;
 }
 
-/* the page the visitor is on */
+/* the page the visitor is on (D-73): in the bar a gold label with a gold line under it;
+   "Start" leads home from every page */
 .nav nav a[aria-current="page"] {
+  position: relative;
   color: var(--gold-soft);
+}
+
+.nav nav a[aria-current="page"]:not(.nav__cta)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.7em;
+  height: 2px;
+  background: var(--gold);
+}
+
+/* on phones and tablets the bar shows the page's name next to the menu button */
+.nav__here {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .nav--menu .nav__here {
+    display: block;
+    margin-left: auto;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+
+  /* in the open menu: the current page's row in gold with a gold dot at its end */
+  .nav.nav--menu nav a[aria-current="page"] {
+    color: var(--gold-soft);
+  }
+
+  .nav.nav--menu nav a[aria-current="page"]:not(.nav__cta)::after {
+    top: 50%;
+    bottom: auto;
+    left: auto;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+/* phones: no room beside the brand, so the label is a second line under "Blaue Stunde",
+   next to the symbol (36px tall, 50px wide on phones, then the brand's 0.7rem gap) */
+@media (max-width: 640px) {
+  .nav--menu .nav__here {
+    position: absolute;
+    top: calc(50% + 0.55rem);
+    left: calc(var(--edge) + 50px + 0.7rem);
+    margin: 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+  }
+}
+
+/* ---- HOME HERO without scrub (D-64): one still frame behind the copy, where the canvas
+   was; the portrait frame on phones held upright ---- */
+.cine__still img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* phones held upright see a narrow strip of the wide image: keep the photographer
+   (right third) in it */
+@media (max-width: 767px) and (orientation: portrait) {
+  .cine__still img {
+    object-position: 84% 50%;
+  }
+}
+
+/* the home's heading: one line shorter than the scenes' hero, so the copy fits on a
+   laptop screen with room for the image */
+.hero--still h1 {
+  max-width: 14ch;
+  font-size: clamp(2.6rem, 5.6vw, 5rem);
+}
+
+/* ---- SEGMENT PAGE OPENING (D-64): the scene with the page's h1, a longer line than the
+   home's, so a smaller size; the path to the page in place of the kicker ---- */
+.hero.hero--page h1 {
+  max-width: 16ch;
+  font-size: clamp(2.6rem, 6vw, 5.4rem);
+  line-height: 1.02;
+}
+
+.crumbs a {
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.crumbs a:hover {
+  border-color: currentColor;
+}
+
+/* bright footage (snow) under the page title: stronger at the side and at the bottom,
+   where the copy sits on wide screens and on phones */
+.hero.hero--bright .cine__scrim {
+  background:
+    linear-gradient(90deg,
+      rgba(8, 10, 9, 0.86) 0%,
+      rgba(8, 10, 9, 0.5) 45%,
+      rgba(8, 10, 9, 0.12) 100%),
+    linear-gradient(0deg, rgba(8, 10, 9, 0.8), transparent 60%);
+}
+
+@media (max-width: 767px) {
+  .hero.hero--page h1 {
+    font-size: clamp(2rem, 8.6vw, 2.6rem);
+  }
+}
+
+/* ---- CONTENT PATTERN (D-71): at a glance, scope, questions, the doors to the segment
+   pages, the team strip. Each list starts on a gold hairline like .metrics ---- */
+.glance__list,
+.scope__cols,
+.faq__list {
+  padding-top: 2.2rem;
+  border-top: 1px solid var(--line);
+}
+
+/* a header across the full width (D-77): kicker and title left, the lead right, so the
+   text keeps a readable line length on wide screens; stacked below 1001px */
+@media (min-width: 1001px) {
+  .section--split>header {
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: end;
+    max-width: none;
+  }
+
+  .section--split>header>.kicker,
+  .section--split>header>h2 {
+    grid-column: 1;
+  }
+
+  .section--split>header>h2+p {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+  }
+}
+
+/* below the segment FAQs: the general questions are on Über uns */
+.faq__more {
+  margin-top: 2.4rem;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
+.faq__more a {
+  color: var(--gold-soft);
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__more a:hover {
+  border-color: var(--gold);
+}
+
+.glance__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 2rem;
+}
+
+.glance__list dt,
+.people__title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.7rem;
+}
+
+.glance__list dd {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--text-soft);
+}
+
+/* the date of the text, as on a data sheet */
+.glance__date {
+  margin: 2rem 0 1.6rem;
+  font-size: 0.76rem;
+  /* 0.55 on --ink = 5.5:1, like .foot__legal (A1) */
+  color: rgba(243, 237, 225, 0.55);
+}
+
+.scope__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.4rem 4rem;
+}
+
+.scope h3,
+.faq h3 {
+  font-size: 1.45rem;
+  margin-bottom: 1rem;
+}
+
+.scope ul {
+  list-style: none;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.scope li {
+  position: relative;
+  padding-left: 1.6rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+/* a short gold dash for what is included, a pale one for what is not */
+.scope li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.78em;
+  width: 0.8rem;
+  height: 1px;
+  background: var(--gold);
+}
+
+.scope__cols>div+div li::before {
+  background: rgba(243, 237, 225, 0.35);
+}
+
+/* the price section's factors use .metrics.facts, four in a row where they fit; its
+   button below them */
+.cost .facts {
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.cost .hero__actions {
+  margin-top: 2.4rem;
+}
+
+.faq__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.4rem 4rem;
+}
+
+.faq__list p {
+  max-width: 60ch;
+  line-height: 1.65;
+  color: var(--text-soft);
+}
+
+/* the segment pages as cards: still, name, one line, a gold "more" */
+.doors__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 2rem 1.6rem;
+}
+
+.doors--more .doors__list {
+  max-width: 870px;
+}
+
+.door a {
+  display: block;
+  height: 100%;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.door img {
+  width: 100%;
+  /* auto: the height attribute would win over the ratio */
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-bottom: 1.2rem;
+  filter: saturate(0.85);
+  transition: filter 0.6s;
+}
+
+.door a:hover img {
+  filter: saturate(1.05);
+}
+
+.door h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.door p {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.door__more {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  transition: color 0.3s;
+}
+
+.door__more::after {
+  content: " →";
+}
+
+.door a:hover .door__more {
+  color: var(--gold-soft);
+}
+
+/* the people behind the enquiry (D-65, D-76): a strip under its buttons on every page
+   but Über uns, which has the full team */
+.people {
+  max-width: 52rem;
+  margin: 3.2rem auto 0;
+  padding-top: 2.2rem;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  scroll-margin-top: calc(4.6rem + var(--section-y));
+}
+
+.people__title {
+  margin-bottom: 1.4rem;
+}
+
+.people ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem 2.4rem;
+}
+
+.people li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* "Web Designer & Developer" on one line */
+  width: 12rem;
+}
+
+.people img {
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-bottom: 0.7rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  filter: grayscale(1) contrast(1.04);
+}
+
+.people b {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.people li span {
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.people__more {
+  display: inline-block;
+  margin-top: 1.6rem;
+  font-size: 0.85rem;
+  color: var(--gold-soft);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (max-width: 767px) {
+
+  .scope__cols,
+  .faq__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* phones: the three people side by side, smaller, the roles may wrap */
+@media (max-width: 640px) {
+  .people ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .people li {
+    width: auto;
+  }
+
+  .people img {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+
+  .people b {
+    font-size: 1rem;
+    line-height: 1.15;
+  }
+
+  .people li span {
+    font-size: 0.62rem;
+  }
 }
 
 /* ---- FOOTER: a full-width band like the nav (same --edge); both hairlines run

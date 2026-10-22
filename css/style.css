@@ -3001,6 +3001,31 @@ html:not(.js) .wizard__step+.wizard__step {
   line-height: 1.05;
 }
 
+.legal header p:not(.kicker) {
+  margin-top: 1.4rem;
+  color: var(--text-soft);
+}
+
+/* the 404 page's ways on (404.html) */
+.legal__links {
+  display: grid;
+  gap: 0.2rem;
+  margin: 1.6rem 0 2.4rem;
+  list-style: none;
+}
+
+.legal__links a {
+  display: inline-block;
+  padding: 0.5rem 0;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  color: var(--gold-soft);
+}
+
+.legal__links a:hover {
+  color: var(--paper);
+}
+
 /* ---- PLACEHOLDERS (D-38): where Nicolas's frames, images or video will go; the text
    names the shot that is wanted, so the page doubles as a shot list ---- */
 .ph {

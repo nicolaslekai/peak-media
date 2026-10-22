@@ -114,7 +114,8 @@
     const phone = Wd < 768, e = ease(p);
     // the camera: from high above the valley to in front of the house, a little above its roof
     // (phones: straight in front of the house, which sits in the screen's middle)
-    const end = at(phone ? -0.65 : -0.38, phone ? -1.45 : -1.2, YT + 0.17);
+    // (wide screens: the house to the right of the stations' copy)
+    const end = at(phone ? -0.65 : -0.62, phone ? -1.45 : -1.25, YT + 0.17);
     cam = { x: -0.5 + e * (end[0] + 0.5), y: 1.0 + e * (end[1] - 1.0), z: -1.3 + e * (end[2] + 1.3) };
     f = Math.min(Wd, Hd * 1.6) * (phone ? 0.95 : 0.66);
     const horizon = Hd * (phone ? 0.3 : 0.42), cx = Wd * (phone ? 0.5 : 0.64);

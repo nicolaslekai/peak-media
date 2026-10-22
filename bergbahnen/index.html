@@ -21,7 +21,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=100" />
+  <link rel="stylesheet" href="../css/style.css?v=101" />
 </head>
 
 <body>
@@ -74,8 +74,8 @@
           <h1>Ihr Berg in seinem besten Licht – im Winter wie im Sommer.</h1>
           <p>Erste Fahrt am Morgen, die Hütte, der Sommer am Berg: Wir zeigen, warum sich der Weg nach oben lohnt – auch an ruhigen Tagen.</p>
           <div class="hero__actions">
-            <a href="#check" class="btn btn--gold">Sichtbarkeit prüfen</a>
-            <a href="#kontakt" class="btn btn--ghost">Anfrage starten</a>
+            <a href="../kontakt/?typ=bergbahn" class="btn btn--gold">Anfrage starten</a>
+            <a href="#check" class="btn btn--ghost">Sichtbarkeit prüfen</a>
           </div>
         </div>
         <div class="hero__cue" aria-hidden="true">Scrollen</div>
@@ -112,7 +112,6 @@
       </dl>
       <p class="glance__date">Stand: Oktober 2026</p>
       <div class="hero__actions">
-        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
         <a href="../#ablauf" class="btn btn--ghost">So arbeiten wir</a>
       </div>
     </section>
@@ -129,7 +128,7 @@
           Winter, Sommer und alles, was oben passiert: An jeder Station zeigen wir, was wir für Ihren Berg tun.
         </p>
       </header>
-      <ol class="chain" data-cta="#kontakt" data-cta-label="Anfrage starten">
+      <ol class="chain" data-cta="../kontakt/?typ=bergbahn" data-cta-label="Anfrage starten">
         <li>
           <div class="chain__fact">
             <h3>Winter</h3>
@@ -338,8 +337,8 @@
          are decided (D-36, Raffaele 2026-10-22) -->
     <section class="section scope" id="leistungen">
       <header>
-        <p class="kicker">Leistungen</p>
-        <h2>Was gehört dazu – und was nicht?</h2>
+        <p class="kicker">Leistungen &amp; Angebot</p>
+        <h2>Was gehört dazu – und was kostet es?</h2>
       </header>
       <div class="scope__cols">
         <div>
@@ -361,25 +360,16 @@
           </ul>
         </div>
       </div>
-    </section>
-
-    <!-- PRICE (D-71, D-34): no prices; what the offer depends on, leading to the enquiry -->
-    <section class="section cost" id="kosten">
-      <header>
-        <p class="kicker">Angebot</p>
-        <h2>Was kostet das?</h2>
-        <p>
-          Feste Pakete gibt es bei uns nicht. Sie bekommen ein individuelles Angebot – es hängt vor allem von vier Dingen ab.
-        </p>
-      </header>
-      <ul class="metrics facts">
-        <li class="metric"><b>Bahnen</b> Eine Bahn oder ein Verbund mehrerer Bahnen und Gebiete.</li>
-        <li class="metric"><b>Saisons</b> Winter, Sommer oder das ganze Jahr – und was am Berg dazugehört.</li>
-        <li class="metric"><b>Umfang</b> Wie viele Reels, Posts und Stories im Monat.</li>
-        <li class="metric"><b>Kanäle</b> Welche Plattformen wir für Sie bespielen.</li>
-      </ul>
-      <div class="hero__actions">
-        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+      <!-- what the offer depends on (D-34: no prices), merged into this section (D-81) -->
+      <div class="scope__cost" id="kosten">
+        <h3>Was kostet das?</h3>
+        <p>Feste Pakete gibt es bei uns nicht. Sie bekommen ein individuelles Angebot – es hängt vor allem von vier Dingen ab.</p>
+        <ul class="metrics facts">
+          <li class="metric"><b>Bahnen</b> Eine Bahn oder ein Verbund mehrerer Bahnen und Gebiete.</li>
+          <li class="metric"><b>Saisons</b> Winter, Sommer oder das ganze Jahr – und was am Berg dazugehört.</li>
+          <li class="metric"><b>Umfang</b> Wie viele Reels, Posts und Stories im Monat.</li>
+          <li class="metric"><b>Kanäle</b> Welche Plattformen wir für Sie bespielen.</li>
+        </ul>
       </div>
     </section>
 
@@ -424,7 +414,7 @@
         </p>
       </header>
       <div class="hero__actions">
-        <a href="../kontakt/?typ=bergbahn" class="btn btn--gold">Projekt besprechen</a>
+        <a href="../kontakt/?typ=bergbahn" class="btn btn--gold">Anfrage starten</a>
         <a href="#check" class="btn btn--ghost">Sichtbarkeit prüfen</a>
       </div>
       <!-- the people behind the enquiry, linking to the Über uns page (D-76: the full team

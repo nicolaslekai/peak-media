@@ -2369,10 +2369,10 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 /* ---- REGIONS marquee (decorative) ----
    Two identical lists side by side, each moving left by its own width, so the
    second list takes the first one's place and the loop is seamless. Each list
-   must be at least as wide as the viewport: one repetition of the six names is
-   ~1400px at the largest font size, so each list holds two (~2800px). The
+   must be at least as wide as the viewport: one repetition of the eight names is
+   ~1700px at the largest font size, so each list holds two (~3400px). The
    trailing padding equals the gap, so the seam looks like any other gap.
-   34s keeps the previous speed (~82px/s). */
+   41s keeps the earlier speed (~82px/s, D-69 list measured 3390px at 1440). */
 .regions {
   display: flex;
   overflow: hidden;
@@ -2389,7 +2389,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   gap: 2rem;
   padding-right: 2rem;
   list-style: none;
-  animation: marq 34s linear infinite;
+  animation: marq 41s linear infinite;
   will-change: transform;
 }
 
@@ -3260,14 +3260,20 @@ html:not(.js) .wizard__step+.wizard__step {
   background: rgba(243, 237, 225, 0.35);
 }
 
-/* the price section's factors use .metrics.facts, four in a row where they fit; its
-   button below them */
-.cost .facts {
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+/* what the offer depends on, the second part of the scope section (D-81): its four factors
+   use .metrics.facts, four in a row where they fit */
+.scope__cost {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
 }
 
-.cost .hero__actions {
-  margin-top: 2.4rem;
+.scope__cost>p {
+  max-width: 60ch;
+  margin-bottom: 0.4rem;
+  color: var(--text-soft);
+}
+
+.scope__cost .facts {
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
 }
 
 .faq__list {

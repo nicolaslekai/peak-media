@@ -21,7 +21,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=100" />
+  <link rel="stylesheet" href="../css/style.css?v=101" />
 </head>
 
 <body>
@@ -73,8 +73,8 @@
           <h1>Ihr Haus in seinem besten Licht – das ganze Jahr.</h1>
           <p>Wir drehen bei Ihnen vor Ort und betreuen Ihre Kanäle dazwischen, damit Gäste Sie kennen, bevor sie ein Portal öffnen.</p>
           <div class="hero__actions">
-            <a href="#rechner" class="btn btn--gold">Potenzial berechnen</a>
-            <a href="#kontakt" class="btn btn--ghost">Anfrage starten</a>
+            <a href="../kontakt/?typ=hotel" class="btn btn--gold">Anfrage starten</a>
+            <a href="#rechner" class="btn btn--ghost">Potenzial berechnen</a>
           </div>
         </div>
         <div class="hero__cue" aria-hidden="true">Scrollen</div>
@@ -111,60 +111,8 @@
       </dl>
       <p class="glance__date">Stand: Oktober 2026</p>
       <div class="hero__actions">
-        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
         <a href="../#ablauf" class="btn btn--ghost">So arbeiten wir</a>
       </div>
-    </section>
-
-    <!-- EXAMPLES: the phones as a swipe row with AI-generated example images (D-61: labelled
-         in the lead), replaced by real pilot content; format, title and one line each -->
-    <section class="section impact" id="beispiele">
-      <header>
-        <p class="kicker">So kann es aussehen</p>
-        <h2>Ihr Haus im Feed.</h2>
-        <p>
-          Beispiele, wie Ihre Beiträge aussehen können – die Bilder sind KI-generiert. Mit dem ersten Pilotprojekt zeigen wir hier echte Beiträge.
-        </p>
-      </header>
-      <div class="phones">
-        <figure class="phone">
-          <img src="../assets/img/phone-hotel-zimmer-473.webp" alt="Beispiel-Story: Zimmer mit Ausblick" width="473" height="1024"
-            srcset="../assets/img/phone-hotel-zimmer-320.webp 320w, ../assets/img/phone-hotel-zimmer-473.webp 473w"
-            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
-          <figcaption>
-            <span>STORY</span>
-            <p><b>Zimmer mit Ausblick</b> Der erste Blick am Morgen</p>
-          </figcaption>
-        </figure>
-        <figure class="phone">
-          <img src="../assets/img/phone-hotel-terrasse-473.webp" alt="Beispiel-Reel: Sommer auf der Terrasse" width="473" height="1024"
-            srcset="../assets/img/phone-hotel-terrasse-320.webp 320w, ../assets/img/phone-hotel-terrasse-473.webp 473w"
-            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
-          <figcaption>
-            <span>REEL</span>
-            <p><b>Sommer auf der Terrasse</b> Ankommen und durchatmen</p>
-          </figcaption>
-        </figure>
-        <figure class="phone">
-          <img src="../assets/img/phone-hotel-winterabend-473.webp" alt="Beispiel-Reel: Winterabend" width="473" height="1024"
-            srcset="../assets/img/phone-hotel-winterabend-320.webp 320w, ../assets/img/phone-hotel-winterabend-473.webp 473w"
-            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
-          <figcaption>
-            <span>REEL</span>
-            <p><b>Winterabend</b> Das Haus zur blauen Stunde</p>
-          </figcaption>
-        </figure>
-        <figure class="phone">
-          <img src="../assets/img/phone-hotel-pool-473.webp" alt="Beispiel-Story: Infinity-Pool" width="473" height="1024"
-            srcset="../assets/img/phone-hotel-pool-320.webp 320w, ../assets/img/phone-hotel-pool-473.webp 473w"
-            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
-          <figcaption>
-            <span>STORY</span>
-            <p><b>Infinity-Pool</b> Schwimmen mit Bergblick</p>
-          </figcaption>
-        </figure>
-      </div>
-      <p class="phones__hint" aria-hidden="true">Wischen</p>
     </section>
 
     <!-- FIGURES (D-77, from the home page): the evidence chain, a sourced fact per link and our
@@ -243,6 +191,57 @@
           </div>
         </li>
       </ol>
+    </section>
+
+    <!-- EXAMPLES: the phones as a swipe row with AI-generated example images (D-61: labelled
+         in the lead), replaced by real pilot content; format, title and one line each -->
+    <section class="section impact" id="beispiele">
+      <header>
+        <p class="kicker">So kann es aussehen</p>
+        <h2>Ihr Haus im Feed.</h2>
+        <p>
+          Beispiele, wie Ihre Beiträge aussehen können – die Bilder sind KI-generiert. Mit dem ersten Pilotprojekt zeigen wir hier echte Beiträge.
+        </p>
+      </header>
+      <div class="phones">
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-zimmer-473.webp" alt="Beispiel-Story: Zimmer mit Ausblick" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-zimmer-320.webp 320w, ../assets/img/phone-hotel-zimmer-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Zimmer mit Ausblick</b> Der erste Blick am Morgen</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-terrasse-473.webp" alt="Beispiel-Reel: Sommer auf der Terrasse" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-terrasse-320.webp 320w, ../assets/img/phone-hotel-terrasse-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Sommer auf der Terrasse</b> Ankommen und durchatmen</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-winterabend-473.webp" alt="Beispiel-Reel: Winterabend" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-winterabend-320.webp 320w, ../assets/img/phone-hotel-winterabend-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>REEL</span>
+            <p><b>Winterabend</b> Das Haus zur blauen Stunde</p>
+          </figcaption>
+        </figure>
+        <figure class="phone">
+          <img src="../assets/img/phone-hotel-pool-473.webp" alt="Beispiel-Story: Infinity-Pool" width="473" height="1024"
+            srcset="../assets/img/phone-hotel-pool-320.webp 320w, ../assets/img/phone-hotel-pool-473.webp 473w"
+            sizes="(max-width: 640px) 52vw, (max-width: 1000px) 32vw, 267px" loading="lazy" decoding="async" />
+          <figcaption>
+            <span>STORY</span>
+            <p><b>Infinity-Pool</b> Schwimmen mit Bergblick</p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="phones__hint" aria-hidden="true">Wischen</p>
     </section>
 
     <!-- WHY VISIBILITY (D-59): where trips start and what visibility can do; no study
@@ -360,8 +359,8 @@
          are decided (D-36, Raffaele 2026-10-22) -->
     <section class="section scope" id="leistungen">
       <header>
-        <p class="kicker">Leistungen</p>
-        <h2>Was gehört dazu – und was nicht?</h2>
+        <p class="kicker">Leistungen &amp; Angebot</p>
+        <h2>Was gehört dazu – und was kostet es?</h2>
       </header>
       <div class="scope__cols">
         <div>
@@ -383,25 +382,16 @@
           </ul>
         </div>
       </div>
-    </section>
-
-    <!-- PRICE (D-71, D-34): no prices; what the offer depends on, leading to the enquiry -->
-    <section class="section cost" id="kosten">
-      <header>
-        <p class="kicker">Angebot</p>
-        <h2>Was kostet das?</h2>
-        <p>
-          Feste Pakete gibt es bei uns nicht. Sie bekommen ein individuelles Angebot – es hängt vor allem von vier Dingen ab.
-        </p>
-      </header>
-      <ul class="metrics facts">
-        <li class="metric"><b>Häuser</b> Ein Haus oder eine Gruppe mit mehreren Häusern – und wie weit sie auseinanderliegen.</li>
-        <li class="metric"><b>Saisons</b> Ganzjährig geöffnet oder Sommer und Winter mit Pause dazwischen.</li>
-        <li class="metric"><b>Umfang</b> Wie viele Reels, Posts und Stories im Monat.</li>
-        <li class="metric"><b>Kanäle</b> Welche Plattformen wir für Sie bespielen.</li>
-      </ul>
-      <div class="hero__actions">
-        <a href="#kontakt" class="btn btn--gold">Anfrage starten</a>
+      <!-- what the offer depends on (D-34: no prices), merged into this section (D-81) -->
+      <div class="scope__cost" id="kosten">
+        <h3>Was kostet das?</h3>
+        <p>Feste Pakete gibt es bei uns nicht. Sie bekommen ein individuelles Angebot – es hängt vor allem von vier Dingen ab.</p>
+        <ul class="metrics facts">
+          <li class="metric"><b>Häuser</b> Ein Haus oder eine Gruppe mit mehreren Häusern – und wie weit sie auseinanderliegen.</li>
+          <li class="metric"><b>Saisons</b> Ganzjährig geöffnet oder Sommer und Winter mit Pause dazwischen.</li>
+          <li class="metric"><b>Umfang</b> Wie viele Reels, Posts und Stories im Monat.</li>
+          <li class="metric"><b>Kanäle</b> Welche Plattformen wir für Sie bespielen.</li>
+        </ul>
       </div>
     </section>
 
@@ -446,7 +436,7 @@
         </p>
       </header>
       <div class="hero__actions">
-        <a href="../kontakt/?typ=hotel" class="btn btn--gold">Projekt besprechen</a>
+        <a href="../kontakt/?typ=hotel" class="btn btn--gold">Anfrage starten</a>
         <a href="#rechner" class="btn btn--ghost">Potenzial berechnen</a>
       </div>
       <!-- the people behind the enquiry, linking to the Über uns page (D-76: the full team
@@ -540,7 +530,7 @@
   <script src="../js/main.js?v=67"></script>
   <script src="../js/evidence.js?v=8"></script>
   <script src="../js/nav.js?v=2"></script>
-  <script src="../js/hotel-scene.js?v=1"></script>
+  <script src="../js/hotel-scene.js?v=2"></script>
 </body>
 
 </html>

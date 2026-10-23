@@ -2159,8 +2159,30 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   color: var(--gold-soft);
 }
 
-.calc__result .range {
-  margin-bottom: 0.6rem;
+/* the scenario (D-85): three equal buttons on top of the result card, the assumptions
+   spelled out below them */
+.calc__result .calc__scenario {
+  margin-bottom: 2.2rem;
+}
+
+.calc__scenario .choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.calc__scenario .choice span {
+  padding: 0.55rem 0.4rem;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.calc__scenario small {
+  display: block;
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: rgba(243, 237, 225, 0.5);
 }
 
 .calc__out {
@@ -3335,14 +3357,6 @@ html:not(.js) .wizard__step+.wizard__step {
   font-size: 0.98rem;
   line-height: 1.6;
   color: var(--text-soft);
-}
-
-/* the date of the text, as on a data sheet */
-.glance__date {
-  margin: 2rem 0 1.6rem;
-  font-size: 0.76rem;
-  /* 0.55 on --ink = 5.5:1, like .foot__legal (A1) */
-  color: rgba(243, 237, 225, 0.55);
 }
 
 .scope__cols {

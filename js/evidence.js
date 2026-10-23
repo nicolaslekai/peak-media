@@ -21,12 +21,12 @@
     eur: x => `${num0.format(x)} €`,
     eur2: x => `${num2.format(x)} €`,
     plus: x => `+${x} %`,
-    pts: x => `+${x} Punkte`,
   };
   // each panel leads with what the business gains per year (Nicolas, 2026-10-22: what a
   // visitor pays today, or might pay, scared people); the parts follow below the sliders
   const MODELS = {
-    // hotel: commission saved by direct bookings + room revenue in the three weakest months
+    // hotel: commission saved by direct bookings + room revenue in the three weakest months;
+    // shift and low come from the chosen scenario (D-85), not from sliders
     hotel: v => {
       const otaNights = v.rooms * 365 * (v.occ / 100) * (v.ota / 100);
       const otaRevenue = otaNights * v.adr;
@@ -35,8 +35,8 @@
       return {
         total: `<b>${money(saving + lowNights * v.adr)}</b> weniger Provision und mehr Zimmerumsatz`,
         outs: [
-          [money(saving), `≈ ${count(otaNights * v.shift / 100)} Zimmernächte direkt statt über Portale`],
-          [money(lowNights * v.adr), `≈ ${count(lowNights)} zusätzliche Zimmernächte (${num0.format(v.rooms)} Zimmer × 90 Nächte × ${v.low} %)`],
+          [money(saving), `≈ ${count(otaNights * v.shift / 100)} Zimmernächte direkt statt über Portale (${v.shift} % Ihrer Portal-Buchungen)`],
+          [money(lowNights * v.adr), `≈ ${count(lowNights)} zusätzliche Zimmernächte in den drei schwächsten Monaten (+${v.low} Punkte Auslastung)`],
         ],
       };
     },
@@ -75,6 +75,8 @@
   document.querySelectorAll('.calc[data-model]').forEach(panel => {
     const model = MODELS[panel.dataset.model];
     const inputs = [...panel.querySelectorAll('input[type="range"]')];
+    // scenario buttons: the checked one hands its data-* values to the model
+    const picks = [...panel.querySelectorAll('input[type="radio"]')];
     const total = panel.querySelector('.calc__total');
     const outs = [...panel.querySelectorAll('.calc__out')];
     if (!model || !total) return;
@@ -85,6 +87,7 @@
         el.style.setProperty('--p', `${((v[el.name] - el.min) / (el.max - el.min)) * 100}%`);
         el.parentElement.querySelector('output').textContent = FORMAT[el.dataset.format](v[el.name]);
       }
+      for (const el of picks) if (el.checked) for (const [k, x] of Object.entries(el.dataset)) v[k] = parseFloat(x);
       const r = model(v);
       total.innerHTML = r.total;
       r.outs.forEach(([value, note], i) => {
@@ -93,6 +96,7 @@
       });
     };
     inputs.forEach(el => el.addEventListener('input', update));
+    picks.forEach(el => el.addEventListener('change', update));
     update();
   });
 
@@ -123,6 +127,7 @@
       const size = panel.querySelector(`input[name="${SIZE[model]}"]`);
       const summary = [
         ...[...panel.querySelectorAll('.range')].map(r => `${clean(r.querySelector('label'))} ${clean(r.querySelector('output'))}`),
+        ...[...panel.querySelectorAll('input[type="radio"]:checked')].map(r => `Szenario ${clean(r.nextElementSibling)}`),
         clean(panel.querySelector('.calc__total')),
         ...[...panel.querySelectorAll('.calc__out b')].map(clean),
       ].join(' · ');

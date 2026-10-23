@@ -1267,9 +1267,11 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   object-fit: cover;
 }
 
+/* the caption starts at the same height in every phone, so badges and titles line up
+   in a row however many lines the text takes */
 .phone figcaption {
   position: absolute;
-  inset: auto 0 0 0;
+  inset: 62% 0 0 0;
   z-index: 3;
   display: flex;
   flex-direction: column;
@@ -3515,14 +3517,56 @@ html:not(.js) .wizard__step+.wizard__step {
   }
 }
 
+/* the FAQ as an accordion (D-84): one question per row on a hairline, the answer opens
+   on a click; the answers stay in the HTML (search engines, AI assistants, no JS) */
 .faq__list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2.4rem 4rem;
+  max-width: 52rem;
+  padding-top: 0;
+}
+
+.faq__list details {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__list summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.3rem 0;
+}
+
+.faq__list summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__list summary::after {
+  content: "+";
+  flex: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--gold);
+  transition: transform 0.3s var(--ease);
+}
+
+.faq__list details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq__list summary:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.faq__list summary h3 {
+  margin-bottom: 0;
 }
 
 .faq__list p {
   max-width: 60ch;
+  padding-bottom: 1.5rem;
   line-height: 1.65;
   color: var(--text-soft);
 }
@@ -3631,10 +3675,13 @@ html:not(.js) .wizard__step+.wizard__step {
   filter: grayscale(1) contrast(1.04);
 }
 
+/* first name and surname on two lines for all three, so the roles below line up */
 .people b {
+  width: min-content;
   font-family: var(--serif);
   font-size: 1.15rem;
   font-weight: 500;
+  line-height: 1.2;
 }
 
 .people li span {

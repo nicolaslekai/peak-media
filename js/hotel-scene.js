@@ -264,7 +264,8 @@
     if (!running) return;
     if (canvas.clientWidth !== lastW || canvas.clientHeight !== lastH) { size(); lastW = Wd; lastH = Hd; last = -1; }
     const r = ride.getBoundingClientRect();
-    const p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
+    // the pin range: the stage's height, not innerHeight, which jumps as a phone's toolbar hides
+    const p = Math.min(1, Math.max(0, -r.top / (r.height - stage.offsetHeight)));
     if (Math.abs(p - last) > 0.0004) {
       draw(p); last = p;
       const k = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));

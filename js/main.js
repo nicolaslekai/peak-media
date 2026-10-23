@@ -220,7 +220,7 @@ function initScrub(cfg, wake) {
     if (canvas.clientWidth !== cssW || canvas.clientHeight !== cssH) resize();
     const rect = section.getBoundingClientRect();
     if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight) return false;
-    const scrollable = rect.height - window.innerHeight;
+    const scrollable = rect.height - canvas.parentElement.offsetHeight;   // the pin range (the stage, not innerHeight, which jumps as a phone's toolbar hides)
     const p = Math.min(Math.max(-rect.top / scrollable, 0), 1);
     const target = p * (n - 1);
     // the frame follows the scroll directly (Lenis already smooths it; a second easing

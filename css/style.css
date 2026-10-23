@@ -159,6 +159,16 @@ body::before {
   z-index: 9997;
 }
 
+/* on phones the overlays cover the height with the toolbars hidden, so the vignette's
+   dark lower edge does not hang mid-screen while a toolbar slides away */
+@supports (height: 100lvh) {
+  body::before,
+  body::after {
+    bottom: auto;
+    height: 100lvh;
+  }
+}
+
 body::after {
   opacity: 0.05;
   z-index: 9999;
@@ -4047,10 +4057,13 @@ html:not(.js) .wizard__step+.wizard__step {
   }
 
   /* the stage fills the phone: full height, the frame cropped around the scene's focal
-     point (main.js). svh = the visible height with the toolbars shown, stable while
-     they hide and show, so the canvas does not stretch while scrolling */
+     point (main.js). lvh = the height with the toolbars hidden, stable while they hide
+     and show, so the canvas does not stretch and no strip opens under the frame; the
+     copy is lifted by the toolbars' height (--bars) so it stays above them */
   .cine__stage {
+    --bars: calc(100lvh - 100svh);
     height: 100svh;
+    height: 100lvh;
     min-height: 0;
   }
 
@@ -4071,7 +4084,7 @@ html:not(.js) .wizard__step+.wizard__step {
   }
 
   .scene .cine__copy {
-    padding-bottom: clamp(2rem, 7svh, 3.5rem);
+    padding-bottom: calc(clamp(2rem, 7svh, 3.5rem) + var(--bars));
   }
 
   .scene h2+p {
@@ -4096,7 +4109,7 @@ html:not(.js) .wizard__step+.wizard__step {
   }
 
   .hero .cine__copy {
-    padding-bottom: clamp(2rem, 7svh, 3.5rem);
+    padding-bottom: calc(clamp(2rem, 7svh, 3.5rem) + var(--bars));
   }
 
   .hero .cine__scrim {

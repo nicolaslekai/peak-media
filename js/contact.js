@@ -3,16 +3,17 @@
    the business type, a few one-click questions for that type, contact. Shows one step
    at a time and only the questions of the chosen type, validates each step in German,
    takes over ?typ= from a segment page and the calculator values ("Mit diesen Werten
-   anfragen") and confirms with a dialog. Delivery is not set up yet (D-04): while
-   ENDPOINT is empty nothing is sent and the dialog says so. Without JS every step shows
-   at once. Own file, like evidence.js: an error here cannot stop the scroll engine.
+   anfragen") and confirms with a dialog. Delivery: api/senden.php on the server mails it
+   to service@ (D-04, D-86); with ENDPOINT empty nothing would be sent and the dialog
+   would say so. Without JS every step shows at once. Own file, like evidence.js: an error here cannot stop the scroll engine.
    ===================================================== */
 (() => {
   const form = document.getElementById('enquiry');
   if (!form) return;
 
-  // form service or function URL, set once hosting and mail exist (D-04)
-  const ENDPOINT = '';
+  // the PHP script on Hostinger that mails the enquiry (D-04, api/senden.php); a local
+  // preview without PHP gets an error here and shows the form's error note
+  const ENDPOINT = '../api/senden.php';
 
   const steps = [...form.querySelectorAll('.wizard__step')];
   const marks = [...form.querySelectorAll('.wizard__progress li')];
@@ -133,12 +134,17 @@
     // a filled honeypot means a bot: pretend success, send nothing
     if (form.elements.website.value) { reset(); return; }
     if (ENDPOINT) {
+      // one request per click: the button waits until the server has answered
+      const send = form.querySelector('[type="submit"]');
+      send.disabled = true;
       try {
         const res = await fetch(ENDPOINT, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
         if (!res.ok) throw new Error(res.status);
       } catch {
         error.hidden = false;
         return;
+      } finally {
+        send.disabled = false;
       }
     }
     dialog.querySelector('.dialog__test').hidden = Boolean(ENDPOINT);

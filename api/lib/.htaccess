@@ -1,0 +1,2 @@
+# the mail library is only included by api/senden.php, never requested directly
+Require all denied

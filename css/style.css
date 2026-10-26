@@ -3820,6 +3820,8 @@ html:not(.js) .wizard__step+.wizard__step {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 3rem;
+  /* clips the legal hairline (100vw, scrollbar included) to the footer's width */
+  overflow: hidden;
 }
 
 /* the same white brand as in the nav, a link to the top; above the page overlays
@@ -3881,12 +3883,22 @@ html:not(.js) .wizard__step+.wizard__step {
 }
 
 .foot__legal {
+  position: relative;
   grid-column: 1/-1;
-  /* the hairline as wide as the footer's content, in line with the brand and the columns */
-  border-top: 1px solid var(--line);
   padding-top: 1.6rem;
   font-size: 0.76rem;
   color: rgba(243, 237, 225, 0.55);
+}
+
+/* the hairline runs from screen edge to screen edge, like the footer's top border, while
+   the text stays in line with the content (Raffaele, 2026-10-26) */
+.foot__legal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  border-top: 1px solid var(--line);
 }
 
 /* ---- NARROW DESKTOP (1001–1400px): brand, five links and the CTA on one line; labels

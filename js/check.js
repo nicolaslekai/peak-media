@@ -19,9 +19,9 @@
   const segments = [...panel.querySelectorAll('.check__bar li')];
   const tips = panel.querySelector('.check__tips');
   const LEVELS = [   // from the lowest score up
-    [0, 'Viel ungenutztes Potenzial – hier bringt schon wenig sehr viel.'],
-    [4, 'Ein guter Anfang, mit klaren Hebeln nach oben.'],
-    [8, 'Gut aufgestellt – jetzt geht es um die Feinheiten.'],
+    [0, 'Viel ungenutztes Potenzial. Hier bringt schon wenig viel.'],
+    [4, 'Ein guter Anfang mit klaren Hebeln.'],
+    [8, 'Gut aufgestellt. Jetzt geht es um Feinheiten.'],
   ];
 
   const answers = () => groups.map(g => g.querySelector('input:checked'));

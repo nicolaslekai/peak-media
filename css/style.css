@@ -3040,6 +3040,50 @@ html:not(.js) .wizard__step+.wizard__step {
   color: var(--text-soft);
 }
 
+/* the legal texts (Impressum, Datenschutz, D-86): one readable column */
+.legal__text {
+  max-width: 46rem;
+  margin: 2.4rem 0 3.2rem;
+}
+
+.legal__text h2 {
+  margin: 2.6rem 0 0.9rem;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  line-height: 1.25;
+}
+
+.legal__text h2:first-child {
+  margin-top: 0;
+}
+
+.legal__text p,
+.legal__text li {
+  line-height: 1.7;
+  color: var(--text-soft);
+}
+
+.legal__text p+p,
+.legal__text p+ul {
+  margin-top: 0.9rem;
+}
+
+.legal__text ul {
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+
+.legal__text a {
+  color: var(--gold-soft);
+  border-bottom: 1px solid var(--line);
+}
+
+/* an open point before the launch (build-dist.mjs --launch refuses "[TBD") */
+.legal__tbd {
+  padding: 0 0.2em;
+  background: rgba(198, 164, 92, 0.18);
+  color: var(--gold-soft);
+}
+
 /* the 404 page's ways on (404.html) */
 .legal__links {
   display: grid;

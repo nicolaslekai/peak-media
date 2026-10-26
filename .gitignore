@@ -2,6 +2,9 @@
 renders/
 templates/
 
+# the upload package (deploy/build-dist.mjs)
+dist/
+
 # editor / harness config
 .claude/
 

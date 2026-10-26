@@ -1,0 +1,10 @@
+# /etc/systemd/system/blauestunde-deploy.timer (D-87): checks GitHub every minute
+[Unit]
+Description=Blaue Stunde: check for new commits every minute
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+
+[Install]
+WantedBy=timers.target

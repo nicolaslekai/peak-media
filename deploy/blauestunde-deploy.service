@@ -1,0 +1,8 @@
+# /etc/systemd/system/blauestunde-deploy.service (D-87): one pull-deploy run, started by the timer
+[Unit]
+Description=Blaue Stunde: deploy origin/main when it has a new commit
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/blauestunde/deploy.sh

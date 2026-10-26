@@ -147,7 +147,11 @@
          segments (D-71); kicker and lead are a draft for Nicolas -->
     <section class="hero hero--still" id="hero">
       <div class="cine__stage">
+        <!-- phones held upright see only a square of the image (object-position 84% in
+             style.css): the same square, cut by workspace tools/images.mjs -->
         <picture class="cine__still">
+          <source media="(max-width: 767px) and (orientation: portrait)" srcset="assets/img/hero-home-phone.webp"
+            width="941" height="941" />
           <img src="assets/img/hero-home.webp" alt="" width="1672" height="941" fetchpriority="high" />
         </picture>
         <div class="cine__scrim"></div>

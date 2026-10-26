@@ -1113,6 +1113,21 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   padding-top: 0;
 }
 
+/* phones and tablets with the drawn logo above all steps (js/steps.js, STILL): the logo
+   is the line, so the steps drop their own small ridges */
+.steps.steps--stacked {
+  padding-top: 0;
+  row-gap: 2.4rem;
+}
+
+.steps.steps--stacked li {
+  padding-top: 0;
+}
+
+.steps.steps--stacked li::after {
+  display: none;
+}
+
 .steps.steps--tabs li {
   grid-area: 1 / 1;
   padding-top: 1.2rem;
@@ -3796,9 +3811,12 @@ html:not(.js) .wizard__step+.wizard__step {
 
 /* ---- FOOTER: a full-width band like the nav (same --edge); both hairlines run
    from screen edge to screen edge ---- */
+/* the content keeps to 68rem, centred, so the columns do not drift apart on large screens
+   (Raffaele, 2026-10-26) */
 .foot {
+  --foot-pad: max(var(--edge), calc((100% - 68rem) / 2));
   border-top: 1px solid var(--line);
-  padding: 2.8rem var(--edge) 2rem;
+  padding: 2.8rem var(--foot-pad) 2rem;
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 3rem;
@@ -3847,27 +3865,26 @@ html:not(.js) .wizard__step+.wizard__step {
   overflow-wrap: anywhere;
 }
 
-/* platform glyphs stay monochrome (light, never gold): brand rules allow one-colour
-   versions of the marks, not recoloured ones */
-.foot__cols .foot__social {
+/* the social glyphs in one row (each column at most two rows). Platform glyphs stay
+   monochrome (light, never gold): brand rules allow one-colour versions of the marks,
+   not recoloured ones */
+.foot__icons {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  gap: 1.2rem;
+  padding-block: 0.1rem;
 }
 
-.foot__social svg {
-  width: 16px;
-  height: 16px;
+.foot__icons svg {
+  width: 20px;
+  height: 20px;
   fill: rgba(243, 237, 225, 0.8);
-  flex-shrink: 0;
 }
 
 .foot__legal {
   grid-column: 1/-1;
+  /* the hairline as wide as the footer's content, in line with the brand and the columns */
   border-top: 1px solid var(--line);
-  /* the hairline runs past the footer padding to both screen edges */
-  margin-inline: calc(-1 * var(--edge));
-  padding: 1.6rem var(--edge) 0;
+  padding-top: 1.6rem;
   font-size: 0.76rem;
   color: rgba(243, 237, 225, 0.55);
 }
@@ -4308,7 +4325,7 @@ html:not(.js) .wizard__step+.wizard__step {
   }
 
   .foot {
-    padding: 2.5rem var(--edge) 1.8rem;
+    padding: 2.5rem var(--foot-pad) 1.8rem;
     gap: 1.8rem;
   }
 
@@ -4337,6 +4354,11 @@ html:not(.js) .wizard__step+.wizard__step {
   .foot__cols span {
     padding-block: 0.55rem;
     margin-bottom: 0;
+  }
+
+  /* the glyph row as tall as a link row */
+  .foot__icons {
+    padding-block: 0.65rem;
   }
 
   .range input {
@@ -4515,9 +4537,9 @@ html:not(.js) .wizard__step+.wizard__step {
     font-size: 0.84rem;
   }
 
-  .foot__cols .foot__social {
+  .foot__icons {
     justify-content: center;
-    gap: 0.45rem;
+    gap: 0.9rem;
   }
 
   .foot__legal {

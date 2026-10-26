@@ -70,7 +70,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=109" />
+  <link rel="stylesheet" href="../css/style.css?v=110" />
 </head>
 
 <body>
@@ -340,17 +340,19 @@
     <div class="foot__cols">
       <div>
         <p>Agentur</p>
-        <span>Füssen · Allgäu</span>
         <a href="../ueber-uns/">Über uns</a>
         <a href="../kontakt/">Kontakt</a>
       </div>
       <div>
         <p>Social</p>
-        <!-- profile URLs pending: plain text until they exist (C7), then <a href> again;
-             glyphs in assets/icons/social.svg (one colour, never gold) -->
-        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#instagram" /></svg>Instagram</span>
-        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#facebook" /></svg>Facebook</span>
-        <span class="foot__social"><svg aria-hidden="true"><use href="../assets/icons/social.svg#youtube" /></svg>YouTube</span>
+        <!-- one row of glyphs, named for screen readers; profile URLs pending (C7), then each
+             <svg> goes into an <a aria-label>. Glyphs in assets/icons/social.svg (one colour,
+             never gold); ?v= on the sprite, since phones kept the old one with TikTok -->
+        <div class="foot__icons">
+          <svg role="img" aria-label="Instagram"><use href="../assets/icons/social.svg?v=2#instagram" /></svg>
+          <svg role="img" aria-label="Facebook"><use href="../assets/icons/social.svg?v=2#facebook" /></svg>
+          <svg role="img" aria-label="YouTube"><use href="../assets/icons/social.svg?v=2#youtube" /></svg>
+        </div>
       </div>
       <div>
         <p>Rechtliches</p>
@@ -359,7 +361,7 @@
       </div>
     </div>
     <p class="foot__legal">
-      © 2026 Blaue Stunde · Digital Media Marketing für den Alpentourismus.
+      © 2026 Blaue Stunde · Füssen im Allgäu · Digital Media Marketing für den Alpentourismus.
     </p>
   </footer>
 

@@ -3,13 +3,13 @@
    real proportions) becomes the line:
    - wide screens (five columns): the whole logo across the steps, small summit on the
      4th dot, every dot on the line, raised dots with a drop line to their number; the
-     line, the rising sun and the arc are drawn while scrolling (.steps--profile,
-     .steps--drawing in style.css);
-   - phones and tablets: the same pinned drawing over the logo's own ridge, dots as a
-     route (foot, halfway up, both summits, other foot); one step at a time, fading
-     with the scroll; a dot jumps to its step (.steps--tabs, .steps--scroll,
-     .steps__nav). With reduced motion: not pinned, the numbered dots and the line
-     under the step choose the step (tap or swipe, .steps__next).
+     line, the rising sun and the arc (.steps--profile in style.css);
+   - phones and tablets: the same logo over its own ridge, above all five steps.
+   Since 2026-10-26 the logo is drawn at once and nothing pins (STILL; Raffaele: the
+   pinned drawing felt stuck and started empty). With STILL false the earlier modes come
+   back: drawn while scrolling on wide screens (.steps--drawing), and on phones a pinned
+   drawing with one step at a time (.steps--tabs, .steps--scroll, .steps__nav), or with
+   reduced motion tabs chosen by the dots (.steps__next).
    Without JS each step keeps its own ridge. Own file, like evidence.js: an error here
    cannot stop the scroll engine.
    ============================================================================ */
@@ -18,6 +18,8 @@
   if (!ol) return;
   const items = [...ol.children];
   const wide = matchMedia('(min-width: 1001px)');   // five columns in style.css
+  const STILL = true;       // drawn at once, never pinned (see above)
+  const still = STILL || matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const S = 170 / 78.7;     // px per logo unit on wide screens (ridge 170px tall)
   const DOT = 4.5;          // dot centre from the step's left edge (style.css)
@@ -117,7 +119,7 @@
   cue.className = 'steps__cue is-gone';
   cue.setAttribute('aria-hidden', 'true');
   cue.textContent = 'Scrollen';
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) pin.firstElementChild.append(cue);
+  if (!still) pin.firstElementChild.append(cue);
 
   let current = 0;
   function show(i) {
@@ -164,8 +166,7 @@
   // again; above it the sun (the logo's disc, behind the logo's own mountain mask) and the
   // arc. Scrolling draws the line from dot to dot (each step appears when the line reaches
   // it), the sun rises behind the mountains, and the arc closes the logo at the end.
-  // Reduced motion: drawn at once.
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // STILL or reduced motion: drawn at once.
   const SVGNS = 'http://www.w3.org/2000/svg';
   const logo = document.createElementNS(SVGNS, 'svg');
   logo.classList.add('steps__logo');
@@ -174,6 +175,7 @@
   const ARC_TOP = 3;        // top of the logo's arc (logo units; the ridge starts at 90.3)
   let line = null, arc = null, sun = null, total = 0, arcLen = 0, dotLen = [];
   let scrolling = false;    // phones and tablets with motion: pinned, steps follow the scroll
+  let stacked = false;      // phones and tablets with STILL: the drawn logo over all steps
 
   // the logo for the dots at xs (px, the 4th on the small summit) at sL px per logo unit,
   // W wide: ridge line through the dots, the sun behind the mountains and the arc
@@ -283,7 +285,7 @@
   const clamp = v => Math.max(0, Math.min(1, v));
   let shown = -1;   // the progress last painted; -1 forces a repaint (after every redraw)
   function progress() {
-    if (!line || !(ol.classList.contains('steps--profile') || scrolling)) return;
+    if (!line || !(ol.classList.contains('steps--profile') || scrolling || stacked)) return;
     const r = pin.getBoundingClientRect();
     let p = 1;
     if (!still) {
@@ -347,21 +349,26 @@
     if (key === last) return;           // height-only changes (fonts, panel): nothing to redraw
     last = key;
     scrolling = tabs && !still;
+    stacked = tabs && STILL;
     ol.classList.toggle('steps--profile', !tabs);
-    ol.classList.toggle('steps--tabs', tabs);
+    ol.classList.toggle('steps--tabs', tabs && !stacked);
+    ol.classList.toggle('steps--stacked', stacked);
     ol.classList.toggle('steps--scroll', scrolling);
-    nav.classList.toggle('steps__nav--scroll', scrolling);
+    nav.classList.toggle('steps__nav--scroll', scrolling || stacked);
     pin.classList.toggle('steps-pin--tabs', scrolling);
     nav.hidden = !tabs;
-    onward.hidden = !tabs || scrolling;
-    logo.toggleAttribute('hidden', tabs && !scrolling);   // an <svg> has no .hidden property (T9)
+    // stacked: the nav only carries the drawn logo, a picture without buttons
+    nav.toggleAttribute('aria-hidden', stacked);
+    dots.forEach(b => { b.style.display = stacked ? 'none' : ''; });
+    onward.hidden = !tabs || scrolling || stacked;
+    logo.toggleAttribute('hidden', tabs && !scrolling && !stacked);   // an <svg> has no .hidden property (T9)
     if (!scrolling) for (const li of items) li.style.opacity = li.style.transform = li.style.visibility = '';
     if (!tabs) { drawLine(); return; }
     if (head && head.parentNode !== host) pin.before(head);   // phones and tablets: header above
     ol.style.paddingTop = '';
     ol.classList.remove('steps--drawing');
     pin.classList.toggle('steps-pin--on', scrolling);
-    if (scrolling) { drawScrollNav(); return; }
+    if (scrolling || stacked) { drawScrollNav(); return; }
     drawNav();
     show(current);
   }

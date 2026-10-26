@@ -4035,7 +4035,9 @@ html:not(.js) .wizard__step+.wizard__step {
     color: var(--text-soft);
   }
 
-  .nav--menu nav .nav__meta a:first-child {
+  /* email and phone (D-86) a row each, the page links share the last row */
+  .nav--menu nav .nav__meta a[href^="mailto:"],
+  .nav--menu nav .nav__meta a[href^="tel:"] {
     flex-basis: 100%;
   }
 

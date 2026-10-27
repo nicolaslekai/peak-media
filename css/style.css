@@ -3280,6 +3280,11 @@ html:not(.js) .wizard__step+.wizard__step {
     border-radius: 50%;
     transform: translateY(-50%);
   }
+
+  /* the small contact/legal links end with their text: the dot goes into the gap after it */
+  .nav.nav--menu nav .nav__meta a[aria-current="page"]::after {
+    right: -0.8rem;
+  }
 }
 
 /* phones: no room beside the brand, so the label is a second line under "Blaue Stunde",

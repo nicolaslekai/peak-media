@@ -2625,14 +2625,19 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   font-size: 1rem;
   padding: 0.9rem 0;
   resize: none;
-  transition: border-color 0.4s;
+  transition:
+    border-color 0.4s,
+    box-shadow 0.4s;
 }
 
+/* focus: the underline turns gold and doubles to 2px (the shadow adds the second pixel),
+   a clear cue for keyboard users without a box around the field (A3) */
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   outline: none;
   border-color: var(--gold);
+  box-shadow: 0 1px 0 var(--gold);
 }
 
 /* select: same underline field, a small gold caret instead of the native arrow */

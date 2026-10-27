@@ -112,6 +112,8 @@ $recent[] = time();
 try {
   $c = mailer($cfg);
   $c->addAddress($email);
+  // a reply to the confirmation goes to the shared address, not to the sending account
+  $c->addReplyTo($cfg['to'] ?? 'service@blauestunde.media', 'Blaue Stunde');
   $c->Subject = 'Ihre Anfrage bei Blaue Stunde';
   $c->Body = "Guten Tag,\n\n"
     . "danke für Ihre Anfrage. Wir melden uns innerhalb von drei Werktagen.\n\n"

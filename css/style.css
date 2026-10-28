@@ -3262,22 +3262,7 @@ html:not(.js) .wizard__step+.wizard__step {
   transition: none !important;
 }
 
-/* on phones and tablets the bar shows the page's name next to the menu button */
-.nav__here {
-  display: none;
-}
-
 @media (max-width: 1000px) {
-  .nav--menu .nav__here {
-    display: block;
-    margin-left: auto;
-    font-size: 0.64rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    white-space: nowrap;
-    text-transform: uppercase;
-    color: var(--gold-soft);
-  }
 
   /* in the open menu: the current page's row in gold with a gold dot at its end */
   .nav.nav--menu nav a[aria-current="page"] {
@@ -3297,19 +3282,6 @@ html:not(.js) .wizard__step+.wizard__step {
   /* the small contact/legal links end with their text: the dot goes into the gap after it */
   .nav.nav--menu nav .nav__meta a[aria-current="page"]::after {
     right: -0.8rem;
-  }
-}
-
-/* phones: no room beside the brand, so the label is a second line under "Blaue Stunde",
-   next to the symbol (36px tall, 50px wide on phones, then the brand's 0.7rem gap) */
-@media (max-width: 640px) {
-  .nav--menu .nav__here {
-    position: absolute;
-    top: calc(50% + 0.55rem);
-    left: calc(var(--edge) + 50px + 0.7rem);
-    margin: 0;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
   }
 }
 

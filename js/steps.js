@@ -62,7 +62,7 @@
     for (const [, a, b, c] of RIDGE) d += `C${X(a[0])} ${Y(a[1])} ${X(b[0])} ${Y(b[1])} ${X(c[0])} ${Y(c[1])}`;
     d += `H${f(width)}`;
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${f(width)}" height="${Math.ceil(h + 1)}">` +
-      `<path d="${d}" fill="none" stroke="#c6a45c" stroke-opacity=".28"/></svg>`;
+      `<path d="${d}" fill="none" stroke="#d1a851" stroke-opacity=".28"/></svg>`;
     return {
       h,
       url: `url("data:image/svg+xml,${encodeURIComponent(svg)}")`,

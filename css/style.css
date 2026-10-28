@@ -96,10 +96,10 @@
   --ink-deep: rgb(var(--ink-deep-rgb));
   --paper: #f3ede1;
   /* warm off-white */
-  --gold: #c6a45c;
+  --gold: #d1a851;
   /* brass accent */
-  --gold-soft: #e6d4a8;
-  --line: rgba(198, 164, 92, 0.28);
+  --gold-soft: #ecd6a2;
+  --line: rgba(209, 168, 81, 0.28);
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "Manrope", system-ui, sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -897,27 +897,27 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   padding: 2.2rem clamp(1rem, 2vw, 2rem) 0 0;
   --ridge-x: 2.4rem;
   --ridge-w: 53px;
-  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='53' height='19'%3E%3Cpath d='M0 18.5C6.8 11.4 17.8 0.5 21.5 0.5C24 0.5 28.9 5.7 33.6 11.2C35.8 9.9 37.7 7.5 40.4 7.5C43.2 7.5 47.9 13.4 53 18.5' fill='none' stroke='%23c6a45c' stroke-opacity='.28'/%3E%3C/svg%3E");
+  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='53' height='19'%3E%3Cpath d='M0 18.5C6.8 11.4 17.8 0.5 21.5 0.5C24 0.5 28.9 5.7 33.6 11.2C35.8 9.9 37.7 7.5 40.4 7.5C43.2 7.5 47.9 13.4 53 18.5' fill='none' stroke='%23d1a851' stroke-opacity='.28'/%3E%3C/svg%3E");
 }
 
 .steps li:nth-child(2) {
   --ridge-w: 71px;
-  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='71' height='25'%3E%3Cpath d='M0 24.5C9.2 15.1 23.9 0.5 28.8 0.5C32.1 0.5 38.7 7.5 45 14.8C48 13.1 50.5 9.8 54.2 9.8C57.8 9.8 64.2 17.7 71 24.5' fill='none' stroke='%23c6a45c' stroke-opacity='.28'/%3E%3C/svg%3E");
+  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='71' height='25'%3E%3Cpath d='M0 24.5C9.2 15.1 23.9 0.5 28.8 0.5C32.1 0.5 38.7 7.5 45 14.8C48 13.1 50.5 9.8 54.2 9.8C57.8 9.8 64.2 17.7 71 24.5' fill='none' stroke='%23d1a851' stroke-opacity='.28'/%3E%3C/svg%3E");
 }
 
 .steps li:nth-child(3) {
   --ridge-w: 88px;
-  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='31'%3E%3Cpath d='M0 30.5C11.3 18.7 29.6 0.5 35.7 0.5C39.8 0.5 47.9 9.2 55.8 18.4C59.4 16.2 62.6 12.1 67.1 12.1C71.7 12.1 79.6 22 88 30.5' fill='none' stroke='%23c6a45c' stroke-opacity='.28'/%3E%3C/svg%3E");
+  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='31'%3E%3Cpath d='M0 30.5C11.3 18.7 29.6 0.5 35.7 0.5C39.8 0.5 47.9 9.2 55.8 18.4C59.4 16.2 62.6 12.1 67.1 12.1C71.7 12.1 79.6 22 88 30.5' fill='none' stroke='%23d1a851' stroke-opacity='.28'/%3E%3C/svg%3E");
 }
 
 .steps li:nth-child(4) {
   --ridge-w: 106px;
-  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='106' height='37'%3E%3Cpath d='M0 36.5C13.7 22.4 35.6 0.5 42.9 0.5C48 0.5 57.7 10.9 67.2 21.9C71.6 19.4 75.4 14.4 80.9 14.4C86.4 14.4 95.9 26.3 106 36.5' fill='none' stroke='%23c6a45c' stroke-opacity='.28'/%3E%3C/svg%3E");
+  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='106' height='37'%3E%3Cpath d='M0 36.5C13.7 22.4 35.6 0.5 42.9 0.5C48 0.5 57.7 10.9 67.2 21.9C71.6 19.4 75.4 14.4 80.9 14.4C86.4 14.4 95.9 26.3 106 36.5' fill='none' stroke='%23d1a851' stroke-opacity='.28'/%3E%3C/svg%3E");
 }
 
 .steps li:nth-child(5) {
   --ridge-w: 124px;
-  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='124' height='43'%3E%3Cpath d='M0 42.5C16 26 41.7 0.5 50.2 0.5C56.1 0.5 67.5 12.7 78.6 25.5C83.8 22.5 88.2 16.7 94.6 16.7C101 16.7 112.1 30.7 124 42.5' fill='none' stroke='%23c6a45c' stroke-opacity='.28'/%3E%3C/svg%3E");
+  --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='124' height='43'%3E%3Cpath d='M0 42.5C16 26 41.7 0.5 50.2 0.5C56.1 0.5 67.5 12.7 78.6 25.5C83.8 22.5 88.2 16.7 94.6 16.7C101 16.7 112.1 30.7 124 42.5' fill='none' stroke='%23d1a851' stroke-opacity='.28'/%3E%3C/svg%3E");
 }
 
 /* box from 48px above the step to 5px below its top edge: room for the highest ridge
@@ -1060,8 +1060,8 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   /* from the ring's top to --drop below the base, at least the ring itself */
   height: calc(9.5px + var(--rise) + max(9.5px, var(--drop)));
   background:
-    radial-gradient(circle, var(--gold) 0 4px, var(--ink) 4.75px 7.5px, rgba(198, 164, 92, 0.35) 8px 8.75px, transparent 9.25px) center top / 19px 19px no-repeat,
-    repeating-linear-gradient(to bottom, rgba(198, 164, 92, 0.45) 0 3px, transparent 3px 7px) center bottom / 1px calc(100% - 21px) no-repeat;
+    radial-gradient(circle, var(--gold) 0 4px, var(--ink) 4.75px 7.5px, rgba(209, 168, 81, 0.35) 8px 8.75px, transparent 9.25px) center top / 19px 19px no-repeat,
+    repeating-linear-gradient(to bottom, rgba(209, 168, 81, 0.45) 0 3px, transparent 3px 7px) center bottom / 1px calc(100% - 21px) no-repeat;
 }
 
 /* phones and tablets (js/steps.js): the profile is the navigation, numbered dots on the
@@ -1104,7 +1104,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   width: 19px;
   height: 19px;
   margin: -9.5px 0 0 -9.5px;
-  background: radial-gradient(circle, var(--gold) 0 4px, var(--ink) 4.75px 7.5px, rgba(198, 164, 92, 0.35) 8px 8.75px, transparent 9.25px);
+  background: radial-gradient(circle, var(--gold) 0 4px, var(--ink) 4.75px 7.5px, rgba(209, 168, 81, 0.35) 8px 8.75px, transparent 9.25px);
   transition: transform 0.3s var(--ease);
 }
 
@@ -1430,7 +1430,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 .chart__key--fill::before {
-  background: rgba(230, 212, 168, 0.55);
+  background: rgba(236, 214, 162, 0.55);
 }
 
 .chart__key--empty::before {
@@ -1500,7 +1500,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 
 .month::after {
   height: calc(var(--v) * 1%);
-  background: linear-gradient(180deg, rgba(230, 212, 168, 0.55), rgba(198, 164, 92, 0.25));
+  background: linear-gradient(180deg, rgba(236, 214, 162, 0.55), rgba(209, 168, 81, 0.25));
   transition: height 0.9s var(--ease);
 }
 
@@ -2133,7 +2133,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 
 .range input:focus-visible::-webkit-slider-thumb {
   transform: scale(1.25);
-  box-shadow: 0 0 0 4px rgba(198, 164, 92, 0.25);
+  box-shadow: 0 0 0 4px rgba(209, 168, 81, 0.25);
 }
 
 .calc details {
@@ -2416,7 +2416,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 .check__bar li[data-points="1"] {
-  background: rgba(198, 164, 92, 0.55);
+  background: rgba(209, 168, 81, 0.55);
 }
 
 .check__bar li[data-points="2"] {
@@ -2661,7 +2661,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   appearance: none;
   border-radius: 0;
   cursor: pointer;
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c6a45c' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 0.2rem center;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23d1a851' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 0.2rem center;
 }
 
 .field select option {
@@ -2689,7 +2689,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
     width: 12px;
     height: 8px;
     margin-right: 0.2rem;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c6a45c' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat center;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23d1a851' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat center;
     transition: rotate 0.3s var(--ease);
   }
 
@@ -2739,7 +2739,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   .field select option:hover,
   .field select option:focus-visible {
     outline: none;
-    background: rgba(198, 164, 92, 0.12);
+    background: rgba(209, 168, 81, 0.12);
     color: var(--paper);
   }
 
@@ -2952,13 +2952,13 @@ html:not(.js) .wizard__step+.wizard__step {
 }
 
 .choice:hover span {
-  border-color: rgba(198, 164, 92, 0.6);
+  border-color: rgba(209, 168, 81, 0.6);
   color: var(--paper);
 }
 
 .choice input:checked+span {
   border-color: var(--gold);
-  background: rgba(198, 164, 92, 0.12);
+  background: rgba(209, 168, 81, 0.12);
   color: var(--gold-soft);
 }
 
@@ -3103,7 +3103,7 @@ html:not(.js) .wizard__step+.wizard__step {
 /* an open point before the launch (build-dist.mjs --launch refuses "[TBD") */
 .legal__tbd {
   padding: 0 0.2em;
-  background: rgba(198, 164, 92, 0.18);
+  background: rgba(209, 168, 81, 0.18);
   color: var(--gold-soft);
 }
 

@@ -122,6 +122,21 @@ body {
   overflow-x: hidden;
 }
 
+/* the footer stays at the bottom of the window on short pages (Impressum, 404, Kontakt on
+   a tall screen): the page is a column and <main> takes the free height. width: 100%, or
+   a centred main (.section, margin-inline: auto) would shrink to its content */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+body>main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -3041,21 +3056,8 @@ html:not(.js) .wizard__step+.wizard__step {
   margin-top: 2rem;
 }
 
-/* ---- LEGAL placeholder pages (impressum.html, datenschutz.html) ---- */
-.legal {
-  min-height: 100vh;
-  padding-top: clamp(2rem, 6vh, 4rem);
-}
-
-.legal .brand {
-  margin-bottom: clamp(3rem, 12vh, 7rem);
-}
-
-.legal h1 {
-  font-size: clamp(2.6rem, 6vw, 4.5rem);
-  line-height: 1.05;
-}
-
+/* ---- LEGAL pages and 404 (impressum.html, datenschutz.html, 404.html; D-90): in the
+   site frame, the top and the heading come from .page-top ---- */
 .legal header p:not(.kicker) {
   margin-top: 1.4rem;
   color: var(--text-soft);
@@ -3105,24 +3107,26 @@ html:not(.js) .wizard__step+.wizard__step {
   color: var(--gold-soft);
 }
 
-/* the 404 page's ways on (404.html) */
-.legal__links {
-  display: grid;
-  gap: 0.2rem;
-  margin: 1.6rem 0 2.4rem;
-  list-style: none;
+/* the 404 is short: heading, text and its two buttons centred both ways in the height
+   between the bar and the footer (the header's margin-bottom is the gap to the buttons) */
+.legal--center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
-.legal__links a {
-  display: inline-block;
-  padding: 0.5rem 0;
-  font-family: var(--serif);
-  font-size: 1.5rem;
-  color: var(--gold-soft);
+.legal--center>header {
+  margin-inline: auto;
 }
 
-.legal__links a:hover {
-  color: var(--paper);
+.legal--center header p:not(.kicker) {
+  max-width: 52ch;
+  margin-inline: auto;
+}
+
+.legal--center .hero__actions {
+  justify-content: center;
 }
 
 /* ---- PLACEHOLDERS (D-38): where Nicolas's frames, images or video will go; the text

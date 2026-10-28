@@ -439,6 +439,15 @@ body::after {
   height: 230vh;
 }
 
+/* hand-off (D-94): the section after a scene rises over the end of its pin while the stage
+   fades (main.js ties the fade to this section's top), so no dark stretch opens between the
+   image and the text. Only with JS: without it the scene is one still screen */
+html.js .cine[data-scene]+.section {
+  position: relative;
+  z-index: 3;
+  margin-top: -35vh;
+}
+
 .cine__stage {
   position: sticky;
   top: 0;
@@ -4312,13 +4321,13 @@ html:not(.js) .wizard__step+.wizard__step {
     margin-bottom: 1.2rem;
   }
 
-  /* shorter cine sections = frames hand off quickly, content follows the crop directly */
-  .hero.cine {
-    height: 130vh;
-  }
-
+  /* longer pins than on wide screens: a thumb swipe travels further than a wheel notch.
+     The stage is a full screen (100lvh), so the scrub runs over the height beyond it:
+     130vh left ~30vh (≈2 px per frame on a 390×844 phone, the clip raced and stuttered);
+     240vh leaves 140vh (≈10 px per frame), as on nicolaslekai.com */
+  .hero.cine,
   .scene.cine {
-    height: 150vh;
+    height: 240vh;
   }
 
   /* tight vertical rhythm everywhere — no dead air between blocks */

@@ -43,6 +43,14 @@ let loOK = !!window.createImageBitmap;   // off when the browser ignores resizeW
 // outran the window and the scrub showed a stand-in frame, a visible jump (P12).
 // Sharp decodes go first; previews take what is left, at most LO_DECODE at a time
 const MAX_FETCH = 6, MAX_DECODE = 6, LO_DECODE = 3;
+// trailing ease ("Nachlauf") where Lenis does not smooth the scroll (touch, keyboard,
+// scrollbar): per second, ≈ Lenis' lerp 0.1 at 60 Hz; frame-rate independent (120 Hz phones).
+// A step of more than JUMP frames (an anchor jump, D-45) is not eased: the image is there
+const EASE_RATE = 9, JUMP = 30;
+// leaving a scene: the stage dims and drifts up while the next section (pulled up over the
+// end of the pin in style.css) rises from the bottom of the screen to FADE_TO of its height;
+// without a next section, over the last stretch of the pin (from FADE_FROM)
+const FADE_FROM = 0.82, FADE_TO = 0.4, LIFT = 0.28;
 
 function smoothstep(a, b, x) {
   if (a === b) return x < a ? 0 : 1;
@@ -213,14 +221,18 @@ function initScrub(cfg, wake) {
   }
   let shown = -1;   // float frame position on screen
   let drawn = -1;   // float position of the last paint
-  let lastP = -1, lastTarget = -1, rest = 0;
+  let lastP = -1, lastTarget = -1, rest = 0, lastT = 0, lastOut = -1;
+  const stage = canvas.parentElement, next = section.nextElementSibling;
+  const copy = stage.querySelector('.cine__copy');
+  let lastCopy = -1;
+  const lift = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : LIFT;
   // returns true while the scrub is still easing toward the scroll position
   function update() {
     // if the canvas box changed size (viewport/toolbar/orientation), re-sync the backing buffer to avoid stretch
     if (canvas.clientWidth !== cssW || canvas.clientHeight !== cssH) resize();
     const rect = section.getBoundingClientRect();
     if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight) return false;
-    const scrollable = rect.height - canvas.parentElement.offsetHeight;   // the pin range (the stage, not innerHeight, which jumps as a phone's toolbar hides)
+    const scrollable = rect.height - stage.offsetHeight;   // the pin range (the stage, not innerHeight, which jumps as a phone's toolbar hides)
     const p = Math.min(Math.max(-rect.top / scrollable, 0), 1);
     const target = p * (n - 1);
     // the frame follows the scroll directly (Lenis already smooths it; a second easing
@@ -237,14 +249,35 @@ function initScrub(cfg, wake) {
     else if (rest > 2) dir = 0;
     lastTarget = target;
     const goal = rest > 2 ? Math.round(target) : target;
-    // the settle eases only the last half frame; after a jump (D-45) the image is simply there
-    if (shown < 0 || rest <= 2 || Math.abs(goal - shown) > 1) shown = goal;
+    // wheel: Lenis has eased the scroll already, the image follows it and the settle eases
+    // only the last half frame. Touch and other native scrolling: the image trails the
+    // scroll here (Nachlauf). After a jump (D-45) the image is simply there
+    const now = performance.now(), dt = lastT ? Math.min(0.05, (now - lastT) / 1000) : 0;
+    lastT = now;
+    const smooth = window.lenis && window.lenis.isScrolling === 'smooth';
+    if (shown < 0 || Math.abs(goal - shown) > JUMP) shown = goal;
+    else if (!smooth && (rest <= 2 || Math.abs(goal - shown) > 1)) shown +=(goal - shown) * (1 - Math.exp(-EASE_RATE * dt));
+    else if (rest <= 2 || Math.abs(goal - shown) > 1) shown = goal;
     else shown += (goal - shown) * 0.3;
     if (Math.abs(goal - shown) < 0.002) shown = goal;
     if (Math.round(shown) !== Math.round(center) || dir !== was) { center = shown; refill(); }
     if ((dirty || Math.abs(shown - drawn) > 0.002) && draw(shown)) { drawn = shown; dirty = false; }
-    // no hand-off effect: the sticky stage stays put until the section ends and then
-    // scrolls off with it, so the image edge is the section edge (no black band)
+    // hand-off: the stage dims and lifts as the next section rises over it (no dark
+    // stretch between image and text); it keeps going after the pin ends, so not gated on p
+    const sh = stage.offsetHeight, nextTop = next ? next.getBoundingClientRect().top : 0;
+    const out = next ? smoothstep(sh, sh * FADE_TO, nextTop) : smoothstep(FADE_FROM, 1, p);
+    if (out !== lastOut) {
+      lastOut = out;
+      stage.style.opacity = out ? (1 - out).toFixed(3) : '';
+      stage.style.transform = out && lift ? `translateY(${(-out * lift * sh).toFixed(1)}px)` : '';
+    }
+    // the scene's own copy leaves first, before the rising text reaches it
+    const copyOut = next && copy ? smoothstep(sh, sh * 0.8, nextTop) : 0;
+    if (copy && copyOut !== lastCopy) {
+      lastCopy = copyOut;
+      copy.style.opacity = copyOut ? (1 - copyOut).toFixed(3) : '';
+      copy.style.visibility = copyOut > 0.99 ? 'hidden' : '';
+    }
     // trapezoidal caption fade: in early, hold, out late — wide bands + a short
     // travel distance keep the text drifting gently instead of popping
     if (p !== lastP) {

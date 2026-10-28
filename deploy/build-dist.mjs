@@ -27,7 +27,7 @@ const INDEXED = { 'index.html': '', 'hotels-resorts/index.html': 'hotels-resorts
 // whole folders the scripts load by computed path (frames) or that belong together
 // api/: the form's mail script and its library (D-04); its secrets stay outside the web root
 const DIRS = ['css', 'js', 'api', 'assets/fonts', 'assets/icons', 'assets/brand', 'assets/frames-hd', 'assets/frames-phone'];
-const FILES = ['site.webmanifest', '.htaccess', 'llms.txt'];
+const FILES = ['site.webmanifest', 'favicon.ico', '.htaccess', 'llms.txt'];
 
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });

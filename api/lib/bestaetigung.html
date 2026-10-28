@@ -9,6 +9,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="supported-color-schemes" content="dark">
+<!-- Apple Mail would turn the address and numbers into its own links -->
+<meta name="format-detection" content="telephone=no,address=no,email=no,date=no">
 <title>Ihre Anfrage bei Blaue Stunde</title>
 <style>
   @font-face { font-family: 'Cormorant Garamond'; font-weight: 400; src: url('https://blauestunde.media/assets/fonts/cormorant-garamond/cormorant-garamond-latin.woff2') format('woff2'); }
@@ -19,71 +21,90 @@
     .pad { padding-left:22px !important; padding-right:22px !important; }
     .h1 { font-size:32px !important; line-height:38px !important; }
   }
+  /* Outlook.com and the new Outlook recolour a mail in their dark mode and mark each changed
+     element with data-ogsb (original background) or data-ogsc (original colour); these rules
+     put our colours back. They match only below such an element (hence the .bs-wrap div);
+     other clients set neither attribute. Unconfirmed in a real Outlook as of 2026-10-28 */
+  [data-ogsb] .bs-page { background-color:#0c0e0d !important; }
+  [data-ogsb] .bs-blue { background-color:#13243a !important; }
+  [data-ogsb] .bs-card { background-color:#14181a !important; }
+  [data-ogsb] .bs-btn { background-color:#c6a45c !important; }
+  [data-ogsc] .bs-paper { color:#f3ede1 !important; }
+  [data-ogsc] .bs-soft { color:#b5b1a9 !important; }
+  [data-ogsc] .bs-gold { color:#c6a45c !important; }
+  [data-ogsc] .bs-ink { color:#0c0e0d !important; }
+  [data-ogsc] .bs-foot { color:#7d7a73 !important; }
+  [data-ogsc] .bs-foot2 { color:#a9a59c !important; }
+  [data-ogsb] .bs-line, [data-ogsc] .bs-line { border-top-color:#463f2d !important; }
 </style>
 </head>
 <body style="margin:0;padding:0;background:#0c0e0d;">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;">Danke – wir melden uns innerhalb von drei Werktagen.&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0c0e0d" style="background:#0c0e0d;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">Danke – wir melden uns innerhalb von drei Werktagen.&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>
+<div class="bs-wrap" style="background-color:#0c0e0d;color:#f3ede1;">
+<table class="bs-page" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0c0e0d" style="background:#0c0e0d;">
 <tr><td align="center" style="padding:32px 12px;">
   <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
     <!-- the brand image (a copy of the link-preview image); without images, its alt text on blue -->
-    <tr><td bgcolor="#13243a" style="padding:0;">
+    <tr><td class="bs-blue" bgcolor="#13243a" style="padding:0;">
       <img src="https://blauestunde.media/assets/brand/mail-header.jpg" width="600" height="315" alt="Blaue Stunde – Digital Media Marketing"
         style="display:block;border:0;width:100%;max-width:600px;height:auto;font-family:'Cormorant Garamond', Georgia, 'Times New Roman', serif;font-size:24px;line-height:32px;color:#f3ede1;text-align:center;">
     </td></tr>
-    <tr><td bgcolor="#14181a" style="padding:36px 48px 8px;" class="pad">
-      <div style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:11px;line-height:16px;letter-spacing:3px;color:#c6a45c;">ANFRAGE ERHALTEN</div>
-      <h1 class="h1" style="margin:10px 0 0;font-family:'Cormorant Garamond', Georgia, 'Times New Roman', serif;font-weight:400;font-size:38px;line-height:44px;color:#f3ede1;">Danke für Ihre Nachricht.</h1>
-      <p style="margin:18px 0 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:16px;line-height:26px;color:#b5b1a9;">Ihre Anfrage ist bei uns angekommen. Wir lesen sie in Ruhe und melden uns innerhalb von drei Werktagen bei Ihnen.</p>
+    <tr><td bgcolor="#14181a" style="padding:36px 48px 8px;" class="pad bs-card">
+      <div class="bs-gold" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:11px;line-height:16px;letter-spacing:3px;color:#c6a45c;">ANFRAGE ERHALTEN</div>
+      <h1 class="h1 bs-paper" style="margin:10px 0 0;font-family:'Cormorant Garamond', Georgia, 'Times New Roman', serif;font-weight:400;font-size:38px;line-height:44px;color:#f3ede1;">Danke für Ihre Nachricht.</h1>
+      <p class="bs-soft" style="margin:18px 0 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:16px;line-height:26px;color:#b5b1a9;">Ihre Anfrage ist bei uns angekommen. Wir lesen sie in Ruhe und melden uns innerhalb von drei Werktagen bei Ihnen.</p>
     </td></tr>
-    <tr><td bgcolor="#14181a" style="padding:28px 48px 6px;" class="pad">
-      <div style="border-top:1px solid #463f2d;font-size:0;line-height:0;">&nbsp;</div>
-      <div style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:11px;line-height:16px;letter-spacing:3px;color:#c6a45c;padding:24px 0 18px;">SO GEHT ES WEITER</div>
+    <tr><td bgcolor="#14181a" style="padding:28px 48px 6px;" class="pad bs-card">
+      <div class="bs-line" style="border-top:1px solid #463f2d;font-size:0;line-height:0;">&nbsp;</div>
+      <div class="bs-gold" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:11px;line-height:16px;letter-spacing:3px;color:#c6a45c;padding:24px 0 18px;">SO GEHT ES WEITER</div>
       <!-- numbers in Manrope: Cormorant and Georgia have old-style figures (the 1 reads as ı) -->
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td valign="top" width="44" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:13px;line-height:23px;font-weight:600;letter-spacing:1px;color:#c6a45c;padding:2px 0 18px;">01</td>
-          <td valign="top" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:23px;color:#b5b1a9;padding:2px 0 18px;">
-            <span style="color:#f3ede1;font-weight:600;">Wir lesen Ihre Anfrage</span><br>und schauen uns Ihren Betrieb und Ihre Kanäle an.</td>
+          <td class="bs-gold" valign="top" width="44" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:13px;line-height:23px;font-weight:600;letter-spacing:1px;color:#c6a45c;padding:2px 0 18px;">01</td>
+          <td class="bs-soft" valign="top" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:23px;color:#b5b1a9;padding:2px 0 18px;">
+            <span class="bs-paper" style="color:#f3ede1;font-weight:600;">Wir lesen Ihre Anfrage</span><br>und schauen uns Ihren Betrieb und Ihre Kanäle an.</td>
         </tr>
         <tr>
-          <td valign="top" width="44" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:13px;line-height:23px;font-weight:600;letter-spacing:1px;color:#c6a45c;padding:2px 0 18px;">02</td>
-          <td valign="top" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:23px;color:#b5b1a9;padding:2px 0 18px;">
-            <span style="color:#f3ede1;font-weight:600;">Wir melden uns</span><br>innerhalb von drei Werktagen, per Telefon oder E-Mail.</td>
+          <td class="bs-gold" valign="top" width="44" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:13px;line-height:23px;font-weight:600;letter-spacing:1px;color:#c6a45c;padding:2px 0 18px;">02</td>
+          <td class="bs-soft" valign="top" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:23px;color:#b5b1a9;padding:2px 0 18px;">
+            <span class="bs-paper" style="color:#f3ede1;font-weight:600;">Wir melden uns</span><br>innerhalb von drei Werktagen, per Telefon oder E-Mail.</td>
         </tr>
         <tr>
-          <td valign="top" width="44" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:13px;line-height:23px;font-weight:600;letter-spacing:1px;color:#c6a45c;padding:2px 0 18px;">03</td>
-          <td valign="top" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:23px;color:#b5b1a9;padding:2px 0 18px;">
-            <span style="color:#f3ede1;font-weight:600;">Kennenlernen und Angebot</span><br>Nach einem ersten Gespräch erhalten Sie einen individuellen Kostenvoranschlag.</td>
+          <td class="bs-gold" valign="top" width="44" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:13px;line-height:23px;font-weight:600;letter-spacing:1px;color:#c6a45c;padding:2px 0 18px;">03</td>
+          <td class="bs-soft" valign="top" style="font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:23px;color:#b5b1a9;padding:2px 0 18px;">
+            <span class="bs-paper" style="color:#f3ede1;font-weight:600;">Kennenlernen und Angebot</span><br>Nach einem ersten Gespräch erhalten Sie einen individuellen Kostenvoranschlag.</td>
         </tr>
       </table>
     </td></tr>
     <!-- the button: Outlook desktop ignores padding on <a>, mso-padding-alt gives the cell the same -->
-    <tr><td bgcolor="#14181a" align="left" style="padding:10px 48px 40px;" class="pad">
+    <tr><td bgcolor="#14181a" align="left" style="padding:10px 48px 40px;" class="pad bs-card">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td bgcolor="#c6a45c" style="border-radius:2px;mso-padding-alt:14px 26px;">
-          <a href="https://blauestunde.media/ueber-uns/" style="display:inline-block;padding:14px 26px;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:14px;line-height:18px;font-weight:600;letter-spacing:1px;color:#0c0e0d;text-decoration:none;">Lernen Sie uns kennen</a>
+        <td class="bs-btn" bgcolor="#c6a45c" style="border-radius:2px;mso-padding-alt:14px 26px;">
+          <a class="bs-ink" href="https://blauestunde.media/ueber-uns/" style="display:inline-block;padding:14px 26px;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:14px;line-height:18px;font-weight:600;letter-spacing:1px;color:#0c0e0d;text-decoration:none;">Lernen Sie uns kennen</a>
         </td>
       </tr></table>
     </td></tr>
-    <tr><td bgcolor="#14181a" style="padding:0 48px 40px;" class="pad">
-      <div style="border-top:1px solid #463f2d;font-size:0;line-height:0;">&nbsp;</div>
-      <p style="margin:24px 0 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;color:#b5b1a9;">Fragen vorab? Antworten Sie einfach auf diese E-Mail.</p>
-      <p style="margin:14px 0 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;color:#f3ede1;">
+    <tr><td bgcolor="#14181a" style="padding:0 48px 40px;" class="pad bs-card">
+      <div class="bs-line" style="border-top:1px solid #463f2d;font-size:0;line-height:0;">&nbsp;</div>
+      <p class="bs-soft" style="margin:24px 0 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;color:#b5b1a9;">Fragen vorab? Antworten Sie einfach auf diese E-Mail.</p>
+      <p class="bs-paper" style="margin:14px 0 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;color:#f3ede1;">
         <span style="font-weight:600;">Daniel Lenzenhuber</span><br>
-        <a href="tel:+4983628809394" style="color:#c6a45c;text-decoration:none;">+49 8362 8809394</a> &nbsp;·&nbsp;
-        <a href="mailto:service@blauestunde.media" style="color:#c6a45c;text-decoration:none;">service@blauestunde.media</a></p>
+        <a class="bs-gold" href="tel:+4983628809394" style="color:#c6a45c;text-decoration:none;">+49 8362 8809394</a> &nbsp;·&nbsp;
+        <a class="bs-gold" href="mailto:service@blauestunde.media" style="color:#c6a45c;text-decoration:none;">service@blauestunde.media</a></p>
     </td></tr>
-    <!-- the provider as in the Impressum -->
-    <tr><td align="center" style="padding:28px 24px 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:12px;line-height:19px;color:#7d7a73;">
-      <a href="https://blauestunde.media/" style="color:#a9a59c;text-decoration:none;">blauestunde.media</a> &nbsp;·&nbsp;
-      <a href="https://blauestunde.media/impressum.html" style="color:#a9a59c;text-decoration:none;">Impressum</a> &nbsp;·&nbsp;
-      <a href="https://blauestunde.media/datenschutz.html" style="color:#a9a59c;text-decoration:none;">Datenschutz</a><br>
-      Blaue Stunde ist ein Angebot von Bergwerk – Daniel Lenzenhuber, Faigeleweg 1, 87629 Füssen.<br>
+    <!-- the provider as in the Impressum; the address is our own link in the footer colour, or
+         Gmail links it to Maps in its own blue -->
+    <tr><td class="bs-foot" align="center" style="padding:28px 24px 0;font-family:Manrope, 'Segoe UI', Arial, Helvetica, sans-serif;font-size:12px;line-height:19px;color:#7d7a73;">
+      <a class="bs-foot2" href="https://blauestunde.media/" style="color:#a9a59c;text-decoration:none;">blauestunde.media</a> &nbsp;·&nbsp;
+      <a class="bs-foot2" href="https://blauestunde.media/impressum.html" style="color:#a9a59c;text-decoration:none;">Impressum</a> &nbsp;·&nbsp;
+      <a class="bs-foot2" href="https://blauestunde.media/datenschutz.html" style="color:#a9a59c;text-decoration:none;">Datenschutz</a><br>
+      Blaue Stunde ist ein Angebot von Bergwerk – Daniel Lenzenhuber,
+      <a class="bs-foot" href="https://blauestunde.media/impressum.html" style="color:#7d7a73;text-decoration:none;">Faigeleweg 1, 87629 Füssen</a>.<br>
       Sie erhalten diese E-Mail, weil Sie über unsere Website eine Anfrage gesendet haben.
     </td></tr>
   </table>
 </td></tr>
 </table>
+</div>
 </body>
 </html>

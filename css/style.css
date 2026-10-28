@@ -174,13 +174,13 @@ body::before {
   z-index: 9997;
 }
 
-/* on phones the overlays cover the height with the toolbars hidden, so the vignette's
-   dark lower edge does not hang mid-screen while a toolbar slides away */
-@supports (height: 100lvh) {
+/* touch screens (phones, tablets): no overlays. Safari on the iPhone ends a fixed layer
+   short of the screen's bottom edge (its toolbar), and the page below it showed without
+   the vignette: a hard, lighter strip right at the bottom (Nicky, 2026-10-28) */
+@media (hover: none) and (pointer: coarse) {
   body::before,
   body::after {
-    bottom: auto;
-    height: 100lvh;
+    display: none;
   }
 }
 

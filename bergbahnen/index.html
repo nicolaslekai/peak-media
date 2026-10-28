@@ -120,7 +120,7 @@
       <a href="../">Home</a>
       <a href="../hotels-resorts/">Hotels &amp; Resorts</a>
       <a href="../bergbahnen/" aria-current="page">Bergbahnen</a>
-      <a href="../wellness-thermen/">Wellness &amp; Thermen</a>
+      <a href="../wellness-thermen/">Wellness</a>
       <a href="../ueber-uns/">Über uns</a>
       <a href="../kontakt/?typ=bergbahn" class="nav__cta">Anfrage starten</a>
       <!-- only in the menu on phones and tablets -->
@@ -152,11 +152,8 @@
         <canvas aria-hidden="true"></canvas>
         <div class="cine__scrim"></div>
         <div class="cine__copy">
-          <nav class="crumbs kicker kicker--light" aria-label="Pfad">
-            <a href="../">Home</a> <span aria-hidden="true">›</span> <span aria-current="page">Bergbahnen</span>
-          </nav>
-          <h1>Ihr Berg im besten Licht, im Winter wie im Sommer.</h1>
-          <p>Wir zeigen, warum sich der Weg nach oben lohnt, auch an ruhigen Tagen.</p>
+          <h1>Erlebnisse, sichtbar. Im Winter wie im Sommer.</h1>
+          <p>Ob Pulverschnee oder eine gemütliche Einkehr mit Panorama: Wir betreuen Ihre Kanäle so, dass sich jeder Gast angesprochen fühlt – sportlich unterwegs oder einfach zum Genießen.</p>
           <div class="hero__actions">
             <a href="../kontakt/?typ=bergbahn" class="btn btn--gold">Anfrage starten</a>
             <a href="#check" class="btn btn--ghost">Sichtbarkeit prüfen</a>
@@ -320,7 +317,7 @@
       </ul>
     </section>
 
-    <!-- VISIBILITY CHECK (D-78, replaces this page's calculator): five one-click questions,
+    <!-- VISIBILITY CHECK (D-78, replaces this page's calculator): four one-click questions,
          no figures; js/check.js scores them (2/1/0 points each), names the level, shows the tip
          of every question not yet answered with the best option, and hands the answers to the
          Kontakt form (sessionStorage "bs-rechner", as the hotel calculator does). A self-check,
@@ -330,7 +327,7 @@
         <p class="kicker">Sichtbarkeits-Check</p>
         <h2>Wie sichtbar ist Ihr Berg?</h2>
         <p>
-          Fünf kurze Fragen. Am Ende sehen Sie, wo Sie stehen und was am meisten bringt.
+          Vier kurze Fragen. Am Ende sehen Sie, wo Sie stehen und was am meisten bringt.
         </p>
       </header>
 
@@ -366,28 +363,20 @@
               <label class="choice"><input type="radio" name="check-3" value="0" data-label="kaum" /><span>kaum</span></label>
             </div>
           </fieldset>
-          <fieldset class="choice-group" data-tip="Ortsangaben, Schlagwörter und gute Texte entscheiden, ob man Sie bei der Suche nach Ihrem Ort findet.">
-            <legend>Findet man Sie auf Instagram und Google, wenn jemand nach Ihrem Ort sucht?</legend>
-            <div class="choices">
-              <label class="choice"><input type="radio" name="check-4" value="2" data-label="ja" /><span>ja</span></label>
-              <label class="choice"><input type="radio" name="check-4" value="1" data-label="weiß nicht" /><span>weiß nicht</span></label>
-              <label class="choice"><input type="radio" name="check-4" value="0" data-label="eher nicht" /><span>eher nicht</span></label>
-            </div>
-          </fieldset>
           <fieldset class="choice-group" data-tip="Jeder Beitrag sollte zum Ticket, zum Bergwetter oder zur Anfahrt führen.">
             <legend>Gibt es Tickets online, und führen Ihre Beiträge dorthin?</legend>
             <div class="choices">
-              <label class="choice"><input type="radio" name="check-5" value="2" data-label="ja, beides" /><span>ja, beides</span></label>
-              <label class="choice"><input type="radio" name="check-5" value="1" data-label="Tickets ja, Links kaum" /><span>Tickets ja, Links kaum</span></label>
-              <label class="choice"><input type="radio" name="check-5" value="0" data-label="nein" /><span>nein</span></label>
+              <label class="choice"><input type="radio" name="check-4" value="2" data-label="ja, beides" /><span>ja, beides</span></label>
+              <label class="choice"><input type="radio" name="check-4" value="1" data-label="Tickets ja, Links kaum" /><span>Tickets ja, Links kaum</span></label>
+              <label class="choice"><input type="radio" name="check-4" value="0" data-label="nein" /><span>nein</span></label>
             </div>
           </fieldset>
         </form>
 
         <div class="calc__result check__result" aria-live="polite">
           <p>Ihr Ergebnis</p>
-          <p class="calc__total"><b>– / 10</b> <span class="check__level">Beantworten Sie die fünf Fragen.</span></p>
-          <ol class="check__bar" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li></ol>
+          <p class="calc__total"><b>– / 8</b> <span class="check__level">Beantworten Sie die vier Fragen.</span></p>
+          <ol class="check__bar" aria-hidden="true"><li></li><li></li><li></li><li></li></ol>
           <ul class="check__tips"></ul>
           <p class="calc__note">
             Ein Selbst-Check, keine Messung. Er zeigt, wo die größten Hebel liegen.
@@ -524,7 +513,7 @@
             <img src="../assets/img/segment-therme-720.webp" alt="" width="720" height="480"
               srcset="../assets/img/segment-therme-480.webp 480w, ../assets/img/segment-therme-720.webp 720w"
               sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
-            <h3>Wellness &amp; Thermen</h3>
+            <h3>Wellness</h3>
             <p>Mehr Besuche in den ruhigen Monaten und mehr verkaufte Gutscheine.</p>
             <span class="door__more">Mehr erfahren</span>
           </a>
@@ -570,7 +559,7 @@
 
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=68"></script>
-  <script src="../js/check.js?v=4"></script>
+  <script src="../js/check.js?v=5"></script>
   <script src="../js/nav.js?v=3"></script>
   <script src="../js/bergfahrt.js?v=8"></script>
 </body>

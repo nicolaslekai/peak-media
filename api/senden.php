@@ -52,7 +52,7 @@ $stamps = sys_get_temp_dir() . '/blauestunde-form-' . md5(__DIR__) . '.json';
 $recent = array_filter(json_decode(@file_get_contents($stamps) ?: '[]', true) ?: [], fn($t) => $t > time() - 3600);
 if (count($recent) >= 20) answer(429, ['ok' => false, 'error' => 'busy']);
 
-$types = ['hotel' => 'Hotel / Resort', 'bergbahn' => 'Bergbahn', 'therme' => 'Wellness / Therme', 'andere' => 'Etwas anderes'];
+$types = ['hotel' => 'Hotel / Resort', 'bergbahn' => 'Bergbahn', 'therme' => 'Wellness', 'andere' => 'Etwas anderes'];
 $type = field('betriebsart', 20);
 $name = field('name', 120);
 $email = field('email', 200);

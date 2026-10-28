@@ -1,9 +1,9 @@
 /* ============ BLAUE STUNDE — visibility check ============
-   On the Bergbahnen and Wellness & Thermen pages (D-78), in place of a calculator: five
-   one-click questions, each answer worth 2, 1 or 0 points (its radio's value), asked one at
-   a time in a card ("Frage n von 5" and a progress bar on top, the answers as wide
-   buttons). After the last answer the card shows the result instead: the score out of 10
-   and its level, a bar with one segment per question, and the tip of every question not
+   On the Bergbahnen and Wellness pages (D-78), in place of a calculator: four one-click
+   questions (five until 2026-10-28), each answer worth 2, 1 or 0 points (its radio's value),
+   asked one at a time in a card ("Frage n von 4" and a progress bar on top, the answers as
+   wide buttons). After the last answer the card shows the result instead: the score out of
+   8 and its level, a bar with one segment per question, and the tip of every question not
    answered with the best option (the fieldset's data-tip). "Mit diesem Ergebnis anfragen"
    hands the answers to the Kontakt form like the hotel calculator (sessionStorage
    "bs-rechner", js/contact.js). A self-check, no figures. Without JS a note replaces it.
@@ -18,10 +18,11 @@
   const total = panel.querySelector('.calc__total');
   const segments = [...panel.querySelectorAll('.check__bar li')];
   const tips = panel.querySelector('.check__tips');
-  const LEVELS = [   // from the lowest score up
+  const MAX = groups.length * 2;   // the best answer is worth 2
+  const LEVELS = [   // from the lowest score up, as shares of MAX (3 and 6 of 8)
     [0, 'Viel ungenutztes Potenzial. Hier bringt schon wenig viel.'],
-    [4, 'Ein guter Anfang mit klaren Hebeln.'],
-    [8, 'Gut aufgestellt. Jetzt geht es um Feinheiten.'],
+    [0.375, 'Ein guter Anfang mit klaren Hebeln.'],
+    [0.75, 'Gut aufgestellt. Jetzt geht es um Feinheiten.'],
   ];
 
   const answers = () => groups.map(g => g.querySelector('input:checked'));
@@ -29,7 +30,7 @@
   function showResult() {
     const picked = answers(), s = score();
     picked.forEach((i, k) => { segments[k].dataset.points = i ? i.value : ''; });
-    total.innerHTML = `<b>${s} / 10</b> <span class="check__level">${LEVELS.filter(([min]) => s >= min).pop()[1]}</span>`;
+    total.innerHTML = `<b>${s} / ${MAX}</b> <span class="check__level">${LEVELS.filter(([min]) => s >= min * MAX).pop()[1]}</span>`;
     // a tip for every question not answered with the best option
     tips.replaceChildren(...picked.map((i, k) => i && i.value !== '2' ? groups[k].dataset.tip : null)
       .filter(Boolean).map(t => Object.assign(document.createElement('li'), { textContent: t })));
@@ -92,7 +93,7 @@
   // the answers travel to the Kontakt form only when the visitor sends it (D-04)
   panel.querySelector('.check__result a[href*="werte=1"]').addEventListener('click', () => {
     const picked = answers();
-    const summary = [`Sichtbarkeits-Check ${score()}/10`, ...groups.map((g, k) =>
+    const summary = [`Sichtbarkeits-Check ${score()}/${MAX}`, ...groups.map((g, k) =>
       `${g.querySelector('legend').textContent} ${picked[k] ? picked[k].dataset.label : '–'}`)].join(' · ');
     try {
       sessionStorage.setItem('bs-rechner', JSON.stringify({ model: 'check', size: null, summary }));

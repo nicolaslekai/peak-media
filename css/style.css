@@ -765,30 +765,11 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(1.6rem, 5vw, 5rem);
-  margin-bottom: 3rem;
 }
 
 .mission__text h3 {
   font-size: clamp(1.5rem, 2.4vw, 2rem);
   margin-bottom: 0.8rem;
-}
-
-
-.mission .metrics {
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2.5rem;
-}
-
-.mission .metric {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--text-soft);
-}
-
-.mission .metric b {
-  /* the three selling points: one short line each, never wrapped */
-  font-size: clamp(1.9rem, 2.8vw, 2.7rem);
-  white-space: nowrap;
 }
 
 /* ---- CINEMATIC SCENES ---- */
@@ -4161,11 +4142,6 @@ html:not(.js) .wizard__step+.wizard__step {
     scroll-snap-align: start;
   }
 
-  .mission .metrics {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
   .calc {
     grid-template-columns: 1fr;
   }
@@ -4313,11 +4289,6 @@ html:not(.js) .wizard__step+.wizard__step {
 
   .section>header {
     margin-bottom: 1.8rem;
-  }
-
-  .mission .metrics {
-    padding-top: 1.8rem;
-    gap: 1.4rem;
   }
 
   .tiles>article {

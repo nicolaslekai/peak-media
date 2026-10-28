@@ -2,7 +2,8 @@
 /* ============ BLAUE STUNDE — enquiry form delivery (D-04, D-86) ============
    Receives the Kontakt form (js/contact.js posts it with fetch), checks it, sends it to
    service@blauestunde.media through Google Workspace SMTP with Reply-To set to the
-   visitor, then sends the visitor a short confirmation (text from Daniel, D-86 B5).
+   visitor, then sends the visitor a confirmation (text from Daniel, D-86 B5; HTML layout in
+   lib/bestaetigung.html, with a plain-text copy).
    Not through Hostinger's own mail: the domain's SPF allows Google only (D-86 B2).
    The SMTP account and its app password live in a config file OUTSIDE public_html
    (see workspace tools/mail-config.example.php); nothing secret is in this repository.
@@ -108,17 +109,34 @@ $recent[] = time();
 @file_put_contents($stamps, json_encode(array_values($recent)), LOCK_EX);
 
 // the confirmation (D-86 B5); the enquiry has arrived even if this one fails. Fixed text
-// only: nothing the visitor typed goes into it, so it cannot carry someone else's message
+// only: nothing the visitor typed goes into it, so it cannot carry someone else's message.
+// HTML from lib/bestaetigung.html with this text as its plain copy; without the file, the
+// plain text alone
 try {
   $c = mailer($cfg);
   $c->addAddress($email);
   // a reply to the confirmation goes to the shared address, not to the sending account
   $c->addReplyTo($cfg['to'] ?? 'service@blauestunde.media', 'Blaue Stunde');
   $c->Subject = 'Ihre Anfrage bei Blaue Stunde';
-  $c->Body = "Guten Tag,\n\n"
-    . "danke für Ihre Anfrage. Wir melden uns innerhalb von drei Werktagen.\n\n"
+  $text = "Guten Tag,\n\n"
+    . "danke für Ihre Anfrage. Sie ist bei uns angekommen; wir melden uns innerhalb von drei Werktagen.\n\n"
+    . "So geht es weiter:\n"
+    . "1. Wir lesen Ihre Anfrage und schauen uns Ihren Betrieb und Ihre Kanäle an.\n"
+    . "2. Wir melden uns innerhalb von drei Werktagen, per Telefon oder E-Mail.\n"
+    . "3. Nach einem ersten Gespräch erhalten Sie einen individuellen Kostenvoranschlag.\n\n"
+    . "Fragen vorab? Antworten Sie einfach auf diese E-Mail.\n\n"
     . "Daniel Lenzenhuber · Blaue Stunde · +49 8362 8809394\n"
-    . "https://blauestunde.media";
+    . "https://blauestunde.media\n\n"
+    . "Blaue Stunde ist ein Angebot von Bergwerk – Daniel Lenzenhuber, Faigeleweg 1, 87629 Füssen.\n"
+    . "Impressum: https://blauestunde.media/impressum.html";
+  $html = @file_get_contents(__DIR__ . '/lib/bestaetigung.html');
+  if ($html) {
+    $c->isHTML(true);
+    $c->Body = $html;
+    $c->AltBody = $text;
+  } else {
+    $c->Body = $text;
+  }
   $c->send();
 } catch (Exception $e) {
   // nothing to do: the enquiry itself was sent

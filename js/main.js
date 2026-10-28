@@ -24,12 +24,12 @@ const ASSETS = new URL('../assets/', document.currentScript ? document.currentSc
 // when the canvas crops the frame's sides (a small phone held sideways on the 16:9 set;
 // the portrait set is framed already)
 const SCENES = {
-  hero: { bg: '#0c0e0d', focalX: 0.62 },   // keep the sun + pool in frame
+  hero: { bg: '#10141A', focalX: 0.62 },   // keep the sun + pool in frame
   spa: { bg: '#0a0c12' },
-  skilift: { bg: '#0c0e0d' },
+  skilift: { bg: '#10141A' },
 };
 const frameCfg = section => {
-  const name = section.dataset.scene, clip = SCENES[name] || { bg: '#0c0e0d' };
+  const name = section.dataset.scene, clip = SCENES[name] || { bg: '#10141A' };
   const dir = new URL(`${PHONE ? 'frames-phone' : 'frames-hd'}/${name}/`, ASSETS).href;
   return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp` };
 };

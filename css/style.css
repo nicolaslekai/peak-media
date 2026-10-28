@@ -81,9 +81,19 @@
 }
 
 :root {
-  --ink: #0c0e0d;
-  /* near-black forest */
-  --ink-2: #14181a;
+  /* background tones from the "mitte" trial (28.10.2026): halfway between the old
+     warm black and a cool slate; text and accent colours stay. Set as r, g, b:
+     overlays use rgba(var(--ink-rgb), a). The canvas scenes (js/*-scene.js,
+     bergfahrt.js, main.js) and the theme-color meta repeat --ink as hex. */
+  --ink-rgb: 16, 20, 26;
+  /* #10141A page background */
+  --ink-2-rgb: 22, 28, 37;
+  /* #161C25 cards, form fields */
+  --ink-deep-rgb: 11, 14, 18;
+  /* #0B0E12 footer, overlays */
+  --ink: rgb(var(--ink-rgb));
+  --ink-2: rgb(var(--ink-2-rgb));
+  --ink-deep: rgb(var(--ink-deep-rgb));
   --paper: #f3ede1;
   /* warm off-white */
   --gold: #c6a45c;
@@ -335,7 +345,7 @@ body::after {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(12, 14, 13, 0.5);
+  background: rgba(var(--ink-rgb), 0.5);
   backdrop-filter: blur(14px);
   opacity: 0;
   transition: opacity 0.5s var(--ease);
@@ -352,7 +362,7 @@ body::after {
   position: absolute;
   inset: 0 0 -70% 0;
   z-index: -1;
-  background: linear-gradient(rgba(8, 10, 9, 0.55), rgba(8, 10, 9, 0));
+  background: linear-gradient(rgba(var(--ink-deep-rgb), 0.55), rgba(var(--ink-deep-rgb), 0));
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s var(--ease);
@@ -599,10 +609,10 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 .hero .cine__scrim {
   background:
     linear-gradient(90deg,
-      rgba(10, 12, 11, 0.82) 0%,
-      rgba(10, 12, 11, 0.42) 45%,
-      rgba(10, 12, 11, 0.15) 100%),
-    linear-gradient(0deg, rgba(10, 12, 11, 0.7), transparent 55%);
+      rgba(var(--ink-deep-rgb), 0.82) 0%,
+      rgba(var(--ink-deep-rgb), 0.42) 45%,
+      rgba(var(--ink-deep-rgb), 0.15) 100%),
+    linear-gradient(0deg, rgba(var(--ink-deep-rgb), 0.7), transparent 55%);
 }
 
 .hero h1 {
@@ -778,22 +788,22 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 .scene .cine__scrim {
   background:
     radial-gradient(120% 100% at 18% 78%,
-      rgba(8, 10, 9, 0.72),
-      rgba(8, 10, 9, 0.2) 60%),
-    linear-gradient(0deg, rgba(8, 10, 9, 0.6), transparent 40%);
+      rgba(var(--ink-deep-rgb), 0.72),
+      rgba(var(--ink-deep-rgb), 0.2) 60%),
+    linear-gradient(0deg, rgba(var(--ink-deep-rgb), 0.6), transparent 40%);
 }
 
 /* bright footage (snow): an extra side gradient behind the copy, as in the hero */
 .scene--bright .cine__scrim {
   background:
     linear-gradient(90deg,
-      rgba(8, 10, 9, 0.7) 0%,
-      rgba(8, 10, 9, 0.35) 40%,
+      rgba(var(--ink-deep-rgb), 0.7) 0%,
+      rgba(var(--ink-deep-rgb), 0.35) 40%,
       transparent 65%),
     radial-gradient(120% 100% at 18% 78%,
-      rgba(8, 10, 9, 0.72),
-      rgba(8, 10, 9, 0.2) 60%),
-    linear-gradient(0deg, rgba(8, 10, 9, 0.6), transparent 40%);
+      rgba(var(--ink-deep-rgb), 0.72),
+      rgba(var(--ink-deep-rgb), 0.2) 60%),
+    linear-gradient(0deg, rgba(var(--ink-deep-rgb), 0.6), transparent 40%);
 }
 
 .scene h2 {
@@ -1258,12 +1268,12 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   aspect-ratio: 9/19.5;
   border-radius: 2.4rem;
   overflow: hidden;
-  background: #0a0a0a;
-  border: 2px solid #17191a;
+  background: var(--ink-deep);
+  border: 2px solid var(--ink-2);
   box-shadow:
     0 2px 0 #000 inset,
     0 30px 60px -20px rgba(0, 0, 0, 0.75),
-    0 0 0 6px rgba(20, 22, 24, 0.6);
+    0 0 0 6px rgba(var(--ink-2-rgb), 0.6);
 }
 
 .phone::before {
@@ -1298,7 +1308,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   flex-direction: column;
   gap: 0.5rem;
   padding: 3.5rem 0.9rem 1.1rem;
-  background: linear-gradient(0deg, rgba(6, 8, 7, 0.9), transparent);
+  background: linear-gradient(0deg, rgba(var(--ink-deep-rgb), 0.9), transparent);
 }
 
 .phone figcaption>span {
@@ -1330,7 +1340,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
    the readout on hover/tap, the view toggle and the bar growth (.chart--wait). ---- */
 .chart {
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(20, 24, 26, 0.7), rgba(12, 14, 13, 0.4));
+  background: linear-gradient(180deg, rgba(var(--ink-2-rgb), 0.7), rgba(var(--ink-rgb), 0.4));
   padding: clamp(1.2rem, 3vw, 2.4rem);
 }
 
@@ -1879,7 +1889,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(90deg, rgba(12, 14, 13, 0.96) 0%, rgba(12, 14, 13, 0.85) 32%, rgba(12, 14, 13, 0) 52%);
+  background: linear-gradient(90deg, rgba(var(--ink-rgb), 0.96) 0%, rgba(var(--ink-rgb), 0.85) 32%, rgba(var(--ink-rgb), 0) 52%);
 }
 
 /* the list in the stage: the three links on top of each other, one shown at a time */
@@ -1995,7 +2005,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 
   .ride__stage::before {
     inset: 40% 0 0;
-    background: linear-gradient(rgba(12, 14, 13, 0), rgba(12, 14, 13, 0.92) 40%);
+    background: linear-gradient(rgba(var(--ink-rgb), 0), rgba(var(--ink-rgb), 0.92) 40%);
   }
 
   .chain.chain--ride {
@@ -2156,7 +2166,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 
 .calc__result {
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(20, 24, 26, 0.85), rgba(12, 14, 13, 0.6));
+  background: linear-gradient(180deg, rgba(var(--ink-2-rgb), 0.85), rgba(var(--ink-rgb), 0.6));
   padding: clamp(1.4rem, 3vw, 2.6rem);
   font-size: 0.85rem;
   color: var(--text-soft);
@@ -2253,7 +2263,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   gap: 1.4rem;
   padding: clamp(1.4rem, 3vw, 2.4rem);
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(20, 24, 26, 0.85), rgba(12, 14, 13, 0.6));
+  background: linear-gradient(180deg, rgba(var(--ink-2-rgb), 0.85), rgba(var(--ink-rgb), 0.6));
 }
 
 .check--steps .check__result,
@@ -3023,7 +3033,7 @@ html:not(.js) .wizard__step+.wizard__step {
 }
 
 .dialog::backdrop {
-  background: rgba(12, 14, 13, 0.7);
+  background: rgba(var(--ink-rgb), 0.7);
   backdrop-filter: blur(6px);
 }
 
@@ -3313,10 +3323,10 @@ html:not(.js) .wizard__step+.wizard__step {
 .hero.hero--bright .cine__scrim {
   background:
     linear-gradient(90deg,
-      rgba(8, 10, 9, 0.86) 0%,
-      rgba(8, 10, 9, 0.5) 45%,
-      rgba(8, 10, 9, 0.12) 100%),
-    linear-gradient(0deg, rgba(8, 10, 9, 0.8), transparent 60%);
+      rgba(var(--ink-deep-rgb), 0.86) 0%,
+      rgba(var(--ink-deep-rgb), 0.5) 45%,
+      rgba(var(--ink-deep-rgb), 0.12) 100%),
+    linear-gradient(0deg, rgba(var(--ink-deep-rgb), 0.8), transparent 60%);
 }
 
 @media (max-width: 767px) {
@@ -3527,7 +3537,7 @@ html:not(.js) .wizard__step+.wizard__step {
     box-shadow:
       0 2px 0 #000 inset,
       0 18px 36px -16px rgba(0, 0, 0, 0.75),
-      0 0 0 4px rgba(20, 22, 24, 0.6);
+      0 0 0 4px rgba(var(--ink-2-rgb), 0.6);
   }
 
   .impact .phone::before {
@@ -3792,6 +3802,7 @@ html:not(.js) .wizard__step+.wizard__step {
    (Raffaele, 2026-10-26) */
 .foot {
   --foot-pad: max(var(--edge), calc((100% - 68rem) / 2));
+  background: var(--ink-deep);
   border-top: 1px solid var(--line);
   padding: 2.8rem var(--foot-pad) 2rem;
   display: grid;
@@ -4181,10 +4192,10 @@ html:not(.js) .wizard__step+.wizard__step {
      see notes/reports/mobile-cine-copy-2026-10-06.md) */
   .scene .cine__scrim {
     background: linear-gradient(0deg,
-        rgba(8, 10, 9, 0.9) 0%,
-        rgba(8, 10, 9, 0.78) 38%,
-        rgba(8, 10, 9, 0.25) 68%,
-        rgba(8, 10, 9, 0.45) 100%);
+        rgba(var(--ink-deep-rgb), 0.9) 0%,
+        rgba(var(--ink-deep-rgb), 0.78) 38%,
+        rgba(var(--ink-deep-rgb), 0.25) 68%,
+        rgba(var(--ink-deep-rgb), 0.45) 100%);
   }
 
   .scene .cine__stage {
@@ -4222,10 +4233,10 @@ html:not(.js) .wizard__step+.wizard__step {
 
   .hero .cine__scrim {
     background: linear-gradient(0deg,
-        rgba(8, 10, 9, 0.9) 0%,
-        rgba(8, 10, 9, 0.72) 35%,
-        rgba(8, 10, 9, 0.15) 65%,
-        rgba(8, 10, 9, 0.45) 100%);
+        rgba(var(--ink-deep-rgb), 0.9) 0%,
+        rgba(var(--ink-deep-rgb), 0.72) 35%,
+        rgba(var(--ink-deep-rgb), 0.15) 65%,
+        rgba(var(--ink-deep-rgb), 0.45) 100%);
   }
 
   .hero__cue {

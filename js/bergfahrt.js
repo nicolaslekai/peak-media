@@ -71,7 +71,7 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  const INK = '#0c0e0d', GOLD = '198,164,92', SOFT = '230,212,168', WARM = '230,180,90';
+  const INK = '#10141A', GOLD = '198,164,92', SOFT = '230,212,168', WARM = '230,180,90';
   const COL = 8;                   // px between the columns of the hidden-line envelope
   let env = new Float32Array(0);   // per column: the lowest ridge drawn so far (screen y)
   // the soft light around lamps and windows: a radial gradient, not shadowBlur (which

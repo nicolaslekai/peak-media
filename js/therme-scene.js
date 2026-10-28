@@ -35,7 +35,7 @@
   const dots = [...stage.querySelectorAll('.ride__dots span')];
 
   // gold for the land, a pale blue for the water (the blue hour), warm for light, white mist
-  const INK = '#0c0e0d', GOLD = '198,164,92', SOFT = '230,212,168', WARM = '232,182,96', WATER = '150,192,210', STEAM = '214,226,230';
+  const INK = '#10141A', GOLD = '198,164,92', SOFT = '230,212,168', WARM = '232,182,96', WATER = '150,192,210', STEAM = '214,226,230';
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const ease = u => u * u * (3 - 2 * u);
   const bump = (x, z, cx, cz, s, h) => h * Math.exp(-((x - cx) ** 2 + (z - cz) ** 2) / (2 * s * s));

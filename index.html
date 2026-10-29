@@ -148,11 +148,12 @@
     <section class="hero hero--still" id="hero">
       <div class="cine__stage">
         <!-- phones held upright see only a square of the image (object-position 84% in
-             style.css): the same square, cut by workspace tools/images.mjs -->
+             style.css): the same square, cut by workspace tools/images.mjs. ?v= because
+             images are cached for 30 days: bump it when either file changes (ISSUES P8) -->
         <picture class="cine__still">
-          <source media="(max-width: 767px) and (orientation: portrait)" srcset="assets/img/hero-home-phone.webp"
+          <source media="(max-width: 767px) and (orientation: portrait)" srcset="assets/img/hero-home-phone.webp?v=2"
             width="941" height="941" />
-          <img src="assets/img/hero-home.webp" alt="" width="1672" height="941" fetchpriority="high" />
+          <img src="assets/img/hero-home.webp?v=2" alt="" width="1672" height="941" fetchpriority="high" />
         </picture>
         <div class="cine__scrim"></div>
         <div class="cine__copy">

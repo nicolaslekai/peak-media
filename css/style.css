@@ -3329,9 +3329,15 @@ html:not(.js) .wizard__step+.wizard__step {
     linear-gradient(0deg, rgba(var(--ink-deep-rgb), 0.8), transparent 60%);
 }
 
+/* one h1 size on phones, the home hero's (.hero h1 in the ≤767px block): the segment
+   openings, Über uns, Kontakt, the legal pages and 404 */
 @media (max-width: 767px) {
-  .hero.hero--page h1 {
-    font-size: clamp(2rem, 8.6vw, 2.6rem);
+  .hero.hero--page h1,
+  .page-hero h1,
+  .contact h1,
+  .page-top h1 {
+    font-size: clamp(2.4rem, 11vw, 3.3rem);
+    line-height: 1.04;
   }
 }
 

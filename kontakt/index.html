@@ -7,13 +7,13 @@
   <meta name="theme-color" content="#10141A" />
   <!-- SEO (D-83): written by workspace tools/seo-head.mjs; edit there and re-run -->
   <title>Kontakt &amp; Anfrage | Blaue Stunde</title>
-  <meta name="description" content="Erzählen Sie uns von Ihrem Hotel, Ihrer Bergbahn oder Ihrer Therme: drei kurze Schritte, Antwort innerhalb von drei Werktagen. Blaue Stunde, Füssen." />
+  <meta name="description" content="Erzählen Sie uns von Ihrem Hotel, Ihrer Bergbahn oder Ihrer Therme: vier kurze Schritte, Antwort innerhalb von drei Werktagen. Blaue Stunde, Füssen." />
   <link rel="canonical" href="https://blauestunde.media/kontakt/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Blaue Stunde" />
   <meta property="og:locale" content="de_DE" />
   <meta property="og:title" content="Kontakt &amp; Anfrage | Blaue Stunde" />
-  <meta property="og:description" content="Erzählen Sie uns von Ihrem Hotel, Ihrer Bergbahn oder Ihrer Therme: drei kurze Schritte, Antwort innerhalb von drei Werktagen. Blaue Stunde, Füssen." />
+  <meta property="og:description" content="Erzählen Sie uns von Ihrem Hotel, Ihrer Bergbahn oder Ihrer Therme: vier kurze Schritte, Antwort innerhalb von drei Werktagen. Blaue Stunde, Füssen." />
   <meta property="og:url" content="https://blauestunde.media/kontakt/" />
   <meta property="og:image" content="https://blauestunde.media/assets/img/og-blaue-stunde.jpg?v=2" />
   <meta property="og:image:width" content="1200" />
@@ -72,7 +72,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=124" />
+  <link rel="stylesheet" href="../css/style.css?v=125" />
 </head>
 
 <body>
@@ -111,7 +111,7 @@
         <p class="kicker">Sprechen wir</p>
         <h1>Erzählen Sie uns von Ihrem Betrieb.</h1>
         <p>
-          Drei kurze Schritte, meist mit einem Klick. Wir melden uns innerhalb von
+          Vier kurze Schritte, meist mit einem Klick. Wir melden uns innerhalb von
           drei Werktagen mit Ideen und einem ersten Angebot.
         </p>
         <!-- for anyone who only wants the address or the phone (D-76, D-86: Daniel answers) -->
@@ -133,6 +133,7 @@
         <ol class="wizard__progress" aria-label="Schritte">
           <li>Betrieb</li>
           <li>Eckdaten</li>
+          <li>Kanäle</li>
           <li>Kontakt</li>
         </ol>
 
@@ -149,101 +150,52 @@
           </div>
         </fieldset>
 
+        <!-- one question for the chosen type, its title is the question; "Etwas anderes" has
+             none and skips this step. data-max = upper bound of a size range, used to pick
+             the range for a calculator value (js/contact.js) -->
         <fieldset class="wizard__step">
-          <legend class="wizard__title">Ein paar Eckdaten</legend>
-          <p class="wizard__hint">Alles freiwillig. Es hilft uns beim ersten Angebot.</p>
-
-          <!-- per type; data-max = upper bound of a size range, used to pick the range for a
-               calculator value (js/contact.js) -->
           <fieldset class="contact__extra" data-for="hotel">
-            <fieldset class="choice-group">
-              <legend>Zimmer</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="zimmer" value="bis 20" data-max="20" /><span>bis 20</span></label>
-                <label class="choice"><input type="radio" name="zimmer" value="21–50" data-max="50" /><span>21–50</span></label>
-                <label class="choice"><input type="radio" name="zimmer" value="51–100" data-max="100" /><span>51–100</span></label>
-                <label class="choice"><input type="radio" name="zimmer" value="101–200" data-max="200" /><span>101–200</span></label>
-                <label class="choice"><input type="radio" name="zimmer" value="über 200" /><span>über 200</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="choice-group">
-              <legend>Ein Haus oder mehrere?</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="hotel_struktur" value="Einzelbetrieb" /><span>Einzelbetrieb</span></label>
-                <label class="choice"><input type="radio" name="hotel_struktur" value="Gruppe oder Kette" /><span>Gruppe oder Kette</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="choice-group">
-              <legend>Geöffnet</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="hotel_saison" value="ganzjährig" /><span>ganzjährig</span></label>
-                <label class="choice"><input type="radio" name="hotel_saison" value="Sommer und Winter, mit Pause" /><span>Sommer und Winter, mit Pause</span></label>
-                <label class="choice"><input type="radio" name="hotel_saison" value="nur eine Saison" /><span>nur eine Saison</span></label>
-              </div>
-            </fieldset>
+            <legend class="wizard__title">Wie viele Zimmer hat Ihr Haus?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="zimmer" value="bis 20" data-max="20" /><span>bis 20</span></label>
+              <label class="choice"><input type="radio" name="zimmer" value="21–50" data-max="50" /><span>21–50</span></label>
+              <label class="choice"><input type="radio" name="zimmer" value="51–100" data-max="100" /><span>51–100</span></label>
+              <label class="choice"><input type="radio" name="zimmer" value="101–200" data-max="200" /><span>101–200</span></label>
+              <label class="choice"><input type="radio" name="zimmer" value="über 200" /><span>über 200</span></label>
+            </div>
           </fieldset>
 
           <fieldset class="contact__extra" data-for="bergbahn">
-            <fieldset class="choice-group">
-              <legend>Anlagen</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="anlagen" value="1" /><span>1</span></label>
-                <label class="choice"><input type="radio" name="anlagen" value="2–5" /><span>2–5</span></label>
-                <label class="choice"><input type="radio" name="anlagen" value="6 und mehr" /><span>6 und mehr</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="choice-group">
-              <legend>Ein Betrieb oder ein Verbund?</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="bahn_struktur" value="Einzelbetrieb" /><span>Einzelbetrieb</span></label>
-                <label class="choice"><input type="radio" name="bahn_struktur" value="Verbund" /><span>Verbund</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="choice-group">
-              <legend>In Betrieb</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="bahn_saison" value="nur im Winter" /><span>nur im Winter</span></label>
-                <label class="choice"><input type="radio" name="bahn_saison" value="nur im Sommer" /><span>nur im Sommer</span></label>
-                <label class="choice"><input type="radio" name="bahn_saison" value="Sommer und Winter" /><span>Sommer und Winter</span></label>
-              </div>
-            </fieldset>
+            <legend class="wizard__title">Ein Betrieb oder ein Verbund?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="bahn_struktur" value="Einzelbetrieb" /><span>Einzelbetrieb</span></label>
+              <label class="choice"><input type="radio" name="bahn_struktur" value="Verbund" /><span>Verbund</span></label>
+            </div>
           </fieldset>
 
           <fieldset class="contact__extra" data-for="therme">
-            <fieldset class="choice-group">
-              <legend>Besuche pro Jahr</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="besuche" value="bis 50.000" data-max="50000" /><span>bis 50.000</span></label>
-                <label class="choice"><input type="radio" name="besuche" value="50.000–150.000" data-max="150000" /><span>50.000–150.000</span></label>
-                <label class="choice"><input type="radio" name="besuche" value="150.000–300.000" data-max="300000" /><span>150.000–300.000</span></label>
-                <label class="choice"><input type="radio" name="besuche" value="über 300.000" /><span>über 300.000</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="choice-group">
-              <legend>Träger</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="traeger" value="privat" /><span>privat</span></label>
-                <label class="choice"><input type="radio" name="traeger" value="kommunal" /><span>kommunal</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="choice-group">
-              <legend>Standorte</legend>
-              <div class="choices">
-                <label class="choice"><input type="radio" name="therme_struktur" value="ein Standort" /><span>ein Standort</span></label>
-                <label class="choice"><input type="radio" name="therme_struktur" value="mehrere" /><span>mehrere</span></label>
-              </div>
-            </fieldset>
-          </fieldset>
-
-          <!-- for every type: who looks after the channels today -->
-          <fieldset class="choice-group">
-            <legend>Ihre Social-Media-Kanäle heute</legend>
+            <legend class="wizard__title">Wie viele Besuche im Jahr?</legend>
             <div class="choices">
-              <label class="choice"><input type="radio" name="kanaele" value="betreuen wir selbst" /><span>betreuen wir selbst</span></label>
-              <label class="choice"><input type="radio" name="kanaele" value="macht eine Agentur" /><span>macht eine Agentur</span></label>
-              <label class="choice"><input type="radio" name="kanaele" value="haben wir noch kaum" /><span>haben wir noch kaum</span></label>
+              <label class="choice"><input type="radio" name="besuche" value="bis 50.000" data-max="50000" /><span>bis 50.000</span></label>
+              <label class="choice"><input type="radio" name="besuche" value="50.000–150.000" data-max="150000" /><span>50.000–150.000</span></label>
+              <label class="choice"><input type="radio" name="besuche" value="150.000–300.000" data-max="300000" /><span>150.000–300.000</span></label>
+              <label class="choice"><input type="radio" name="besuche" value="über 300.000" /><span>über 300.000</span></label>
             </div>
           </fieldset>
+          <div class="wizard__nav">
+            <button class="btn btn--ghost" type="button" data-back>Zurück</button>
+            <button class="btn btn--gold" type="button" data-next>Weiter</button>
+          </div>
+        </fieldset>
+
+        <!-- for every type: who looks after the channels today -->
+        <fieldset class="wizard__step">
+          <legend class="wizard__title">Und Ihre Social-Media-Kanäle?</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="kanaele" value="betreuen wir selbst" /><span>betreuen wir selbst</span></label>
+            <label class="choice"><input type="radio" name="kanaele" value="macht eine Agentur" /><span>macht eine Agentur</span></label>
+            <label class="choice"><input type="radio" name="kanaele" value="haben wir noch kaum" /><span>haben wir noch kaum</span></label>
+          </div>
           <div class="wizard__nav">
             <button class="btn btn--ghost" type="button" data-back>Zurück</button>
             <button class="btn btn--gold" type="button" data-next>Weiter</button>
@@ -260,7 +212,7 @@
               pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" /><label for="f-mail">E-Mail</label>
           </div>
           <div class="field">
-            <input type="text" name="betrieb" autocomplete="organization" placeholder=" " id="f-prop" /><label for="f-prop">Name des Betriebs</label>
+            <input type="text" name="betrieb" autocomplete="organization" placeholder=" " id="f-prop" /><label for="f-prop" data-hotel="Name des Hotels" data-bergbahn="Name der Bergbahn">Name des Betriebs</label>
           </div>
           <div class="field">
             <input type="text" name="ort" autocomplete="address-level2" placeholder=" " id="f-place" /><label for="f-place">Ort</label>
@@ -368,7 +320,7 @@
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=73"></script>
   <script src="../js/nav.js?v=3"></script>
-  <script src="../js/contact.js?v=10"></script>
+  <script src="../js/contact.js?v=11"></script>
 </body>
 
 </html>

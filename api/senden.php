@@ -64,9 +64,7 @@ if (!isset($types[$type]) || $name === '' || $message === '' || !filter_var($ema
 // every answer the form can carry, in the order of the form, with the form's own words
 $labels = [
   'betrieb' => 'Name des Betriebs', 'ort' => 'Ort',
-  'zimmer' => 'Zimmer', 'hotel_struktur' => 'Ein Haus oder mehrere', 'hotel_saison' => 'Geöffnet',
-  'anlagen' => 'Anlagen', 'bahn_struktur' => 'Betrieb oder Verbund', 'bahn_saison' => 'In Betrieb',
-  'besuche' => 'Besuche pro Jahr', 'traeger' => 'Träger', 'therme_struktur' => 'Standorte',
+  'zimmer' => 'Zimmer', 'bahn_struktur' => 'Betrieb oder Verbund', 'besuche' => 'Besuche pro Jahr',
   'kanaele' => 'Social-Media-Kanäle heute', 'rechner' => 'Aus Rechner oder Check',
 ];
 $lines = ["Art des Betriebs: {$types[$type]}", "Name: $name", "E-Mail: $email"];

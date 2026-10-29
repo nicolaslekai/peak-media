@@ -2812,7 +2812,12 @@ html:not(.js) .contact__form .btn {
   display: contents;
 }
 
-/* ---- ENQUIRY IN THREE STEPS (D-74, js/contact.js): progress, steps, one-click choices.
+/* its question is the step's title (D-97): across the step's grid like the step legends */
+.contact__extra>legend {
+  grid-column: 1/-1;
+}
+
+/* ---- ENQUIRY IN FOUR STEPS (D-74, D-97, js/contact.js): progress, steps, one-click choices.
    Without JS every step shows, one after the other, and the step buttons are hidden ---- */
 .wizard__progress {
   grid-column: 1/-1;
@@ -2854,6 +2859,19 @@ html:not(.js) .wizard__progress {
   display: none;
 }
 
+/* four labels do not fit a phone's width (they broke into two lines): the numbers only,
+   the names stay for screen readers; the step's title says what is asked */
+@media (max-width: 480px) {
+  .wizard__progress li {
+    font-size: 0;
+  }
+
+  .wizard__progress li::before {
+    content: counter(step);
+    font-size: 0.7rem;
+  }
+}
+
 .wizard__step {
   grid-column: 1/-1;
   display: grid;
@@ -2880,6 +2898,7 @@ html:not(.js) .wizard__step+.wizard__step {
   margin-bottom: 1rem;
   font-family: var(--serif);
   font-size: clamp(1.6rem, 3vw, 2.1rem);
+  line-height: 1.2;
   color: var(--paper);
   outline: none;
 }

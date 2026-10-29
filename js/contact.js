@@ -1,7 +1,8 @@
 /* ============ BLAUE STUNDE — enquiry form ============
-   On the Kontakt page (kontakt/), one form for the whole site in three steps (D-74):
-   the business type, a few one-click questions for that type, contact. Shows one step
-   at a time and only the questions of the chosen type, validates each step in German,
+   On the Kontakt page (kontakt/), one form for the whole site in four steps (D-74, D-97):
+   the business type, one question for that type, the social channels, contact. The first
+   three are one click each and move on by themselves. Shows one step at a time and only
+   the question of the chosen type ("Etwas anderes" has none and skips it), validates each step in German,
    takes over ?typ= from a segment page and the calculator values ("Mit diesen Werten
    anfragen") and confirms with a dialog. Delivery: api/senden.php on the server mails it
    to service@ (D-04, D-86); with ENDPOINT empty nothing would be sent and the dialog
@@ -21,15 +22,21 @@
   const calcNote = form.querySelector('.contact__calc');
   const error = form.querySelector('.contact__error');
   const dialog = document.getElementById('enquiry-sent');
+  const propLabel = form.querySelector('label[for="f-prop"]');
+  const propDefault = propLabel.textContent;
   const type = () => form.elements.betriebsart.value;
   // each step is checked on "Weiter", so the browser's own check on submit stays off
   form.noValidate = true;
 
-  // only the questions of the chosen type are visible; the others are disabled
-  // <fieldset>s, so their answers are neither validated nor sent
+  // only the question of the chosen type is visible; the others are disabled
+  // <fieldset>s, so their answers are neither validated nor sent. The name field speaks
+  // to the type ("Name des Hotels") where the label has a data-<type>
   const showGroup = () => {
     for (const g of groups) g.hidden = g.disabled = g.dataset.for !== type();
+    propLabel.textContent = propLabel.dataset[type()] || propDefault;
   };
+  // a step of per-type questions with none for this type ("Etwas anderes") is skipped
+  const empty = i => steps[i].querySelector('.contact__extra') && !steps[i].querySelector('.contact__extra:not([hidden])');
 
   let current = 0;
   const show = (i, focus = true) => {
@@ -40,7 +47,7 @@
       if (k === i) m.setAttribute('aria-current', 'step'); else m.removeAttribute('aria-current');
     });
     if (focus) {
-      const title = steps[i].querySelector('.wizard__title');
+      const title = [...steps[i].querySelectorAll('.wizard__title')].find(t => !t.closest('[hidden]'));
       title.tabIndex = -1;
       title.focus({ preventScroll: true });
       const top = form.getBoundingClientRect().top + scrollY - 120;
@@ -69,18 +76,26 @@
     return true;
   };
 
+  // one step on or back, past a step with nothing to ask
+  const go = dir => {
+    let i = current + dir;
+    while (empty(i)) i += dir;
+    show(i);
+  };
   form.addEventListener('click', e => {
-    if (e.target.closest('[data-next]') && valid(steps[current])) show(current + 1);
-    if (e.target.closest('[data-back]')) show(current - 1);
+    if (e.target.closest('[data-next]') && valid(steps[current])) go(1);
+    if (e.target.closest('[data-back]')) go(-1);
   });
-  // choosing the type is the whole first step: on to the questions at once. On click, not
-  // change: after "Zurück", a click on the card already chosen fires no change
+  // each one-click question is the whole step: on to the next at once. On click, not
+  // change: after "Zurück", a click on the answer already chosen fires no change
   form.addEventListener('click', e => {
-    if (e.target.name !== 'betriebsart') return;
-    showGroup();
+    const el = e.target;
+    if (el.type !== 'radio' || !steps[current].contains(el)) return;
+    if (el.name === 'betriebsart') showGroup();
     // pointer only (detail > 0): arrow keys also "click" radios, and keyboard users
-    // move through the cards first and go on with "Weiter"
-    if (current === 0 && e.detail > 0) setTimeout(() => show(1), 180);   // the card lights up first
+    // move through the answers first and go on with "Weiter"
+    const from = current;
+    if (e.detail > 0) setTimeout(() => { if (current === from) go(1); }, 180);   // the answer lights up first
   });
 
   // the size questions are ranges: a calculator number picks the first option whose
@@ -99,7 +114,7 @@
   const start = () => {
     if (preset) preset.checked = true;
     showGroup();
-    show(preset ? 1 : 0, false);
+    show(preset ? (empty(1) ? 2 : 1) : 0, false);
   };
   start();
   const SIZE_FIELD = { hotel: 'zimmer', thermen: 'besuche' };
@@ -125,7 +140,7 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     // Enter in an earlier step moves on instead of sending
-    if (current < steps.length - 1) { if (valid(steps[current])) show(current + 1); return; }
+    if (current < steps.length - 1) { if (valid(steps[current])) go(1); return; }
     // every step once more, in order: the first incomplete one is shown again
     const complete = step => [...step.querySelectorAll('input, textarea')].every(el => el.disabled || el.checkValidity());
     const first = steps.findIndex(s => !complete(s));

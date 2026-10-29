@@ -2893,9 +2893,14 @@ html:not(.js) .wizard__step+.wizard__step {
   border-top: 1px solid var(--line);
 }
 
+/* each step on the page's centre axis, like the header above and the team below (D-97):
+   title, short choices and buttons centred; the cards and the fields keep the full width.
+   margin-inline: auto centres a step's own <legend> */
 .wizard__title {
   padding: 0;
+  margin-inline: auto;
   margin-bottom: 1rem;
+  text-align: center;
   font-family: var(--serif);
   font-size: clamp(1.6rem, 3vw, 2.1rem);
   line-height: 1.2;
@@ -2914,7 +2919,12 @@ html:not(.js) .wizard__step+.wizard__step {
   grid-column: 1/-1;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
+}
+
+.wizard__step .choices {
+  justify-content: center;
 }
 
 /* a question with one-click answers: the radio stays in the label (focusable, invisible),

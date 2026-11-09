@@ -20,19 +20,17 @@
   ride.className = 'ride';
   ride.innerHTML =
     '<div class="ride__stage"><canvas aria-hidden="true"></canvas>' +
-    '<p class="ride__dots" aria-hidden="true"><span>01</span><span>02</span><span>03</span></p>' +
     '<a class="btn btn--gold ride__cta"></a></div>';
   const cta = ride.querySelector('.ride__cta');
   cta.href = chain.dataset.cta || '#check';
   cta.textContent = chain.dataset.ctaLabel || 'Sichtbarkeit prüfen';
   chain.before(ride);
   const stage = ride.firstElementChild;
-  stage.insertBefore(chain, stage.querySelector('.ride__dots'));
+  stage.insertBefore(chain, cta);   // no 01-03 progress on the right any more (Nicky, 2026-11-09)
   chain.classList.add('chain--ride');
   items[0].classList.add('is-active');
   const canvas = stage.querySelector('canvas');
   const ctx = canvas.getContext('2d', { alpha: false });
-  const dots = [...stage.querySelectorAll('.ride__dots span')];
 
   // gold for the land, a pale blue for the water (the blue hour), warm for light, white mist
   const INK = '#10141A', GOLD = '209,168,81', SOFT = '236,214,162', WARM = '232,182,96', WATER = '150,192,210', STEAM = '214,226,230';
@@ -243,7 +241,6 @@
         li.classList.toggle('is-active', o >= 0.5);
       });
       const active = p < 0.25 ? 0 : p < 0.75 ? 1 : 2;
-      dots.forEach((d, i) => d.classList.toggle('on', i <= active));
       ride.classList.toggle('ride--top', p > 0.9);
     }
     requestAnimationFrame(frame);

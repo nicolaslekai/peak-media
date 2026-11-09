@@ -107,7 +107,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=126" />
+  <link rel="stylesheet" href="css/style.css?v=127" />
 </head>
 
 <body>
@@ -312,6 +312,99 @@
       </ol>
     </section>
 
+    <!-- TOOLS: what is made by hand (everything guests see) and what AI does in the
+         background (admin). The art is the logo's ridge split at the blue-hour sun: the left
+         half in a camera viewfinder, the right half a schedule line with posts. Drawn in
+         when it scrolls into view (js/tools.js); static without JS or with reduced motion -->
+    <section class="section tools" id="werkzeuge">
+      <header>
+        <p class="kicker">Das richtige Werkzeug</p>
+        <h2>Echte Bilder. Kluge Werkzeuge.</h2>
+        <p>
+          Alles, was Ihre Gäste sehen, entsteht bei Ihnen vor Ort, mit Kamera und echten
+          Menschen. KI nutzen wir dort, wo sie Arbeit spart. So bleibt mehr Zeit für
+          gute Bilder.
+        </p>
+      </header>
+      <svg class="tools__art" viewBox="0 0 1200 260" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="tools-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#d1a851" stop-opacity=".2" />
+            <stop offset="1" stop-color="#d1a851" stop-opacity="0" />
+          </linearGradient>
+          <radialGradient id="tools-glow">
+            <stop offset="0" stop-color="#ecd6a2" stop-opacity=".28" />
+            <stop offset="1" stop-color="#ecd6a2" stop-opacity="0" />
+          </radialGradient>
+          <!-- hides the sun below the ridge, with a small gap above it, as in the logo -->
+          <mask id="tools-ground" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="260">
+            <rect width="1200" height="260" fill="#fff" />
+            <path d="M0 250C110 170 250 60 300 60C350 60 470 160 600 200C690 160 820 110 880 110C940 110 1060 180 1200 250L1200 260L0 260Z"
+              fill="#000" stroke="#000" stroke-width="10" stroke-linejoin="round" />
+          </mask>
+        </defs>
+        <!-- left: shot by hand, the peak inside a viewfinder -->
+        <g class="tools__hand">
+          <path class="tools__fill" d="M0 250C110 170 250 60 300 60C350 60 470 160 600 200L600 260L0 260Z" />
+          <path class="tools__thirds" d="M226.7 22V248M373.3 22V248M80 97.3H520M80 172.7H520" />
+          <path class="tools__frame" d="M80 50V22H108M492 22H520V50M520 220V248H492M108 248H80V220" />
+          <circle class="tools__rec" cx="106" cy="46" r="4.5" />
+          <path class="tools__ridge" d="M0 250C110 170 250 60 300 60C350 60 470 160 600 200" />
+        </g>
+        <!-- centre: the blue-hour sun between the two halves -->
+        <g class="tools__sunset">
+          <circle cx="600" cy="196" r="120" fill="url(#tools-glow)" />
+          <circle class="tools__sun" cx="600" cy="196" r="42" mask="url(#tools-ground)" />
+          <path class="tools__seam" d="M600 206V260" />
+        </g>
+        <!-- right: run by the system, the ridge as a dotted line, each node a scheduled post -->
+        <g class="tools__ai">
+          <path class="tools__timeline" d="M650 42H1170" />
+          <path class="tools__ticks" d="M676 38V46M711 38V46M746 38V46M781 38V46M816 38V46M851 38V46M886 38V46M921 38V46M956 38V46M991 38V46M1026 38V46M1061 38V46M1096 38V46M1131 38V46" />
+          <path class="tools__ridge tools__ridge--dots" d="M600 200C690 160 820 110 880 110C940 110 1060 180 1200 250" />
+          <path class="tools__drops" d="M698 152V50M799 118V50M880 103V50M1010 147V50M1119 202V50" />
+          <g class="tools__nodes">
+            <circle cx="698" cy="159" r="5" />
+            <circle cx="799" cy="125" r="5" />
+            <circle cx="880" cy="110" r="5" />
+            <circle cx="1010" cy="154" r="5" />
+            <circle cx="1119" cy="209" r="5" />
+          </g>
+          <g class="tools__posts">
+            <rect x="691" y="35" width="14" height="14" rx="2" style="--i: 0" />
+            <rect x="792" y="35" width="14" height="14" rx="2" style="--i: 1" />
+            <rect x="873" y="35" width="14" height="14" rx="2" style="--i: 2" />
+            <rect x="1003" y="35" width="14" height="14" rx="2" style="--i: 3" />
+            <rect x="1112" y="35" width="14" height="14" rx="2" style="--i: 4" />
+          </g>
+        </g>
+      </svg>
+      <div class="tools__split">
+        <article class="tools__side tools__side--hand">
+          <p class="tools__label">Von Hand</p>
+          <h3>Was Ihre Gäste sehen</h3>
+          <ul>
+            <li>Filme und Fotos, gedreht bei Ihnen</li>
+            <li>Schnitt, Farbe und Ton</li>
+            <li>Ideen und Geschichten aus Ihrem Haus</li>
+            <li>Ihr Team und Ihre Gäste, keine erfundenen Gesichter</li>
+          </ul>
+        </article>
+        <div class="tools__divider" aria-hidden="true"></div>
+        <article class="tools__side tools__side--ai">
+          <p class="tools__label">Mit KI</p>
+          <h3>Was im Hintergrund läuft</h3>
+          <ul>
+            <li>Redaktionsplan und beste Uhrzeiten</li>
+            <li>Untertitel und Formate für jeden Kanal</li>
+            <li>Kommentare und Anfragen vorsortiert</li>
+            <li>Auswertung und Monatsbericht</li>
+          </ul>
+        </article>
+      </div>
+      <p class="tools__note">Das Beste aus beiden Welten: das richtige Werkzeug für die richtige Arbeit.</p>
+    </section>
+
     <!-- EXAMPLES — iPhone-framed formats, how content can look; no client figures until a
          pilot exists (D-05) -->
     <section class="section impact" id="beispiele">
@@ -485,6 +578,7 @@
   <script src="js/main.js?v=73"></script>
   <script src="js/steps.js?v=23"></script>
   <script src="js/nav.js?v=3"></script>
+  <script src="js/tools.js?v=1"></script>
 </body>
 
 </html>

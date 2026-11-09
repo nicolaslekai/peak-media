@@ -1250,6 +1250,221 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   }
 }
 
+/* ---- TOOLS: by hand (left) and with AI (right), split at the blue-hour sun ----
+   The art spans the width; its centre (x 600) sits over the divider of the two columns.
+   Hairlines keep 1px at any size (non-scaling-stroke); the dotted ridge does not, since
+   dashes on a non-scaling stroke differ between browsers. */
+.tools__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* only the drawn groups, not the mask in <defs> (its fills make the mask) */
+.tools__art g path,
+.tools__art g circle,
+.tools__art g rect {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.tools__art .tools__fill {
+  fill: url(#tools-fill);
+}
+
+.tools__thirds {
+  stroke: var(--gold);
+  stroke-opacity: 0.12;
+}
+
+.tools__frame {
+  stroke: var(--gold-soft);
+  stroke-width: 1.5px;
+}
+
+.tools__art .tools__rec {
+  fill: var(--gold);
+}
+
+.tools__ridge {
+  stroke: var(--gold);
+  stroke-width: 1.5px;
+  stroke-opacity: 0.85;
+}
+
+.tools__ridge--dots {
+  vector-effect: none;
+  stroke-width: 2.5;
+  stroke-dasharray: 0.1 9;
+  stroke-linecap: round;
+}
+
+.tools__art .tools__sun {
+  fill: var(--gold-soft);
+  fill-opacity: 0.9;
+}
+
+.tools__art g circle[fill] {
+  fill: url(#tools-glow);
+}
+
+.tools__seam,
+.tools__timeline,
+.tools__ticks,
+.tools__drops {
+  stroke: var(--gold);
+  stroke-opacity: 0.35;
+}
+
+.tools__drops {
+  vector-effect: none;
+  stroke-dasharray: 3 5;
+}
+
+.tools__art .tools__nodes circle {
+  fill: var(--ink);
+  stroke: var(--gold);
+  stroke-width: 1.5px;
+}
+
+.tools__art .tools__posts rect {
+  fill: var(--gold-soft);
+  fill-opacity: 0.85;
+}
+
+/* draw-in (js/tools.js): the hand half wipes in from the left, the sun rises, then the
+   system half wipes in and the posts drop onto the timeline one by one */
+.tools__hand,
+.tools__ai {
+  transition: clip-path 1.6s var(--ease);
+}
+
+.tools__ai {
+  transition-delay: 0.9s;
+}
+
+.tools__sunset {
+  transition: opacity 1s var(--ease) 0.6s, transform 1.2s var(--ease) 0.6s;
+}
+
+.tools__posts rect {
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  transition-delay: calc(1.6s + var(--i) * 0.18s);
+}
+
+.js .tools:not(.tools--in) .tools__hand,
+.js .tools:not(.tools--in) .tools__ai {
+  clip-path: inset(0 100% 0 0);
+}
+
+.js .tools:not(.tools--in) .tools__sunset {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.js .tools:not(.tools--in) .tools__posts rect {
+  opacity: 0;
+  transform: translateY(-14px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .tools__hand,
+  .tools__ai,
+  .tools__sunset,
+  .tools__posts rect {
+    transition: none;
+  }
+}
+
+/* the two columns under the art, a hairline between them at the sun */
+.tools__split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  column-gap: clamp(1.6rem, 5vw, 5rem);
+  border-top: 1px solid var(--line);
+}
+
+.tools__divider {
+  background: var(--line);
+}
+
+.tools__side {
+  padding-top: 2rem;
+}
+
+.tools__label {
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+
+.tools__side h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  margin-bottom: 1.2rem;
+}
+
+.tools__side ul {
+  list-style: none;
+}
+
+.tools__side li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(209, 168, 81, 0.14);
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
+/* markers echo the art: a gold dot (the rec light) by hand, a small square (a post) with AI */
+.tools__side li::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  transform: translateY(-1px);
+}
+
+.tools__side--hand li::before {
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.tools__side--ai li::before {
+  border-radius: 1.5px;
+  border: 1px solid var(--gold-soft);
+}
+
+.tools__note {
+  margin-top: 2.6rem;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-style: italic;
+  color: var(--gold-soft);
+  text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+  .tools__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tools__divider {
+    display: none;
+  }
+
+  .tools__side--ai {
+    margin-top: 1.4rem;
+  }
+}
+
 /* ---- PHONES: iPhone-style mockups (social proof wall) ----
    The figure is the phone: screen image + caption overlay; the island is ::before. */
 .phones {
@@ -1716,14 +1931,12 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   counter-reset: step;
 }
 
+/* each link: label (h3), one line in big print (.chain__big), one sentence of what we do
+   (.chain__do) — Nicky, 2026-11-09: no figures, no sources, no fact sentence */
 .chain li {
   --rail: 2.6rem;
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 1.6rem clamp(2rem, 5vw, 5rem);
-  align-items: start;
-  padding: 0 0 4.2rem calc(var(--rail) + clamp(1.4rem, 3vw, 2.6rem));
+  padding: 0.4rem 0 4.2rem calc(var(--rail) + clamp(1.4rem, 3vw, 2.6rem));
 }
 
 .chain li:last-child {
@@ -1762,39 +1975,35 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 .chain h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.1rem;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
 }
 
-.chain .metric {
-  font-size: 0.95rem;
+.chain__big {
+  max-width: 17ch;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 3.6vw, 3.1rem);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  color: var(--gold-soft);
+  text-wrap: balance;
+  font-variant-numeric: lining-nums;
+}
+
+.chain__do {
+  max-width: 40ch;
+  margin-top: 1.5rem;
+  padding-left: 1.2rem;
+  border-left: 1px solid var(--gold);
+  font-size: 1rem;
+  line-height: 1.55;
   color: var(--text-soft);
-}
-
-.chain .metric b {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
-}
-
-.chain small {
-  display: block;
-  margin-top: 1.1rem;
-  font-size: 0.66rem;
-  color: rgba(243, 237, 225, 0.38);
-}
-
-.chain__answer {
-  padding: 1.6rem 1.7rem;
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  background: rgba(243, 237, 225, 0.025);
-  font-size: 0.95rem;
-  color: var(--text-soft);
-}
-
-.chain__label {
-  margin-bottom: 0.8rem;
 }
 
 .chain a,
@@ -1815,13 +2024,14 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
     }
 
     .chain li::before,
-    .chain__fact {
+    .chain h3,
+    .chain__big {
       animation: chain-in linear both;
       animation-timeline: --link;
       animation-range: entry 5% entry 50%;
     }
 
-    .chain__answer {
+    .chain__do {
       animation: chain-in linear both;
       animation-timeline: --link;
       animation-range: entry 30% entry 75%;
@@ -1932,53 +2142,20 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 .chain--ride h3 {
-  margin-bottom: 1rem;
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
+  margin-bottom: 1.3rem;
 }
 
 .chain--ride h3::before {
   content: counter(step, decimal-leading-zero) " · ";
 }
 
-.chain--ride .metric b {
-  font-size: clamp(3.2rem, 6vw, 5.4rem);
+.chain--ride .chain__big {
+  font-size: clamp(2.6rem, 4.4vw, 4.2rem);
+  line-height: 1.02;
 }
 
-.chain--ride .chain__answer {
-  margin-top: 1.6rem;
-  padding: 0 0 0 1.2rem;
-  border: 0;
-  border-left: 1px solid var(--gold);
-  border-radius: 0;
-  background: none;
-}
-
-.chain--ride .chain__label {
-  margin-bottom: 0.5rem;
-  color: var(--gold-soft);
-}
-
-.ride__dots {
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  right: var(--edge);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  translate: 0 -50%;
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
-  color: rgba(243, 237, 225, 0.4);
-}
-
-.ride__dots .on {
-  color: var(--gold);
+.chain--ride .chain__do {
+  margin-top: 1.7rem;
 }
 
 .ride__cta {
@@ -2018,16 +2195,13 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
     align-items: end;
   }
 
-  .chain--ride .metric b {
-    font-size: clamp(2.6rem, 12vw, 3.4rem);
+  .chain--ride .chain__big {
+    font-size: clamp(2rem, 9vw, 2.7rem);
   }
 
-  .chain--ride .chain__answer {
-    margin-top: 1rem;
-  }
-
-  .ride__dots {
-    display: none;
+  .chain--ride .chain__do {
+    margin-top: 1.1rem;
+    font-size: 0.95rem;
   }
 
   /* on phones the third link's own "Rechner" link is the way on */

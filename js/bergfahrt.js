@@ -20,20 +20,18 @@
   ride.className = 'ride';
   ride.innerHTML =
     '<div class="ride__stage"><canvas aria-hidden="true"></canvas>' +
-    '<p class="ride__dots" aria-hidden="true"><span>01</span><span>02</span><span>03</span></p>' +
     '<a class="btn btn--gold ride__cta"></a></div>';
   const cta = ride.querySelector('.ride__cta');
   cta.href = chain.dataset.cta || '#rechner';
   cta.textContent = chain.dataset.ctaLabel || 'Potenzial berechnen';
   chain.before(ride);
   const stage = ride.firstElementChild;
-  stage.insertBefore(chain, stage.querySelector('.ride__dots'));
+  stage.insertBefore(chain, cta);   // no 01-03 progress on the right any more (Nicky, 2026-11-09)
   chain.classList.add('chain--ride');
   items[0].classList.add('is-active');
   const canvas = stage.querySelector('canvas');
   // opaque: the ride paints its own background, so the compositor need not blend it
   const ctx = canvas.getContext('2d', { alpha: false });
-  const dots = [...stage.querySelectorAll('.ride__dots span')];
 
   // ---- terrain: the logo's two summits (big left, small right), side ridges, a little noise
   const bump = (x, z, cx, cz, s, h) => h * Math.exp(-((x - cx) ** 2 + (z - cz) ** 2) / (2 * s * s));
@@ -41,7 +39,9 @@
     bump(x, z, -0.25, 1.35, 0.42, 1.05) + bump(x, z, 0.55, 1.5, 0.33, 0.66) +
     bump(x, z, 1.4, 2.1, 0.5, 0.7) + bump(x, z, -1.4, 2.0, 0.5, 0.75) +
     0.05 * Math.sin(x * 7 + z * 3) * Math.cos(z * 5) + 0.08 * Math.max(0, z - 0.6);
-  const COLS = 120, ROWS = 46, X0 = -2.6, X1 = 2.6, Z0 = 0.15, Z1 = 3.2;
+  // 300 points a line, stroked as curves: at 120 straight pieces the near ridges showed
+  // corners ("low-poly", Nicky, 2026-11-09)
+  const COLS = 300, ROWS = 46, X0 = -2.6, X1 = 2.6, Z0 = 0.15, Z1 = 3.2;
   const ridges = [];   // precomputed heights per ridgeline (they never change)
   for (let r = 0; r < ROWS; r++) {
     const z = Z0 + (Z1 - Z0) * (r / (ROWS - 1)), row = [];
@@ -50,11 +50,14 @@
   }
 
   // ---- the cable: valley, middle and top station (the top one just below the summit)
-  const stations = [[-1.25, 0.6], [-0.75, 1.0], [-0.33, 1.28]].map(([x, z]) => ({ x, z, y: height(x, z) + 0.03 }));
-  const cableAt = t => {   // t 0..1 over both spans; a natural sag in each span
+  // the cable runs into the gables of the valley and the summit station and over the
+  // saddle of the tower in the middle (entry: the cable's height there above the station)
+  const stations = [[-1.25, 0.6], [-0.75, 1.0], [-0.33, 1.28]].map(([x, z], i) => ({ x, z, y: height(x, z) + 0.03, entry: [0.03, 0.075, 0.012][i] }));
+  const SAG = 0.045;
+  const cableAt = (t, drop = 0) => {   // t 0..1 over both spans; a parabolic sag in each span
     const seg = t < 0.5 ? 0 : 1, u = seg ? (t - 0.5) * 2 : t * 2;
-    const a = stations[seg], b = stations[seg + 1];
-    return { x: a.x + (b.x - a.x) * u, z: a.z + (b.z - a.z) * u, y: a.y + (b.y - a.y) * u - 0.06 * Math.sin(Math.PI * u) + 0.07 };
+    const a = stations[seg], b = stations[seg + 1], ya = a.y + a.entry, yb = b.y + b.entry;
+    return { x: a.x + (b.x - a.x) * u, z: a.z + (b.z - a.z) * u, y: ya + (yb - ya) * u - SAG * 4 * u * (1 - u) - drop };
   };
   const ease = u => u * u * (3 - 2 * u);
   // scroll progress → cable position: the cabin slows down at each station
@@ -84,11 +87,19 @@
     ctx.fillStyle = g;
     ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
   }
+  // a smooth line through screen points: quadratic pieces between the midpoints
+  function curve(pts) {
+    ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length - 1; i++) ctx.quadraticCurveTo(pts[i].x, pts[i].y, (pts[i].x + pts[i + 1].x) / 2, (pts[i].y + pts[i + 1].y) / 2);
+    const l = pts.at(-1); ctx.lineTo(l.x, l.y);
+  }
   function draw(p) {
     const phone = W < 768, t = cabinT(p);
     // the camera rises and moves towards the summit with the cabin
-    const cam = { x: -0.15 - p * 0.25 + (phone ? -0.35 : 0.35), y: 0.55 + p * 0.45, z: -1.05 + p * 0.55 };
-    const f = Math.min(W, H * 1.6) * 0.62, horizon = H * (phone ? 0.34 : 0.42) + p * 40, cx = W * (phone ? 0.5 : 0.8);
+    // (wide screens: the camera stands further left, so the whole line, valley station
+    // included, sits right of the copy — Nicky, 2026-11-09)
+    const cam = phone ? { x: -0.5 - p * 0.25, y: 0.55 + p * 0.45, z: -1.05 + p * 0.55 } : { x: -0.45 - p * 0.1, y: 0.55 + p * 0.45, z: -1.05 + p * 0.55 };
+    const f = Math.min(W, H * 1.6) * 0.62, horizon = H * (phone ? 0.34 : 0.42) + p * 40, cx = W * (phone ? 0.5 : 0.74);
     const P = (x, y, z) => { const d = z - cam.z; return d <= 0.05 ? null : { x: cx + (x - cam.x) / d * f, y: horizon - (y - cam.y) / d * f, d }; };
 
     ctx.fillStyle = INK; ctx.fillRect(0, 0, W, H);
@@ -116,55 +127,94 @@
       ctx.closePath();
       ctx.fillStyle = INK; ctx.fill();
       for (let c = c0; c <= c1; c++) env[c] = Math.max(env[c], yAt(c * COL));
-      ctx.beginPath(); pts.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
+      curve(pts);
       const near = 1 - r / ROWS;
       ctx.strokeStyle = `rgba(${GOLD},${(0.12 + 0.5 * near * near).toFixed(3)})`;
       ctx.lineWidth = 0.6 + near * 0.6; ctx.stroke();
     }
 
-    // cable
-    ctx.beginPath();
-    for (let i = 0; i <= 80; i++) { const c = cableAt(i / 80), q = P(c.x, c.y, c.z); if (q) (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)); }
-    ctx.strokeStyle = 'rgba(243,237,225,.55)'; ctx.lineWidth = 1; ctx.stroke();
+    // ---- helpers for the built parts: a filled outline in 3D, a line in 3D
+    const poly = (vs, a = 0.85, w = 1) => {
+      const q = vs.map(v => P(...v)); if (q.some(v => !v)) return null;
+      ctx.beginPath(); q.forEach((v, i) => (i ? ctx.lineTo(v.x, v.y) : ctx.moveTo(v.x, v.y))); ctx.closePath();
+      ctx.fillStyle = INK; ctx.fill(); ctx.strokeStyle = `rgba(${SOFT},${a})`; ctx.lineWidth = w; ctx.stroke();
+      return q;
+    };
+    const line = (A, B, a, w = 1, rgb = SOFT) => { const s = P(...A), e = P(...B); if (!s || !e) return; ctx.strokeStyle = `rgba(${rgb},${a})`; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(e.x, e.y); ctx.stroke(); };
+    const lightRect = (q, lit) => {   // a window: warm when lit, a hairline when not
+      if (!q) return;
+      if (lit > 0) {
+        ctx.fillStyle = `rgba(${WARM},${(0.2 + 0.65 * lit).toFixed(2)})`; ctx.fill();
+        glow((q[0].x + q[2].x) / 2, (q[0].y + q[2].y) / 2, Math.hypot(q[2].x - q[0].x, q[2].y - q[0].y) + 8, WARM, 0.3 * lit);
+      }
+    };
+    // a small alpine building: front and right walls (the camera stands to the right), a
+    // gable roof along x with an overhang, a row of windows on the front
+    const building = (x, z, w, d, h, rh, wins, lit) => {
+      const g = Math.min(height(x - w / 2, z - d / 2), height(x + w / 2, z - d / 2), height(x, z)) - 0.008;
+      const xa = x - w / 2, xb = x + w / 2, za = z - d / 2, zb = z + d / 2, y1 = g + h, yr = y1 + rh, e = 0.012;
+      poly([[xb, g, za], [xb, g, zb], [xb, y1, zb], [xb, y1, za]], 0.75);
+      poly([[xb, y1, za], [xb, y1, zb], [xb, yr, z]], 0.75);
+      poly([[xa, g, za], [xb, g, za], [xb, y1, za], [xa, y1, za]], 0.9);
+      for (let i = 0; i < wins; i++) {
+        const u0 = xa + w * (i + 0.25) / wins, u1 = xa + w * (i + 0.75) / wins;
+        const q = poly([[u0, g + h * 0.35, za], [u1, g + h * 0.35, za], [u1, g + h * 0.75, za], [u0, g + h * 0.75, za]], lit > 0 ? 0.9 : 0.4, 0.7);
+        lightRect(q, lit);
+      }
+      poly([[xa - e, y1 - 0.004, za - e], [xb + e, y1 - 0.004, za - e], [xb + e, yr, z], [xa - e, yr, z]], 0.95, 1.1);
+      line([xa - e, y1 - 0.009, za - e], [xb + e, y1 - 0.009, za - e], 0.45, 0.8);
+      return { g, y1, yr };
+    };
 
-    // stations: pylons with a light that comes on when the cabin arrives
-    stations.forEach((s, i) => {
-      const top = P(s.x, s.y + 0.07, s.z), foot = P(s.x, s.y - 0.06, s.z);
-      if (!top || !foot) return;
-      const on = t >= i / 2 - 0.01;
-      ctx.strokeStyle = `rgba(${SOFT},${on ? 0.95 : 0.35})`; ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.moveTo(foot.x, foot.y); ctx.lineTo(top.x, top.y); ctx.stroke();
-      if (on) glow(top.x, top.y, 16, SOFT, 0.5);
-      ctx.beginPath(); ctx.arc(top.x, top.y, on ? 5 : 3.5, 0, Math.PI * 2);
-      ctx.fillStyle = on ? `rgb(${SOFT})` : `rgba(${SOFT},.4)`;
-      ctx.fill();
-    });
-
-    // summit hut next to the top station: its window lights up at the end of the ride
-    const s3 = stations[2], hut = P(s3.x + 0.1, s3.y + 0.02, s3.z + 0.04);
-    if (hut) {
-      const k = Math.max(9, 0.05 / hut.d * f), lit = Math.max(0, Math.min(1, (p - 0.88) / 0.1));
-      ctx.strokeStyle = `rgba(${SOFT},.85)`; ctx.lineWidth = 1.1;
-      ctx.beginPath();
-      ctx.moveTo(hut.x - k, hut.y); ctx.lineTo(hut.x - k, hut.y - k * 0.8); ctx.lineTo(hut.x, hut.y - k * 1.5);
-      ctx.lineTo(hut.x + k, hut.y - k * 0.8); ctx.lineTo(hut.x + k, hut.y); ctx.closePath();
-      ctx.fillStyle = INK; ctx.fill(); ctx.stroke();
-      glow(hut.x, hut.y - k * 0.42, k * 0.35 + 18, WARM, 0.45 * lit);
-      ctx.fillStyle = `rgba(${WARM},${(0.15 + 0.8 * lit).toFixed(2)})`;
-      ctx.fillRect(hut.x - k * 0.35, hut.y - k * 0.65, k * 0.7, k * 0.45);
+    // ---- the cable: carrying rope and, a little lower, the haul rope, both with a smooth sag
+    for (const [drop, a, w] of [[0.012, 0.28, 0.8], [0, 0.7, 1.2]]) {
+      const pts = [];
+      for (let i = 0; i <= 240; i++) { const c = cableAt(i / 240, drop), q = P(c.x, c.y, c.z); if (q) pts.push(q); }
+      if (pts.length > 1) { curve(pts); ctx.strokeStyle = `rgba(243,237,225,${a})`; ctx.lineWidth = w; ctx.stroke(); }
     }
 
-    // cabin: hanger and a rounded glass body with a warm light inside
-    const c = cableAt(t), a = P(c.x, c.y, c.z), b = P(c.x, c.y - 0.075, c.z);
+    // ---- the tower in the middle: two tapering legs with cross braces, a saddle on top,
+    // a light that comes on when the cabin passes
+    {
+      const s = stations[1], g = height(s.x, s.z) - 0.01, top = s.y + s.entry, on = t >= 0.49;
+      const L = (y, k) => [s.x + k * (0.03 - 0.02 * (y - g) / (top - g)), y, s.z];   // a leg at height y (k = -1 / 1)
+      line(L(g, -1), L(top - 0.006, -1), 0.85, 1.1); line(L(g, 1), L(top - 0.006, 1), 0.85, 1.1);
+      for (let i = 0; i < 4; i++) {
+        const ya = g + (top - g) * i / 4, yb = g + (top - g) * (i + 1) / 4;
+        line(L(ya, -1), L(yb, 1), 0.35, 0.6); line(L(ya, 1), L(yb, -1), 0.35, 0.6); line(L(yb, -1), L(yb, 1), 0.5, 0.7);
+      }
+      line([s.x - 0.03, top - 0.004, s.z], [s.x + 0.03, top - 0.004, s.z], 0.95, 1.4);
+      const q = P(s.x, top, s.z);
+      if (q && on) glow(q.x, q.y, 16, SOFT, 0.5);
+    }
+
+    // ---- the valley station, the summit station and the hut next to it, whose windows
+    // light up at the end of the ride
+    const s1 = stations[0], s3 = stations[2], lit = Math.max(0, Math.min(1, (p - 0.86) / 0.12));
+    building(s1.x - 0.02, s1.z, 0.15, 0.09, 0.045, 0.04, 3, 0.35);
+    building(s3.x + 0.015, s3.z, 0.12, 0.08, 0.04, 0.038, 2, t > 0.97 ? 0.5 : 0);
+    building(s3.x + 0.19, s3.z + 0.03, 0.16, 0.1, 0.05, 0.045, 4, lit);
+
+    // ---- the cabin: grip on the rope, hanger arm, a gondola with a tapered roof, a lit
+    // window band with mullions
+    const c = cableAt(t), a = P(c.x, c.y, c.z), b = P(c.x, c.y - 0.07, c.z);
     if (a && b) {
-      const s = Math.max(10, 0.045 / a.d * f);
+      const s = Math.max(16, 0.07 / a.d * f), wB = s * 1.05, hB = s * 1.05, x = b.x, y = b.y;
       ctx.strokeStyle = `rgb(${SOFT})`; ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-      ctx.beginPath(); ctx.roundRect(b.x - s * 0.6, b.y, s * 1.2, s, s * 0.25);
-      ctx.fillStyle = 'rgba(12,14,13,.95)'; ctx.fill(); ctx.stroke();
-      glow(b.x, b.y + s * 0.42, s * 0.45 + 14, WARM, 0.4);
-      ctx.fillStyle = `rgba(${WARM},.85)`;
-      ctx.fillRect(b.x - s * 0.45, b.y + s * 0.2, s * 0.9, s * 0.45);
+      ctx.fillStyle = `rgb(${SOFT})`; ctx.fillRect(a.x - s * 0.14, a.y - s * 0.05, s * 0.28, s * 0.1);
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(a.x, a.y + (y - a.y) * 0.55); ctx.lineTo(x + s * 0.12, y - s * 0.02); ctx.lineTo(x, y); ctx.stroke();
+      ctx.beginPath();   // roof
+      ctx.moveTo(x - wB * 0.3, y); ctx.lineTo(x + wB * 0.3, y); ctx.lineTo(x + wB * 0.48, y + hB * 0.16); ctx.lineTo(x - wB * 0.48, y + hB * 0.16); ctx.closePath();
+      ctx.fillStyle = INK; ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(x - wB * 0.5, y + hB * 0.16, wB, hB * 0.84, [s * 0.06, s * 0.06, s * 0.2, s * 0.2]);
+      ctx.fillStyle = 'rgba(12,14,16,.96)'; ctx.fill(); ctx.stroke();
+      glow(x, y + hB * 0.45, s * 0.6 + 14, WARM, 0.42);
+      const wy = y + hB * 0.27, wh = hB * 0.36, wx = x - wB * 0.42, ww = wB * 0.84;
+      ctx.fillStyle = `rgba(${WARM},.85)`; ctx.fillRect(wx, wy, ww, wh);
+      ctx.strokeStyle = 'rgba(12,14,16,.9)'; ctx.lineWidth = Math.max(1, s * 0.05);
+      ctx.beginPath(); for (const k of [1 / 3, 2 / 3]) { ctx.moveTo(wx + ww * k, wy); ctx.lineTo(wx + ww * k, wy + wh); } ctx.stroke();
+      ctx.strokeStyle = `rgba(${SOFT},.5)`; ctx.lineWidth = 0.8;
+      ctx.beginPath(); ctx.moveTo(x - wB * 0.44, y + hB * 0.8); ctx.lineTo(x + wB * 0.44, y + hB * 0.8); ctx.stroke();
     }
   }
 
@@ -191,7 +241,6 @@
         li.classList.toggle('is-active', o >= 0.5);
       });
       const active = p < 0.25 ? 0 : p < 0.75 ? 1 : 2;
-      dots.forEach((d, i) => d.classList.toggle('on', i <= active));
       ride.classList.toggle('ride--top', p > 0.9);
     }
     requestAnimationFrame(frame);

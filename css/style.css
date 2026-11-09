@@ -104,7 +104,7 @@
   --sans: "Manrope", system-ui, sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --text-soft: rgba(243, 237, 225, 0.72);
-  --container: 1440px;
+  --container: 90rem;
   --gutter: clamp(1.2rem, 5vw, 4rem);
   /* distance to the screen edge for full-width bands: nav, footer, wide hero copy */
   --edge: clamp(1.2rem, 4vw, 3.5rem);
@@ -2801,7 +2801,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.4rem;
-  max-width: 640px;
+  max-width: 56rem;
   margin: 0 auto;
 }
 
@@ -3188,15 +3188,34 @@ html:not(.js) .wizard__step+.wizard__step {
   gap: 0.9rem;
 }
 
+/* (Nicky, 2026-11-09: bigger, with a picture each, so nobody has to read) */
 .choice--card span {
-  padding: 1.2rem 1.3rem;
+  overflow: hidden;
+  padding: 0 1.4rem 1.4rem;
+  font-size: 0.98rem;
+}
+
+.choice__img {
+  display: block;
+  width: calc(100% + 2.8rem);
+  max-width: none;
+  aspect-ratio: 3 / 2;
+  margin: 0 -1.4rem 1.2rem;
+  object-fit: cover;
+  filter: saturate(0.8) brightness(0.82);
+  transition: filter 0.4s var(--ease);
+}
+
+.choice--card:hover .choice__img,
+.choice--card input:checked+span .choice__img {
+  filter: none;
 }
 
 .choice--card b {
   display: block;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
   font-family: var(--serif);
-  font-size: 1.35rem;
+  font-size: 1.7rem;
   font-weight: 500;
   color: var(--paper);
 }
@@ -4928,6 +4947,12 @@ html:not(.js) .wizard__step+.wizard__step {
   max-width: none;
 }
 
+/* the team cards (Über uns) on the same edges and gap as the doors below them */
+.team__grid {
+  max-width: none;
+  gap: 2.4rem 2rem;
+}
+
 .doors__list {
   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 2.4rem 2rem;
@@ -5041,4 +5066,194 @@ html.layout-center .phones__hint {
 
 html.layout-center .impact .phones {
   justify-content: center;
+}
+
+/* ===================================================================================
+   GLANCE VARIANTS (Hotels, 2026-11-09, to choose one): A gradient fade, B cinema strip,
+   C triptych, D passepartout. The same photo in all four; the tag names the variant.
+   =================================================================================== */
+.glance-v {
+  position: relative;
+  isolation: isolate;
+}
+
+.glance-v+.glance-v {
+  border-top: 1px dashed rgba(209, 168, 81, 0.35);
+}
+
+.glance-v__tag {
+  position: absolute;
+  z-index: 3;
+  top: 1rem;
+  right: var(--gutter);
+  padding: 0.4em 0.9em;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+}
+
+.glance-v__art {
+  margin: 0;
+}
+
+.glance-v__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A · Verlauf: the photo fills the right side to the screen edge and fades out to the
+   left and to the bottom, behind the copy */
+.glance-v--a {
+  padding-block: clamp(5rem, 12vh, 9rem) var(--section-y);
+}
+
+.glance-v--a>header {
+  display: block;
+  max-width: 34rem;
+}
+
+.glance-v--a>header>h2+p {
+  margin-top: 1.4rem;
+}
+
+.glance-v--a .glance-v__art {
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(50% - 50vw) 0 34%;
+}
+
+.glance-v--a .glance-v__art img {
+  object-position: 70% 50%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 30%, #000 60%), linear-gradient(0deg, transparent 0%, #000 40%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 30%, #000 60%), linear-gradient(0deg, transparent 0%, #000 40%);
+  mask-composite: intersect;
+}
+
+/* B · Kino: a 21:9 still across the screen width, fading in and out at top and bottom,
+   a small caption on the container edge */
+.glance-v--b .glance-v__art {
+  position: relative;
+  width: 100vw;
+  margin: 1.4rem calc(50% - 50vw) 2.6rem;
+  aspect-ratio: 21 / 9;
+  max-height: 74vh;
+}
+
+.glance-v--b .glance-v__art img {
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 16%, #000 80%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 16%, #000 80%, transparent);
+}
+
+.glance-v--b figcaption {
+  position: absolute;
+  left: max(var(--gutter), calc(50vw - var(--container) / 2 + var(--gutter)));
+  bottom: 14%;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+/* C · Triptychon: one photo in three tall panels with gaps, the middle one lower */
+.glance-v--c .glance-v__art {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.4vw, 1.2rem);
+  height: clamp(20rem, 40vw, 34rem);
+  margin: 0.6rem 0 3.4rem;
+}
+
+.glance-v--c .glance-v__art span {
+  background: var(--img) no-repeat;
+  background-size: 300% 100%;
+  filter: saturate(0.85);
+}
+
+.glance-v--c .glance-v__art span:nth-child(1) {
+  background-position: 0% 50%;
+  margin-bottom: 2.4rem;
+}
+
+.glance-v--c .glance-v__art span:nth-child(2) {
+  background-position: 50% 50%;
+  margin-top: 2.4rem;
+}
+
+.glance-v--c .glance-v__art span:nth-child(3) {
+  background-position: 100% 50%;
+  margin-bottom: 1.2rem;
+  margin-top: 1.2rem;
+}
+
+/* D · Passepartout: the photo beside the copy, a gold hairline frame offset behind it,
+   the colour a little quieter */
+.glance-v--d {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  column-gap: clamp(2.4rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.glance-v--d>header {
+  display: block;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.glance-v--d>header>h2+p {
+  margin-top: 1.4rem;
+}
+
+.glance-v--d .glance-v__art {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  aspect-ratio: 5 / 4;
+  margin: 1.2rem 1.2rem 3rem 0;
+}
+
+.glance-v--d .glance-v__art::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 1.2rem -1.2rem -1.2rem 1.2rem;
+  border: 1px solid var(--line);
+}
+
+.glance-v--d .glance-v__art img {
+  filter: saturate(0.75) contrast(1.05) sepia(0.12);
+}
+
+.glance-v--d>.glance__list {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 1000px) {
+  .glance-v--a .glance-v__art {
+    inset: 0 calc(50% - 50vw) 0 0;
+    opacity: 0.45;
+  }
+
+  .glance-v--d {
+    display: block;
+  }
+
+  .glance-v--d .glance-v__art {
+    margin: 2rem 1.2rem 3rem 0;
+  }
+}
+
+/* big screens (27" and 32", 2560 and 3840 CSS px wide at 100 %): everything set in rem grows
+   with the screen above 1920 px: 16 px there, ~19 px at 2560, 26 px at 3840 (Nicky, 2026-11-09) */
+@media (min-width: 1921px) {
+  html {
+    font-size: calc(16px + (100vw - 1920px) * 0.0052);
+  }
 }

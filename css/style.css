@@ -3926,47 +3926,116 @@ html:not(.js) .wizard__step+.wizard__step {
   gap: 1.6rem 2.4rem;
 }
 
+/* one style for all three (Nicky, 2026-11-09): the same round photo with the same gold
+   ring, the name on one line, the role quiet below it */
 .people li {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* "Web Designer & Developer" on one line */
-  width: 12rem;
+  width: 13rem;
 }
 
 .people img {
   width: 4.5rem;
   height: 4.5rem;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.9rem;
   border-radius: 50%;
   object-fit: cover;
   object-position: 50% 20%;
-  filter: grayscale(1) contrast(1.04);
+  filter: grayscale(1) contrast(1.06) brightness(1.08);
+  box-shadow: 0 0 0 1px var(--ink), 0 0 0 2px var(--line);
 }
 
-/* first name and surname on two lines for all three, so the roles below line up */
 .people b {
-  width: min-content;
   font-family: var(--serif);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 500;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .people li span {
-  margin-top: 0.2rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gold);
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-soft);
 }
 
 .people__more {
   display: inline-block;
-  margin-top: 1.6rem;
+  margin-top: 1.8rem;
   font-size: 0.85rem;
   color: var(--gold-soft);
   border-bottom: 1px solid var(--line);
+}
+
+/* ---- REACH (Kontakt, at the bottom): e-mail, phone, office as three equal tiles, each
+   the same line icon in the same hairline circle ---- */
+.reach {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.6rem;
+  max-width: 52rem;
+  margin: 3rem auto 0;
+  padding-top: 2.6rem;
+  border-top: 1px solid var(--line);
+}
+
+.reach a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+.reach__icon {
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-bottom: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gold);
+  transition: border-color 0.3s var(--ease), background-color 0.3s var(--ease);
+}
+
+.reach__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.reach__label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.reach__value {
+  font-size: 0.98rem;
+  color: var(--paper);
+  overflow-wrap: anywhere;
+}
+
+.reach a:hover .reach__icon,
+.reach a:focus-visible .reach__icon {
+  border-color: var(--gold);
+  background-color: rgba(209, 168, 81, 0.08);
+}
+
+@media (max-width: 640px) {
+  .reach {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
 }
 
 @media (max-width: 767px) {
@@ -3994,14 +4063,15 @@ html:not(.js) .wizard__step+.wizard__step {
     height: 3.6rem;
   }
 
+  /* phones: three narrow columns, so first name and surname may wrap here */
   .people b {
     font-size: 1rem;
     line-height: 1.15;
+    white-space: normal;
   }
 
   .people li span {
-    font-size: 0.66rem;
-    letter-spacing: 0.04em;
+    font-size: 0.74rem;
   }
 }
 

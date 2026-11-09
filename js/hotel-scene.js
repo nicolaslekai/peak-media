@@ -81,9 +81,11 @@
   const ZMIN = BZ - (W / 2 * Math.sin(TH) + (D / 2 + PJ) * Math.cos(TH)) - EAVE;
   const HOTEL_ROW = Math.max(0, Math.floor((ZMIN - Z0) / (Z1 - Z0) * (ROWS - 1)));
 
-  // ---- the guests' road: from the valley up to the entrance, two rows of points (its edges)
-  // that the scroll lays down one by one, and a faint centre line
-  const START = [0.12, 0.5], ENTRY = at(0, -D / 2 - PJ - 0.035, 0), C1 = [0.5, 0.66], C2 = [-0.2, 0.8];
+  // ---- the guests' road: one long sweep from the valley up to the entrance, arriving square
+  // to the front (it was an S of dots, "a snake", Nicky 2026-11-09): two solid edges, the
+  // surface between them, a dashed centre line; the scroll lays it down
+  const START = [-0.3, 0.3], ENTRY = at(0, -D / 2 - PJ - 0.035, 0), C1 = [0.0, 0.42];
+  const C2 = [ENTRY[0] + 0.2 * Math.sin(TH), ENTRY[2] - 0.2 * Math.cos(TH)];
   const bez = (a, b, c, d, t) => { const u = 1 - t; return u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * d; };
   const ROAD = [];
   for (let i = 0, N = 150; i <= N; i++) {
@@ -92,9 +94,11 @@
   }
   ROAD.forEach((r, i) => {
     const a = ROAD[Math.max(0, i - 1)], b = ROAD[Math.min(ROAD.length - 1, i + 1)];
-    const dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1, nx = -dz / l * 0.014, nz = dx / l * 0.014;
+    const dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1, nx = -dz / l * 0.02, nz = dx / l * 0.02;
     r.edges = [[r.x + nx, r.z + nz], [r.x - nx, r.z - nz]].map(([x, z]) => [x, height(x, z) + 0.003, z]);
-    r.mid = [r.x, height(r.x, r.z) + 0.006, r.z];
+    r.mid = [r.x, height(r.x, r.z) + 0.004, r.z];
+    // the uphill lane (cars drive away from the camera, so we see their tail lights)
+    r.lane = [0.25, 0.65].map(k => { const x = r.x - nx * k, z = r.z - nz * k; return [x, height(x, z) + 0.006, z]; });
   });
 
   let Wd = 0, Hd = 0, dpr = 1;
@@ -338,29 +342,35 @@
   }
 
   function road(p) {
-    const built = clamp((p - 0.04) / 0.84), n = ROAD.length - 1, head = built * n;
-    for (let i = 0; i <= Math.min(n, Math.floor(head)); i++) {
-      const fresh = clamp((head - i) / 6);   // the newest points grow in
-      for (const e of ROAD[i].edges) {
-        const q = Pv(e); if (!q) continue;
-        const r = Math.max(0.55, Math.min(2.2, 0.004 / q.d * f * 0.35));
-        ctx.fillStyle = `rgba(${SOFT},${(0.75 * fresh).toFixed(3)})`;
-        ctx.beginPath(); ctx.arc(q.x, q.y, r * (0.4 + 0.6 * fresh), 0, Math.PI * 2); ctx.fill();
-      }
-      if (i % 3 === 0) {
-        const q = Pv(ROAD[i].mid); if (!q) continue;
-        ctx.fillStyle = `rgba(${GOLD},${(0.35 * fresh).toFixed(3)})`; ctx.fillRect(q.x - 0.5, q.y - 0.5, 1, 1);
-      }
+    const built = clamp((p - 0.04) / 0.84), n = ROAD.length - 1, head = Math.min(n, Math.floor(built * n));
+    if (head < 1) return;
+    const L = [], R = [], M = [];
+    for (let i = 0; i <= head; i++) {
+      const l = Pv(ROAD[i].edges[0]), r = Pv(ROAD[i].edges[1]), m = Pv(ROAD[i].mid);
+      if (l && r && m) { L.push(l); R.push(r); M.push(m); }
     }
-    if (built > 0 && built < 1) {   // the light that lays the road
-      const q = Pv(ROAD[Math.round(head)].mid);
-      if (q) { glow(q.x, q.y, 18, WARM, 0.6); ctx.fillStyle = `rgb(${SOFT})`; ctx.beginPath(); ctx.arc(q.x, q.y, 2.2, 0, Math.PI * 2); ctx.fill(); }
+    if (L.length < 2) return;
+    const curve = pts => { ctx.moveTo(pts[0].x, pts[0].y); for (let i = 1; i < pts.length - 1; i++) ctx.quadraticCurveTo(pts[i].x, pts[i].y, (pts[i].x + pts[i + 1].x) / 2, (pts[i].y + pts[i + 1].y) / 2); ctx.lineTo(pts.at(-1).x, pts.at(-1).y); };
+    // the surface: dark, with a faint warm sheen
+    ctx.beginPath(); L.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
+    for (let i = R.length - 1; i >= 0; i--) ctx.lineTo(R[i].x, R[i].y);
+    ctx.closePath(); ctx.fillStyle = INK; ctx.fill(); ctx.fillStyle = `rgba(${GOLD},.07)`; ctx.fill();
+    // the edges, solid; the centre line, dashed
+    for (const E of [L, R]) { ctx.beginPath(); curve(E); ctx.strokeStyle = `rgba(${SOFT},.8)`; ctx.lineWidth = 1.1; ctx.stroke(); }
+    ctx.beginPath(); curve(M); ctx.setLineDash([5, 7]); ctx.strokeStyle = `rgba(${SOFT},.45)`; ctx.lineWidth = 0.8; ctx.stroke(); ctx.setLineDash([]);
+    if (built < 1) {   // the light that lays the road
+      const q = M.at(-1);
+      glow(q.x, q.y, 18, WARM, 0.6); ctx.fillStyle = `rgb(${SOFT})`; ctx.beginPath(); ctx.arc(q.x, q.y, 2.2, 0, Math.PI * 2); ctx.fill();
     }
-    for (let k = 0; k < 5; k++) {   // guests travelling up the part already built
-      const t = ((p * 2.2 + k / 5) % 1) * built;
-      if (t <= 0.01 || built < 0.08) continue;
-      const q = Pv(ROAD[Math.round(t * n)].mid); if (!q) continue;
-      glow(q.x, q.y, 9, WARM, 0.5); ctx.fillStyle = `rgba(${WARM},.95)`; ctx.beginPath(); ctx.arc(q.x, q.y, 1.6, 0, Math.PI * 2); ctx.fill();
+    // guests' cars driving up the part already built: a pair of tail lights each
+    for (let k = 0; k < 4; k++) {
+      const t = ((p * 1.8 + k / 4) % 1) * built;
+      if (t <= 0.02 || built < 0.08) continue;
+      const lane = ROAD[Math.round(t * n)].lane, a = Pv(lane[0]), b = Pv(lane[1]); if (!a || !b) continue;
+      const r = Math.max(0.9, Math.min(2.2, 0.0035 / a.d * f));
+      glow((a.x + b.x) / 2, (a.y + b.y) / 2, 10, '226,96,64', 0.45);
+      ctx.fillStyle = 'rgba(240,120,84,.95)';
+      for (const q of [a, b]) { ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, Math.PI * 2); ctx.fill(); }
     }
   }
 

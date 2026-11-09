@@ -49,7 +49,7 @@
     0.03 * Math.sin(x * 9 + z * 3) * Math.cos(z * 6);
   const HP = raw(PX, PZ);
   const height = (x, z) => {
-    const w = Math.exp(-((x - PX - 0.12) ** 2 / (2 * 0.62 ** 2) + (z - PZ - 0.08) ** 2 / (2 * 0.36 ** 2)));
+    const w = Math.exp(-((x - PX) ** 2 / (2 * 0.62 ** 2) + (z - PZ - 0.16) ** 2 / (2 * 0.45 ** 2)));
     return raw(x, z) * (1 - w) + HP * w;
   };
   const COLS = 150, ROWS = 60, X0 = -3, X1 = 3, Z0 = 0.05, Z1 = 3.6;
@@ -78,8 +78,14 @@
     const z = PZ - PW / 2 + rnd() * PW, h = halfAt(z), x = PX - h + rnd() * 2 * h;
     return { x, z, ph: rnd(), sp: 0.6 + rnd() * 0.8, dr: rnd() * Math.PI * 2 };
   });
-  // the pavilion behind the pool: a thin flat roof slab, a glass front, a slatted side
-  const VX0 = PX + 0.08, VX1 = PX + 0.62, VZ0 = PZ + PW / 2 + 0.06, VZ1 = VZ0 + 0.2, VH = 0.085;
+  // the bath house behind the pool, on the pool's axis (Nicky, 2026-11-09: "a much nicer house,
+  // more architectural rigour, all centred"): a glazed ground floor on a regular column grid
+  // under a thin roof slab, and a set-back upper floor in vertical timber with a ribbon window
+  const VX0 = PX - 0.4, VX1 = PX + 0.4, VZ0 = PZ + PW / 2 + 0.07, VZ1 = VZ0 + 0.24, VH = 0.075;
+  const UX0 = PX - 0.26, UX1 = PX + 0.26, UZ0 = VZ0 + 0.07, UH = 0.058;
+  // what the fixed view frames: the pool's outer rim and the house's roofs
+  const FRAME_PTS = [[PX - PL / 2 - 0.03, HP, PZ - PW / 2 - 0.03], [PX + PL / 2 + 0.03, HP, PZ - PW / 2 - 0.03],
+    [VX0 - 0.035, HP + VH + 0.01, VZ0 - 0.035], [VX1 + 0.035, HP + VH + 0.01, VZ0 - 0.035], [PX, HP + VH + 0.02 + UH, UZ0]];
   const rowOf = z => Math.max(0, Math.floor((z - Z0) / (Z1 - Z0) * (ROWS - 1)));
   const PAV_ROW = rowOf(VZ0 - 0.02), POOL_ROW = rowOf(PZ - PW / 2 - 0.03);
 
@@ -100,7 +106,7 @@
 
   const COL = 8;                   // px between the columns of the hidden-line envelope
   let env = new Float32Array(0);   // per column: the lowest line drawn so far (screen y)
-  let P = null, f = 0;
+  let P = null, f = 0, cam = null;
   const Pv = v => P(v[0], v[1], v[2]);
   const seg = (A, B, a, w = 1, rgb = SOFT) => { const s = Pv(A), t = Pv(B); if (!s || !t) return; ctx.strokeStyle = `rgba(${rgb},${a})`; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(t.x, t.y); ctx.stroke(); };
   const poly = vs => { const q = vs.map(Pv); if (q.some(v => !v)) return null; ctx.beginPath(); q.forEach((v, i) => (i ? ctx.lineTo(v.x, v.y) : ctx.moveTo(v.x, v.y))); ctx.closePath(); return q; };
@@ -109,13 +115,21 @@
   const raise = (box, cols) => { if (!box) return; for (let k = Math.max(0, Math.floor(box[0] / COL)); k <= Math.min(cols - 1, Math.ceil(box[1] / COL)); k++) env[k] = Math.max(env[k], box[2]); };
 
   function draw(p) {
-    const phone = Wd < 768, e = ease(p);
-    // the camera: from high above the mountains' foot to in front of the pool, a little above it
-    // (phones: pool and pavilion together in the screen's middle)
-    const end = [PX + (phone ? -0.04 : 0.1), HP + 0.48, PZ - (phone ? 1.3 : 1.15)];
-    const cam = { x: -0.15 + e * (end[0] + 0.15), y: 1.05 + e * (end[1] - 1.05), z: -1.3 + e * (end[2] + 1.3) };
-    f = Math.min(Wd, Hd * 1.6) * (phone ? 0.95 : 0.66);
-    const horizon = Hd * ((phone ? 0.3 : 0.42) - 0.08 * e), cx = Wd * (phone ? 0.5 : 0.64);
+    const phone = Wd < 768;
+    // one fixed view straight down the pool's axis, framed by pool and house: right of the
+    // copy, its middle at the copy's height; the scroll moves the camera a little forward,
+    // never up, and the water and the steam (Nicky, 2026-11-09)
+    const base = { x: PX, y: HP + 0.46, z: PZ - 1.05 };
+    const box = c => {
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (const v of FRAME_PTS) { const d = v[2] - c.z, x = (v[0] - c.x) / d, y = -(v[1] - c.y) / d; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+      return [x0, x1, y0, y1];
+    };
+    const b0 = box(base);
+    f = phone ? Wd * 0.84 / (b0[1] - b0[0]) : Math.min(Wd * 0.4 / (b0[1] - b0[0]), Hd * 0.56 / (b0[3] - b0[2]));
+    cam = { ...base, z: base.z + 0.15 * (PZ - base.z) * ease(p) };
+    const fb = box(cam);
+    const horizon = Hd * (phone ? 0.3 : 0.5) - f * (fb[2] + fb[3]) / 2, cx = Wd * (phone ? 0.5 : 0.68) - f * (fb[0] + fb[1]) / 2;
     P = (x, y, z) => { const d = z - cam.z; return d <= 0.04 ? null : { x: cx + (x - cam.x) / d * f, y: horizon - (y - cam.y) / d * f, d }; };
 
     ctx.fillStyle = INK; ctx.fillRect(0, 0, Wd, Hd);
@@ -164,8 +178,8 @@
       const near = 1 - k / n;
       ctx.strokeStyle = `rgba(${WATER},${(0.12 + 0.35 * near).toFixed(3)})`; ctx.lineWidth = 0.5 + 0.4 * near; ctx.stroke();
     }
-    // lights under the water come on one by one
-    const lit = clamp((p - 0.15) / 0.6);
+    // lights under the water (all on: the picture stands still, only the water moves)
+    const lit = 1;
     for (const l of LIGHTS) {
       if (lit <= l.order) continue;
       const v = P(l.x, YW - 0.004, l.z); if (!v) continue;
@@ -180,35 +194,61 @@
   }
 
   function pavilion(p) {
-    const b = [[VX0, HP, VZ0], [VX1, HP, VZ0], [VX1, HP, VZ1], [VX0, HP, VZ1]];
-    const t = b.map(([x, , z]) => [x, HP + VH, z]);
-    const front = poly([b[0], b[1], t[1], t[0]]); if (!front) return null;
-    ctx.fillStyle = INK; ctx.fill();
-    // the glass front: tall panes, lit warm from inside more and more
-    const panes = 7, glowA = 0.15 + 0.35 * clamp((p - 0.1) / 0.5);
-    for (let i = 0; i < panes; i++) {
-      const xa = VX0 + 0.02 + (VX1 - VX0 - 0.04) * i / panes, xb = VX0 + 0.02 + (VX1 - VX0 - 0.04) * (i + 1) / panes - 0.006;
-      const g = poly([[xa, HP + 0.008, VZ0], [xb, HP + 0.008, VZ0], [xb, HP + VH - 0.01, VZ0], [xa, HP + VH - 0.01, VZ0]]); if (!g) continue;
-      const grad = ctx.createLinearGradient(0, g[2].y, 0, g[0].y);
-      grad.addColorStop(0, `rgba(${WARM},${(glowA * 0.4).toFixed(3)})`); grad.addColorStop(1, `rgba(${WARM},${glowA.toFixed(3)})`);
+    const all = [], keep = q => { if (q) all.push(...q); return q; };
+    const fill = (q, a = 0.85, w = 1) => { if (!q) return q; ctx.fillStyle = INK; ctx.fill(); ctx.strokeStyle = `rgba(${SOFT},${a})`; ctx.lineWidth = w; ctx.stroke(); return keep(q); };
+    const warmPane = (q, a) => {
+      if (!q) return;
+      const grad = ctx.createLinearGradient(0, q[2].y, 0, q[0].y);
+      grad.addColorStop(0, `rgba(${WARM},${(a * 0.45).toFixed(3)})`); grad.addColorStop(1, `rgba(${WARM},${a.toFixed(3)})`);
       ctx.fillStyle = grad; ctx.fill();
-      ctx.strokeStyle = `rgba(${WARM},.7)`; ctx.lineWidth = 0.6; ctx.stroke();
+    };
+    const y0 = HP, y1 = HP + VH, glowA = 0.5;
+    // the side the camera sees (it stands on the axis, so mostly neither)
+    const side = (x, za, zb, ya, yb, n) => {
+      if (!fill(poly([[x, ya, za], [x, ya, zb], [x, yb, zb], [x, yb, za]]), 0.7)) return;
+      for (let i = 1; i < n; i++) { const z = za + (zb - za) * i / n; seg([x, ya, z], [x, yb, z], 0.3, 0.5); }
+    };
+    if (cam.x < VX0) side(VX0, VZ0, VZ1, y0, y1, 18); else if (cam.x > VX1) side(VX1, VZ0, VZ1, y0, y1, 18);
+
+    // ground floor: a regular grid of 10 bays, a column at every bay line, glass between,
+    // a transom near the top, a stone plinth line at the foot
+    fill(poly([[VX0, y0, VZ0], [VX1, y0, VZ0], [VX1, y1, VZ0], [VX0, y1, VZ0]]), 0.9, 1.1);
+    const BAYS = 10, bw = (VX1 - VX0) / BAYS, tr = y0 + VH * 0.8;
+    for (let i = 0; i < BAYS; i++) {
+      const xa = VX0 + bw * i + 0.004, xb = VX0 + bw * (i + 1) - 0.004;
+      warmPane(poly([[xa, y0 + 0.006, VZ0], [xb, y0 + 0.006, VZ0], [xb, y1 - 0.004, VZ0], [xa, y1 - 0.004, VZ0]]), glowA);
+      seg([xa, tr, VZ0], [xb, tr, VZ0], 0.45, 0.6, WARM);
     }
-    const side = poly([b[1], b[2], t[2], t[1]]);
-    if (side) { ctx.fillStyle = INK; ctx.fill(); for (let i = 0; i <= 20; i++) { const z = VZ0 + (VZ1 - VZ0) * i / 20; seg([VX1, HP, z], [VX1, HP + VH, z], 0.35, 0.5); } }
-    // the roof slab: thin, overhanging, its front edge in light
-    const o = 0.05, r0 = [VX0 - o, HP + VH, VZ0 - o], r1 = [VX1 + o, HP + VH, VZ0 - o], r2 = [VX1 + o, HP + VH, VZ1 + o], r3 = [VX0 - o, HP + VH, VZ1 + o];
-    const roof = poly([r0, r1, r2, r3]); if (roof) { ctx.fillStyle = INK; ctx.fill(); ctx.strokeStyle = `rgba(${SOFT},.85)`; ctx.lineWidth = 1; ctx.stroke(); }
-    const dn = v => [v[0], v[1] + 0.012, v[2]];
-    seg(dn(r0), dn(r1), 0.9, 1.1); seg(r0, dn(r0), 0.7); seg(r1, dn(r1), 0.7);
-    seg(b[0], b[1], 0.8, 1);
-    const m = P((VX0 + VX1) / 2, YW, VZ0 - 0.06); if (m) glow(m.x, m.y, 0.25 / m.d * f, WARM, 0.24 * glowA);
-    return boxOf(front.concat(side || [], roof || []));
+    for (let i = 0; i <= BAYS; i++) { const x = VX0 + bw * i; seg([x, y0, VZ0], [x, y1, VZ0], 0.9, i % 5 === 0 ? 1.6 : 1.1); }
+    seg([VX0, y0 + 0.006, VZ0], [VX1, y0 + 0.006, VZ0], 0.7, 1);
+    // its roof slab: thin, overhanging on three sides, a fascia in light
+    const o = 0.035, s0 = [VX0 - o, y1, VZ0 - o], s1 = [VX1 + o, y1, VZ0 - o], s2 = [VX1 + o, y1, VZ1], s3 = [VX0 - o, y1, VZ1];
+    const up = v => [v[0], v[1] + 0.01, v[2]];
+    fill(poly([s0, s1, up(s1), up(s0)]), 0.95, 1.2);
+    fill(poly([up(s0), up(s1), up(s2), up(s3)]), 0.6, 0.8);
+
+    // upper floor, set back: vertical timber, a ribbon window, its own slab
+    const u0 = y1 + 0.01, u1 = u0 + UH;
+    fill(poly([[UX0, u0, UZ0], [UX1, u0, UZ0], [UX1, u1, UZ0], [UX0, u1, UZ0]]), 0.9, 1.1);
+    const n = Math.round((UX1 - UX0) / 0.007);
+    for (let i = 1; i < n; i++) { const x = UX0 + (UX1 - UX0) * i / n; seg([x, u0, UZ0], [x, u1, UZ0], 0.22, 0.5); }
+    const wa = u0 + UH * 0.32, wb = u0 + UH * 0.7;
+    const rib = poly([[UX0 + 0.04, wa, UZ0], [UX1 - 0.04, wa, UZ0], [UX1 - 0.04, wb, UZ0], [UX0 + 0.04, wb, UZ0]]);
+    if (rib) { ctx.fillStyle = INK; ctx.fill(); warmPane(rib, glowA * 0.9); ctx.strokeStyle = `rgba(${WARM},.85)`; ctx.lineWidth = 0.8; ctx.stroke(); }
+    for (let i = 1; i < 8; i++) { const x = UX0 + 0.04 + (UX1 - UX0 - 0.08) * i / 8; seg([x, wa, UZ0], [x, wb, UZ0], 0.6, 0.6, '20,18,16'); }
+    const o2 = 0.025, t0 = [UX0 - o2, u1, UZ0 - o2], t1 = [UX1 + o2, u1, UZ0 - o2], t2 = [UX1 + o2, u1, VZ1], t3 = [UX0 - o2, u1, VZ1];
+    fill(poly([t0, t1, up(t1), up(t0)]), 0.95, 1.2);
+    fill(poly([up(t0), up(t1), up(t2), up(t3)]), 0.6, 0.8);
+
+    // the terrace between house and pool: a stone edge and three steps down to the pool deck
+    seg([VX0 - 0.05, HP + 0.001, VZ0 - 0.05], [VX1 + 0.05, HP + 0.001, VZ0 - 0.05], 0.5, 0.8);
+    const m = P(PX, YW, VZ0 - 0.06); if (m) glow(m.x, m.y, 0.3 / m.d * f, WARM, 0.2);
+    return all.length ? boxOf(all) : null;
   }
 
   function steam(p) {
     // a fine mist that thickens through the scene and drifts as the visitor scrolls
-    const amount = 0.35 + 0.65 * clamp(p / 0.8);
+    const amount = 0.8;
     STEAM_PTS.forEach((s, i) => {
       if (i / STEAM_PTS.length > amount) return;
       const t = (s.ph + p * s.sp * 1.6) % 1, hgt = 0.004 + t * 0.2;
@@ -228,7 +268,8 @@
     if (canvas.clientWidth !== lastW || canvas.clientHeight !== lastH) { size(); lastW = Wd; lastH = Hd; last = -1; }
     const r = ride.getBoundingClientRect();
     // the pin range: the stage's height, not innerHeight, which jumps as a phone's toolbar hides
-    const p = Math.min(1, Math.max(0, -r.top / (r.height - stage.offsetHeight)));
+    // the stage pins at its sticky top (the band sits in the middle of the screen)
+    const p = Math.min(1, Math.max(0, ((parseFloat(getComputedStyle(stage).top) || 0) - r.top) / (r.height - stage.offsetHeight)));
     if (Math.abs(p - last) > 0.0004) {
       draw(p); last = p;
       const k = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));

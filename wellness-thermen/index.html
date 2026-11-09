@@ -65,27 +65,6 @@
             "item": "https://blauestunde.media/wellness-thermen/"
           }
         ]
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Bringt Social Media wirklich mehr Besuche?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Das hat noch keine Studie gemessen. Deshalb messen wir es bei Ihnen, mit eigenen Links und Codes, etwa für Gutscheine und Abendangebote."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Arbeiten Sie auch für kommunale Bäder?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Ja. Die längeren Abstimmungs- und Vergabewege planen wir von Anfang an ein."
-            }
-          }
-        ]
       }
     ]
   }
@@ -101,6 +80,8 @@
        followed by main.js once the page is built (F6) -->
   <script>
     document.documentElement.classList.add('js');
+    // layout variant to compare (2026-11-09): ?layout=center or ?layout=left, remembered
+    try { var lay = new URLSearchParams(location.search).get('layout'); if (lay) localStorage.setItem('bs-layout', lay); else lay = localStorage.getItem('bs-layout'); if (lay === 'center') document.documentElement.classList.add('layout-center'); } catch (e) {}
     if (location.hash.length > 1) {
       document.documentElement.dataset.hash = location.hash;
       history.replaceState(null, '', location.pathname + location.search);
@@ -168,6 +149,8 @@
       <header>
         <p class="kicker">Auf einen Blick</p>
         <h2>Ruhe hat keine Saison.</h2>
+        <!-- a cut-out from the page's own scene, alpha into the page (GPT Image 2.5, 2026-11-09) -->
+        <figure class="glance__art"><img src="../assets/img/glance-therme.webp" srcset="../assets/img/glance-therme-700.webp 700w, ../assets/img/glance-therme.webp 1200w" sizes="(max-width: 1000px) 92vw, 36rem" width="1200" height="835" alt="" loading="lazy" decoding="async" /></figure>
         <p>
           Wenn es draußen warm ist, wird es in Thermen und Spas ruhiger, die Kosten laufen weiter. Wir machen Gutscheine und Abendangebote zu Gründen für einen Besuch.
         </p>
@@ -343,73 +326,7 @@
       </div>
     </section>
 
-    <!-- SCOPE (D-71): what the standard package holds (D-24, D-58, D-72) and what it does
-         not. Comment replies and how the work is automated stay out of the copy until they
-         are decided (D-36, Raffaele 2026-10-22) -->
-    <section class="section scope" id="leistungen">
-      <header>
-        <p class="kicker">Leistungen &amp; Angebot</p>
-        <h2>Was dazugehört und was es kostet.</h2>
-      </header>
-      <div class="scope__cols">
-        <div>
-          <h3>Das gehört dazu</h3>
-          <ul>
-            <li>Kennenlernen und erste Aufnahmen vor Ort</li>
-            <li>Zwei Shootings im Jahr, Sommer und Winter</li>
-            <li>Reels, Posts und Stories: ausgewählt, bearbeitet, geplant, veröffentlicht</li>
-            <li>Texte, Schlagwörter und Ortsangaben, damit man Sie auf Instagram, YouTube und Google findet</li>
-            <li>Jeder Beitrag geprüft, auf Wunsch auch von Ihnen</li>
-            <li>Regelmäßige Berichte, was bei Ihren Gästen ankommt</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Nicht im Standardpaket</h3>
-          <ul>
-            <li>Werbeanzeigen, Google-Unternehmensprofil und Website: eigene Leistungen</li>
-            <li>Einzelne Produktionen ohne laufende Betreuung: auf Anfrage</li>
-          </ul>
-        </div>
-      </div>
-      <!-- what the offer depends on (D-34: no prices), merged into this section (D-81) -->
-      <div class="scope__cost" id="kosten">
-        <h3>Was kostet das?</h3>
-        <p>Feste Pakete gibt es nicht. Ihr Angebot hängt vor allem von vier Dingen ab.</p>
-        <ul class="metrics facts">
-          <li class="metric"><b>Standorte</b> Einer oder mehrere, und wie weit sie auseinanderliegen.</li>
-          <li class="metric"><b>Bereiche</b> Therme, Sauna, Spa, Hotel, Gastronomie: was wir zeigen sollen.</li>
-          <li class="metric"><b>Umfang</b> Reels, Posts und Stories pro Monat.</li>
-          <li class="metric"><b>Kanäle</b> Welche Plattformen wir bespielen.</li>
-        </ul>
-      </div>
-    </section>
 
-    <!-- FAQ (D-71, D-77): only this segment's own questions, the general ones once, on Über uns;
-         a draft for Nicolas and Daniel -->
-    <section class="section faq" id="fragen">
-      <header>
-        <p class="kicker">Fragen</p>
-        <h2>Fragen von Thermen.</h2>
-      </header>
-      <div class="faq__list">
-        <details>
-          <summary><h3>Bringt Social Media wirklich mehr Besuche?</h3></summary>
-          <p>
-            Das hat noch keine Studie gemessen. Deshalb messen wir es bei Ihnen, mit eigenen Links und Codes,
-            etwa für Gutscheine und Abendangebote.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Arbeiten Sie auch für kommunale Bäder?</h3></summary>
-          <p>
-            Ja. Die längeren Abstimmungs- und Vergabewege planen wir von Anfang an ein.
-          </p>
-        </details>
-      </div>
-      <p class="faq__more">
-        Fragen zu Kosten und Ablauf beantworten wir <a href="../ueber-uns/#fragen">hier</a>.
-      </p>
-    </section>
 
     <!-- ENQUIRY: the stepped onboarding form comes here in phase 3 (D-66); until then the
          Kontakt page -->
@@ -473,6 +390,17 @@
             <h3>Bergbahnen</h3>
             <p>Mehr Gäste im Sommer, an ruhigen Tagen und bei Events.</p>
             <span class="door__more">Mehr erfahren</span>
+          </a>
+        </li>
+        <!-- the way home (Nicky, 2026-11-09: three doors wherever there were two) -->
+        <li class="door">
+          <a href="../">
+            <img src="../assets/img/segment-home-720.webp" alt="" width="720" height="480"
+              srcset="../assets/img/segment-home-480.webp 480w, ../assets/img/segment-home-720.webp 720w"
+              sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 400px" loading="lazy" decoding="async" />
+            <h3>Startseite</h3>
+            <p>Alle Bereiche, unser Team und wie wir arbeiten.</p>
+            <span class="door__more">Zur Startseite</span>
           </a>
         </li>
       </ul>

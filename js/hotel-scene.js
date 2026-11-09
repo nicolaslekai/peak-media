@@ -84,7 +84,8 @@
   // ---- the guests' road: one long sweep from the valley up to the entrance, arriving square
   // to the front (it was an S of dots, "a snake", Nicky 2026-11-09): two solid edges, the
   // surface between them, a dashed centre line; the scroll lays it down
-  const START = [-0.3, 0.3], ENTRY = at(0, -D / 2 - PJ - 0.035, 0), C1 = [0.0, 0.42];
+  // (it comes in from the right, so in the fixed view the whole way to the door is on screen)
+  const START = [1.45, 0.82], ENTRY = at(0, -D / 2 - PJ - 0.035, 0), C1 = [0.95, 0.6];
   const C2 = [ENTRY[0] + 0.2 * Math.sin(TH), ENTRY[2] - 0.2 * Math.cos(TH)];
   const bez = (a, b, c, d, t) => { const u = 1 - t; return u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * d; };
   const ROAD = [];
@@ -121,18 +122,31 @@
   let P = null, cam = null, f = 0;
   const Pv = v => P(v[0], v[1], v[2]);
 
+  // the house's outline (footprint and roof), for framing the fixed view
+  const HOUSE_PTS = [[-1, -1], [1, -1], [1, 1], [-1, 1]].flatMap(([a, b]) => [
+    at(a * W / 2, b < 0 ? -D / 2 - PJ : D / 2, Y0), at(a * (W / 2 + EAVE), 0, YT + ROOF + 0.03)]);
+
   function draw(p) {
-    const phone = Wd < 768, e = ease(p);
-    // the camera: from high above the valley to in front of the house, a little above its roof
-    // (phones: straight in front of the house, which sits in the screen's middle)
-    // (wide screens: the house to the right of the stations' copy)
-    const end = at(phone ? -0.65 : -0.62, phone ? -1.45 : -1.25, YT + 0.17);
-    // the start: lower and straight in line with the house, so it begins nearer the middle of
-    // the picture, not at the bottom right (Nicky, 2026-11-09)
+    const phone = Wd < 768;
+    // one fixed view, half-way down from the valley to the house (Nicky, 2026-11-09: the house
+    // stays level with the copy, only the road moves). The house is framed by its outline:
+    // a third of the width right of the copy, its middle at the copy's height (phones: wide,
+    // in the upper part, the copy below)
+    const end = at(phone ? -0.65 : -0.62, phone ? -1.45 : -1.25, YT + 0.17), e = 0.62;
     const SX = 0.1, SY = 0.72, SZ = -1.3;
-    cam = { x: SX + e * (end[0] - SX), y: SY + e * (end[1] - SY), z: SZ + e * (end[2] - SZ) };
-    f = Math.min(Wd, Hd * 1.6) * (phone ? 0.95 : 0.66);
-    const horizon = Hd * (phone ? 0.3 : 0.42), cx = Wd * (phone ? 0.5 : 0.64);
+    const base = { x: SX + e * (end[0] - SX), y: SY + e * (end[1] - SY), z: SZ + e * (end[2] - SZ) };
+    const box = c => {   // the house's outline at f = 1 seen from camera c
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (const v of HOUSE_PTS) { const d = v[2] - c.z, x = (v[0] - c.x) / d, y = -(v[1] - c.y) / d; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+      return [x0, x1, y0, y1];
+    };
+    const b0 = box(base);
+    f = phone ? Wd * 0.66 / (b0[1] - b0[0]) : Math.min(Wd * 0.3 / (b0[1] - b0[0]), Hd * 0.44 / (b0[3] - b0[2]));
+    // the scroll moves the camera forward a little, never up (Nicky, 2026-11-09, for every
+    // scene); the house keeps its place in the picture and grows by about a fifth
+    cam = { ...base, z: base.z + 0.17 * (BZ - base.z) * ease(p) };
+    const b = box(cam);
+    const cx = Wd * (phone ? 0.5 : 0.68) - f * (b[0] + b[1]) / 2, horizon = Hd * (phone ? 0.3 : 0.5) - f * (b[2] + b[3]) / 2;
     P = (x, y, z) => { const d = z - cam.z; return d <= 0.04 ? null : { x: cx + (x - cam.x) / d * f, y: horizon - (y - cam.y) / d * f, d }; };
 
     ctx.fillStyle = INK; ctx.fillRect(0, 0, Wd, Hd);
@@ -166,7 +180,7 @@
   }
 
   function hotel(p, cols) {
-    const lit = clamp((p - 0.2) / 0.7);
+    const lit = 0.85;   // the house stands still, most windows lit (only the road moves)
     const seg = (A, B, a, w = 1, rgb = SOFT) => { const s = Pv(A), t = Pv(B); if (!s || !t) return; ctx.strokeStyle = `rgba(${rgb},${a})`; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(t.x, t.y); ctx.stroke(); };
     const quad = vs => { const q = vs.map(Pv); if (q.some(v => !v)) return null; ctx.beginPath(); q.forEach((v, i) => (i ? ctx.lineTo(v.x, v.y) : ctx.moveTo(v.x, v.y))); ctx.closePath(); return q; };
     const area = q => q.reduce((s, v, i) => { const w = q[(i + 1) % q.length]; return s + v.x * w.y - w.x * v.y; }, 0);
@@ -334,15 +348,14 @@
     }
     crossRoof(planes[1]);
 
-    // from afar: one point of light where the house is
-    const far = clamp(1 - p / 0.22), c = Pv(at(0, vF, YT));
-    if (c && far > 0) glow(c.x, c.y, 30, WARM, 0.75 * far);
     // the rows in front must hide the hotel's foot: they fill down to its lowest point
     if (maxY > -Infinity) for (let j = Math.max(0, Math.floor(minX / COL)); j <= Math.min(cols - 1, Math.ceil(maxX / COL)); j++) env[j] = Math.max(env[j], maxY);
   }
 
   function road(p) {
-    const built = clamp((p - 0.04) / 0.84), n = ROAD.length - 1, head = Math.min(n, Math.floor(built * n));
+    // the road reaches the entrance by the second station ("Wer Sie kennt, bucht bei Ihnen"),
+    // so it never stops short of the house there; the third station is cars arriving
+    const built = clamp((p - 0.04) / 0.44), n = ROAD.length - 1, head = Math.min(n, Math.floor(built * n));
     if (head < 1) return;
     const L = [], R = [], M = [];
     for (let i = 0; i <= head; i++) {
@@ -383,7 +396,8 @@
     if (canvas.clientWidth !== lastW || canvas.clientHeight !== lastH) { size(); lastW = Wd; lastH = Hd; last = -1; }
     const r = ride.getBoundingClientRect();
     // the pin range: the stage's height, not innerHeight, which jumps as a phone's toolbar hides
-    const p = Math.min(1, Math.max(0, -r.top / (r.height - stage.offsetHeight)));
+    // the stage pins at its sticky top (the band sits in the middle of the screen)
+    const p = Math.min(1, Math.max(0, ((parseFloat(getComputedStyle(stage).top) || 0) - r.top) / (r.height - stage.offsetHeight)));
     if (Math.abs(p - last) > 0.0004) {
       draw(p); last = p;
       const k = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));

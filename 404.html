@@ -11,6 +11,8 @@
   <!-- .js marks a page with scripts; without it the CSS shows the no-JS state (F9) -->
   <script>
     document.documentElement.classList.add('js');
+    // layout variant to compare (2026-11-09): ?layout=center or ?layout=left, remembered
+    try { var lay = new URLSearchParams(location.search).get('layout'); if (lay) localStorage.setItem('bs-layout', lay); else lay = localStorage.getItem('bs-layout'); if (lay === 'center') document.documentElement.classList.add('layout-center'); } catch (e) {}
     if (location.hash.length > 1) {
       document.documentElement.dataset.hash = location.hash;
       history.replaceState(null, '', location.pathname + location.search);

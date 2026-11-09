@@ -35,8 +35,10 @@
 
   // ---- terrain: the logo's two summits (big left, small right), side ridges, a little noise
   const bump = (x, z, cx, cz, s, h) => h * Math.exp(-((x - cx) ** 2 + (z - cz) ** 2) / (2 * s * s));
+  // (the summits lower than before, so the line climbs at about 25°, not 40°: Nicky,
+  // 2026-11-09, "not quite as steep")
   const height = (x, z) =>
-    bump(x, z, -0.25, 1.35, 0.42, 1.05) + bump(x, z, 0.55, 1.5, 0.33, 0.66) +
+    bump(x, z, -0.25, 1.1, 0.42, 0.72) + bump(x, z, 0.55, 1.4, 0.33, 0.5) +
     bump(x, z, 1.4, 2.1, 0.5, 0.7) + bump(x, z, -1.4, 2.0, 0.5, 0.75) +
     0.05 * Math.sin(x * 7 + z * 3) * Math.cos(z * 5) + 0.08 * Math.max(0, z - 0.6);
   // 300 points a line, stroked as curves: at 120 straight pieces the near ridges showed
@@ -52,7 +54,13 @@
   // ---- the cable: valley, middle and top station (the top one just below the summit)
   // the cable runs into the gables of the valley and the summit station and over the
   // saddle of the tower in the middle (entry: the cable's height there above the station)
-  const stations = [[-1.25, 0.6], [-0.75, 1.0], [-0.33, 1.28]].map(([x, z], i) => ({ x, z, y: height(x, z) + 0.03, entry: [0.03, 0.075, 0.012][i] }));
+  // (the line runs across the picture more than into it, so the summit and its hut are not
+  // tiny in the distance)
+  const stations = [[-1.6, 0.62], [-0.95, 0.84], [-0.33, 1.04]].map(([x, z], i) => ({ x, z, y: height(x, z) + 0.03, entry: [0.03, 0.075, 0.012][i] }));
+  // what the fixed view frames: valley station, summit station and the hut beside it
+  const [S0, , S2] = stations;
+  const FRAME_PTS = [[S0.x - 0.1, S0.y - 0.04, S0.z], [S0.x + 0.1, S0.y + 0.09, S0.z],
+    [S2.x - 0.06, S2.y + 0.12, S2.z], [S2.x + 0.12, S2.y + 0.12, S2.z], [S2.x + 0.12, S2.y - 0.03, S2.z]];
   const SAG = 0.045;
   const cableAt = (t, drop = 0) => {   // t 0..1 over both spans; a parabolic sag in each span
     const seg = t < 0.5 ? 0 : 1, u = seg ? (t - 0.5) * 2 : t * 2;
@@ -95,11 +103,20 @@
   }
   function draw(p) {
     const phone = W < 768, t = cabinT(p);
-    // the camera rises and moves towards the summit with the cabin
-    // (wide screens: the camera stands further left, so the whole line, valley station
-    // included, sits right of the copy — Nicky, 2026-11-09)
-    const cam = phone ? { x: -0.5 - p * 0.25, y: 0.55 + p * 0.45, z: -1.05 + p * 0.55 } : { x: -0.45 - p * 0.1, y: 0.55 + p * 0.45, z: -1.05 + p * 0.55 };
-    const f = Math.min(W, H * 1.6) * 0.62, horizon = H * (phone ? 0.34 : 0.42) + p * 40, cx = W * (phone ? 0.5 : 0.74);
+    // one fixed view of the whole line, framed by valley station, tower and summit hut: right
+    // of the copy, its middle at the copy's height; the scroll only moves the cabin and the
+    // camera a little forward, never up (Nicky, 2026-11-09)
+    const base = { x: -0.95, y: 0.5, z: -0.75 };
+    const box = c => {
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (const v of FRAME_PTS) { const d = v[2] - c.z, x = (v[0] - c.x) / d, y = -(v[1] - c.y) / d; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+      return [x0, x1, y0, y1];
+    };
+    const b0 = box(base);
+    const f = phone ? W * 0.86 / (b0[1] - b0[0]) : Math.min(W * 0.46 / (b0[1] - b0[0]), H * 0.66 / (b0[3] - b0[2]));
+    const cam = { ...base, z: base.z + 0.15 * (1.0 - base.z) * ease(p) };
+    const fb = box(cam);
+    const cx = W * (phone ? 0.5 : 0.68) - f * (fb[0] + fb[1]) / 2, horizon = H * (phone ? 0.3 : 0.5) - f * (fb[2] + fb[3]) / 2;
     const P = (x, y, z) => { const d = z - cam.z; return d <= 0.05 ? null : { x: cx + (x - cam.x) / d * f, y: horizon - (y - cam.y) / d * f, d }; };
 
     ctx.fillStyle = INK; ctx.fillRect(0, 0, W, H);
@@ -148,21 +165,68 @@
         glow((q[0].x + q[2].x) / 2, (q[0].y + q[2].y) / 2, Math.hypot(q[2].x - q[0].x, q[2].y - q[0].y) + 8, WARM, 0.3 * lit);
       }
     };
-    // a small alpine building: front and right walls (the camera stands to the right), a
-    // gable roof along x with an overhang, a row of windows on the front
-    const building = (x, z, w, d, h, rh, wins, lit) => {
-      const g = Math.min(height(x - w / 2, z - d / 2), height(x + w / 2, z - d / 2), height(x, z)) - 0.008;
-      const xa = x - w / 2, xb = x + w / 2, za = z - d / 2, zb = z + d / 2, y1 = g + h, yr = y1 + rh, e = 0.012;
-      poly([[xb, g, za], [xb, g, zb], [xb, y1, zb], [xb, y1, za]], 0.75);
-      poly([[xb, y1, za], [xb, y1, zb], [xb, yr, z]], 0.75);
-      poly([[xa, g, za], [xb, g, za], [xb, y1, za], [xa, y1, za]], 0.9);
-      for (let i = 0; i < wins; i++) {
-        const u0 = xa + w * (i + 0.25) / wins, u1 = xa + w * (i + 0.75) / wins;
-        const q = poly([[u0, g + h * 0.35, za], [u1, g + h * 0.35, za], [u1, g + h * 0.75, za], [u0, g + h * 0.75, za]], lit > 0 ? 0.9 : 0.4, 0.7);
-        lightRect(q, lit);
+    // an alpine building on the slope (Nicky, 2026-11-09: "a better effort with the huts"):
+    // a stone base, timber walls in vertical boards, a roof with a deep overhang and barge
+    // boards. ridge 'x': eaves to the front (the stations); ridge 'z': the gable to the front
+    // with a balcony, as a mountain hut. The side the camera sees is drawn, not always the right
+    const building = o => {
+      const { x, z, w, d, h, rh, ridge, wins, lit } = o;
+      const g = Math.min(height(x - w / 2, z - d / 2), height(x + w / 2, z - d / 2), height(x - w / 2, z + d / 2), height(x + w / 2, z + d / 2)) - 0.006;
+      const xa = x - w / 2, xb = x + w / 2, za = z - d / 2, zb = z + d / 2, y1 = g + h, yr = y1 + rh, e = 0.014, base = g + h * 0.28;
+      const sx = cam.x < x ? xa : xb, ox = sx === xa ? xb : xa;   // the side seen, the other one
+      const boards = (u0, u1, yA, yB, n, a) => { for (let i = 1; i < n; i++) { const u = u0 + (u1 - u0) * i / n; line([u, yA(u), za], [u, yB(u), za], a, 0.5); } };
+      const win = (u0, u1, ya, yb, l) => { const q = poly([[u0, ya, za], [u1, ya, za], [u1, yb, za], [u0, yb, za]], l > 0 ? 0.9 : 0.45, 0.7); lightRect(q, l); if (q) line([(u0 + u1) / 2, ya, za], [(u0 + u1) / 2, yb, za], 0.5, 0.6, l > 0 ? '20,18,16' : SOFT); };
+      if (ridge === 'x') {
+        poly([[sx, g, za], [sx, g, zb], [sx, y1, zb], [sx, yr, z], [sx, y1, za]], 0.75);
+        poly([[xa, g, za], [xb, g, za], [xb, y1, za], [xa, y1, za]], 0.9);
+        line([xa, base, za], [xb, base, za], 0.55, 0.8);
+        boards(xa, xb, () => base, () => y1, Math.round(w / 0.009), 0.16);
+        for (let i = 0; i < wins; i++) win(xa + w * (i + 0.22) / wins, xa + w * (i + 0.78) / wins, base + (y1 - base) * 0.22, base + (y1 - base) * 0.8, lit);
+        const r = [[xa - e, y1 - 0.004, za - e], [xb + e, y1 - 0.004, za - e], [xb + e, yr, z], [xa - e, yr, z]];
+        poly(r, 0.95, 1.1);
+        for (let i = 1; i < 24; i++) { const u = xa - e + (w + 2 * e) * i / 24; line([u, y1 - 0.004, za - e], [u, yr, z], 0.14, 0.5); }
+        line([xa - e, y1 - 0.009, za - e], [xb + e, y1 - 0.009, za - e], 0.45, 0.8);
+      } else {
+        poly([[sx, g, za], [sx, g, zb], [sx, y1, zb], [sx, y1, za]], 0.75);
+        for (let i = 1; i < 5; i++) { const zz = za + d * i / 5; line([sx, base, zz], [sx, y1, zz], 0.18, 0.5); }
+        poly([[xa, g, za], [xb, g, za], [xb, y1, za], [x, yr, za], [xa, y1, za]], 0.95);
+        line([xa, base, za], [xb, base, za], 0.55, 0.8);
+        const top = u => y1 + (yr - y1) * (1 - Math.abs(u - x) / (w / 2));
+        boards(xa, xb, () => base, top, Math.round(w / 0.008), 0.16);
+        // ground floor: door in the middle, a window each side; upstairs: two windows behind
+        // the balcony; the gable: a small lit window
+        win(xa + w * 0.1, xa + w * 0.3, base + 0.006, y1 - h * 0.42, lit);
+        win(xb - w * 0.3, xb - w * 0.1, base + 0.006, y1 - h * 0.42, lit);
+        const dq = poly([[x - w * 0.08, g, za], [x + w * 0.08, g, za], [x + w * 0.08, y1 - h * 0.4, za], [x - w * 0.08, y1 - h * 0.4, za]], 0.85, 0.8); lightRect(dq, lit * 0.8);
+        win(xa + w * 0.18, xa + w * 0.4, y1 - h * 0.3, y1 - 0.004, lit);
+        win(xb - w * 0.4, xb - w * 0.18, y1 - h * 0.3, y1 - 0.004, lit);
+        win(x - w * 0.06, x + w * 0.06, y1 + rh * 0.2, y1 + rh * 0.55, lit);
+        // the balcony across the front: a dark balustrade of close balusters, a handrail
+        const yb = y1 - h * 0.34, yt = yb + h * 0.2, out = 0.02;
+        const bq = poly([[xa - 0.006, yb, za - out], [xb + 0.006, yb, za - out], [xb + 0.006, yt, za - out], [xa - 0.006, yt, za - out]], 0.85, 0.9);
+        if (bq) { for (let i = 1; i < 28; i++) { const u = xa - 0.006 + (w + 0.012) * i / 28; line([u, yb, za - out], [u, yt, za - out], 0.4, 0.5); } }
+        line([xa - 0.006, yb - 0.004, za - out], [xb + 0.006, yb - 0.004, za - out], 0.6, 0.8);
+        // the roof: the far plane, then the near one, each with rafters and a barge board
+        for (const s of [ox, sx]) {
+          const ex = s === xa ? xa - e : xb + e;
+          const pl = [[ex, y1 - 0.004, za - e], [ex, y1 - 0.004, zb + e], [x, yr + 0.004, zb + e], [x, yr + 0.004, za - e]];
+          if (!poly(pl, 0.9, 1.1)) continue;
+          for (let i = 1; i < 10; i++) { const zz = za - e + (d + 2 * e) * i / 10; line([ex, y1 - 0.004, zz], [x, yr + 0.004, zz], 0.14, 0.5); }
+          line([ex, y1 - 0.01, za - e], [x, yr - 0.002, za - e], 0.5, 0.8);
+        }
+        // a chimney through the roof, with a thread of smoke
+        if (o.chimney) {
+          const cxm = x + (sx === xa ? -1 : 1) * w * 0.22, cz = z + d * 0.15, ch = (yr - y1) * (1 - 0.44) + y1;
+          poly([[cxm - 0.006, ch - 0.01, cz], [cxm + 0.006, ch - 0.01, cz], [cxm + 0.006, yr + 0.02, cz], [cxm - 0.006, yr + 0.02, cz]], 0.85, 0.9);
+          const s0 = P(cxm, yr + 0.022, cz);
+          if (s0) { ctx.strokeStyle = 'rgba(236,214,162,.18)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(s0.x, s0.y); ctx.bezierCurveTo(s0.x + 6, s0.y - 10, s0.x - 4, s0.y - 18, s0.x + 8, s0.y - 30); ctx.stroke(); }
+        }
+        // a terrace in front: its edge and a low railing
+        const tz = za - 0.05;
+        line([xa - 0.03, g + 0.002, tz], [xb + 0.03, g + 0.002, tz], 0.5, 0.8);
+        line([xa - 0.03, g + 0.016, tz], [xb + 0.03, g + 0.016, tz], 0.35, 0.6);
+        for (let i = 0; i <= 8; i++) { const u = xa - 0.03 + (w + 0.06) * i / 8; line([u, g + 0.002, tz], [u, g + 0.016, tz], 0.35, 0.6); }
       }
-      poly([[xa - e, y1 - 0.004, za - e], [xb + e, y1 - 0.004, za - e], [xb + e, yr, z], [xa - e, yr, z]], 0.95, 1.1);
-      line([xa - e, y1 - 0.009, za - e], [xb + e, y1 - 0.009, za - e], 0.45, 0.8);
       return { g, y1, yr };
     };
 
@@ -190,10 +254,11 @@
 
     // ---- the valley station, the summit station and the hut next to it, whose windows
     // light up at the end of the ride
-    const s1 = stations[0], s3 = stations[2], lit = Math.max(0, Math.min(1, (p - 0.86) / 0.12));
-    building(s1.x - 0.02, s1.z, 0.15, 0.09, 0.045, 0.04, 3, 0.35);
-    building(s3.x + 0.015, s3.z, 0.12, 0.08, 0.04, 0.038, 2, t > 0.97 ? 0.5 : 0);
-    building(s3.x + 0.19, s3.z + 0.03, 0.16, 0.1, 0.05, 0.045, 4, lit);
+    // (the picture stands still: the hut is lit from the start, only the cabin moves)
+    const s1 = stations[0], s3 = stations[2];
+    building({ x: s1.x - 0.02, z: s1.z, w: 0.16, d: 0.09, h: 0.05, rh: 0.042, ridge: 'x', wins: 4, lit: 0.4 });
+    building({ x: s3.x + 0.015, z: s3.z, w: 0.12, d: 0.08, h: 0.045, rh: 0.04, ridge: 'x', wins: 3, lit: 0.4 });
+    // (the hut beside it is gone: Nicky, 2026-11-09, "weird roof, remove it")
 
     // ---- the cabin: grip on the rope, hanger arm, a gondola with a tapered roof, a lit
     // window band with mullions
@@ -226,7 +291,8 @@
     if (canvas.clientWidth !== lastW || canvas.clientHeight !== lastH) { size(); lastW = W; lastH = H; last = -1; }
     const r = ride.getBoundingClientRect();
     // the pin range: the stage's height, not innerHeight, which jumps as a phone's toolbar hides
-    const p = Math.min(1, Math.max(0, -r.top / (r.height - stage.offsetHeight)));
+    // the stage pins at its sticky top (the band sits in the middle of the screen)
+    const p = Math.min(1, Math.max(0, ((parseFloat(getComputedStyle(stage).top) || 0) - r.top) / (r.height - stage.offsetHeight)));
     if (Math.abs(p - last) > 0.0004) {
       draw(p); last = p;
       // each link fades with the scroll, like the captions over the frames: the current

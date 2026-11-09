@@ -104,7 +104,7 @@
   --sans: "Manrope", system-ui, sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --text-soft: rgba(243, 237, 225, 0.72);
-  --container: 1300px;
+  --container: 1440px;
   --gutter: clamp(1.2rem, 5vw, 4rem);
   /* distance to the screen edge for full-width bands: nav, footer, wide hero copy */
   --edge: clamp(1.2rem, 4vw, 3.5rem);
@@ -2072,25 +2072,32 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
    section with a pinned stage: the canvas mountain fills it, the active link (.is-active)
    sits on the left over a dark gradient (phones: below the mountain, at the bottom), the
    progress 01–03 on the right, the calculator CTA at the top of the ride (.ride--top) ---- */
+/* a band about half the screen high, pinned in the middle of the screen (Nicky,
+   2026-11-09: "about half its current size"); the picture stands still, only the road,
+   the cabin or the water moves. --band: the stage's height */
 .ride {
+  --band: max(26rem, 52svh);
   position: relative;
   width: 100vw;
-  height: 340vh;
+  height: calc(var(--band) + 190vh);
   margin: 3.4rem 0 3.4rem calc(50% - 50vw);
 }
 
 .ride__stage {
   position: sticky;
-  top: 0;
-  height: 100svh;
+  top: calc((100svh - var(--band)) / 2);
+  height: var(--band);
   overflow: hidden;
 }
 
+/* the band's top and bottom edge fade into the page */
 .ride canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
 }
 
 .ride__stage::before {
@@ -2150,19 +2157,20 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 .chain--ride .chain__big {
-  font-size: clamp(2.6rem, 4.4vw, 4.2rem);
-  line-height: 1.02;
+  font-size: clamp(2.3rem, 3.6vw, 3.5rem);
+  line-height: 1.04;
 }
 
 .chain--ride .chain__do {
   margin-top: 1.7rem;
 }
 
+/* the CTA under the copy (left), so it never covers the picture */
 .ride__cta {
   position: absolute;
   z-index: 2;
-  right: var(--edge);
-  bottom: clamp(2rem, 8vh, 4rem);
+  left: max(var(--gutter), calc(50vw - var(--container) / 2 + var(--gutter)));
+  bottom: clamp(1.4rem, 4vh, 2.4rem);
   opacity: 0;
   visibility: hidden;
   transition:
@@ -2176,8 +2184,11 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 @media (max-width: 767px) {
+
+  /* phones: the picture above, the copy below it, so the band stays taller */
   .ride {
-    height: 300vh;
+    --band: 84svh;
+    height: calc(var(--band) + 170vh);
   }
 
   .ride__stage::before {
@@ -3576,6 +3587,67 @@ html:not(.js) .wizard__step+.wizard__step {
   }
 }
 
+/* ---- GLANCE ART (2026-11-09): a cut-out photo with alpha from the page's own scene, no
+   box. Wide screens: in the split header above the lead (title left); the home's "Warum":
+   right of its header. Stacked: between the title and the lead, full width ---- */
+.glance__art {
+  margin: 1.6rem 0 1.2rem;
+}
+
+.glance__art img {
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 1001px) {
+
+  /* kicker, title and lead stacked on the left, the picture beside them, centred */
+  .section--split>header:has(.glance__art) {
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    align-content: center;
+  }
+
+  .section--split>header:has(.glance__art)>.kicker {
+    grid-row: 1;
+  }
+
+  .section--split>header:has(.glance__art)>h2 {
+    grid-row: 2;
+  }
+
+  .section--split>header>.glance__art {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+    max-width: 40rem;
+    margin: 0 0 0 auto;
+  }
+
+  .section--split>header>.glance__art+p {
+    grid-column: 1;
+    grid-row: 3;
+    margin-top: 1.4rem;
+  }
+
+  .mission:has(.glance__art) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .mission>.glance__art {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+  }
+
+  .mission:has(.glance__art)>.mission__text {
+    grid-column: 1 / -1;
+  }
+}
+
 /* below the segment FAQs: the general questions are on Über uns */
 .faq__more {
   margin-top: 2.4rem;
@@ -4834,4 +4906,139 @@ html:not(.js) .wizard__step+.wizard__step {
   .hero h1 {
     animation: none;
   }
+}
+
+/* ===================================================================================
+   LAYOUT (Nicky, 2026-11-09): "some things are centred, some are not, make a choice".
+   One alignment for every content section; bar, hero and footer stay as they are.
+   Two variants to choose from:
+   - left (default): every section bound to the container's left edge
+   - centred: html.layout-center (?layout=center, remembered per browser, see <head>)
+   Both: a wider container, a little larger type, the doors across the full width.
+   =================================================================================== */
+.section>header h2+p,
+.mission__text p,
+.glance__list dd,
+.tiles p,
+.tools__side li {
+  font-size: 1.08rem;
+}
+
+.doors--more .doors__list {
+  max-width: none;
+}
+
+.doors__list {
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 2.4rem 2rem;
+}
+
+/* ---- left ---- */
+html:not(.layout-center) .contact>header,
+html:not(.layout-center) .contact h2+p,
+html:not(.layout-center) .contact h1+p {
+  margin-inline: 0;
+  text-align: left;
+}
+
+html:not(.layout-center) .contact .hero__actions,
+html:not(.layout-center) .wizard__nav,
+html:not(.layout-center) .wizard__step .choices {
+  justify-content: flex-start;
+}
+
+html:not(.layout-center) .contact__form {
+  margin: 0;
+}
+
+html:not(.layout-center) .wizard__title {
+  margin-inline: 0;
+  text-align: left;
+}
+
+html:not(.layout-center) .people,
+html:not(.layout-center) .reach {
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+html:not(.layout-center) .people ul {
+  justify-content: flex-start;
+}
+
+html:not(.layout-center) .people li,
+html:not(.layout-center) .reach a {
+  align-items: flex-start;
+  text-align: left;
+}
+
+html:not(.layout-center) .tools__note {
+  text-align: left;
+}
+
+@media (max-width: 767px) {
+  html:not(.layout-center) .hero__actions:has(> .btn:only-child) {
+    justify-content: start;
+  }
+}
+
+/* ---- centred ---- */
+html.layout-center .section>header,
+html.layout-center .steps-pin__stage>header {
+  margin-inline: auto;
+  text-align: center;
+}
+
+html.layout-center .section>header h2+p {
+  margin-inline: auto;
+}
+
+html.layout-center .section--split>header {
+  display: block;
+  max-width: 52rem;
+}
+
+html.layout-center .section--split>header>.glance__art {
+  max-width: 40rem;
+  margin: 1.6rem auto;
+}
+
+html.layout-center .section--split>header>.glance__art+p {
+  margin-inline: auto;
+}
+
+html.layout-center .mission:has(.glance__art) {
+  display: block;
+}
+
+html.layout-center .mission>.glance__art {
+  max-width: 34rem;
+  margin: 0 auto 2.4rem;
+}
+
+html.layout-center .mission__text,
+html.layout-center .glance__list,
+html.layout-center .door,
+html.layout-center .tiles>article,
+html.layout-center .tools__label,
+html.layout-center .tools__side h3 {
+  text-align: center;
+}
+
+html.layout-center .mission__text p {
+  margin-inline: auto;
+}
+
+html.layout-center .channels h3 {
+  justify-content: center;
+}
+
+html.layout-center .channels__note,
+html.layout-center .phones__hint {
+  text-align: center;
+}
+
+html.layout-center .impact .phones {
+  justify-content: center;
 }

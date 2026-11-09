@@ -106,83 +106,6 @@
             "item": "https://blauestunde.media/ueber-uns/"
           }
         ]
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Für wen arbeiten Sie?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Für Hotels und Resorts, Bergbahnen, Wellnessbetriebe und Thermen. Wir sitzen in Füssen und arbeiten in Bayern, Tirol und im ganzen Alpenraum."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Wie beginnt die Zusammenarbeit?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Mit einem Besuch bei Ihnen und ersten Aufnahmen. Danach kommen wir zweimal im Jahr, im Sommer und im Winter."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Was kostet die Zusammenarbeit?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Das hängt von Standorten, Saisons und Kanälen ab. Sie bekommen ein individuelles Angebot, nachdem wir Ihren Betrieb kennen. Das erste Gespräch vor Ort ist kostenlos."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Wie viel Arbeit bleibt bei uns?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Wenig. Ihr Team schickt ab und zu Fotos oder kurze Videos vom Handy, den Rest machen wir."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Wir haben schon eine Agentur oder machen es selbst. Passt das?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Ja. Ihre Agentur oder Ihr Team kann unsere Bilder, Filme und Beiträge mitnutzen."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Wie läuft die Freigabe der Beiträge?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Auf Wunsch geben Sie jeden Beitrag per Link auf dem Handy frei. Sonst prüfen wir selbst."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Was ist mit Gästen und Mitarbeitenden auf den Bildern?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Bei unseren Aufnahmen holen wir die Einwilligung erkennbarer Personen ein (§ 22 KUG), die Vorlage bringen wir mit. Für Material, das Sie uns geben, holen Sie die Einwilligung ein."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Wer legt die Konten an, und wer hat die Zugänge?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Am besten nutzen wir Ihre Konten über die Rollen der Plattform, etwa die Meta Business Suite, ohne Ihre Passwörter. Fehlen Konten, legen wir sie an und berechnen das gesondert."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Wie viel Zeit kostet uns ein Shooting-Tag?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Das hängt davon ab, ob Räume oder Szenen hergerichtet werden müssen (Staging). Den Aufwand klären wir vorher."
-            }
-          }
-        ]
       }
     ]
   }
@@ -198,6 +121,8 @@
        followed by main.js once the page is built (F6) -->
   <script>
     document.documentElement.classList.add('js');
+    // layout variant to compare (2026-11-09): ?layout=center or ?layout=left, remembered
+    try { var lay = new URLSearchParams(location.search).get('layout'); if (lay) localStorage.setItem('bs-layout', lay); else lay = localStorage.getItem('bs-layout'); if (lay === 'center') document.documentElement.classList.add('layout-center'); } catch (e) {}
     if (location.hash.length > 1) {
       document.documentElement.dataset.hash = location.hash;
       history.replaceState(null, '', location.pathname + location.search);
@@ -338,76 +263,6 @@
       </ul>
     </section>
 
-    <!-- FAQ (D-71): the general questions (moved from the home page); each question is a
-         <details> that opens on a click (D-84); the answers stay in the HTML for crawlers -->
-    <section class="section faq" id="fragen">
-      <header>
-        <p class="kicker">Fragen</p>
-        <h2>Was Betriebe uns zuerst fragen.</h2>
-      </header>
-      <div class="faq__list">
-        <details>
-          <summary><h3>Für wen arbeiten Sie?</h3></summary>
-          <p>
-            Für Hotels und Resorts, Bergbahnen, Wellnessbetriebe und Thermen. Wir sitzen in Füssen und
-            arbeiten in Bayern, Tirol und im ganzen Alpenraum.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Wie beginnt die Zusammenarbeit?</h3></summary>
-          <p>
-            Mit einem Besuch bei Ihnen und ersten Aufnahmen. Danach kommen wir zweimal im Jahr, im Sommer
-            und im Winter.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Was kostet die Zusammenarbeit?</h3></summary>
-          <p>
-            Das hängt von Standorten, Saisons und Kanälen ab. Sie bekommen ein individuelles Angebot, nachdem
-            wir Ihren Betrieb kennen. Das erste Gespräch vor Ort ist kostenlos.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Wie viel Arbeit bleibt bei uns?</h3></summary>
-          <p>
-            Wenig. Ihr Team schickt ab und zu Fotos oder kurze Videos vom Handy, den Rest machen wir.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Wir haben schon eine Agentur oder machen es selbst. Passt das?</h3></summary>
-          <p>
-            Ja. Ihre Agentur oder Ihr Team kann unsere Bilder, Filme und Beiträge mitnutzen.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Wie läuft die Freigabe der Beiträge?</h3></summary>
-          <p>
-            Auf Wunsch geben Sie jeden Beitrag per Link auf dem Handy frei. Sonst prüfen wir selbst.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Was ist mit Gästen und Mitarbeitenden auf den Bildern?</h3></summary>
-          <p>
-            Bei unseren Aufnahmen holen wir die Einwilligung erkennbarer Personen ein (§ 22 KUG), die
-            Vorlage bringen wir mit. Für Material, das Sie uns geben, holen Sie die Einwilligung ein.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Wer legt die Konten an, und wer hat die Zugänge?</h3></summary>
-          <p>
-            Am besten nutzen wir Ihre Konten über die Rollen der Plattform, etwa die Meta Business Suite,
-            ohne Ihre Passwörter. Fehlen Konten, legen wir sie an und berechnen das gesondert.
-          </p>
-        </details>
-        <details>
-          <summary><h3>Wie viel Zeit kostet uns ein Shooting-Tag?</h3></summary>
-          <p>
-            Das hängt davon ab, ob Räume oder Szenen hergerichtet werden müssen (Staging). Den Aufwand klären
-            wir vorher.
-          </p>
-        </details>
-      </div>
-    </section>
 
     <!-- CLOSING: the enquiry form is on the Kontakt page (D-74) -->
     <section class="section contact" id="kontakt">

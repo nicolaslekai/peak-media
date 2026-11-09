@@ -102,6 +102,8 @@
        above it exist: the browser's own early jump left the page shifting (CLS 0.41) -->
   <script>
     document.documentElement.classList.add('js');
+    // layout variant to compare (2026-11-09): ?layout=center or ?layout=left, remembered
+    try { var lay = new URLSearchParams(location.search).get('layout'); if (lay) localStorage.setItem('bs-layout', lay); else lay = localStorage.getItem('bs-layout'); if (lay === 'center') document.documentElement.classList.add('layout-center'); } catch (e) {}
     if (location.hash.length > 1) {
       document.documentElement.dataset.hash = location.hash;
       history.replaceState(null, '', location.pathname + location.search);
@@ -178,6 +180,8 @@
         <p class="kicker">Warum Blaue Stunde</p>
         <h2>Ein schöner Ort sollte keine stillen Wochen haben.</h2>
       </header>
+      <!-- a cut-out from the page's own scene, alpha into the page (GPT Image 2.5, 2026-11-09) -->
+      <figure class="glance__art"><img src="./assets/img/glance-home.webp" srcset="./assets/img/glance-home-700.webp 700w, ./assets/img/glance-home.webp 1200w" sizes="(max-width: 1000px) 92vw, 36rem" width="1200" height="766" alt="" loading="lazy" decoding="async" /></figure>
       <div class="mission__text">
         <article>
           <h3>Was wir lösen</h3>

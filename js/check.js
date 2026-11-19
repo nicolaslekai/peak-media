@@ -7,13 +7,20 @@
    answered with the best option (the fieldset's data-tip). "Mit diesem Ergebnis anfragen"
    hands the answers to the Kontakt form like the hotel calculator (sessionStorage
    "bs-rechner", js/contact.js). A self-check, no figures. Without JS a note replaces it.
-   Own file, like evidence.js: an error here cannot stop the scroll engine.
+   On the Hotels page the same card is the calculator (2026-11-19, in place of the sliders:
+   "less complex", "rough estimates are fine"): the panel has data-model="hotel", each answer's
+   value is the figure the estimate uses (rooms, occupancy in %, price per night), and the
+   result card stays locked ("Ihr Ergebnis erhalten Sie mit der Anfrage") until an enquiry
+   has been sent (localStorage "bs-onboarded", js/contact.js); the figures go to the Kontakt
+   page's thank-you dialog.
+   Own file: an error here cannot stop the scroll engine.
    ========================================================= */
 (() => {
   const panel = document.querySelector('.check__panel');
   if (!panel) return;
   const form = panel.querySelector('.check__form');
-  const groups = [...form.querySelectorAll('fieldset[data-tip]')];
+  const groups = [...form.querySelectorAll('fieldset.choice-group')];
+  const model = panel.dataset.model || 'check';
   const result = panel.querySelector('.check__result');
   const total = panel.querySelector('.calc__total');
   const segments = [...panel.querySelectorAll('.check__bar li')];
@@ -27,7 +34,40 @@
 
   const answers = () => groups.map(g => g.querySelector('input:checked'));
   const score = () => answers().reduce((sum, i) => sum + (i ? Number(i.value) : 0), 0);
+  // ---- hotel estimate: commission saved by direct bookings plus room revenue in the three
+  // weakest months. Assumptions (the calculator's former defaults, scenario "mittel"): 31.9 %
+  // of nights via portals (HOTREC 2026), 15 % commission, 6 % cost of a direct booking,
+  // 10 % of portal guests book direct, 5 points more occupancy in 90 weak nights
+  const num0 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 });
+  const money = x => `≈ ${num0.format(x >= 20000 ? Math.round(x / 1000) * 1000 : Math.round(x / 100) * 100)} €`;
+  const count = x => num0.format(x >= 1000 ? Math.round(x / 100) * 100 : Math.round(x / 10) * 10);
+  function estimate() {
+    const v = Object.fromEntries(answers().map(i => [i.name, Number(i.value)]));
+    const otaNights = v.rooms * 365 * (v.occ / 100) * 0.319;
+    const saving = otaNights * v.adr * 0.10 * (0.15 - 0.06);
+    const lowNights = v.rooms * 90 * 0.05;
+    return {
+      total: `<b>${money(saving + lowNights * v.adr)}</b> weniger Provision und mehr Zimmerumsatz`,
+      outs: [
+        [money(saving), `≈ ${count(otaNights * 0.10)} Zimmernächte direkt statt über Portale (10 % Ihrer Portal-Buchungen)`],
+        [money(lowNights * v.adr), `≈ ${count(lowNights)} zusätzliche Zimmernächte in den drei schwächsten Monaten (+5 Punkte Auslastung)`],
+      ],
+    };
+  }
   function showResult() {
+    if (model === 'hotel') {
+      const r = estimate();
+      total.innerHTML = r.total;
+      [...panel.querySelectorAll('.calc__out')].forEach((out, i) => {
+        out.querySelector('b').textContent = r.outs[i][0];
+        out.querySelector('small').textContent = r.outs[i][1];
+      });
+      let done = false;
+      try { done = localStorage.getItem('bs-onboarded') === '1'; } catch { /* storage blocked: stays locked */ }
+      panel.querySelector('.calc__lock').hidden = done;
+      panel.querySelector('.calc__figures').hidden = !done;
+      return;
+    }
     const picked = answers(), s = score();
     picked.forEach((i, k) => { segments[k].dataset.points = i ? i.value : ''; });
     total.innerHTML = `<b>${s} / ${MAX}</b> <span class="check__level">${LEVELS.filter(([min]) => s >= min * MAX).pop()[1]}</span>`;
@@ -102,12 +142,26 @@
   show(0);
 
   // the answers travel to the Kontakt form only when the visitor sends it (D-04)
-  panel.querySelector('.check__result a[href*="werte=1"]').addEventListener('click', () => {
+  // (hotel: "shown" is what the form shows before it is sent, no money yet; "result" is the
+  // figures' markup for the thank-you dialog; "size" picks the form's room range)
+  const clean = el => el.textContent.replace(/\s+/g, ' ').trim();
+  panel.querySelectorAll('.check__result a[href*="werte=1"]').forEach(link => link.addEventListener('click', () => {
     const picked = answers();
-    const summary = [`Sichtbarkeits-Check ${score()}/${MAX}`, ...groups.map((g, k) =>
-      `${g.querySelector('legend').textContent} ${picked[k] ? picked[k].dataset.label : '–'}`)].join(' · ');
+    let data;
+    if (model === 'hotel') {
+      const shown = groups.map((g, k) => `${g.dataset.name} ${picked[k] ? picked[k].dataset.label : '–'}`).join(' · ');
+      const outs = panel.querySelector('.calc__outs');
+      data = {
+        model, size: picked[0] ? Number(picked[0].value) : null, shown,
+        summary: [shown, clean(total), ...[...panel.querySelectorAll('.calc__out b')].map(clean)].join(' · '),
+        result: total.outerHTML + outs.outerHTML,
+      };
+    } else {
+      data = { model: 'check', size: null, summary: [`Sichtbarkeits-Check ${score()}/${MAX}`, ...groups.map((g, k) =>
+        `${g.querySelector('legend').textContent} ${picked[k] ? picked[k].dataset.label : '–'}`)].join(' · ') };
+    }
     try {
-      sessionStorage.setItem('bs-rechner', JSON.stringify({ model: 'check', size: null, summary }));
+      sessionStorage.setItem('bs-rechner', JSON.stringify(data));
     } catch { /* storage blocked: the form opens without the answers */ }
-  });
+  }));
 })();

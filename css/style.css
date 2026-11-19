@@ -210,6 +210,18 @@ body::after {
   margin-bottom: 1.4rem;
 }
 
+/* a heading that stays for screen readers and the outline only (the scenes speak for
+   themselves, Nicky 2026-11-19) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .kicker--light {
   color: var(--gold-soft);
 }

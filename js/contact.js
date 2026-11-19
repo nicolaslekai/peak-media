@@ -130,6 +130,14 @@
     // the note shows the visitor's inputs only: no money before the enquiry is sent
     calcNote.querySelector('span').textContent = fromCalc.shown || fromCalc.summary;
     calcNote.hidden = false;
+    // the visitor has just answered three questions (the check or the hotel calculator): no
+    // second questionnaire, straight to the contact details (Nicky, 2026-11-19); "Zurück"
+    // still leads to the optional questions
+    if (preset) {
+      show(steps.length - 1, false);
+      const note = document.querySelector('.contact__steps-note');
+      if (note) note.textContent = 'Nur noch Ihre Kontaktdaten.';
+    }
   }
 
   const reset = () => {

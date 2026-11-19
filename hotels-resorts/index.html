@@ -87,7 +87,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=142" />
+  <link rel="stylesheet" href="../css/style.css?v=143" />
 </head>
 
 <body>
@@ -145,11 +145,7 @@
     <!-- AT A GLANCE: no photo since 2026-11-19 (Nicky: "looks cheap, less text"): one sentence and four facts as an icon row -->
     <section class="section glance section--split" id="ueberblick">
       <header>
-        <p class="kicker">Auf einen Blick</p>
         <h2>Volle Häuser auch außerhalb der Hochsaison.</h2>
-        <p>
-          Zwischen den Saisons bleiben Zimmer leer, und viele Gäste buchen über Portale.
-        </p>
       </header>
       <ul class="facts">
         <li>
@@ -181,15 +177,7 @@
          ride's button leads to the calculator. Without JS or with reduced motion: the vertical
          list. Copy provisional, figures to be corrected (ISSUES C3) -->
     <section class="section evidence" id="zahlen">
-      <header>
-        <p class="kicker">Die Zahlen dahinter</p>
-        <h2>
-          Erst gesehen, dann direkt gebucht.
-        </h2>
-        <p>
-          Warum Gäste Sie kennen sollten, bevor sie das Portal öffnen.
-        </p>
-      </header>
+      <h2 class="sr-only">Erst gesehen, dann direkt gebucht.</h2>
 
       <!-- the chain (Nicky, 2026-11-09: number, one line in big print that carries the whole
            point, one sentence of what we do; no figures, no sources). Sources behind the lines:
@@ -264,95 +252,63 @@
       <p class="phones__hint" aria-hidden="true">Wischen</p>
     </section>
 
-    <!-- WHY VISIBILITY (D-59): where trips start and what visibility can do; no study
-         measures a business's own social media work (research-2026-10-07/social-evidence.md) -->
-    <section class="section" id="sichtbarkeit">
-      <header>
-        <p class="kicker">Warum Sichtbarkeit</p>
-        <h2>Reisen beginnen auf dem Handy.</h2>
-      </header>
-      <ul class="metrics facts">
-        <li class="metric">
-          <b>58 %</b> der Urlauberinnen und Urlauber, die soziale Netzwerke nutzen, haben dort im vergangenen Jahr eine Idee für eine Reise bekommen.
-          <small>Bitkom Research, Juli 2026: telefonische Befragung von 1.004 Personen ab 16 Jahren in Deutschland, davon 745 Reisende mit Social-Media-Nutzung.</small>
-        </li>
-      </ul>
-    </section>
-
-    <!-- CALCULATOR for this segment (D-59): the same panel as on the home page, copied by hand;
-         a change to its fields, defaults or sources goes into both. Formulas in js/evidence.js -->
-    <section class="section calculator" id="rechner">
+    <!-- CALCULATOR for this segment, since 2026-11-19 as three one-click questions (Nicky: "less
+         complex and more straightforward", "rough estimates are fine"): rooms, occupancy and
+         price as rough ranges, in the same card as the visibility check (js/check.js, data-model
+         "hotel": each answer's value is the figure the estimate uses). No money before the enquiry:
+         the card hands the answers to the Kontakt page, which opens at the contact details; the
+         thank-you dialog shows the figures -->
+    <section class="section check" id="rechner">
       <header>
         <p class="kicker">Rechner</p>
         <h2>Was das für Ihr Haus bedeutet.</h2>
         <p>
-          Drei Angaben genügen. Die übrigen Werte sind belegte Durchschnitte, die Sie anpassen können.
+          Drei kurze Fragen, grobe Angaben genügen.
         </p>
       </header>
 
       <noscript>
         <p class="calc__nojs">
           Der Rechner braucht JavaScript. Gern rechnen wir gemeinsam:
-          <a href="../kontakt/">schreiben Sie uns</a>.
+          <a href="../kontakt/?typ=hotel">schreiben Sie uns</a>.
         </p>
       </noscript>
-      <div class="calc" id="calc-hotel" data-model="hotel">
-        <form class="calc__inputs">
-          <div class="range">
-            <label for="c-rooms">Zimmer</label> <output for="c-rooms">40</output>
-            <input type="range" id="c-rooms" name="rooms" data-format="int" min="5" max="250" step="1" value="40" />
-          </div>
-          <div class="range">
-            <label for="c-occ">Zimmerauslastung im Jahr</label> <output for="c-occ">60 %</output>
-            <input type="range" id="c-occ" name="occ" data-format="pct" min="20" max="95" step="1" value="60" />
-          </div>
-          <div class="range">
-            <label for="c-adr">Zimmerpreis pro Nacht</label> <output for="c-adr">120 €</output>
-            <input type="range" id="c-adr" name="adr" data-format="eur" min="50" max="500" step="5" value="120" />
-          </div>
-
-          <fieldset class="choice-group calc__scenario">
-            <legend>Szenario</legend>
+      <div class="calc check__panel" data-model="hotel">
+        <form class="check__form">
+          <fieldset class="choice-group" data-name="Zimmer">
+            <legend>Wie viele Zimmer hat Ihr Haus?</legend>
             <div class="choices">
-              <label class="choice"><input type="radio" name="szenario" value="vorsichtig" data-shift="5" data-low="2" /><span>vorsichtig</span></label>
-              <label class="choice"><input type="radio" name="szenario" value="mittel" data-shift="10" data-low="5" checked /><span>mittel</span></label>
-              <label class="choice"><input type="radio" name="szenario" value="ambitioniert" data-shift="20" data-low="8" /><span>ambitioniert</span></label>
+              <label class="choice"><input type="radio" name="rooms" value="20" data-label="10–30" /><span>10–30</span></label>
+              <label class="choice"><input type="radio" name="rooms" value="40" data-label="30–50" /><span>30–50</span></label>
+              <label class="choice"><input type="radio" name="rooms" value="75" data-label="50–100" /><span>50–100</span></label>
+              <label class="choice"><input type="radio" name="rooms" value="140" data-label="über 100" /><span>über 100</span></label>
             </div>
-            <small>Annahmen, keine Erfahrungswerte: 5, 10 oder 20 % Ihrer Portal-Gäste buchen künftig direkt,
-              und in den drei schwächsten Monaten sind 2, 5 oder 8 Prozentpunkte mehr Zimmer belegt.</small>
           </fieldset>
-
-          <details>
-            <summary>Annahmen anpassen</summary>
-            <div class="range">
-              <label for="c-ota">Anteil über Buchungsportale</label> <output for="c-ota">31,9 %</output>
-              <input type="range" id="c-ota" name="ota" data-format="pct1" min="0" max="80" step="0.1" value="31.9" />
-              <small>Standard: 31,9 %, Anteil der Übernachtungen über Portale, befragte Hotels in Deutschland 2025 (HOTREC 2026)</small>
+          <fieldset class="choice-group" data-name="Auslastung im Jahr">
+            <legend>Wie gut ist Ihr Haus übers Jahr belegt?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="occ" value="45" data-label="unter 50 %" /><span>weniger als die Hälfte der Zimmer</span></label>
+              <label class="choice"><input type="radio" name="occ" value="60" data-label="50–70 %" /><span>etwa 50 bis 70 %</span></label>
+              <label class="choice"><input type="radio" name="occ" value="78" data-label="über 70 %" /><span>mehr als 70 %</span></label>
             </div>
-            <div class="range">
-              <label for="c-com">Provision der Portale</label> <output for="c-com">15,0 %</output>
-              <input type="range" id="c-com" name="com" data-format="pct1" min="8" max="30" step="0.5" value="15" />
-              <small>Standard: 15 % (Annahme). Laut BGH im Schnitt 10–15 % bei Booking.com (2021),
-                mit Preferred oder Visibility Booster mehr</small>
+          </fieldset>
+          <fieldset class="choice-group" data-name="Zimmerpreis pro Nacht">
+            <legend>Was kostet ein Zimmer pro Nacht, im Schnitt?</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="adr" value="85" data-label="bis 100 €" /><span>bis 100 €</span></label>
+              <label class="choice"><input type="radio" name="adr" value="150" data-label="100–200 €" /><span>100–200 €</span></label>
+              <label class="choice"><input type="radio" name="adr" value="270" data-label="200–350 €" /><span>200–350 €</span></label>
+              <label class="choice"><input type="radio" name="adr" value="420" data-label="über 350 €" /><span>über 350 €</span></label>
             </div>
-            <div class="range">
-              <label for="c-dir">Kosten einer Direktbuchung</label> <output for="c-dir">6,0 %</output>
-              <input type="range" id="c-dir" name="dir" data-format="pct1" min="0" max="15" step="0.5" value="6" />
-              <small>Standard: 6 %. Bundeskartellamt 2015 (Angaben IHA u. a.): rund 5–7 % inkl. Marketing</small>
-            </div>
-          </details>
+          </fieldset>
         </form>
 
-        <!-- the result (Nicky, 2026-11-19): no money before the enquiry is finished. Until then
-             the card asks for the four steps and hands the values over (werte=1); the thank-you
-             dialog on the Kontakt page shows the figures, and from then on (localStorage
-             "bs-onboarded", js/contact.js) this card shows them too (js/evidence.js) -->
-        <div class="calc__result" aria-live="polite">
+        <div class="calc__result check__result" aria-live="polite">
           <div class="calc__lock">
             <p class="kicker">Ihr Plus pro Jahr</p>
             <p class="calc__lock-title">Ihr Ergebnis erhalten Sie mit der Anfrage.</p>
-            <p>Vier kurze Schritte, meist mit einem Klick. Ihre Werte aus dem Rechner nehmen wir mit,
-              am Ende sehen Sie, was weniger Provision und mehr belegte Zimmer für Ihr Haus bedeuten.</p>
+            <p>Nur noch Ihre Kontaktdaten. Dann sehen Sie, was weniger Provision und mehr belegte
+              Zimmer für Ihr Haus bedeuten.</p>
             <a class="btn btn--gold" href="../kontakt/?typ=hotel&amp;werte=1">Ergebnis anfordern</a>
           </div>
           <div class="calc__figures" hidden>
@@ -367,7 +323,7 @@
               </p>
             </div>
             <p class="calc__note">
-              Beispielrechnung mit Ihren Angaben und den Durchschnittswerten. Umsatz,
+              Grobe Beispielrechnung mit Ihren Angaben und Durchschnittswerten. Umsatz,
               nicht Gewinn, und keine Zusage. Die echte Provision hängt von Ihrem
               Vertrag ab.
             </p>
@@ -475,7 +431,7 @@
 
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=74"></script>
-  <script src="../js/evidence.js?v=10"></script>
+  <script src="../js/check.js?v=8"></script>
   <script src="../js/nav.js?v=3"></script>
   <script src="../js/hotel-scene.js?v=9"></script>
 </body>

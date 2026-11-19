@@ -427,7 +427,8 @@ body::after {
   color: var(--paper);
 }
 
-/* symbol: blaue-stunde-logo-white.svg, scaled by height (aspect ratio 240:172) */
+/* the logo (since 2026-11-19): the arc with the sun at its end over the name, one file with
+   the letters as outlines (assets/brand/blaue-stunde-logo-white_KJ_v002.svg), scaled by height */
 .brand img {
   display: block;
   flex: none;
@@ -4759,7 +4760,7 @@ html:not(.js) .wizard__step+.wizard__step {
 /* ---- MOBILE cinematic: full-height portrait stage with the caption overlaid on it ---- */
 @media (max-width: 767px) {
   .brand img {
-    height: 36px;
+    height: 34px;
   }
 
   /* the stage fills the phone: full height, the frame cropped around the scene's focal

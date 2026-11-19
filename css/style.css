@@ -2822,7 +2822,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 /* what each person brings: plain text under the role */
 .member .member__bio {
   margin-top: 0.7rem;
-  max-width: 34ch;
+  max-width: 44ch;
   font-size: 0.9rem;
   letter-spacing: 0;
   text-transform: none;

@@ -4,10 +4,10 @@
    said nothing): a front view in layers, the mountains behind, a symmetric bath house with a
    glazed hall, the outdoor pool in front, steam. The picture stands still; each station adds
    what its line says:
-     01 Entdecken        a phone frames the bath like a story (planned on the phone)
+     01 Entdecken        the bath at the blue hour, stars, the pool lights low
      02 Bei jedem Wetter clouds and rain, the windows glow warmer, more steam
      03 Ruhige Monate    the low sun in the saddle, its light on the water, the pool lights on
-   Water, steam, rain and the story move with time; the scroll blends the stations and moves the
+   Water, steam and rain move with time; the scroll blends the stations and moves the
    camera a little forward, never up or sideways (Nicky, 2026-11-09).
    Reuses the Bergfahrt's markup and CSS (.ride, .chain--ride). Without JS or with reduced
    motion the list stays. Own file: an error here cannot stop the scroll engine.
@@ -56,7 +56,6 @@
   const POOL = { y0: 22, y1: 122, h0: 182, h1: 292 };
   const halfAt = y => lerp(POOL.h0, POOL.h1, (y - POOL.y0) / (POOL.y1 - POOL.y0));
   const BAYS = 7, HALL = 110, HALL_H = 92, WING = 232, WING_H = 62;
-  const PHONE = { x: -126, y: -312, w: 252, h: 474, r: 30 };
 
   const STARS = Array.from({ length: 46 }, () => ({ x: -620 + rnd() * 1240, y: -330 + rnd() * 150, r: 0.5 + rnd() * 0.8, ph: rnd() * 6.3 }));
   const PUFFS = Array.from({ length: 44 }, () => ({ x: -150 + rnd() * 300, ph: rnd(), sp: 0.6 + rnd() * 0.8, dr: rnd() * 6.3, y: 40 + rnd() * 60 }));
@@ -83,16 +82,6 @@
     const gr = ctx.createRadialGradient(x, y, 0, x, y, r);
     gr.addColorStop(0, `rgba(${rgb},${a})`); gr.addColorStop(1, `rgba(${rgb},0)`);
     ctx.fillStyle = gr; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
-  }
-  function round(x, y, w, h, r, add = false) {   // add: a further subpath of the current path
-    if (!add) ctx.beginPath();
-    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
-    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
-  }
-  function heart(x, y, k) {
-    ctx.beginPath(); ctx.moveTo(x, y + k * 0.9);
-    ctx.bezierCurveTo(x - k * 1.4, y - k * 0.1, x - k * 0.7, y - k * 1.1, x, y - k * 0.35);
-    ctx.bezierCurveTo(x + k * 0.7, y - k * 1.1, x + k * 1.4, y - k * 0.1, x, y + k * 0.9);
   }
   function poolPath(grow = 0) {
     const { y0, y1, h0, h1 } = POOL, r = 16;
@@ -232,32 +221,6 @@
     }
   }
 
-  // 01: the bath as a story on a phone; what is outside the frame steps back a little
-  function phone(t, a, xa, xb) {
-    if (a <= 0.01) return;
-    const { x, y, w, h, r } = PHONE;
-    ctx.beginPath(); ctx.rect(xa, -1000, xb - xa, 2000); round(x, y, w, h, r, true);
-    ctx.fillStyle = `rgba(16,20,26,${(0.62 * a).toFixed(3)})`; ctx.fill('evenodd');
-    round(x, y, w, h, r); stroke(SOFT, 0.95 * a, 1.8);
-    round(x - 6, y - 6, w + 12, h + 12, r + 5); stroke(SOFT, 0.22 * a, 1);
-    round(-24, y + 9, 48, 9, 4.5); ctx.fillStyle = `rgba(16,20,26,${a})`; ctx.fill(); stroke(SOFT, 0.5 * a, 0.9);
-    // story bars, the middle one filling; the profile line below them
-    const bars = 3, gap = 6, bw = (w - 36 - gap * (bars - 1)) / bars, prog = (t * 0.16) % 1;
-    for (let i = 0; i < bars; i++) {
-      const bx = x + 18 + i * (bw + gap); line(bx, y + 30, bx + bw, y + 30); stroke(SOFT, 0.28 * a, 2);
-      const f = i === 0 ? 1 : i === 1 ? prog : 0; if (f > 0) { line(bx, y + 30, bx + bw * f, y + 30); stroke(SOFT, 0.95 * a, 2); }
-    }
-    ctx.beginPath(); ctx.arc(x + 28, y + 50, 9, 0, 6.3); ctx.fillStyle = `rgba(16,20,26,${0.7 * a})`; ctx.fill(); stroke(SOFT, 0.9 * a, 1.2);
-    line(x + 44, y + 47, x + 104, y + 47); stroke(SOFT, 0.85 * a, 2); line(x + 44, y + 55, x + 82, y + 55); stroke(SOFT, 0.4 * a, 2);
-    // the message field and the heart at the foot, hearts rising from it
-    round(x + 16, y + h - 40, w - 70, 24, 12); stroke(SOFT, 0.6 * a, 1.1);
-    heart(x + w - 30, y + h - 28, 8); ctx.fillStyle = `rgba(${SOFT},${0.95 * a})`; ctx.fill();
-    for (let i = 0; i < 4; i++) {
-      const u = (t * 0.22 + i * 0.25) % 1, hx = x + w - 30 + 9 * Math.sin(u * 5 + i * 2), hy = y + h - 44 - u * 150;
-      heart(hx, hy, 4 + 3 * u); ctx.fillStyle = `rgba(${SOFT},${(Math.sin(Math.PI * u) * 0.9 * a).toFixed(3)})`; ctx.fill();
-    }
-  }
-
   function draw(p, t) {
     const phoneScreen = Wd < 768;
     // one fixed view, right of the copy and level with it; on phones on top, the copy below
@@ -265,7 +228,7 @@
     s = (phoneScreen ? Wd * 0.94 / 600 : Math.min(Wd * 0.44 / 600, Hd * 0.92 / 500)) * dolly; px = 1 / s;
     const ox = phoneScreen ? Wd * 0.5 : Wd * 0.7, gy = (phoneScreen ? Hd * 0.3 : Hd * 0.5) + 82 * s;
     const k = (a, b) => clamp((p - a) / (b - a));
-    const w1 = 1 - ease(k(0.1, 0.26)), w2 = ease(k(0.24, 0.4)) * (1 - ease(k(0.6, 0.76))), w3 = ease(k(0.7, 0.9));
+    const w2 = ease(k(0.24, 0.4)) * (1 - ease(k(0.6, 0.76))), w3 = ease(k(0.7, 0.9));
     const gl = 0.86 + 0.14 * Math.max(w2, w3);
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -289,7 +252,6 @@
     pool(t, gl, w3, 0.45 + 0.55 * Math.max(w3, w2 * 0.6));
     steam(t, 0.62 + 0.38 * w2);
     rain(t, w2);
-    phone(t, w1, xa, xb);
 
     // the copy's side stays clear: the land fades out towards it (and under the copy on phones)
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

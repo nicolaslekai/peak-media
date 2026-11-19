@@ -1285,6 +1285,14 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   fill: url(#tools-fill);
 }
 
+.tools__art .tools__land {
+  fill: #10141a;
+  stroke: #10141a;
+  stroke-width: 9px;
+  stroke-linejoin: round;
+  vector-effect: none;
+}
+
 .tools__far {
   stroke: var(--gold);
   stroke-opacity: 0.22;
@@ -1397,8 +1405,8 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   fill-opacity: 0.9;
 }
 
-.tools__chip--done text {
-  fill: var(--ink);
+.tools__art .tools__chip--done text {
+  fill: #10141a;
   fill-opacity: 1;
 }
 

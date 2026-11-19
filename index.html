@@ -109,7 +109,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=132" />
+  <link rel="stylesheet" href="css/style.css?v=133" />
 </head>
 
 <body>
@@ -343,17 +343,14 @@
                 <stop offset="1" stop-color="#ecd6a2" stop-opacity="0" />
               </radialGradient>
               <clipPath id="tools-view"><rect x="24" y="20" width="512" height="210" /></clipPath>
-              <!-- hides the sun below the ridge, with a small gap above it, as in the logo -->
-              <mask id="tools-ground" maskUnits="userSpaceOnUse" x="0" y="0" width="560" height="250">
-                <rect width="560" height="250" fill="#fff" />
-                <path d="M24 205C90 175 170 72 215 72C250 72 290 130 320 148C345 135 375 112 400 112C440 112 500 175 536 205L536 250L24 250Z"
-                  fill="#000" stroke="#000" stroke-width="9" stroke-linejoin="round" />
-              </mask>
             </defs>
             <g clip-path="url(#tools-view)">
               <path class="tools__far" d="M24 168C70 150 110 120 140 120C170 120 200 150 240 150C290 150 330 96 372 96C420 96 470 140 536 160" />
               <circle class="tools__glow" cx="318" cy="140" r="96" />
-              <circle class="tools__sun" cx="318" cy="140" r="34" mask="url(#tools-ground)" />
+              <circle class="tools__sun" cx="318" cy="140" r="34" />
+              <!-- the land in front of the sun, with a small gap above the ridge as in the logo
+                   (a shape, not a mask: masks broke in Nicky's browser, 2026-11-19) -->
+              <path class="tools__land" d="M24 205C90 175 170 72 215 72C250 72 290 130 320 148C345 135 375 112 400 112C440 112 500 175 536 205L536 230L24 230Z" />
               <path class="tools__fill" d="M24 205C90 175 170 72 215 72C250 72 290 130 320 148C345 135 375 112 400 112C440 112 500 175 536 205L536 230L24 230Z" />
               <path class="tools__ridge" pathLength="1" d="M24 205C90 175 170 72 215 72C250 72 290 130 320 148C345 135 375 112 400 112C440 112 500 175 536 205" />
               <path class="tools__water" d="M24 205H536M292 213H344M302 220H334M310 227H326" />

@@ -361,7 +361,7 @@ function __boot() {
   const nav = document.getElementById('nav');
   const cue = document.querySelector('.hero__cue');
   const onScroll = (y) => {
-    if (nav) nav.classList.toggle('scrolled', y > 60);
+    if (nav) nav.classList.toggle('scrolled', y > 16);   // early: text must not run under the logo
     if (cue) cue.classList.toggle('is-gone', y > 80);
   };
   if (lenis) lenis.on('scroll', ({ scroll }) => onScroll(scroll));

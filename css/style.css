@@ -436,6 +436,39 @@ body::after {
   width: auto;
 }
 
+/* ONE AXIS in the bar (Nicky, 2026-11-19: "logo and burger menu need to be fully aligned,
+   centred on the horizontal axis"). The logo's letters sit in its lower part, the arc above
+   them, so centring the logo's box put the menu beside the arc. The letters' middle is 29.4 %
+   of the logo's height below the box's middle: the logo moves up by half of that, the links
+   and the toggle down by the other half, and both meet on the letters' middle. */
+.nav {
+  --logo-h: 40px;
+  --axis: calc(var(--logo-h) * 0.147);
+}
+
+.nav .brand {
+  position: relative;
+  top: calc(-1 * var(--axis));
+}
+
+.nav__toggle {
+  position: relative;
+  top: var(--axis);
+}
+
+@media (min-width: 1001px) {
+  .nav nav {
+    position: relative;
+    top: var(--axis);
+  }
+}
+
+@media (max-width: 767px) {
+  .nav {
+    --logo-h: 34px;
+  }
+}
+
 /* ---- CANVAS FRAME-SEQUENCE SCRUB (smooth 3D scroll) ---- */
 .cine {
   position: relative;
@@ -1238,6 +1271,8 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   flex: none;
   width: 30px;
   height: 30px;
+  /* 15 % less saturation (Nicky, 2026-11-19): the brand colours sit calmer on the dark page */
+  filter: saturate(0.85);
 }
 
 /* three channels since TikTok left (D-75): one row of three, one column on phones */
@@ -4529,18 +4564,18 @@ html:not(.js) .wizard__step+.wizard__step {
     display: none;
   }
 
-  /* over a cine scene (js/nav.js) the bar fades into the soft shade: the frames stay
-     whole, brand and toggle stay readable (contrast 7.4–9.7 over the ski frames) */
-  .nav.nav--over-cine::before {
-    opacity: 0;
-  }
-
-  .nav.nav--over-cine::after {
+  /* over a cine scene (js/nav.js) and still at the very top, the bar is only a soft shade:
+     the first frame stays whole, brand and toggle stay readable. As soon as the page moves
+     (.scrolled) the real bar is there, also over the scene: the logo is a wordmark now and
+     the hero's headline ran through it (Nicky, 2026-11-19: "logo overlay is bad, box fades
+     on much too late") */
+  .nav.nav--over-cine:not(.scrolled)::after {
     opacity: 1;
   }
 
-  .nav.nav--over-cine {
-    border-bottom-color: transparent;
+  /* a denser bar on small screens, where text passes right under the logo */
+  .nav::before {
+    background: rgba(var(--ink-rgb), 0.82);
   }
 
   /* MENU (js/nav.js adds .nav--menu): the <nav> becomes a full-screen panel that slides
@@ -5305,7 +5340,8 @@ html.layout-center .impact .phones {
   gap: 0.55rem;
 }
 
-.facts__icon {
+.facts__icon,
+.steps__icon {
   display: grid;
   place-items: center;
   width: 3.2rem;
@@ -5316,7 +5352,8 @@ html.layout-center .impact .phones {
   color: var(--gold);
 }
 
-.facts__icon svg {
+.facts__icon svg,
+.steps__icon svg {
   width: 1.3rem;
   height: 1.3rem;
   fill: none;
@@ -5344,6 +5381,20 @@ html.layout-center .impact .phones {
   .facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* the five steps carry an icon each instead of 01 … 05 (Nicky, 2026-11-19), the same
+   hairline circle as the facts and the Kontakt tiles; the order still reads from the list */
+.steps li::before {
+  content: none;
+}
+
+.steps__icon {
+  margin-bottom: 1.1rem;
+}
+
+html.layout-center .steps__icon {
+  margin-inline: auto;
 }
 
 html.layout-center .facts li {

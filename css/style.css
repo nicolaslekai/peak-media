@@ -1626,6 +1626,109 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   }
 }
 
+/* ---- TOOLS in the Raum style (js/tools.js): each side's picture as a small model on a
+   <canvas> in the flat picture's place (js sets its height). .tools__side--raum is set only
+   while the model is there: it hides the flat picture. The plan's words (Mo to So, heute,
+   the legend) are HTML over the canvas; js puts them where the model's tiles are seen. ---- */
+.tools-model {
+  position: relative;
+  max-width: 40rem;
+  margin-bottom: 1rem;
+  pointer-events: none;
+}
+
+.tools-model canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tools__side--raum>.tools__art {
+  display: none;
+}
+
+.tools-model__day,
+.tools-model__today,
+.tools-model__legend {
+  position: absolute;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(236, 214, 162, 0.75);
+}
+
+/* centred on their place; the padding makes up for the spacing after the last letter */
+.tools-model__day,
+.tools-model__today {
+  padding-left: 0.14em;
+  transform: translate(-50%, -100%) rotate(var(--tilt, 0rad));
+  transform-origin: 50% 100%;
+}
+
+.tools-model__today {
+  color: var(--gold);
+  opacity: 0;
+  transform: translate(-50%, 0.55rem) rotate(var(--tilt, 0rad));
+  transform-origin: 50% 0;
+  transition: opacity 0.7s var(--ease);
+}
+
+.tools-model.is-today .tools-model__today {
+  opacity: 1;
+}
+
+.tools-model__legend {
+  top: 0.2rem;
+  left: 0;
+  display: flex;
+  gap: 1.3rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  font-size: 0.72rem;
+}
+
+.tools-model__key::before {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-right: 0.6em;
+  border: 1px solid rgba(209, 168, 81, 0.7);
+  border-radius: 2px;
+  vertical-align: -0.04em;
+}
+
+.tools-model__key--done::before {
+  border-color: transparent;
+  background: var(--gold-soft);
+}
+
+/* phones: the sides stand one above the other, the picture takes the gutters as well */
+@media (max-width: 767px) {
+  .tools-model {
+    max-width: none;
+    margin-inline: calc(-1 * var(--gutter));
+  }
+
+  .tools-model__day,
+  .tools-model__today {
+    font-size: 0.6rem;
+  }
+
+  .tools-model__legend {
+    left: var(--gutter);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tools-model__today {
+    transition: none;
+  }
+}
+
 /* ---- PHONES: iPhone-style mockups (social proof wall) ----
    The figure is the phone: screen image + caption overlay; the island is ::before. */
 .phones {

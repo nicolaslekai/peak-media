@@ -109,7 +109,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=147" />
+  <link rel="stylesheet" href="css/style.css?v=149" />
 </head>
 
 <body>
@@ -143,20 +143,15 @@
   </header>
 
   <main id="top">
-    <!-- HERO — a still image, no scrub (D-64), not one of the scenes the segment pages use
-         (Raffaele, 2026-10-22; size optimisation later). The home page speaks to all three
-         segments (D-71); title and lead from Daniel and Nicolas (2026-10-28), no kicker -->
-    <section class="hero hero--still" id="hero">
+    <!-- HERO: since 2026-11-19 a scene like the segment pages' openings (Nicky: "animate it ...
+         so we can have the cinematic scroll effect"): house, pool and cable car at blue hour, all
+         three segments in one picture, 120 frames scrubbed by the scroll (js/main.js reads
+         data-scene; assets/frames-hd/home, on phones held upright assets/frames-phone/home, where
+         the picture stands above the heading and fades into the page). Without JS a still frame
+         (style.css). Title and lead from Daniel and Nicolas (2026-10-28), no kicker -->
+    <section class="cine hero hero--still" data-scene="home" id="hero">
       <div class="cine__stage">
-        <!-- since 2026-11-19 a picture in the style of the Hotels and Wellness title pictures
-             (Nicky: "something for the home page that fits the style"): house, pool and cable
-             car at blue hour, all three segments in one frame; mirrored, so the house stands
-             right of the copy. Phones held upright get their own portrait picture -->
-        <picture class="cine__still">
-          <source media="(max-width: 767px) and (orientation: portrait)" srcset="assets/img/hero-home-tal-phone_KJ_v001.webp"
-            width="941" height="1686" />
-          <img src="assets/img/hero-home-tal_KJ_v001.webp" alt="" width="2560" height="1429" fetchpriority="high" />
-        </picture>
+        <canvas aria-hidden="true"></canvas>
         <div class="cine__scrim"></div>
         <div class="cine__copy">
           <h1>Marketing für Tourismus im Alpenraum.</h1>
@@ -556,7 +551,7 @@
   </footer>
 
   <script src="js/vendor/lenis-1.1.14.min.js"></script>
-  <script src="js/main.js?v=75"></script>
+  <script src="js/main.js?v=77"></script>
   <script src="js/steps.js?v=24"></script>
   <script src="js/nav.js?v=3"></script>
   <script src="js/tools.js?v=3"></script>

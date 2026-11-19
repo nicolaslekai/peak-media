@@ -27,11 +27,12 @@ const SCENES = {
   hero: { bg: '#10141A', focalX: 0.62 },   // keep the sun + pool in frame
   spa: { bg: '#0a0c12' },
   skilift: { bg: '#10141A' },
+  home: { bg: '#10141A', focalX: 0.72 },   // the house stands right of the copy
 };
 const frameCfg = section => {
   const name = section.dataset.scene, clip = SCENES[name] || { bg: '#10141A' };
   const dir = new URL(`${PHONE ? 'frames-phone' : 'frames-hd'}/${name}/`, ASSETS).href;
-  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=2' : ''}` };   // v=2: the phone strips of hero and spa pan across the frame (2026-11-19)
+  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=3' : ''}` };   // v=3: the phone strips of hero and spa sit on the subject: the house, the starry window (2026-11-19)
 };
 // sharp frames kept around the playhead (phone ≈ 6 MB decoded, 2560 ≈ 15 MB): at rest
 // WINDOW on each side; while scrolling AHEAD in the direction of travel, BEHIND the other way

@@ -574,18 +574,26 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   background-image: url("../assets/frames-hd/skilift/frame_0060.webp");
 }
 
+html:not(.js) [data-scene="home"] .cine__stage {
+  background-image: url("../assets/frames-hd/home/frame_0001.webp");
+}
+
 /* phones held upright: the portrait set, framed on each scene's focal point (D-55) */
 @media (max-width: 767px) and (orientation: portrait) {
   html:not(.js) [data-scene="hero"] .cine__stage {
-    background-image: url("../assets/frames-phone/hero/frame_0001.webp?v=2");
+    background-image: url("../assets/frames-phone/hero/frame_0001.webp?v=3");
   }
 
   html:not(.js) [data-scene="spa"] .cine__stage {
-    background-image: url("../assets/frames-phone/spa/frame_0001.webp?v=2");
+    background-image: url("../assets/frames-phone/spa/frame_0001.webp?v=3");
   }
 
   html:not(.js) [data-scene="skilift"] .cine__stage {
     background-image: url("../assets/frames-phone/skilift/frame_0060.webp");
+  }
+
+  html:not(.js) [data-scene="home"] .cine__stage {
+    background-image: url("../assets/frames-phone/home/frame_0001.webp?v=3");
   }
 }
 
@@ -3916,26 +3924,6 @@ html:not(.js) .wizard__step+.wizard__step {
 
 /* ---- HOME HERO without scrub (D-64): one still frame behind the copy, where the canvas
    was; the portrait frame on phones held upright ---- */
-.cine__still img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* phones held upright get their own portrait picture (index.html). It fills the upper
-   four fifths of the screen and fades into the page, so the house and the cabin stand
-   above the heading, not behind it */
-@media (max-width: 767px) and (orientation: portrait) {
-  .cine__still img {
-    height: 80%;
-    object-position: 40% 0;
-    -webkit-mask-image: linear-gradient(#000 58%, transparent);
-    mask-image: linear-gradient(#000 58%, transparent);
-  }
-}
-
 /* the home's heading: one line shorter than the scenes' hero, so the copy fits on a
    laptop screen with room for the image */
 .hero--still h1 {
@@ -5298,8 +5286,9 @@ html:not(.js) .wizard__step+.wizard__step {
     text-align: center;
   }
 
+  /* about the size of the logo in the header (Nicky, 2026-11-19: "logo smaller") */
   .foot .brand img {
-    height: 48px;
+    height: 30px;
   }
 
   .foot__cols {

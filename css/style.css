@@ -465,7 +465,7 @@ body::after {
 
 @media (max-width: 767px) {
   .nav {
-    --logo-h: 34px;
+    --logo-h: 27px;
   }
 }
 
@@ -4795,7 +4795,18 @@ html:not(.js) .wizard__step+.wizard__step {
 /* ---- MOBILE cinematic: full-height portrait stage with the caption overlaid on it ---- */
 @media (max-width: 767px) {
   .brand img {
-    height: 34px;
+    height: 27px;
+  }
+
+  /* a lower bar on phones (Nicky, 2026-11-19: "logo and burger menu box are too big ...
+     reduce it by 35 %"): 51 px instead of 79, the toggle keeps a 44 x 40 px touch area */
+  .nav,
+  .nav.scrolled {
+    padding-block: 0.35rem;
+  }
+
+  .nav__toggle:not([hidden]) {
+    height: 40px;
   }
 
   /* the stage fills the phone: full height, the frame cropped around the scene's focal

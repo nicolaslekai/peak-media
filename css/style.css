@@ -2240,7 +2240,8 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   --band: max(26rem, 52svh);
   position: relative;
   width: 100vw;
-  height: calc(var(--band) + 190vh);
+  /* a long way: the first station stands for about a third of it (Nicky, 2026-11-19) */
+  height: calc(var(--band) + 260vh);
   margin: 3.4rem 0 3.4rem calc(50% - 50vw);
 }
 
@@ -2270,16 +2271,37 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   background: linear-gradient(90deg, rgba(var(--ink-rgb), 0.96) 0%, rgba(var(--ink-rgb), 0.85) 32%, rgba(var(--ink-rgb), 0) 52%);
 }
 
-/* the list in the stage: the three links on top of each other, one shown at a time */
-.chain.chain--ride {
+/* the copy in the stage (.ride__copy, built by the scene's script): the three links on top of
+   each other, one shown at a time, and under them one line that fills with the scroll */
+.ride__copy {
   position: absolute;
   z-index: 2;
   top: 50%;
   left: max(var(--gutter), calc(50vw - var(--container) / 2 + var(--gutter)));
   width: min(30rem, 40%);
+  translate: 0 -50%;
+}
+
+.chain.chain--ride {
   margin: 0;
   display: grid;
-  translate: 0 -50%;
+}
+
+.ride__progress {
+  width: min(100%, 15rem);
+  height: 2px;
+  margin-top: 2.2rem;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.ride__progress i {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  transform: scaleX(0.03);
+  transform-origin: left;
 }
 
 .chain.chain--ride li {
@@ -2346,34 +2368,51 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 
 @media (max-width: 767px) {
 
-  /* phones: the picture above, the copy below it, so the band stays taller */
+  /* phones (Nicky, 2026-11-19): the copy above the model, smaller and close to it, the line
+     of progress between the two; the copy's box has a fixed height and its text stands on
+     its floor, so a short and a long station end at the same place, right above the model */
   .ride {
-    --band: 84svh;
-    height: calc(var(--band) + 170vh);
+    --band: max(68svh, 34rem);
+    height: calc(var(--band) + 240vh);
   }
 
   .ride__stage::before {
-    inset: 40% 0 0;
-    background: linear-gradient(rgba(var(--ink-rgb), 0), rgba(var(--ink-rgb), 0.92) 40%);
+    inset: 0 0 58%;
+    background: linear-gradient(rgba(var(--ink-rgb), 0.9) 55%, rgba(var(--ink-rgb), 0));
   }
 
-  .chain.chain--ride {
-    top: auto;
-    bottom: 1.6rem;
+  .ride__copy {
+    top: 0;
     left: var(--gutter);
     right: var(--gutter);
     width: auto;
+    height: 14.4rem;
     translate: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .chain.chain--ride {
     align-items: end;
   }
 
+  .chain--ride h3 {
+    margin-bottom: 0.7rem;
+  }
+
   .chain--ride .chain__big {
-    font-size: clamp(2rem, 9vw, 2.7rem);
+    font-size: clamp(1.55rem, 6.6vw, 2rem);
   }
 
   .chain--ride .chain__do {
+    margin-top: 0.8rem;
+    font-size: 0.88rem;
+  }
+
+  .ride__progress {
+    width: 100%;
     margin-top: 1.1rem;
-    font-size: 0.95rem;
   }
 
   /* on phones the third link's own "Rechner" link is the way on */

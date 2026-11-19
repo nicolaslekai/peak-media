@@ -351,6 +351,7 @@ void main() {
 varying vec3 vP, vN, vC, vS2, vS3;
 varying vec2 vM;
 uniform vec3 uW, uSky, uKey, uSun2, uSun2Dir, uSun3, uSun3Dir, uInk, uWarm, uCab;
+uniform vec4 uLift;
 uniform vec4 uEmit, uCabSh;   // how bright: valley station, hut, terrace lights, cabin; the cabin's shadow on the slope
 uniform float uPx, uShTex, uMark;
 uniform sampler2D uShadow2, uShadow3;
@@ -394,8 +395,10 @@ void main() {
   else if (m > 10.5) col = alb * ao * (m < 11.5 ? uEmit.y : m < 12.5 ? uEmit.z : m < 13.5 ? uEmit.w : uMark);
   else if (m > 5.5 && m < 6.5) {                                                  // the table: only a soft shadow under the block
     vec2 p = vP.xz, lo = vec2(${f2(-PX)}, ${f2(ZB)}), hi = vec2(${f2(PX)}, ${f2(ZF)});
-    vec2 c = p - vec2(0.0, -0.8);
-    float lift = exp(-dot(c, c) / 120.0);
+    // the lift around the model is measured on the screen and is gone before the band's edges, so the
+    // canvas never shows as a lighter box (Nicky, 2026-11-19, on a phone)
+    vec2 q = (gl_FragCoord.xy - uLift.xy) * uLift.zw;
+    float lift = 1.0 - smoothstep(0.3, 1.0, length(q));
     col = uInk * (1.0 + 1.5 * lift) * (1.0 - 0.5 * boxS(p, lo - 0.6, hi + 0.6, 2.6)) * (1.0 - 0.62 * boxS(p, lo - 0.35, hi + 0.35, 0.55));
   } else {
     float up = N.y, rock = 0.0, snow = 0.0, sun2 = 1.0, sun3 = 1.0, last = 0.0;
@@ -629,7 +632,7 @@ void main() {
   function setup() {
     const r = {};
     r.mesh = program(VS_MESH, FS_MESH, ['aP', 'aN', 'aC', 'aM'], ['uVP', 'uM', 'uL2', 'uL3', 'uW', 'uSky', 'uKey', 'uSun2', 'uSun2Dir', 'uSun3', 'uSun3Dir',
-      'uInk', 'uWarm', 'uCab', 'uEmit', 'uCabSh', 'uPx', 'uShTex', 'uMark', 'uShadow2', 'uShadow3', 'uTree']);
+      'uInk', 'uLift', 'uWarm', 'uCab', 'uEmit', 'uCabSh', 'uPx', 'uShTex', 'uMark', 'uShadow2', 'uShadow3', 'uTree']);
     r.depth = program(VS_DEPTH, FS_DEPTH, ['aP'], ['uLight']);
     r.disc = program(VS_DISC, FS_DISC, ['aQ'], ['uVP', 'uC', 'uR', 'uU', 'uSize', 'uCol', 'uKind']);
     r.snow = program(VS_SNOW, FS_SNOW, ['aS', 'aQ'], ['uVP', 'uR', 'uU', 'uTP', 'uA']);
@@ -653,7 +656,7 @@ void main() {
   canvas.addEventListener('webglcontextrestored', () => { try { setup(); } catch (err) { R = null; } });
 
   // ---- where the picture goes: the block and the summits, fitted right of the copy (phones: the upper part)
-  let fitW = 0, fitH = 0, K = 1;
+  let fitW = 0, fitH = 0, K = 1, LCX = 0.4, LCY = 0, LBW = 1;   // LC*: the model's middle (clip space) and width (px), for the table's lift
   function fit(W, H, phone) {
     fitW = W; fitH = H;
     placeSun(phone ? EL_PHONE : EL);   // phones look from a little higher: the picture gets taller, not wider
@@ -664,9 +667,10 @@ void main() {
       x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
     }
     // the band's upper and lower edge fade into the page (style.css), so the model keeps clear of them
-    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.38 : 0.525;
+    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.66 : 0.525;   // phones: the copy stands above the model
     K = Math.min((phone ? 0.92 : 0.5) * W / (x1 - x0), (phone ? 0.46 : 0.775) * H / (y1 - y0));
     const OX = 2 * cx - 1 - K * (x0 + x1) / W, OY = 1 - 2 * cy - K * (y0 + y1) / H;
+    LCX = 2 * cx - 1; LCY = 1 - 2 * cy; LBW = (x1 - x0) * K;
     const ne = DIST - 34, fa = DIST + 70;
     proj.fill(0);
     proj[0] = 2 * K * DIST / W; proj[5] = 2 * K * DIST / H; proj[8] = -OX; proj[9] = -OY;
@@ -715,8 +719,8 @@ void main() {
     if (!r) { if (!gl.isContextLost()) { gl.clearColor(16 / 255, 20 / 255, 26 / 255, 1); gl.clear(gl.COLOR_BUFFER_BIT); } return; }
     if (W < 2 || H < 2) return;
     if (W !== fitW || H !== fitH) fit(W, H, phone);
-    // the stations: 1 until about p 0.24, 2 in the middle, 3 from about 0.76, blended in between
-    const f12 = ease(clamp((p - 0.12) / 0.26)), f23 = ease(clamp((p - 0.62) / 0.26));
+    // the stations: 1 until p 0.32 (the snow falls for the first third), 2 in the middle, 3 from about 0.88
+    const f12 = ease(clamp((p - 0.32) / 0.20)), f23 = ease(clamp((p - 0.66) / 0.22));
     w[0] = 1 - f12; w[1] = f12 * (1 - f23); w[2] = f23;
     const w1 = w[0], w2 = w[1], w3 = w[2], in3 = ease(w3);
     // the camera drifts by about a degree, so the depth is felt, and moves forward with the scroll
@@ -748,6 +752,10 @@ void main() {
     gl.uniform3f(pr.u.uSun2, 0.86 * w2, 0.67 * w2, 0.43 * w2); gl.uniform3f(pr.u.uSun2Dir, SUN2_DIR[0], SUN2_DIR[1], SUN2_DIR[2]);
     gl.uniform3f(pr.u.uSun3, 2.0 * in3, 1.02 * in3, 0.42 * in3); gl.uniform3f(pr.u.uSun3Dir, SUN3_DIR[0], SUN3_DIR[1], SUN3_DIR[2]);
     gl.uniform3f(pr.u.uInk, INK[0], INK[1], INK[2]);
+    {   // the table's lift: centre and reach in device px (see the shader)
+      const cyp = (LCY * 0.5 + 0.5) * H * dpr, ry = 0.88 * Math.min(cyp, H * dpr - cyp), rx = Math.max(LBW * dpr, 2 * ry);
+      gl.uniform4f(pr.u.uLift, (LCX * 0.5 + 0.5) * W * dpr, cyp, 1 / rx, 1 / ry);
+    }
     gl.uniform3f(pr.u.uCab, cab[0], cab[1] - 0.5 * sc, cab[2]);
     gl.uniform4f(pr.u.uEmit, eV, eH, eT, eC); gl.uniform4f(pr.u.uCabSh, cabSh[0], cabSh[1], cabSh[2], cabSh[3]);
     gl.uniform1f(pr.u.uPx, px); gl.uniform1f(pr.u.uShTex, 1 / SH); gl.uniform1f(pr.u.uMark, 0.05 * w1 + 1.0 * w2 + 0.3 * w3);
@@ -821,7 +829,13 @@ void main() {
   chain.before(ride);
   const stage = ride.firstElementChild;
   stage.insertBefore(canvas, cta);
-  stage.insertBefore(chain, cta);   // no 01-03 progress on the right any more (Nicky, 2026-11-09)
+  // the copy and, under it, one line that fills with the scroll: it says "read on while you scroll"
+  const copy = document.createElement('div');
+  copy.className = 'ride__copy';
+  copy.innerHTML = '<div class="ride__progress" aria-hidden="true"><i></i></div>';
+  stage.insertBefore(copy, cta);
+  copy.prepend(chain);
+  const bar = copy.querySelector('.ride__progress i');
   chain.classList.add('chain--ride');
   items[0].classList.add('is-active');
 
@@ -836,7 +850,7 @@ void main() {
 
   // ---- loop: only while the section is on screen. The picture is drawn every frame (snow, sway),
   // the copy is touched only when the scroll progress has changed
-  const STATIONS = [0, 0.5, 1];   // ride progress at each link's station
+  const STATIONS = [0, 0.47, 0.85];   // ride progress at each link's station
   let running = false, last = -1;
   function frame(now) {
     if (!running) return;
@@ -852,7 +866,7 @@ void main() {
       // each link fades with the scroll, like the captions over the frames: the current
       // one fades out, a short pause, then the next one fades in and rises (12 % each)
       const k = (a, b) => clamp((p - a) / (b - a));
-      const show = [1 - k(0.12, 0.24), k(0.26, 0.38) * (1 - k(0.62, 0.74)), k(0.76, 0.88)];
+      const show = [1 - k(0.30, 0.40), k(0.42, 0.52) * (1 - k(0.68, 0.78)), k(0.80, 0.90)];   // station 1 stays for the first third (Nicky, 2026-11-19: "gone too fast")
       items.forEach((li, i) => {
         const o = show[i], y = p < STATIONS[i] ? (1 - o) * 1.2 : -(1 - o) * 0.6;
         li.style.opacity = o.toFixed(3);
@@ -861,6 +875,7 @@ void main() {
         li.classList.toggle('is-active', o >= 0.5);
       });
       ride.classList.toggle('ride--top', p > 0.9);
+      bar.style.transform = `scaleX(${Math.max(0.03, p).toFixed(4)})`;
     }
   }
   new IntersectionObserver(([e]) => {

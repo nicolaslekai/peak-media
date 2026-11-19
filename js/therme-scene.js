@@ -5,7 +5,7 @@
    library. One block of dark stone with the mountains folded out of its back, the bath house
    on a timber platform, the basin cut into the deck, seen from a raised three-quarter view
    through a long lens. The picture stands still; each station adds what its line says:
-     01 Entdecken        the blue hour: stars, quiet water, a few wisps of steam
+     01 Entdecken        the blue hour: the stars come out as you scroll, quiet water, a few wisps of steam
      02 Bei jedem Wetter clouds in the flanks, rain, wet stone, warmer windows, more steam
      03 Ruhige Monate    the low sun in the saddle, long shadows towards us, its path on the
                          water, the basin's lamps on
@@ -266,6 +266,7 @@ void main() {
 varying vec3 vP, vN, vC, vSh;
 varying vec2 vM;
 uniform vec3 uEye, uW, uSky, uKey, uSun, uSunDir, uInk;
+uniform vec4 uLift;
 uniform float uWet, uPx, uLights, uPool, uShTex;
 uniform sampler2D uShadow;
 uniform vec3 uTree[6];
@@ -322,8 +323,10 @@ void main() {
   else if (m > 9.5) col = alb * (0.55 + 0.25 * uGl) * (0.5 + 0.5 * boxS(vP.xz, vec2(-1.5, -2.25), vec2(1.5, -0.95), 0.2));
   else if (m > 5.5 && m < 6.5) {                                                  // the table: only a soft shadow under the block
     vec2 p = vP.xz, lo = vec2(-${PX.toFixed(2)}, ${ZB.toFixed(2)}), hi = vec2(${PX.toFixed(2)}, ${ZF.toFixed(2)});
-    vec2 c = p - vec2(0.0, -1.5);
-    float lift = exp(-dot(c, c) / 120.0);
+    // the lift around the model is measured on the screen and is gone before the band's edges, so the
+    // canvas never shows as a lighter box (Nicky, 2026-11-19, on a phone)
+    vec2 q = (gl_FragCoord.xy - uLift.xy) * uLift.zw;
+    float lift = 1.0 - smoothstep(0.3, 1.0, length(q));
     col = uInk * (1.0 + 1.5 * lift) * (1.0 - 0.5 * boxS(p, lo - 0.6, hi + 0.6, 2.6)) * (1.0 - 0.62 * boxS(p, lo - 0.35, hi + 0.35, 0.55));
   } else {
     vec3 extra = vec3(0.0);
@@ -523,11 +526,14 @@ void main() { float a = vA * uA; gl_FragColor = vec4(vec3(0.69, 0.784, 0.855) * 
 attribute vec4 aS;   // x, y in picture widths from its middle, size, phase
 uniform vec4 uFrame;
 uniform vec3 uTDA;   // time, device pixels, alpha
+uniform float uOut;  // how far the stars have come out (the scroll through station 1)
 varying float vA;
 void main() {
-  gl_Position = vec4(uFrame.xy + aS.xy * uFrame.zw, 0.9995, 1.0);
-  gl_PointSize = aS.z * uTDA.y;
-  vA = (0.5 + 0.3 * sin(uTDA.x * 0.8 + aS.w)) * uTDA.z;
+  // each star has its own moment; the sky turns a little as they come out
+  float on = smoothstep(0.0, 0.07, uOut - fract(aS.w * 0.159155) * 0.92);
+  gl_Position = vec4(uFrame.xy + (aS.xy + vec2(-0.045, 0.018) * uOut) * uFrame.zw, 0.9995, 1.0);
+  gl_PointSize = aS.z * uTDA.y * (0.8 + 0.4 * on);
+  vA = (0.55 + 0.4 * sin(uTDA.x * 1.1 + aS.w)) * uTDA.z * on;
 }`;
   const FS_STAR = HEAD + `
 varying float vA;
@@ -632,19 +638,19 @@ void main() {
   function unbind(pr, layout) { for (let i = 0; i < layout.length; i++) if (pr.a[layout[i][0]] >= 0) gl.disableVertexAttribArray(pr.a[layout[i][0]]); }
   const L_MESH = [['aP', 3, 0], ['aN', 3, 3], ['aC', 3, 6], ['aM', 2, 9]], L_POS = [['aP', 3, 0]], L_DISC = [['aQ', 2, 0]],
     L_PART = [['aS', 4, 0], ['aQ', 3, 4]], L_STAR = [['aS', 4, 0]];
-  const N_STEAM = 70, N_WISP = 26, N_RAIN = 300, N_STAR = 120;
+  const N_STEAM = 70, N_WISP = 26, N_RAIN = 300, N_STAR = 190;
   let nMist = 0;
 
   function setup() {
     build();
     const r = {};
-    r.mesh = program(VS_MESH, FS_MESH, ['aP', 'aN', 'aC', 'aM'], ['uVP', 'uLight', 'uEye', 'uW', 'uSky', 'uKey', 'uSun', 'uSunDir', 'uInk', 'uWet', 'uPx', 'uLights', 'uPool', 'uShTex', 'uShadow', 'uTree', 'uWarm', 'uGl']);
+    r.mesh = program(VS_MESH, FS_MESH, ['aP', 'aN', 'aC', 'aM'], ['uVP', 'uLight', 'uEye', 'uW', 'uSky', 'uKey', 'uSun', 'uSunDir', 'uInk', 'uLift', 'uWet', 'uPx', 'uLights', 'uPool', 'uShTex', 'uShadow', 'uTree', 'uWarm', 'uGl']);
     r.water = program(VS_WATER, FS_WATER, ['aP'], ['uVP', 'uEye', 'uW', 'uHor', 'uZen', 'uSunR', 'uDeep', 'uT', 'uRipple', 'uRain', 'uPool', 'uLights', 'uWarm', 'uGl']);
     r.depth = program(VS_DEPTH, FS_DEPTH, ['aP'], ['uLight']);
     r.disc = program(VS_DISC, FS_DISC, ['aQ'], ['uVP', 'uC', 'uR', 'uU', 'uSize', 'uCol', 'uKind']);
     r.steam = program(VS_STEAM, FS_STEAM, ['aS', 'aQ'], ['uVP', 'uR', 'uU', 'uTA', 'uTint', 'uKind']);
     r.rain = program(VS_RAIN, FS_RAIN, ['aS', 'aQ'], ['uVP', 'uR', 'uT', 'uPx', 'uA']);
-    r.star = program(VS_STAR, FS_STAR, ['aS'], ['uFrame', 'uTDA']);
+    r.star = program(VS_STAR, FS_STAR, ['aS'], ['uFrame', 'uTDA', 'uOut']);
     r.mist = program(VS_MIST, FS_MIST, ['aS', 'aQ'], ['uVP', 'uR', 'uU', 'uIn', 'uCol']);
     r.line = program(VS_LINE, FS_LINE, ['aP'], ['uVP', 'uCol']);
 
@@ -722,7 +728,7 @@ void main() {
   canvas.addEventListener('webglcontextrestored', () => { try { setup(); canvas.style.visibility = ''; } catch (err) { R = null; } });
 
   // ---- where the picture goes: the block and the summits fitted into the band, right of the copy and
-  // clear of the band's faded edges (phones: the upper part, the copy stands below it). The scroll
+  // clear of the band's faded edges (phones: the lower part, the copy stands above it). The scroll
   // pushes in by a few percent; the fit leaves room for that.
   const PUSH = 0.04;
   let K0 = 1, K = 1, OX = 0, OY = 0, CX = 0, CY = 0, BW = 1, midX = 0, midY = 0;
@@ -735,9 +741,9 @@ void main() {
       const sx = DIST * (view[0] * p[0] + view[4] * p[1] + view[8] * p[2] + view[12]) / -zv, sy = DIST * (view[1] * p[0] + view[5] * p[1] + view[9] * p[2] + view[13]) / -zv;
       x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
     }
-    K0 = Math.min((phone ? 0.95 : 0.38) * Wd / (x1 - x0), (phone ? 0.40 : 0.80) * Hd / (y1 - y0)) / (1 + PUSH);
+    K0 = Math.min((phone ? 0.95 : 0.38) * Wd / (x1 - x0), (phone ? 0.44 : 0.80) * Hd / (y1 - y0)) / (1 + PUSH);
     BW = (x1 - x0) * K0; midX = (x0 + x1) / 2; midY = (y0 + y1) / 2;
-    CX = 2 * (phone ? 0.5 : 0.7) - 1; CY = 1 - 2 * (phone ? 0.32 : 0.5);
+    CX = 2 * (phone ? 0.5 : 0.7) - 1; CY = 1 - 2 * (phone ? 0.65 : 0.5);
     const ne = DIST - 34, fa = DIST + 70;
     proj.fill(0);
     proj[10] = (fa + ne) / (ne - fa); proj[11] = -1; proj[14] = 2 * fa * ne / (ne - fa);
@@ -767,12 +773,12 @@ void main() {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 
-  // the scroll blends the stations as the copy changes: 1 until p 0.22, into 2 by 0.40, 2 until 0.62, into 3 by 0.84
+  // the scroll blends the stations as the copy changes: 1 until p 0.32, into 2 by 0.50, 2 until 0.66, into 3 by 0.86
   const WG = [1, 0, 0];
   function draw(pos, t) {
     const r = R;
     if (!r || Wd < 2 || Hd < 2) return;
-    const a12 = ease(clamp((pos - 0.22) / 0.18)), a23 = ease(clamp((pos - 0.62) / 0.22));
+    const a12 = ease(clamp((pos - 0.32) / 0.18)), a23 = ease(clamp((pos - 0.66) / 0.20));
     WG[0] = 1 - a12; WG[1] = a12 * (1 - a23); WG[2] = a23;
     const W = Wd, H = Hd, w = WG, w1 = w[0], w2 = w[1], w3 = w[2];
     push(1 + PUSH * ease(pos));   // forward only, a few percent
@@ -795,6 +801,10 @@ void main() {
     gl.uniform3fv(p.u.uSky, mix3(SKY, w)); gl.uniform3fv(p.u.uKey, mix3(KEYL, w)); gl.uniform3fv(p.u.uWarm, mix3(WARMS, w));
     gl.uniform3f(p.u.uSun, 2.0 * in3, 1.02 * in3, 0.42 * in3); gl.uniform3f(p.u.uSunDir, SUN_DIR[0], SUN_DIR[1], SUN_DIR[2]);
     gl.uniform3f(p.u.uInk, INK[0], INK[1], INK[2]);
+    {   // the table's lift: centre and reach in device px (see the shader)
+      const cyp = (CY * 0.5 + 0.5) * H * dpr, ry = 0.88 * Math.min(cyp, H * dpr - cyp), rx = Math.max(BW * dpr, 2 * ry);
+      gl.uniform4f(p.u.uLift, (CX * 0.5 + 0.5) * W * dpr, cyp, 1 / rx, 1 / ry);
+    }
     gl.uniform1f(p.u.uWet, 0.10 * w1 + 0.62 * w2 + 0.12 * w3); gl.uniform1f(p.u.uPx, px);
     gl.uniform1f(p.u.uLights, lights); gl.uniform1f(p.u.uPool, pool); gl.uniform1f(p.u.uGl, glow); gl.uniform1f(p.u.uShTex, 1 / SH);
     gl.uniform3fv(p.u.uTree, treeData);
@@ -820,7 +830,7 @@ void main() {
     const stars = w1 + 0.3 * w3;
     if (stars > 0.01) {
       p = r.star; gl.useProgram(p.p);
-      gl.uniform4f(p.u.uFrame, CX, CY, 2 * BW / W, 2 * BW / H); gl.uniform3f(p.u.uTDA, t, dpr, stars);
+      gl.uniform4f(p.u.uFrame, CX, CY, 2 * BW / W, 2 * BW / H); gl.uniform3f(p.u.uTDA, t, dpr, stars); gl.uniform1f(p.u.uOut, 0.2 + 0.9 * clamp(pos / 0.3));
       bind(p, r.bStar, 4, L_STAR); gl.drawArrays(gl.POINTS, 0, N_STAR); unbind(p, L_STAR);
     }
 
@@ -884,7 +894,13 @@ void main() {
   chain.before(ride);
   const stage = ride.firstElementChild;
   stage.insertBefore(canvas, cta);
-  stage.insertBefore(chain, cta);
+  // the copy and, under it, one line that fills with the scroll: it says "read on while you scroll"
+  const copy = document.createElement('div');
+  copy.className = 'ride__copy';
+  copy.innerHTML = '<div class="ride__progress" aria-hidden="true"><i></i></div>';
+  stage.insertBefore(copy, cta);
+  copy.prepend(chain);
+  const bar = copy.querySelector('.ride__progress i');
   chain.classList.add('chain--ride');
   items[0].classList.add('is-active');
 
@@ -898,7 +914,7 @@ void main() {
 
   // ---- loop: only while the section is on screen, about 30 pictures a second (water, steam
   // and rain move with time); the copy follows the scroll as in the Bergfahrt
-  const STATIONS = [0, 0.5, 1];
+  const STATIONS = [0, 0.47, 0.85];
   let running = false, last = -1, lastW = 0, lastH = 0, lastT = 0;
   function frame(now) {
     if (!running) return;
@@ -913,7 +929,7 @@ void main() {
     if (Math.abs(p - last) > 0.0004) {
       last = p;
       const k = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
-      const show = [1 - k(0.12, 0.24), k(0.26, 0.38) * (1 - k(0.62, 0.74)), k(0.76, 0.88)];
+      const show = [1 - k(0.30, 0.40), k(0.42, 0.52) * (1 - k(0.68, 0.78)), k(0.80, 0.90)];   // station 1 stays for the first third (Nicky, 2026-11-19: "gone too fast")
       items.forEach((li, i) => {
         const o = show[i], y = p < STATIONS[i] ? (1 - o) * 1.2 : -(1 - o) * 0.6;
         li.style.opacity = o.toFixed(3);
@@ -922,6 +938,7 @@ void main() {
         li.classList.toggle('is-active', o >= 0.5);
       });
       ride.classList.toggle('ride--top', p > 0.9);
+      bar.style.transform = `scaleX(${Math.max(0.03, p).toFixed(4)})`;
     }
   }
   new IntersectionObserver(([e]) => {

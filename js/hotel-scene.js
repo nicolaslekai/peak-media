@@ -315,6 +315,7 @@ void main() {
 varying vec3 vP, vN, vC, vSh;
 varying vec2 vM;
 uniform vec3 uSky, uKey, uSun, uSunDir, uInk, uWarm, uGL, uGR;
+uniform vec4 uLift;
 uniform float uPx, uShTex, uGl, uLit, uDoor, uLamp, uSunOn, uAl;
 uniform sampler2D uShadow;
 uniform vec3 uTree[6];
@@ -396,8 +397,10 @@ void main() {
     col = mix(off, alb * uGl * (ao > 1.5 ? 1.6 : 1.0), on);
   } else if (m > 5.5 && m < 6.5) {                                                // the table: only a soft shadow under the block
     vec2 p = vP.xz, lo = vec2(-${PX.toFixed(2)}, ${ZB.toFixed(2)}), hi = vec2(${PX.toFixed(2)}, ${ZF.toFixed(2)});
-    vec2 c = p - vec2(0.0, -1.5);
-    float lift = exp(-dot(c, c) / 120.0);
+    // the lift around the model is measured on the screen and is gone before the band's edges, so the
+    // canvas never shows as a lighter box (Nicky, 2026-11-19, on a phone)
+    vec2 q = (gl_FragCoord.xy - uLift.xy) * uLift.zw;
+    float lift = 1.0 - smoothstep(0.3, 1.0, length(q));
     col = uInk * (1.0 + 1.5 * lift) * (1.0 - 0.5 * boxS(p, lo - 0.6, hi + 0.6, 2.6)) * (1.0 - 0.62 * boxS(p, lo - 0.35, hi + 0.35, 0.55));
   } else {
     float up = N.y, sun = 1.0;
@@ -621,7 +624,7 @@ void main() {
   function setup() {
     build();
     const r = {};
-    r.mesh = program(VS_MESH, FS_MESH, ['aP', 'aN', 'aC', 'aM'], ['uVP', 'uLight', 'uMdl', 'uSky', 'uKey', 'uSun', 'uSunDir', 'uInk', 'uWarm', 'uGL', 'uGR',
+    r.mesh = program(VS_MESH, FS_MESH, ['aP', 'aN', 'aC', 'aM'], ['uVP', 'uLight', 'uMdl', 'uSky', 'uKey', 'uSun', 'uSunDir', 'uInk', 'uLift', 'uWarm', 'uGL', 'uGR',
       'uPx', 'uShTex', 'uGl', 'uLit', 'uDoor', 'uLamp', 'uSunOn', 'uAl', 'uShadow', 'uTree', 'uSL', 'uSR', 'uCar', 'uCarI', 'uCarA', 'uCast']);
     r.depth = program(VS_DEPTH, FS_DEPTH, ['aP'], ['uLight']);
     r.disc = program(VS_DISC, FS_DISC, ['aQ'], ['uVP', 'uC', 'uR', 'uU', 'uSize', 'uCol', 'uKind']);
@@ -689,7 +692,13 @@ void main() {
   chain.before(ride);
   const stage = ride.firstElementChild;
   stage.insertBefore(canvas, cta);
-  stage.insertBefore(chain, cta);   // no 01-03 progress on the right any more (Nicky, 2026-11-09)
+  // the copy and, under it, one line that fills with the scroll: it says "read on while you scroll"
+  const copy = document.createElement('div');
+  copy.className = 'ride__copy';
+  copy.innerHTML = '<div class="ride__progress" aria-hidden="true"><i></i></div>';
+  stage.insertBefore(copy, cta);
+  copy.prepend(chain);
+  const bar = copy.querySelector('.ride__progress i');   // no 01-03 progress on the right any more (Nicky, 2026-11-09)
   chain.classList.add('chain--ride');
   items[0].classList.add('is-active');
 
@@ -706,8 +715,8 @@ void main() {
       x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
     }
     // the band's top and bottom fade into the page (the canvas's mask), so the model keeps clear of them
-    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.31 : 0.525;
-    K = Math.min((phone ? 0.92 : 0.5) * W / (x1 - x0), (phone ? 0.5 : 0.87) * H / (y1 - y0));
+    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.65 : 0.525;   // phones: the copy stands above the model
+    K = Math.min((phone ? 0.92 : 0.5) * W / (x1 - x0), (phone ? 0.46 : 0.87) * H / (y1 - y0));
     BW = (x1 - x0) * K;
     CX = 2 * cx - 1; CY = 1 - 2 * cy;
     OX = CX - K * (x0 + x1) / W; OY = CY - K * (y0 + y1) / H;
@@ -816,6 +825,10 @@ void main() {
     gl.uniform3fv(p.u.uSky, mix3(SKY, w)); gl.uniform3fv(p.u.uKey, mix3(KEYL, w)); gl.uniform3f(p.u.uWarm, WARM[0], WARM[1], WARM[2]);
     gl.uniform3f(p.u.uSun, 2.0 * in3, 1.02 * in3, 0.42 * in3); gl.uniform3f(p.u.uSunDir, SUN_DIR[0], SUN_DIR[1], SUN_DIR[2]);
     gl.uniform3f(p.u.uInk, INK[0], INK[1], INK[2]);
+    {   // the table's lift: centre and reach in device px (see the shader)
+      const cyp = (CY * 0.5 + 0.5) * H * st.dpr, ry = 0.88 * Math.min(cyp, H * st.dpr - cyp), rx = Math.max(BW * st.dpr, 2 * ry);
+      gl.uniform4f(p.u.uLift, (CX * 0.5 + 0.5) * W * st.dpr, cyp, 1 / rx, 1 / ry);
+    }
     gl.uniform1f(p.u.uPx, px); gl.uniform1f(p.u.uShTex, 1 / SH); gl.uniform1f(p.u.uSunOn, in3);
     gl.uniform1f(p.u.uGl, glow); gl.uniform1f(p.u.uLit, level); gl.uniform1f(p.u.uDoor, door); gl.uniform1f(p.u.uLamp, lamp);
     gl.uniform3f(p.u.uGL, lit1(GROUND[0].turn, level), lit1(GROUND[1].turn, level), lit1(GROUND[2].turn, level));
@@ -901,7 +914,7 @@ void main() {
 
   // ---- loop: only while the section is on screen. The scroll gives the station and the copy
   // (the same timing as the Bergfahrt, so both pages feel alike), time moves the actors
-  const STATIONS = [0, 0.5, 1], BUDGET = 3.4e6;   // canvas pixels
+  const STATIONS = [0, 0.47, 0.85], BUDGET = 3.4e6;   // canvas pixels
   const W3 = [1, 0, 0], state = { W: 0, H: 0, dpr: 1, t: 0, p: 0, w: W3, phone: false };
   let running = false, failed = false, last = -1, lastW = -1, lastH = -1, before = 0, time = 0;
   function frame(now) {
@@ -920,7 +933,7 @@ void main() {
     const k = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
     if (Math.abs(p - last) > 0.0004) {
       last = p;
-      const show = [1 - k(0.12, 0.24), k(0.26, 0.38) * (1 - k(0.62, 0.74)), k(0.76, 0.88)];
+      const show = [1 - k(0.30, 0.40), k(0.42, 0.52) * (1 - k(0.68, 0.78)), k(0.80, 0.90)];   // station 1 stays for the first third (Nicky, 2026-11-19: "gone too fast")
       items.forEach((li, i) => {
         const o = show[i], y = p < STATIONS[i] ? (1 - o) * 1.2 : -(1 - o) * 0.6;
         li.style.opacity = o.toFixed(3);
@@ -929,9 +942,10 @@ void main() {
         li.classList.toggle('is-active', o >= 0.5);
       });
       ride.classList.toggle('ride--top', p > 0.9);
+      bar.style.transform = `scaleX(${Math.max(0.03, p).toFixed(4)})`;
     }
-    // the picture's stations: 1 until p 0.24 or so, 2 in the middle, 3 from about 0.76, blended in between
-    const f12 = ease(k(0.12, 0.38)), f23 = ease(k(0.62, 0.88));
+    // the picture's stations: 1 until p 0.32, 2 in the middle, 3 from about 0.86, blended in between
+    const f12 = ease(k(0.32, 0.52)), f23 = ease(k(0.66, 0.88));
     W3[0] = 1 - f12; W3[1] = f12 * (1 - f23); W3[2] = f23;
     const dt = Math.min(0.1, Math.max(0, (now - before) / 1000));
     before = now; time += dt;

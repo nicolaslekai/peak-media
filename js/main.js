@@ -334,6 +334,22 @@ function __boot() {
       lenis.scrollTo = (...args) => { scrollTo(...args); wake(); };
     } catch (err) { console.error(err); }   // native scrolling still works
   }
+  // scroll drag at "So arbeiten wir" (Nicky, 2026-11-19: the scroll gets harder around the model
+  // and eases off again, no halt): wheel and trackpad move the page up to half as far per notch
+  // while the model is near the middle of the screen. Touch scrolls natively: style.css, steps-drag
+  if (lenis && lenis.virtualScroll && !matchMedia('(hover: none) and (pointer: coarse)').matches) {
+    const BASE = 0.9;
+    lenis.on('scroll', () => {
+      const fig = document.querySelector('.steps-model:not([hidden])');
+      let k = 0;
+      if (fig) {
+        const r = fig.getBoundingClientRect();
+        const d = Math.abs((r.top + r.bottom) / 2 - innerHeight / 2) / (innerHeight * 0.75);   // 0 in the middle, 1 = three quarters of a screen away
+        k = d >= 1 ? 0 : (1 + Math.cos(Math.PI * d)) / 2;
+      }
+      lenis.virtualScroll.options.wheelMultiplier = BASE * (1 - 0.5 * k);
+    });
+  }
   const updateAll = () => {
     let busy = false;
     for (const s of scrubs) {

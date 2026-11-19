@@ -5614,6 +5614,77 @@ html.layout-center .facts li {
   }
 }
 
+/* ---- SCROLL DRAG at "So arbeiten wir" (Nicky, 2026-11-19: "can scrolling get harder with a
+   gradient fading it on, and then fade off again after the section, no full halt"). A phone
+   scrolls natively, the finger cannot be braked; instead the section slides along with the
+   scroll while its model crosses the screen: hardly at first, at about half the scroll's speed
+   in the middle, then less again. So the picture passes more slowly, without ever standing
+   still. The section ends one --drag lower than it lies in the page: that room is its extra
+   margin below. A scroll-driven animation, run by the compositor; browsers without it scroll
+   as before. Wheel and trackpad: js/main.js lowers Lenis' wheel multiplier around the model ---- */
+@keyframes steps-drag {
+  0% {
+    translate: 0 calc(var(--drag) * 0);
+  }
+
+  10% {
+    translate: 0 calc(var(--drag) * 0.0065);
+  }
+
+  20% {
+    translate: 0 calc(var(--drag) * 0.0486);
+  }
+
+  30% {
+    translate: 0 calc(var(--drag) * 0.1486);
+  }
+
+  40% {
+    translate: 0 calc(var(--drag) * 0.3065);
+  }
+
+  50% {
+    translate: 0 calc(var(--drag) * 0.5);
+  }
+
+  60% {
+    translate: 0 calc(var(--drag) * 0.6935);
+  }
+
+  70% {
+    translate: 0 calc(var(--drag) * 0.8514);
+  }
+
+  80% {
+    translate: 0 calc(var(--drag) * 0.9514);
+  }
+
+  90% {
+    translate: 0 calc(var(--drag) * 0.9935);
+  }
+
+  100% {
+    translate: 0 calc(var(--drag) * 1);
+  }
+}
+
+@supports (animation-timeline: view()) and (timeline-scope: --a) {
+  @media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+    .services:has(.steps-model:not([hidden])) {
+      --drag: 30svh;
+      timeline-scope: --steps-model;
+      margin-bottom: var(--drag);
+      animation: steps-drag linear both;
+      animation-timeline: --steps-model;
+      animation-range: cover 0% cover 100%;
+    }
+
+    .steps-model {
+      view-timeline: --steps-model block;
+    }
+  }
+}
+
 /* ---- PROCESS in the Raum style (js/steps.js, home page "So arbeiten wir"): the five steps
    as one model above the list, a canvas as wide as the list plus the gutters beside it
    (js sets its height). .steps--raum is set only while the picture is there: it takes the

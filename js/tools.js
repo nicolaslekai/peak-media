@@ -667,6 +667,12 @@ void main() {
         for (const e of es) { visible = e.isIntersecting; if (e.intersectionRatio >= 0.4) begin(); }
         kick();
       }, { threshold: [0, 0.4] }).observe(fig);
+      // replay, as the steps model (js/steps.js): well off screen it goes back to its start
+      new IntersectionObserver(es => {
+        if (es.some(e => e.isIntersecting) || !began) return;
+        began = false; rested = false;
+        draw(performance.now());
+      }, { rootMargin: '40% 0px 40% 0px' }).observe(fig);
     } else { visible = true; begin(); }
     document.addEventListener('visibilitychange', kick);
 

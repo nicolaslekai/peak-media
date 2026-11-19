@@ -18,7 +18,7 @@
    - the line, the rings and the contact shadows are drawn by the stone's shader
    - wide screens (five columns): every place stands above the middle of its column's text;
      tablets and phones: the same model, the places closer together, once above the list
-   - it draws in once when it scrolls into view (about three seconds: the line runs from the
+   - it draws in when it scrolls into view, and again after it has been well off screen (about three seconds: the line runs from the
      door to the beacon, each place and its text switch on in turn, the sun rises into the
      saddle), then it rests: the beacon's rings, a camera drift of half a degree
    - it runs only while on screen; reduced motion: the finished picture at once, nothing moves
@@ -691,6 +691,16 @@ void main() {
       for (const e of es) { visible = e.isIntersecting; if (e.intersectionRatio >= 0.35) begin(); }
       kick();
     }, { threshold: [0, 0.35] }).observe(fig);
+    // replay (Nicky, 2026-11-19: "when we get back to the animation it needs to play again"): once the
+    // picture is well off screen, by 40 % of the screen's height, it goes back to its start, so it
+    // draws in again on the way back. The steps dim again only on wide screens, where they stand
+    // under their places; on phones the list is read with the picture long gone, so it stays lit
+    new IntersectionObserver(es => {
+      if (es.some(e => e.isIntersecting) || !began) return;
+      began = false; rested = false;
+      if (wide.matches) ol.classList.add('steps--wait');
+      draw(performance.now());
+    }, { rootMargin: '40% 0px 40% 0px' }).observe(fig);
   } else if (!still) { visible = true; begin(); }
   document.addEventListener('visibilitychange', kick);
 

@@ -3821,11 +3821,15 @@ html:not(.js) .wizard__step+.wizard__step {
   object-fit: cover;
 }
 
-/* phones held upright see a narrow strip of the wide image: keep the photographer
-   (right third) in it */
+/* phones held upright get their own portrait picture (index.html). It fills the upper
+   four fifths of the screen and fades into the page, so the house and the cabin stand
+   above the heading, not behind it */
 @media (max-width: 767px) and (orientation: portrait) {
   .cine__still img {
-    object-position: 84% 50%;
+    height: 80%;
+    object-position: 40% 0;
+    -webkit-mask-image: linear-gradient(#000 58%, transparent);
+    mask-image: linear-gradient(#000 58%, transparent);
   }
 }
 

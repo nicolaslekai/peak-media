@@ -109,7 +109,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=145" />
+  <link rel="stylesheet" href="css/style.css?v=146" />
 </head>
 
 <body>
@@ -148,13 +148,14 @@
          segments (D-71); title and lead from Daniel and Nicolas (2026-10-28), no kicker -->
     <section class="hero hero--still" id="hero">
       <div class="cine__stage">
-        <!-- phones held upright see only a square of the image (object-position 84% in
-             style.css): the same square, cut by workspace tools/images.mjs. ?v= because
-             images are cached for 30 days: bump it when either file changes (ISSUES P8) -->
+        <!-- since 2026-11-19 a picture in the style of the Hotels and Wellness title pictures
+             (Nicky: "something for the home page that fits the style"): house, pool and cable
+             car at blue hour, all three segments in one frame; mirrored, so the house stands
+             right of the copy. Phones held upright get their own portrait picture -->
         <picture class="cine__still">
-          <source media="(max-width: 767px) and (orientation: portrait)" srcset="assets/img/hero-home-phone.webp?v=2"
-            width="941" height="941" />
-          <img src="assets/img/hero-home.webp?v=2" alt="" width="1672" height="941" fetchpriority="high" />
+          <source media="(max-width: 767px) and (orientation: portrait)" srcset="assets/img/hero-home-tal-phone_KJ_v001.webp"
+            width="941" height="1686" />
+          <img src="assets/img/hero-home-tal_KJ_v001.webp" alt="" width="2560" height="1429" fetchpriority="high" />
         </picture>
         <div class="cine__scrim"></div>
         <div class="cine__copy">

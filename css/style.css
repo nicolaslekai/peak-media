@@ -5614,89 +5614,48 @@ html.layout-center .facts li {
   }
 }
 
-/* ---- SCROLL DRAG at "So arbeiten wir" (Nicky, 2026-11-19: "can scrolling get harder with a
-   gradient fading it on, and then fade off again after the section, no full halt"). A phone
-   scrolls natively, the finger cannot be braked; instead the section slides along with the
-   scroll while its model crosses the screen: hardly at first, at about half the scroll's speed
-   in the middle, then less again. So the picture passes more slowly, without ever standing
-   still. The section ends one --drag lower than it lies in the page: that room is its extra
-   margin below. A scroll-driven animation, run by the compositor; browsers without it scroll
-   as before. Wheel and trackpad: js/main.js lowers Lenis' wheel multiplier around the model ---- */
-@keyframes steps-drag {
+/* ---- HALF-SPEED SECTIONS: "So arbeiten wir" and "Das richtige Werkzeug" (Nicky, 2026-11-19:
+   "for the sections with the graphics all the scrolling has to happen at half speed, you
+   scroll twice as much to get half as far"). A phone scrolls natively and the finger cannot
+   be braked, so the section's content travels along with the scroll at half its speed for the
+   whole way across the screen (eased in and out over the first and last eighth). It ends
+   --drag lower than it lies in the page; that room is the section's extra padding below.
+   js/main.js sets .is-slow and --drag (the way is as long as the section is tall). A
+   scroll-driven animation, run by the compositor; browsers without it scroll as before.
+   Wheel and trackpad: js/main.js halves Lenis' wheel multiplier inside the two sections ---- */
+@keyframes slow-section {
   0% {
-    translate: 0 calc(var(--drag) * 0);
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0.33);
   }
 
-  10% {
-    translate: 0 calc(var(--drag) * 0.0065);
+  12% {
+    translate: 0 calc(var(--drag) * 0.0682);
+    animation-timing-function: linear;
   }
 
-  20% {
-    translate: 0 calc(var(--drag) * 0.0486);
-  }
-
-  30% {
-    translate: 0 calc(var(--drag) * 0.1486);
-  }
-
-  40% {
-    translate: 0 calc(var(--drag) * 0.3065);
-  }
-
-  50% {
-    translate: 0 calc(var(--drag) * 0.5);
-  }
-
-  60% {
-    translate: 0 calc(var(--drag) * 0.6935);
-  }
-
-  70% {
-    translate: 0 calc(var(--drag) * 0.8514);
-  }
-
-  80% {
-    translate: 0 calc(var(--drag) * 0.9514);
-  }
-
-  90% {
-    translate: 0 calc(var(--drag) * 0.9935);
+  88% {
+    translate: 0 calc(var(--drag) * 0.9318);
+    animation-timing-function: cubic-bezier(0.33, 0.67, 0.67, 1);
   }
 
   100% {
-    translate: 0 calc(var(--drag) * 1);
+    translate: 0 var(--drag);
   }
 }
 
-@supports (animation-timeline: view()) and (timeline-scope: --a) {
-  @media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: no-preference) {
-    .services:has(.steps-model:not([hidden])) {
-      --drag: 30svh;
-      timeline-scope: --steps-model;
-      margin-bottom: var(--drag);
-      animation: steps-drag linear both;
-      animation-timeline: --steps-model;
-      animation-range: cover 0% cover 100%;
-    }
+@supports (animation-timeline: view()) {
+  .section.is-slow {
+    view-timeline: --slow-section block;
+    padding-bottom: calc(var(--section-y) + var(--drag));
+  }
 
-    .steps-model {
-      view-timeline: --steps-model block;
-    }
-
-    /* the same at "Das richtige Werkzeug" (Nicky, 2026-11-19: "slow scrolling down with gradient
-       for this section too"): each side slides along while its own model crosses the screen */
-    .tools__side--raum:has(.tools-model:not([hidden])) {
-      --drag: 24svh;
-      timeline-scope: --tools-model;
-      margin-bottom: var(--drag);
-      animation: steps-drag linear both;
-      animation-timeline: --tools-model;
-      animation-range: cover 0% cover 100%;
-    }
-
-    .tools-model {
-      view-timeline: --tools-model block;
-    }
+  /* from the moment the section's top is a fifth of the screen in; 2.2727 = 2 / (1 - 0.12),
+     the way it takes to fall behind by --drag at half speed with the two eased ends */
+  .section.is-slow>* {
+    animation: slow-section linear both;
+    animation-timeline: --slow-section;
+    animation-range: cover 20svh cover calc(20svh + 2.2727 * var(--drag));
   }
 }
 

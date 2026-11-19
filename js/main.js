@@ -334,19 +334,39 @@ function __boot() {
       lenis.scrollTo = (...args) => { scrollTo(...args); wake(); };
     } catch (err) { console.error(err); }   // native scrolling still works
   }
-  // scroll drag at "So arbeiten wir" and "Das richtige Werkzeug" (Nicky, 2026-11-19: the scroll gets harder around the model
-  // and eases off again, no halt): wheel and trackpad move the page up to half as far per notch
-  // while the model is near the middle of the screen. Touch scrolls natively: style.css, steps-drag
-  if (lenis && lenis.virtualScroll && !matchMedia('(hover: none) and (pointer: coarse)').matches) {
-    const BASE = 0.9;
-    lenis.on('scroll', () => {
-      let k = 0;   // the nearest model counts: "So arbeiten wir" and the two of "Das richtige Werkzeug"
-      for (const fig of document.querySelectorAll('.steps-model:not([hidden]), .tools-model:not([hidden])')) {
-        const r = fig.getBoundingClientRect();
-        if (!r.height) continue;
-        const d = Math.abs((r.top + r.bottom) / 2 - innerHeight / 2) / (innerHeight * 0.75);   // 0 in the middle, 1 = three quarters of a screen away
-        if (d < 1) k = Math.max(k, (1 + Math.cos(Math.PI * d)) / 2);
+  // half-speed sections (Nicky, 2026-11-19: in "So arbeiten wir" and "Das richtige Werkzeug" all the
+  // scrolling happens at half speed, twice the scroll for the same way).
+  // Wheel and trackpad: Lenis moves the page half as far per notch while one of the two sections
+  // fills the screen (eased over a fifth of the screen at either end).
+  // Touch scrolls natively: the section gets .is-slow and --drag, and style.css lets its content
+  // travel along at half speed (slow-section); --drag is how far it falls behind until its end
+  // has passed the upper third of the screen
+  const slow = [...document.querySelectorAll('.section.services, .section.tools')];
+  const touch = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  if (slow.length && !reduce && touch && window.CSS && CSS.supports('animation-timeline: view()') && 'ResizeObserver' in window) {
+    const measure = () => {
+      for (const sec of slow) {
+        const kids = [...sec.children].filter(el => el.offsetHeight);
+        if (!kids.length) continue;
+        const tall = kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top;
+        sec.style.setProperty('--drag', `${Math.round((tall + 0.5 * innerHeight) / 1.2727)}px`);
+        sec.classList.add('is-slow');
       }
+    };
+    let w = innerWidth;
+    const ro = new ResizeObserver(measure);
+    for (const sec of slow) for (const el of sec.children) ro.observe(el);
+    addEventListener('resize', () => { if (innerWidth !== w) { w = innerWidth; measure(); } });   // not for the toolbar sliding in and out
+    measure();
+  } else if (slow.length && lenis && lenis.virtualScroll && !touch) {
+    const BASE = 0.9, c01 = v => Math.max(0, Math.min(1, v));
+    lenis.on('scroll', () => {
+      let k = 0;
+      for (const sec of slow) {
+        const r = sec.getBoundingClientRect(), vh = innerHeight;
+        k = Math.max(k, c01((0.8 * vh - r.top) / (0.2 * vh)) * c01((r.bottom - 0.3 * vh) / (0.2 * vh)));
+      }
+      k = k * k * (3 - 2 * k);
       lenis.virtualScroll.options.wheelMultiplier = BASE * (1 - 0.5 * k);
     });
   }

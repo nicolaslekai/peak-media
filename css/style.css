@@ -2625,33 +2625,30 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   gap: 0.8rem;
 }
 
+/* the step is said to screen readers only; in sight there is just the bar (Nicky, 2026-11-19) */
 .check__step {
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .check__progress {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.4rem;
-  list-style: none;
-}
-
-.check__progress li {
   height: 3px;
   border-radius: 2px;
   background: var(--line);
-  transition: background-color 0.4s;
+  overflow: hidden;
 }
 
-.check__progress li.is-done {
+.check__progress i {
+  display: block;
+  height: 100%;
   background: var(--gold);
-}
-
-.check__progress li.is-now {
-  background: var(--gold-soft);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
 }
 
 .check__form .choice-group[hidden] {
@@ -3183,57 +3180,52 @@ html:not(.js) .contact__form .btn {
 
 /* ---- ENQUIRY IN FOUR STEPS (D-74, D-97, js/contact.js): progress, steps, one-click choices.
    Without JS every step shows, one after the other, and the step buttons are hidden ---- */
+/* one progress bar; the step names stay for screen readers only (Nicky, 2026-11-19: no
+   "1 · Betrieb …" row, a bar instead). js/contact.js sets --p = step / steps */
 .wizard__progress {
   grid-column: 1/-1;
-  display: flex;
-  gap: 0.6rem;
+  position: relative;
+  height: 3px;
   margin-bottom: 0.4rem;
+  border-radius: 2px;
+  background: var(--line);
   list-style: none;
-  counter-reset: step;
+  overflow: hidden;
+}
+
+.wizard__progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: scaleX(var(--p, 0.25));
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
 }
 
 .wizard__progress li {
-  flex: 1;
-  padding-top: 0.7rem;
-  border-top: 2px solid var(--line);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(243, 237, 225, 0.55);
-  counter-increment: step;
-  transition:
-    border-color 0.4s,
-    color 0.4s;
-}
-
-.wizard__progress li::before {
-  content: counter(step) " · ";
-}
-
-.wizard__progress li.is-done {
-  border-color: var(--gold);
-}
-
-.wizard__progress li[aria-current] {
-  border-color: var(--gold);
-  color: var(--gold-soft);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 html:not(.js) .wizard__progress {
   display: none;
 }
 
-/* four labels do not fit a phone's width (they broke into two lines): the numbers only,
-   the names stay for screen readers; the step's title says what is asked */
-@media (max-width: 480px) {
-  .wizard__progress li {
-    font-size: 0;
-  }
-
-  .wizard__progress li::before {
-    content: counter(step);
-    font-size: 0.7rem;
-  }
+/* Weiter is for the keyboard only: a click on an answer moves on by itself */
+.wizard__key:not(:focus-visible) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .wizard__step {
@@ -3379,7 +3371,13 @@ html:not(.js) .wizard__step+.wizard__step {
     width: 100cqw;
   }
 
-  html.layout-center .choices--cards {
+  /* the progress bar as wide as the cards under it */
+  .wizard__progress {
+    width: 100cqw;
+  }
+
+  html.layout-center .choices--cards,
+  html.layout-center .wizard__progress {
     margin-inline: calc((100% - 100cqw) / 2);
   }
 }

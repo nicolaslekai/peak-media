@@ -17,7 +17,8 @@
   const ENDPOINT = '../api/senden.php';
 
   const steps = [...form.querySelectorAll('.wizard__step')];
-  const marks = [...form.querySelectorAll('.wizard__progress li')];
+  const progress = form.querySelector('.wizard__progress');
+  const marks = [...progress.querySelectorAll('li')];
   const groups = [...form.querySelectorAll('.contact__extra')];
   const calcNote = form.querySelector('.contact__calc');
   const error = form.querySelector('.contact__error');
@@ -42,6 +43,7 @@
   const show = (i, focus = true) => {
     current = i;
     steps.forEach((s, k) => { s.hidden = k !== i; });
+    progress.style.setProperty('--p', (i + 1) / steps.length);   // one bar, no step names in sight
     marks.forEach((m, k) => {
       m.classList.toggle('is-done', k < i);
       if (k === i) m.setAttribute('aria-current', 'step'); else m.removeAttribute('aria-current');
@@ -93,7 +95,7 @@
     if (el.type !== 'radio' || !steps[current].contains(el)) return;
     if (el.name === 'betriebsart') showGroup();
     // pointer only (detail > 0): arrow keys also "click" radios, and keyboard users
-    // move through the answers first and go on with "Weiter"
+    // move through the answers first and go on with Enter or "Weiter" (shown on focus only)
     const from = current;
     if (e.detail > 0) setTimeout(() => { if (current === from) go(1); }, 180);   // the answer lights up first
   });

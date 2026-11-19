@@ -1,9 +1,9 @@
 /* ============ BLAUE STUNDE — visibility check ============
-   On the Bergbahnen and Wellness pages (D-78), in place of a calculator: four one-click
-   questions (five until 2026-10-28), each answer worth 2, 1 or 0 points (its radio's value),
-   asked one at a time in a card ("Frage n von 4" and a progress bar on top, the answers as
-   wide buttons). After the last answer the card shows the result instead: the score out of
-   8 and its level, a bar with one segment per question, and the tip of every question not
+   On the Bergbahnen and Wellness pages (D-78), in place of a calculator: three one-click
+   questions (five until 2026-10-28, four until 2026-11-19), each answer worth 2, 1 or 0
+   points (its radio's value), asked one at a time in a card (one progress bar on top, no
+   "Frage n von 3" in sight, the answers as wide buttons). After the last answer the card
+   shows the result instead: the score out of 6 and its level, a bar with one segment per question, and the tip of every question not
    answered with the best option (the fieldset's data-tip). "Mit diesem Ergebnis anfragen"
    hands the answers to the Kontakt form like the hotel calculator (sessionStorage
    "bs-rechner", js/contact.js). A self-check, no figures. Without JS a note replaces it.
@@ -19,7 +19,7 @@
   const segments = [...panel.querySelectorAll('.check__bar li')];
   const tips = panel.querySelector('.check__tips');
   const MAX = groups.length * 2;   // the best answer is worth 2
-  const LEVELS = [   // from the lowest score up, as shares of MAX (3 and 6 of 8)
+  const LEVELS = [   // from the lowest score up, as shares of MAX (3 and 5 of 6)
     [0, 'Viel ungenutztes Potenzial. Hier bringt schon wenig viel.'],
     [0.375, 'Ein guter Anfang mit klaren Hebeln.'],
     [0.75, 'Gut aufgestellt. Jetzt geht es um Feinheiten.'],
@@ -42,14 +42,14 @@
   panel.classList.add('check--steps');
   const head = document.createElement('div');
   head.className = 'check__head';
-  head.innerHTML = `<span class="check__step"></span><ol class="check__progress" aria-hidden="true">${groups.map(() => '<li></li>').join('')}</ol>`;
+  head.innerHTML = '<span class="check__step"></span><div class="check__progress" aria-hidden="true"><i></i></div>';
   const nav = document.createElement('div');
   nav.className = 'check__nav';
   nav.innerHTML = '<button type="button" class="check__go" data-dir="-1">Zurück</button><button type="button" class="check__go check__go--key" data-dir="1">Weiter</button>';
   form.prepend(head);
   form.append(nav);
   const stepLabel = head.querySelector('.check__step');
-  const marks = [...head.querySelectorAll('li')];
+  const fill = head.querySelector('.check__progress i');
   const [back, next] = nav.querySelectorAll('.check__go');
   const again = Object.assign(document.createElement('button'), { type: 'button', className: 'check__go check__again', textContent: 'Antworten ändern' });
   result.append(again);
@@ -61,7 +61,7 @@
     panel.classList.toggle('check--done', finished);
     if (finished) { showResult(); return; }
     groups.forEach((g, k) => { g.hidden = k !== i; });
-    marks.forEach((m, k) => { m.classList.toggle('is-done', k < i); m.classList.toggle('is-now', k === i); });
+    fill.style.transform = `scaleX(${(i + 1) / groups.length})`;
     stepLabel.textContent = `Frage ${i + 1} von ${groups.length}`;
     back.hidden = i === 0;
     nav.classList.toggle('check__nav--bare', i === 0);

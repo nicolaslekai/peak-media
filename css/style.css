@@ -2713,9 +2713,10 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   filter: grayscale(0) contrast(1.02);
 }
 
-/* placeholder until the photo exists: initials on the card background */
+/* no portraits (Nicky, 2026-11-19): each card opens with a hairline instead */
 .member figcaption {
-  padding: 1.1rem 0.2rem 0;
+  padding: 1.4rem 0 0;
+  border-top: 1px solid var(--line);
 }
 
 .member h3,
@@ -5342,5 +5343,34 @@ html.layout-center .impact .phones {
 @media (min-width: 1921px) {
   html {
     font-size: calc(16px + (100vw - 1920px) * 0.0052);
+  }
+}
+
+/* ---- ONE GRID for the contact tiles and the footer (Nicky, 2026-11-19: "still not well
+   aligned"): on wide screens both use four equal columns with the same gap on the content
+   edges, so E-Mail sits over the brand, Telefon over Agentur, Büro over Social ---- */
+@media (min-width: 1001px) {
+  .foot {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+
+  /* the three link columns become the footer's columns 2–4 */
+  .foot__cols {
+    display: contents;
+  }
+
+  html:not(.layout-center) .reach {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}
+
+/* tablets: the brand on its own row, then the three link columns on the contact tiles'
+   three columns (same gap) */
+@media (min-width: 641px) and (max-width: 1000px) {
+  .foot__cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 1.6rem;
   }
 }

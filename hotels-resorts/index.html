@@ -87,7 +87,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=138" />
+  <link rel="stylesheet" href="../css/style.css?v=139" />
 </head>
 
 <body>
@@ -143,34 +143,37 @@
       </div>
     </section>
 
-    <!-- AT A GLANCE: the photo fades into the page from the right (variant A "Verlauf", chosen by Nicky 2026-11-09) -->
-    <section class="section glance section--split glance-v glance-v--a" id="ueberblick">
+    <!-- AT A GLANCE: no photo since 2026-11-19 (Nicky: "looks cheap, less text"): one sentence and four facts as an icon row -->
+    <section class="section glance section--split" id="ueberblick">
       <header>
         <p class="kicker">Auf einen Blick</p>
         <h2>Volle Häuser auch außerhalb der Hochsaison.</h2>
         <p>
-          Zwischen den Saisons stehen auch in guten Häusern Zimmer leer, und viele Gäste buchen über Portale. Wir zeigen Zimmer, Küche, Wellness und Ihr Team dort, wo Reisen beginnen.
+          Zwischen den Saisons bleiben Zimmer leer, und viele Gäste buchen über Portale.
         </p>
       </header>
-      <figure class="glance-v__art"><img src="../assets/img/glance-hotel_KJ_v002.webp" alt="" loading="lazy" decoding="async" /></figure>
-      <dl class="glance__list">
-        <div>
-          <dt>Für wen</dt>
-          <dd>Hotels und Resorts in den Alpen, vom inhabergeführten Haus bis zur Gruppe.</dd>
-        </div>
-        <div>
-          <dt>Was wir machen</dt>
-          <dd>Shootings im Sommer und Winter, dazwischen Reels, Posts und Stories.</dd>
-        </div>
-        <div>
-          <dt>Wo</dt>
-          <dd>Aus Füssen im Allgäu, im ganzen Alpenraum und darüber hinaus.</dd>
-        </div>
-        <div>
-          <dt>Angebot</dt>
-          <dd>Individuell, nachdem wir Ihr Haus kennengelernt haben.</dd>
-        </div>
-      </dl>
+      <ul class="facts">
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 4l8.5 6.5" /><path d="M5.5 9.5V20h13V9.5" /><path d="M10 20v-5h4v5" /></svg></span>
+          <span class="facts__label">Für wen</span>
+          <span class="facts__value">Hotels und Resorts in den Alpen</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3.2l1.3-2h7l1.3 2H20v10.5H4z" /><circle cx="12" cy="13" r="3.2" /></svg></span>
+          <span class="facts__label">Was wir machen</span>
+          <span class="facts__value">Shootings, Reels, Posts und Stories</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" /><circle cx="12" cy="10" r="2.4" /></svg></span>
+          <span class="facts__label">Wo</span>
+          <span class="facts__value">Aus Füssen, im ganzen Alpenraum</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4v13H7z" /><path d="M14 3.5v4h4" /><path d="M9.8 12.5h4.4M9.8 16h4.4" /></svg></span>
+          <span class="facts__label">Angebot</span>
+          <span class="facts__value">Individuell, nach dem Kennenlernen</span>
+        </li>
+      </ul>
     </section>
 
 

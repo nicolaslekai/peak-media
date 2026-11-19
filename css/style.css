@@ -5285,186 +5285,69 @@ html.layout-center .impact .phones {
   justify-content: center;
 }
 
-/* ===================================================================================
-   GLANCE VARIANTS (Hotels, 2026-11-09, to choose one): A gradient fade, B cinema strip,
-   C triptych, D passepartout. The same photo in all four; the tag names the variant.
-   =================================================================================== */
-.glance-v {
-  position: relative;
-  isolation: isolate;
+/* ---- FACTS ("Auf einen Blick", since 2026-11-19 without a photo): four facts in a row,
+   each a line icon in a hairline circle, a small gold label and one short line: the look
+   of the Kontakt tiles, on the left edge like every headline ---- */
+.facts {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.4rem 2rem;
+  padding-top: 2.6rem;
+  border-top: 1px solid var(--line);
 }
 
-.glance-v+.glance-v {
-  border-top: 1px dashed rgba(209, 168, 81, 0.35);
+.facts li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
 }
 
-.glance-v__tag {
-  position: absolute;
-  z-index: 3;
-  top: 1rem;
-  right: var(--gutter);
-  padding: 0.4em 0.9em;
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: var(--gold);
+.facts__icon {
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gold);
 }
 
-.glance-v__art {
-  margin: 0;
+.facts__icon svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.glance-v__art img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* A · Verlauf: the photo fills the right side to the screen edge and fades out to the
-   left and to the bottom, behind the copy */
-.glance-v--a {
-  padding-block: clamp(5rem, 12vh, 9rem) var(--section-y);
-}
-
-.glance-v--a>header {
-  display: block;
-  max-width: 34rem;
-}
-
-.glance-v--a>header>h2+p {
-  margin-top: 1.4rem;
-}
-
-.glance-v--a .glance-v__art {
-  position: absolute;
-  z-index: -1;
-  inset: 0 calc(50% - 50vw) 0 34%;
-}
-
-.glance-v--a .glance-v__art img {
-  object-position: 70% 50%;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 30%, #000 60%), linear-gradient(0deg, transparent 0%, #000 40%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 30%, #000 60%), linear-gradient(0deg, transparent 0%, #000 40%);
-  mask-composite: intersect;
-}
-
-/* B · Kino: a 21:9 still across the screen width, fading in and out at top and bottom,
-   a small caption on the container edge */
-.glance-v--b .glance-v__art {
-  position: relative;
-  width: 100vw;
-  margin: 1.4rem calc(50% - 50vw) 2.6rem;
-  aspect-ratio: 21 / 9;
-  max-height: 74vh;
-}
-
-.glance-v--b .glance-v__art img {
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 16%, #000 80%, transparent);
-  mask-image: linear-gradient(180deg, transparent, #000 16%, #000 80%, transparent);
-}
-
-.glance-v--b figcaption {
-  position: absolute;
-  left: max(var(--gutter), calc(50vw - var(--container) / 2 + var(--gutter)));
-  bottom: 14%;
+.facts__label {
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--gold-soft);
+  color: var(--gold);
 }
 
-/* C · Triptychon: one photo in three tall panels with gaps, the middle one lower */
-.glance-v--c .glance-v__art {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.6rem, 1.4vw, 1.2rem);
-  height: clamp(20rem, 40vw, 34rem);
-  margin: 0.6rem 0 3.4rem;
-}
-
-.glance-v--c .glance-v__art span {
-  background: var(--img) no-repeat;
-  background-size: 300% 100%;
-  filter: saturate(0.85);
-}
-
-.glance-v--c .glance-v__art span:nth-child(1) {
-  background-position: 0% 50%;
-  margin-bottom: 2.4rem;
-}
-
-.glance-v--c .glance-v__art span:nth-child(2) {
-  background-position: 50% 50%;
-  margin-top: 2.4rem;
-}
-
-.glance-v--c .glance-v__art span:nth-child(3) {
-  background-position: 100% 50%;
-  margin-bottom: 1.2rem;
-  margin-top: 1.2rem;
-}
-
-/* D · Passepartout: the photo beside the copy, a gold hairline frame offset behind it,
-   the colour a little quieter */
-.glance-v--d {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  column-gap: clamp(2.4rem, 6vw, 6rem);
-  align-items: center;
-}
-
-.glance-v--d>header {
-  display: block;
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.glance-v--d>header>h2+p {
-  margin-top: 1.4rem;
-}
-
-.glance-v--d .glance-v__art {
-  position: relative;
-  grid-column: 2;
-  grid-row: 1;
-  aspect-ratio: 5 / 4;
-  margin: 1.2rem 1.2rem 3rem 0;
-}
-
-.glance-v--d .glance-v__art::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 1.2rem -1.2rem -1.2rem 1.2rem;
-  border: 1px solid var(--line);
-}
-
-.glance-v--d .glance-v__art img {
-  filter: saturate(0.75) contrast(1.05) sepia(0.12);
-}
-
-.glance-v--d>.glance__list {
-  grid-column: 1 / -1;
+.facts__value {
+  font-size: 1.02rem;
+  line-height: 1.45;
+  color: var(--paper);
 }
 
 @media (max-width: 1000px) {
-  .glance-v--a .glance-v__art {
-    inset: 0 calc(50% - 50vw) 0 0;
-    opacity: 0.45;
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .glance-v--d {
-    display: block;
-  }
-
-  .glance-v--d .glance-v__art {
-    margin: 2rem 1.2rem 3rem 0;
-  }
+html.layout-center .facts li {
+  align-items: center;
+  text-align: center;
 }
 
 /* big screens (27" and 32", 2560 and 3840 CSS px wide at 100 %): everything set in rem grows

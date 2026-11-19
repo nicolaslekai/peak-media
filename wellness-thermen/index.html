@@ -87,7 +87,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=138" />
+  <link rel="stylesheet" href="../css/style.css?v=139" />
 </head>
 
 <body>
@@ -145,33 +145,36 @@
 
     <!-- AT A GLANCE (D-71, replaces the context block): for whom, what, where, how the
          offer comes about, with the date of the text -->
-    <section class="section glance section--split glance-v glance-v--a" id="ueberblick">
+    <section class="section glance section--split" id="ueberblick">
       <header>
         <p class="kicker">Auf einen Blick</p>
         <h2>Ruhe hat keine Saison.</h2>
         <p>
-          Wenn es draußen warm ist, wird es in Thermen und Spas ruhiger, die Kosten laufen weiter. Wir machen Gutscheine und Abendangebote zu Gründen für einen Besuch.
+          Wenn es draußen warm ist, wird es in Thermen und Spas ruhiger.
         </p>
       </header>
-      <figure class="glance-v__art"><img src="../assets/img/glance-therme_KJ_v002.webp" srcset="../assets/img/glance-therme_KJ_v002-900.webp 900w, ../assets/img/glance-therme_KJ_v002.webp 1536w" sizes="(max-width: 1000px) 100vw, 66vw" width="1536" height="1024" alt="" loading="lazy" decoding="async" /></figure>
-      <dl class="glance__list">
-        <div>
-          <dt>Für wen</dt>
-          <dd>Thermen, Freizeitbäder und Wellnessbetriebe, privat oder kommunal.</dd>
-        </div>
-        <div>
-          <dt>Was wir machen</dt>
-          <dd>Shootings im Sommer und Winter, dazwischen Reels, Posts und Stories.</dd>
-        </div>
-        <div>
-          <dt>Wo</dt>
-          <dd>Aus Füssen im Allgäu, im ganzen Alpenraum und darüber hinaus.</dd>
-        </div>
-        <div>
-          <dt>Angebot</dt>
-          <dd>Individuell, nachdem wir Ihren Betrieb kennengelernt haben.</dd>
-        </div>
-      </dl>
+      <ul class="facts">
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5c1.5-1.4 3-1.4 4.5 0s3 1.4 4.5 0 3-1.4 4.5 0 3 1.4 4.5 0" /><path d="M3 19.5c1.5-1.4 3-1.4 4.5 0s3 1.4 4.5 0 3-1.4 4.5 0 3 1.4 4.5 0" /><path d="M9 11c-1.1-1.3 1.1-2.5 0-4M15 11c-1.1-1.3 1.1-2.5 0-4" /></svg></span>
+          <span class="facts__label">Für wen</span>
+          <span class="facts__value">Thermen, Bäder und Spas</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3.2l1.3-2h7l1.3 2H20v10.5H4z" /><circle cx="12" cy="13" r="3.2" /></svg></span>
+          <span class="facts__label">Was wir machen</span>
+          <span class="facts__value">Shootings, Reels, Posts und Stories</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" /><circle cx="12" cy="10" r="2.4" /></svg></span>
+          <span class="facts__label">Wo</span>
+          <span class="facts__value">Aus Füssen, im ganzen Alpenraum</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4v13H7z" /><path d="M14 3.5v4h4" /><path d="M9.8 12.5h4.4M9.8 16h4.4" /></svg></span>
+          <span class="facts__label">Angebot</span>
+          <span class="facts__value">Individuell, nach dem Kennenlernen</span>
+        </li>
+      </ul>
     </section>
 
     <!-- THE THERMAL BATH'S YEAR (D-80): three stations as this page's drawn scene

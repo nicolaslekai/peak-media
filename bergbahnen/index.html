@@ -87,7 +87,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=138" />
+  <link rel="stylesheet" href="../css/style.css?v=139" />
 </head>
 
 <body>
@@ -146,33 +146,36 @@
 
     <!-- AT A GLANCE (D-71, replaces the context block): for whom, what, where, how the
          offer comes about, with the date of the text -->
-    <section class="section glance section--split glance-v glance-v--a" id="ueberblick">
+    <section class="section glance section--split" id="ueberblick">
       <header>
         <p class="kicker">Auf einen Blick</p>
         <h2>Ein Berg für jede Jahreszeit.</h2>
         <p>
-          Der Winter läuft, der Sommer wächst. An Regentagen und unter der Woche bleibt trotzdem Platz in den Kabinen.
+          An Regentagen und unter der Woche bleibt Platz in den Kabinen.
         </p>
       </header>
-      <figure class="glance-v__art"><img src="../assets/img/glance-bergbahn_KJ_v002.webp" srcset="../assets/img/glance-bergbahn_KJ_v002-900.webp 900w, ../assets/img/glance-bergbahn_KJ_v002.webp 1536w" sizes="(max-width: 1000px) 100vw, 66vw" width="1536" height="1024" alt="" loading="lazy" decoding="async" /></figure>
-      <dl class="glance__list">
-        <div>
-          <dt>Für wen</dt>
-          <dd>Bergbahnen und Skigebiete, eine Bahn oder ein Verbund, saisonal oder ganzjährig.</dd>
-        </div>
-        <div>
-          <dt>Was wir machen</dt>
-          <dd>Shootings am Berg im Sommer und Winter, dazwischen Reels, Posts und Stories.</dd>
-        </div>
-        <div>
-          <dt>Wo</dt>
-          <dd>Aus Füssen im Allgäu, im ganzen Alpenraum und darüber hinaus.</dd>
-        </div>
-        <div>
-          <dt>Angebot</dt>
-          <dd>Individuell, nachdem wir Ihren Berg kennengelernt haben.</dd>
-        </div>
-      </dl>
+      <ul class="facts">
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.6 21 3.2" /><path d="M12 4.4V8" /><rect x="6" y="8" width="12" height="10.5" rx="2.5" /><path d="M6 13.2h12" /></svg></span>
+          <span class="facts__label">Für wen</span>
+          <span class="facts__value">Bergbahnen und Skigebiete</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3.2l1.3-2h7l1.3 2H20v10.5H4z" /><circle cx="12" cy="13" r="3.2" /></svg></span>
+          <span class="facts__label">Was wir machen</span>
+          <span class="facts__value">Shootings, Reels, Posts und Stories</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" /><circle cx="12" cy="10" r="2.4" /></svg></span>
+          <span class="facts__label">Wo</span>
+          <span class="facts__value">Aus Füssen, im ganzen Alpenraum</span>
+        </li>
+        <li>
+          <span class="facts__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4v13H7z" /><path d="M14 3.5v4h4" /><path d="M9.8 12.5h4.4M9.8 16h4.4" /></svg></span>
+          <span class="facts__label">Angebot</span>
+          <span class="facts__value">Individuell, nach dem Kennenlernen</span>
+        </li>
+      </ul>
     </section>
 
     <!-- BERGFAHRT (D-67): the cable car ride (js/bergfahrt.js) with three stations of a

@@ -316,9 +316,10 @@
     </section>
 
     <!-- TOOLS: what is made by hand (everything guests see) and what AI does in the
-         background (admin). The art is the logo's ridge split at the blue-hour sun: the left
-         half in a camera viewfinder, the right half a schedule line with posts. Drawn in
-         when it scrolls into view (js/tools.js); static without JS or with reduced motion -->
+         background (admin). Two pictures that say it (Nicky, 2026-11-19: the abstract ridge was
+         "too random"): left a camera viewfinder on the blue-hour ridge, right a week of the
+         editorial plan with posted and scheduled posts. Drawn in when it scrolls into view
+         (js/tools.js); static without JS or with reduced motion -->
     <section class="section tools" id="werkzeuge">
       <header>
         <p class="kicker">Das richtige Werkzeug</p>
@@ -329,61 +330,42 @@
           gute Bilder.
         </p>
       </header>
-      <svg class="tools__art" viewBox="0 0 1200 260" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="tools-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#d1a851" stop-opacity=".2" />
-            <stop offset="1" stop-color="#d1a851" stop-opacity="0" />
-          </linearGradient>
-          <radialGradient id="tools-glow">
-            <stop offset="0" stop-color="#ecd6a2" stop-opacity=".28" />
-            <stop offset="1" stop-color="#ecd6a2" stop-opacity="0" />
-          </radialGradient>
-          <!-- hides the sun below the ridge, with a small gap above it, as in the logo -->
-          <mask id="tools-ground" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="260">
-            <rect width="1200" height="260" fill="#fff" />
-            <path d="M0 250C110 170 250 60 300 60C350 60 470 160 600 200C690 160 820 110 880 110C940 110 1060 180 1200 250L1200 260L0 260Z"
-              fill="#000" stroke="#000" stroke-width="10" stroke-linejoin="round" />
-          </mask>
-        </defs>
-        <!-- left: shot by hand, the peak inside a viewfinder -->
-        <g class="tools__hand">
-          <path class="tools__fill" d="M0 250C110 170 250 60 300 60C350 60 470 160 600 200L600 260L0 260Z" />
-          <path class="tools__thirds" d="M226.7 22V248M373.3 22V248M80 97.3H520M80 172.7H520" />
-          <path class="tools__frame" d="M80 50V22H108M492 22H520V50M520 220V248H492M108 248H80V220" />
-          <circle class="tools__rec" cx="106" cy="46" r="4.5" />
-          <path class="tools__ridge" d="M0 250C110 170 250 60 300 60C350 60 470 160 600 200" />
-        </g>
-        <!-- centre: the blue-hour sun between the two halves -->
-        <g class="tools__sunset">
-          <circle cx="600" cy="196" r="120" fill="url(#tools-glow)" />
-          <circle class="tools__sun" cx="600" cy="196" r="42" mask="url(#tools-ground)" />
-          <path class="tools__seam" d="M600 206V260" />
-        </g>
-        <!-- right: run by the system, the ridge as a dotted line, each node a scheduled post -->
-        <g class="tools__ai">
-          <path class="tools__timeline" d="M650 42H1170" />
-          <path class="tools__ticks" d="M676 38V46M711 38V46M746 38V46M781 38V46M816 38V46M851 38V46M886 38V46M921 38V46M956 38V46M991 38V46M1026 38V46M1061 38V46M1096 38V46M1131 38V46" />
-          <path class="tools__ridge tools__ridge--dots" d="M600 200C690 160 820 110 880 110C940 110 1060 180 1200 250" />
-          <path class="tools__drops" d="M698 152V50M799 118V50M880 103V50M1010 147V50M1119 202V50" />
-          <g class="tools__nodes">
-            <circle cx="698" cy="159" r="5" />
-            <circle cx="799" cy="125" r="5" />
-            <circle cx="880" cy="110" r="5" />
-            <circle cx="1010" cy="154" r="5" />
-            <circle cx="1119" cy="209" r="5" />
-          </g>
-          <g class="tools__posts">
-            <rect x="691" y="35" width="14" height="14" rx="2" style="--i: 0" />
-            <rect x="792" y="35" width="14" height="14" rx="2" style="--i: 1" />
-            <rect x="873" y="35" width="14" height="14" rx="2" style="--i: 2" />
-            <rect x="1003" y="35" width="14" height="14" rx="2" style="--i: 3" />
-            <rect x="1112" y="35" width="14" height="14" rx="2" style="--i: 4" />
-          </g>
-        </g>
-      </svg>
       <div class="tools__split">
         <article class="tools__side tools__side--hand">
+          <svg class="tools__art tools__art--hand" viewBox="0 0 560 250" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="tools-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#d1a851" stop-opacity=".22" />
+                <stop offset="1" stop-color="#d1a851" stop-opacity="0" />
+              </linearGradient>
+              <radialGradient id="tools-glow">
+                <stop offset="0" stop-color="#ecd6a2" stop-opacity=".3" />
+                <stop offset="1" stop-color="#ecd6a2" stop-opacity="0" />
+              </radialGradient>
+              <clipPath id="tools-view"><rect x="24" y="20" width="512" height="210" /></clipPath>
+              <!-- hides the sun below the ridge, with a small gap above it, as in the logo -->
+              <mask id="tools-ground" maskUnits="userSpaceOnUse" x="0" y="0" width="560" height="250">
+                <rect width="560" height="250" fill="#fff" />
+                <path d="M24 205C90 175 170 72 215 72C250 72 290 130 320 148C345 135 375 112 400 112C440 112 500 175 536 205L536 250L24 250Z"
+                  fill="#000" stroke="#000" stroke-width="9" stroke-linejoin="round" />
+              </mask>
+            </defs>
+            <g clip-path="url(#tools-view)">
+              <path class="tools__far" d="M24 168C70 150 110 120 140 120C170 120 200 150 240 150C290 150 330 96 372 96C420 96 470 140 536 160" />
+              <circle class="tools__glow" cx="318" cy="140" r="96" />
+              <circle class="tools__sun" cx="318" cy="140" r="34" mask="url(#tools-ground)" />
+              <path class="tools__fill" d="M24 205C90 175 170 72 215 72C250 72 290 130 320 148C345 135 375 112 400 112C440 112 500 175 536 205L536 230L24 230Z" />
+              <path class="tools__ridge" pathLength="1" d="M24 205C90 175 170 72 215 72C250 72 290 130 320 148C345 135 375 112 400 112C440 112 500 175 536 205" />
+              <path class="tools__water" d="M24 205H536M292 213H344M302 220H334M310 227H326" />
+            </g>
+            <path class="tools__thirds" d="M194.7 20V230M365.3 20V230M24 90H536M24 160H536" />
+            <path class="tools__frame" d="M24 48V20H52M508 20H536V48M536 202V230H508M52 230H24V202" />
+            <path class="tools__focus" d="M197 62V54H205M225 54H233V62M233 82V90H225M205 90H197V82" />
+            <circle class="tools__rec" cx="46" cy="42" r="4.5" />
+            <text class="tools__hud" x="58" y="46.5">REC</text>
+            <text class="tools__hud tools__hud--end" x="516" y="46.5">00:12:08</text>
+            <text class="tools__hud" x="44" y="216">4K · 25p</text>
+          </svg>
           <p class="tools__label">Von Hand</p>
           <h3>Was Ihre Gäste sehen</h3>
           <ul>
@@ -395,6 +377,44 @@
         </article>
         <div class="tools__divider" aria-hidden="true"></div>
         <article class="tools__side tools__side--ai">
+          <svg class="tools__art tools__art--plan" viewBox="0 0 560 250" aria-hidden="true" focusable="false">
+            <g class="tools__days"><text x="94" y="34">Mo</text><text x="162" y="34">Di</text><text x="230" y="34">Mi</text><text x="298" y="34">Do</text><text x="366" y="34">Fr</text><text x="434" y="34">Sa</text><text x="502" y="34">So</text></g>
+            <g class="tools__times"><text x="24" y="79">08:00</text><text x="24" y="137">12:00</text><text x="24" y="195">18:00</text></g>
+            <path class="tools__grid" d="M60 46V220M128 46V220M196 46V220M264 46V220M332 46V220M400 46V220M468 46V220M536 46V220M60 46H536M60 104H536M60 162H536M60 220H536" />
+            <path class="tools__today" d="M264 40V226" />
+            <circle class="tools__today-dot" cx="264" cy="46" r="3.5" />
+            <text class="tools__today-label" x="264" y="243">heute</text>
+            <g class="tools__chips">
+            <g class="tools__chip tools__chip--done" style="--i: 0">
+              <rect x="66" y="171" width="56" height="40" rx="5" />
+              <text x="94" y="196">Reel</text>
+            </g>
+            <g class="tools__chip tools__chip--done" style="--i: 1">
+              <rect x="134" y="113" width="56" height="40" rx="5" />
+              <text x="162" y="138">Story</text>
+            </g>
+            <g class="tools__chip tools__chip--done" style="--i: 2">
+              <rect x="202" y="171" width="56" height="40" rx="5" />
+              <text x="230" y="196">Post</text>
+            </g>
+            <g class="tools__chip" style="--i: 3">
+              <rect x="270" y="55" width="56" height="40" rx="5" />
+              <text x="298" y="80">Story</text>
+            </g>
+            <g class="tools__chip" style="--i: 4">
+              <rect x="338" y="171" width="56" height="40" rx="5" />
+              <text x="366" y="196">Reel</text>
+            </g>
+            <g class="tools__chip" style="--i: 5">
+              <rect x="406" y="113" width="56" height="40" rx="5" />
+              <text x="434" y="138">Post</text>
+            </g>
+            <g class="tools__chip" style="--i: 6">
+              <rect x="474" y="55" width="56" height="40" rx="5" />
+              <text x="502" y="80">Story</text>
+            </g>
+            </g>
+          </svg>
           <p class="tools__label">Mit KI</p>
           <h3>Was im Hintergrund läuft</h3>
           <ul>
@@ -561,7 +581,7 @@
   <script src="js/main.js?v=73"></script>
   <script src="js/steps.js?v=23"></script>
   <script src="js/nav.js?v=3"></script>
-  <script src="js/tools.js?v=1"></script>
+  <script src="js/tools.js?v=2"></script>
 </body>
 
 </html>

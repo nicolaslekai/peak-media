@@ -1250,32 +1250,70 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   }
 }
 
-/* ---- TOOLS: by hand (left) and with AI (right), split at the blue-hour sun ----
-   The art spans the width; its centre (x 600) sits over the divider of the two columns.
-   Hairlines keep 1px at any size (non-scaling-stroke); the dotted ridge does not, since
-   dashes on a non-scaling stroke differ between browsers. */
+/* ---- TOOLS: by hand (left) and with AI (right) ----
+   Two pictures, one above each column: a camera viewfinder on the blue-hour ridge and a
+   week of the editorial plan (posted = filled, scheduled = outlined, the line is today).
+   Hairlines keep 1px at any size (non-scaling-stroke). */
 .tools__art {
   display: block;
   width: 100%;
+  max-width: 40rem;
   height: auto;
+  margin-bottom: 2rem;
   overflow: visible;
 }
 
-/* only the drawn groups, not the mask in <defs> (its fills make the mask) */
-.tools__art g path,
-.tools__art g circle,
-.tools__art g rect {
+/* only the drawn shapes, not the mask in <defs> (its fills make the mask) */
+.tools__art>path,
+.tools__art>g path,
+.tools__art>g rect {
   fill: none;
   vector-effect: non-scaling-stroke;
 }
 
+.tools__art text {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: var(--gold-soft);
+  fill-opacity: 0.75;
+}
+
+/* the viewfinder */
 .tools__art .tools__fill {
   fill: url(#tools-fill);
 }
 
+.tools__far {
+  stroke: var(--gold);
+  stroke-opacity: 0.22;
+}
+
+.tools__glow {
+  fill: url(#tools-glow);
+}
+
+.tools__sun {
+  fill: var(--gold-soft);
+  fill-opacity: 0.92;
+}
+
+.tools__ridge {
+  stroke: var(--gold);
+  stroke-width: 1.5px;
+  stroke-dasharray: 1;
+  transition: stroke-dashoffset 1.8s var(--ease);
+}
+
+.tools__water {
+  stroke: var(--gold-soft);
+  stroke-opacity: 0.4;
+}
+
 .tools__thirds {
   stroke: var(--gold);
-  stroke-opacity: 0.12;
+  stroke-opacity: 0.1;
 }
 
 .tools__frame {
@@ -1283,98 +1321,125 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   stroke-width: 1.5px;
 }
 
-.tools__art .tools__rec {
+.tools__focus {
+  stroke: var(--gold-soft);
+  stroke-opacity: 0.7;
+}
+
+.tools__rec {
+  fill: #d9644a;
+  animation: tools-rec 1.6s steps(1) infinite;
+}
+
+.tools__hud--end {
+  text-anchor: end;
+}
+
+@keyframes tools-rec {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* the week */
+.tools__days text {
+  text-anchor: middle;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tools__times text {
+  font-weight: 500;
+  font-size: 11px;
+  fill-opacity: 0.4;
+}
+
+.tools__grid {
+  stroke: var(--gold);
+  stroke-opacity: 0.14;
+}
+
+.tools__today {
+  stroke: var(--gold);
+  stroke-opacity: 0.7;
+  stroke-dasharray: 3 4;
+}
+
+.tools__today-dot {
   fill: var(--gold);
 }
 
-.tools__ridge {
+.tools__art .tools__today-label {
+  text-anchor: middle;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: var(--gold);
+  fill-opacity: 1;
+}
+
+.tools__art .tools__chip rect {
   stroke: var(--gold);
-  stroke-width: 1.5px;
-  stroke-opacity: 0.85;
+  stroke-opacity: 0.7;
+  fill: rgba(209, 168, 81, 0.06);
 }
 
-.tools__ridge--dots {
-  vector-effect: none;
-  stroke-width: 2.5;
-  stroke-dasharray: 0.1 9;
-  stroke-linecap: round;
+.tools__chip text {
+  font-size: 13.5px;
+  text-anchor: middle;
+  letter-spacing: 0.04em;
+  fill-opacity: 0.9;
 }
 
-.tools__art .tools__sun {
+.tools__art .tools__chip--done rect {
+  stroke: none;
   fill: var(--gold-soft);
   fill-opacity: 0.9;
 }
 
-.tools__art g circle[fill] {
-  fill: url(#tools-glow);
-}
-
-.tools__seam,
-.tools__timeline,
-.tools__ticks,
-.tools__drops {
-  stroke: var(--gold);
-  stroke-opacity: 0.35;
-}
-
-.tools__drops {
-  vector-effect: none;
-  stroke-dasharray: 3 5;
-}
-
-.tools__art .tools__nodes circle {
+.tools__chip--done text {
   fill: var(--ink);
-  stroke: var(--gold);
-  stroke-width: 1.5px;
+  fill-opacity: 1;
 }
 
-.tools__art .tools__posts rect {
-  fill: var(--gold-soft);
-  fill-opacity: 0.85;
+/* draw-in (js/tools.js): the ridge is drawn, the sun rises, the posts land on the plan
+   one by one */
+.tools__sun,
+.tools__glow {
+  transition: opacity 1.2s var(--ease) 0.5s, transform 1.4s var(--ease) 0.5s;
 }
 
-/* draw-in (js/tools.js): the hand half wipes in from the left, the sun rises, then the
-   system half wipes in and the posts drop onto the timeline one by one */
-.tools__hand,
-.tools__ai {
-  transition: clip-path 1.6s var(--ease);
-}
-
-.tools__ai {
-  transition-delay: 0.9s;
-}
-
-.tools__sunset {
-  transition: opacity 1s var(--ease) 0.6s, transform 1.2s var(--ease) 0.6s;
-}
-
-.tools__posts rect {
+.tools__chip {
   transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
-  transition-delay: calc(1.6s + var(--i) * 0.18s);
+  transition-delay: calc(0.5s + var(--i) * 0.14s);
 }
 
-.js .tools:not(.tools--in) .tools__hand,
-.js .tools:not(.tools--in) .tools__ai {
-  clip-path: inset(0 100% 0 0);
+.js .tools:not(.tools--in) .tools__ridge {
+  stroke-dashoffset: 1;
 }
 
-.js .tools:not(.tools--in) .tools__sunset {
+.js .tools:not(.tools--in) .tools__sun,
+.js .tools:not(.tools--in) .tools__glow {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(26px);
 }
 
-.js .tools:not(.tools--in) .tools__posts rect {
+.js .tools:not(.tools--in) .tools__chip {
   opacity: 0;
-  transform: translateY(-14px);
+  transform: translateY(-12px);
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-  .tools__hand,
-  .tools__ai,
-  .tools__sunset,
-  .tools__posts rect {
+  .tools__ridge,
+  .tools__sun,
+  .tools__glow,
+  .tools__chip {
     transition: none;
+  }
+
+  .tools__rec {
+    animation: none;
   }
 }
 
@@ -1387,7 +1452,26 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 .tools__divider {
+  position: relative;
   background: var(--line);
+}
+
+/* from the shoot to the plan: an arrow on the hairline, level with the two pictures */
+.tools__divider::before {
+  content: "\2192";
+  position: absolute;
+  top: clamp(6rem, 11vw, 10rem);
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--gold);
+  font-size: 1rem;
+  transform: translate(-50%, -50%);
 }
 
 .tools__side {

@@ -1,6 +1,6 @@
 /* ============ BLAUE STUNDE — hotel scene: the evidence chain as a model of the house ============
    On Hotels & Resorts (D-77): the three links of <ol class="chain"> become the stations of one
-   pinned picture, in the style "Raum" (as js/styles/therme-3.js): an architect's presentation
+   pinned picture, in the style "Raum" (as js/therme-scene.js): an architect's presentation
    model on a block of dark stone, seen from a raised three-quarter view through a long lens,
    raw WebGL, no library. The house: a symmetric alpine hotel, gable to the front, a stone
    ground floor, two timber floors with balconies, a calm roof with deep eaves, the entrance on

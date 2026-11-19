@@ -5505,85 +5505,60 @@ html.layout-center .impact .phones {
   }
 }
 
-/* ---- STYLE LAB (temporary, Wellness page): one scene in four styles, a full-width band each,
-   its number top left, the station's line on the left as in the scene, the picture right ---- */
-.stylelab__list {
-  margin-inline: calc(50% - 50vw);
+/* ---- PROCESS in the Raum style (js/steps.js, home page "So arbeiten wir"): the five steps
+   as one model above the list, a canvas as wide as the list plus the gutters beside it
+   (js sets its height). .steps--raum is set only while the picture is there: it takes the
+   steps' own dots, ridges and lines away. Without WebGL neither exists and the list keeps
+   its look from above. .steps--wait: until the model has drawn in, each step waits dimmed
+   and comes up (.is-on) when its place lights. ---- */
+.steps-model {
+  margin: -1.4rem calc(-1 * var(--gutter)) 0;
+  pointer-events: none;
 }
 
-.stylelab__band {
-  position: relative;
-  height: clamp(26rem, 64vh, 42rem);
-  border-top: 1px solid var(--line);
-  overflow: hidden;
-}
-
-.stylelab__band:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
-.stylelab__band canvas {
-  position: absolute;
-  inset: 0;
+.steps-model canvas {
+  display: block;
   width: 100%;
   height: 100%;
 }
 
-.stylelab__tag,
-.stylelab__copy {
-  position: absolute;
-  z-index: 1;
-  left: max(var(--gutter), calc(50vw - var(--container) / 2 + var(--gutter)));
+.steps.steps--raum {
+  padding-top: 0;
 }
 
-.stylelab__tag {
-  top: 1.6rem;
-  display: flex;
-  align-items: baseline;
-  gap: 0.9rem;
-  color: var(--gold);
+.steps.steps--raum li {
+  padding-top: 0.6rem;
+  transition: opacity 0.9s var(--ease);
 }
 
-.stylelab__tag b {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 3.2rem;
-  line-height: 1;
-  color: var(--gold-soft);
+.steps.steps--raum li::after {
+  display: none;
 }
 
-.stylelab__tag span {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
+.steps.steps--raum.steps--wait li {
+  opacity: 0.42;
 }
 
-.stylelab__copy {
-  top: 50%;
-  width: min(30rem, 36%);
-  transform: translateY(-50%);
+.steps.steps--raum.steps--wait li.is-on {
+  opacity: 1;
 }
 
-.stylelab__big {
-  margin-top: 1rem;
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(1.9rem, 3.4vw, 3.2rem);
-  line-height: 1.1;
-  color: var(--gold-soft);
-}
-
-@media (max-width: 767px) {
-  .stylelab__band {
-    height: 34rem;
+@media (max-width: 1000px) {
+  .steps-model {
+    margin-bottom: 0.8rem;
   }
 
-  .stylelab__copy {
-    top: auto;
-    bottom: 2rem;
-    width: auto;
-    right: var(--gutter);
-    transform: none;
+  .steps.steps--raum {
+    row-gap: 2.4rem;
+  }
+
+  .steps.steps--raum li {
+    padding-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .steps.steps--raum li {
+    transition: none;
   }
 }

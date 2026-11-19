@@ -1,7 +1,7 @@
 /* ============ BLAUE STUNDE — "Bergfahrt": the cable car ride as a presentation model (3D) ============
    The three links of <ol class="chain"> become the stations of a cable car. The section pins like
    the cine scenes; the picture is an architect's model in raw WebGL (no library, no images), in the
-   same hand as the Wellness scene (js/styles/therme-3.js): one block of dark stone, the massif
+   same hand as the Wellness scene (js/therme-scene.js): one block of dark stone, the massif
    folded out of it (two summits and a saddle, the bigger one left: the logo), a valley station at
    its foot, two pylons, the cable, a hut with a terrace on the shoulder under the smaller summit.
 

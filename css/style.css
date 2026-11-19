@@ -5682,6 +5682,21 @@ html.layout-center .facts li {
     .steps-model {
       view-timeline: --steps-model block;
     }
+
+    /* the same at "Das richtige Werkzeug" (Nicky, 2026-11-19: "slow scrolling down with gradient
+       for this section too"): each side slides along while its own model crosses the screen */
+    .tools__side--raum:has(.tools-model:not([hidden])) {
+      --drag: 24svh;
+      timeline-scope: --tools-model;
+      margin-bottom: var(--drag);
+      animation: steps-drag linear both;
+      animation-timeline: --tools-model;
+      animation-range: cover 0% cover 100%;
+    }
+
+    .tools-model {
+      view-timeline: --tools-model block;
+    }
   }
 }
 

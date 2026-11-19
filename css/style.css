@@ -577,11 +577,11 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 /* phones held upright: the portrait set, framed on each scene's focal point (D-55) */
 @media (max-width: 767px) and (orientation: portrait) {
   html:not(.js) [data-scene="hero"] .cine__stage {
-    background-image: url("../assets/frames-phone/hero/frame_0001.webp");
+    background-image: url("../assets/frames-phone/hero/frame_0001.webp?v=2");
   }
 
   html:not(.js) [data-scene="spa"] .cine__stage {
-    background-image: url("../assets/frames-phone/spa/frame_0060.webp");
+    background-image: url("../assets/frames-phone/spa/frame_0001.webp?v=2");
   }
 
   html:not(.js) [data-scene="skilift"] .cine__stage {

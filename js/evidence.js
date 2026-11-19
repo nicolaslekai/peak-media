@@ -98,6 +98,16 @@
     inputs.forEach(el => el.addEventListener('input', update));
     picks.forEach(el => el.addEventListener('change', update));
     update();
+    // no money before the enquiry is finished (Nicky, 2026-11-19): the figures stay hidden
+    // behind the "Ergebnis anfordern" card until js/contact.js has set "bs-onboarded"
+    const lock = panel.querySelector('.calc__lock');
+    const figures = panel.querySelector('.calc__figures');
+    let done = false;
+    try { done = localStorage.getItem('bs-onboarded') === '1'; } catch { /* storage blocked: stays locked */ }
+    if (lock && figures) {
+      lock.hidden = done;
+      figures.hidden = !done;
+    }
   });
 
   // tabs (home page): show one calculator panel at a time; a segment page has its own panel
@@ -125,14 +135,22 @@
       const panel = link.closest('.calc');
       const model = panel.dataset.model;
       const size = panel.querySelector(`input[name="${SIZE[model]}"]`);
-      const summary = [
+      // shown: the visitor's own inputs only, on the form before it is sent (no money yet);
+      // summary: inputs and result, sent with the enquiry; result: the figures' markup for
+      // the thank-you dialog
+      const shown = [
         ...[...panel.querySelectorAll('.range')].map(r => `${clean(r.querySelector('label'))} ${clean(r.querySelector('output'))}`),
         ...[...panel.querySelectorAll('input[type="radio"]:checked')].map(r => `Szenario ${clean(r.nextElementSibling)}`),
+      ].join(' · ');
+      const summary = [
+        shown,
         clean(panel.querySelector('.calc__total')),
         ...[...panel.querySelectorAll('.calc__out b')].map(clean),
       ].join(' · ');
+      const outs = panel.querySelector('.calc__outs');
+      const result = panel.querySelector('.calc__total').outerHTML + (outs ? outs.outerHTML : '');
       try {
-        sessionStorage.setItem('bs-rechner', JSON.stringify({ model, size: size ? Number(size.value) : null, summary }));
+        sessionStorage.setItem('bs-rechner', JSON.stringify({ model, size: size ? Number(size.value) : null, summary, shown, result }));
       } catch { /* storage blocked: the form opens without the values */ }
     });
   });

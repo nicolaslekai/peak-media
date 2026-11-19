@@ -74,7 +74,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="../css/style.css?v=127" />
+  <link rel="stylesheet" href="../css/style.css?v=129" />
 </head>
 
 <body>
@@ -247,6 +247,12 @@
         <p class="kicker">Anfrage</p>
         <h2 id="enquiry-sent-title">Danke für Ihre Nachricht.</h2>
         <p>Wir melden uns innerhalb von drei Werktagen mit Ideen.</p>
+        <!-- the calculator's result, shown only now that the enquiry is sent (js/contact.js) -->
+        <div class="dialog__result" hidden>
+          <p class="calc__label">Ihr Plus pro Jahr</p>
+          <div class="dialog__figures"></div>
+          <p class="calc__note">Beispielrechnung mit Ihren Angaben und Durchschnittswerten. Umsatz, nicht Gewinn, und keine Zusage.</p>
+        </div>
         <p class="dialog__test" hidden>
           Testmodus: Der Versand wird mit dem Hosting eingerichtet. Diese Anfrage wurde noch nicht übermittelt.
         </p>
@@ -322,7 +328,7 @@
   <script src="../js/vendor/lenis-1.1.14.min.js"></script>
   <script src="../js/main.js?v=73"></script>
   <script src="../js/nav.js?v=3"></script>
-  <script src="../js/contact.js?v=11"></script>
+  <script src="../js/contact.js?v=12"></script>
 </body>
 
 </html>

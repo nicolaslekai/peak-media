@@ -2230,7 +2230,8 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
   gap: clamp(1.6rem, 4vw, 4rem);
-  align-items: start;
+  /* both columns the same height (Nicky, 2026-11-19: the card was much taller) */
+  align-items: stretch;
 }
 
 .calc[hidden] {
@@ -2355,6 +2356,38 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   padding: clamp(1.4rem, 3vw, 2.6rem);
   font-size: 0.85rem;
   color: var(--text-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.calc__result [hidden] {
+  display: none;
+}
+
+/* before the enquiry: no money, a short invitation to the four steps */
+.calc__lock .kicker {
+  margin-bottom: 1rem;
+}
+
+.calc__lock-title {
+  margin-bottom: 1rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  line-height: 1.15;
+  color: var(--paper);
+}
+
+.calc__lock p:not(.kicker):not(.calc__lock-title) {
+  max-width: 34rem;
+  margin-bottom: 1.8rem;
+  line-height: 1.6;
+}
+
+.calc__label {
+  font-size: 0.8rem;
+  color: rgba(243, 237, 225, 0.5);
 }
 
 .calc__total {
@@ -2370,15 +2403,28 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   margin: 0.4rem 0 0.5rem;
   font-family: var(--serif);
   font-weight: 500;
-  font-size: clamp(3rem, 7vw, 5.2rem);
+  font-size: clamp(2.6rem, 5vw, 4rem);
   line-height: 1;
   color: var(--gold-soft);
 }
 
+/* the two parts side by side, so the card stays as tall as the inputs */
+.calc__outs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+}
+
+@media (max-width: 480px) {
+  .calc__outs {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* the scenario (D-85): three equal buttons on top of the result card, the assumptions
    spelled out below them */
-.calc__result .calc__scenario {
-  margin-bottom: 2.2rem;
+.calc .calc__scenario {
+  margin: 0.2rem 0 2rem;
 }
 
 .calc__scenario .choices {
@@ -2406,10 +2452,11 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 .calc__out b {
-  margin-right: 0.6rem;
+  display: block;
+  margin-bottom: 0.4rem;
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 2.1rem;
+  font-size: 1.8rem;
   line-height: 1;
   color: var(--paper);
 }
@@ -3188,6 +3235,23 @@ html:not(.js) .wizard__step+.wizard__step {
   gap: 0.9rem;
 }
 
+/* wide screens: the four in one row across the whole section, wider than the form
+   (Nicky, 2026-11-19: four across, not two by two). 100cqw = the section's content width */
+.contact {
+  container-type: inline-size;
+}
+
+@media (min-width: 1001px) {
+  .choices--cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100cqw;
+  }
+
+  html.layout-center .choices--cards {
+    margin-inline: calc((100% - 100cqw) / 2);
+  }
+}
+
 /* (Nicky, 2026-11-09: bigger, with a picture each, so nobody has to read) */
 .choice--card span {
   overflow: hidden;
@@ -3283,6 +3347,27 @@ html:not(.js) .wizard__step+.wizard__step {
   margin-top: 1rem;
   font-size: 0.78rem;
   color: rgba(243, 237, 225, 0.5);
+}
+
+/* the calculator's result, once the enquiry is sent */
+.dialog__result {
+  margin: 1.4rem 0 1.6rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+  text-align: left;
+}
+
+.dialog__result .calc__total b {
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+}
+
+.dialog__result .calc__note {
+  margin: 0;
+}
+
+.dialog .dialog__result .calc__out {
+  font-size: 0.85rem;
+  color: var(--text-soft);
 }
 
 .dialog .btn {
@@ -4170,8 +4255,10 @@ html:not(.js) .wizard__step+.wizard__step {
    from screen edge to screen edge ---- */
 /* the content keeps to 68rem, centred, so the columns do not drift apart on large screens
    (Raffaele, 2026-10-26) */
+/* (Nicky, 2026-11-19) the footer's content on the same edges as the sections above it
+   (--container and --gutter, like .section), not a narrower 68rem of its own */
 .foot {
-  --foot-pad: max(var(--edge), calc((100% - 68rem) / 2));
+  --foot-pad: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
   background: var(--ink-deep);
   border-top: 1px solid var(--line);
   padding: 2.8rem var(--foot-pad) 2rem;

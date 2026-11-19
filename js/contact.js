@@ -125,7 +125,8 @@
   if (fromCalc && fromCalc.summary) {
     if (SIZE_FIELD[fromCalc.model] && fromCalc.size) pickRange(SIZE_FIELD[fromCalc.model], fromCalc.size);
     form.elements.rechner.value = fromCalc.summary;
-    calcNote.querySelector('span').textContent = fromCalc.summary;
+    // the note shows the visitor's inputs only: no money before the enquiry is sent
+    calcNote.querySelector('span').textContent = fromCalc.shown || fromCalc.summary;
     calcNote.hidden = false;
   }
 
@@ -163,6 +164,16 @@
       }
     }
     dialog.querySelector('.dialog__test').hidden = Boolean(ENDPOINT);
+    // the enquiry is finished: now the money may show (Nicky, 2026-11-19). The dialog
+    // shows the calculator's result if the visitor came from it, and the calculator shows
+    // its figures from now on (js/evidence.js reads "bs-onboarded")
+    try { localStorage.setItem('bs-onboarded', '1'); } catch { /* storage blocked */ }
+    const box = dialog.querySelector('.dialog__result');
+    if (box) {
+      const html = fromCalc && fromCalc.result;
+      box.querySelector('.dialog__figures').innerHTML = html || '';
+      box.hidden = !html;
+    }
     if (typeof dialog.showModal === 'function') dialog.showModal();
     reset();
   });

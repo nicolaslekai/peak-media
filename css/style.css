@@ -5374,3 +5374,20 @@ html.layout-center .impact .phones {
     column-gap: 1.6rem;
   }
 }
+
+/* ---- ONE LEFT EDGE (Nicky, 2026-11-19: "all sorts of text positions", but not the far
+   left): on wide screens the nav, the hero copy and the scenes' copy sit on the sections'
+   content edge (--container, --gutter) instead of the screen edge. --edge is only used in
+   paddings of full-width boxes, so 100% is the page width without the scrollbar ---- */
+@media (min-width: 1001px) {
+  :root {
+    --edge: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
+  }
+}
+
+/* phones and tablets: the nav on the sections' gutter too */
+@media (max-width: 1000px) {
+  :root {
+    --edge: var(--gutter);
+  }
+}

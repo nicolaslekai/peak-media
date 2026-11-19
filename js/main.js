@@ -334,40 +334,46 @@ function __boot() {
       lenis.scrollTo = (...args) => { scrollTo(...args); wake(); };
     } catch (err) { console.error(err); }   // native scrolling still works
   }
-  // half-speed sections (Nicky, 2026-11-19: in "So arbeiten wir" and "Das richtige Werkzeug" all the
-  // scrolling happens at half speed, twice the scroll for the same way).
-  // Wheel and trackpad: Lenis moves the page half as far per notch while one of the two sections
-  // fills the screen (eased over a fifth of the screen at either end).
-  // Touch scrolls natively: the section gets .is-slow and --drag, and style.css lets its content
-  // travel along at half speed (slow-section); --drag is how far it falls behind until its end
-  // has passed the upper third of the screen
-  const slow = [...document.querySelectorAll('.section.services, .section.tools')];
+  // scroll speed (Nicky, 2026-11-19, tried on his phone): "So arbeiten wir" and "Das richtige
+  // Werkzeug", the sections with the graphics, run slower than the rest.
+  // Touch scrolls natively: every section gets .is-slow, --drag and --drag-span, and style.css lets
+  // its content travel along with the scroll (slow-section), so it moves at SPEED of the finger:
+  // 0.65 in the two sections, 0.8 everywhere else. --drag is how far the content falls behind
+  // until its end has passed the upper third of the screen, --drag-span the scroll that takes
+  // (0.88: the eased first and last eighth). Sections with a pinned scene stay as they are.
+  // Wheel and trackpad: Lenis moves the page 0.65 times as far per notch inside the two sections
+  const SLOW = '.services, .tools';
   const touch = matchMedia('(hover: none) and (pointer: coarse)').matches;
-  if (slow.length && !reduce && touch && window.CSS && CSS.supports('animation-timeline: view()') && 'ResizeObserver' in window) {
+  if (!reduce && touch && window.CSS && CSS.supports('animation-timeline: view()') && 'ResizeObserver' in window) {
+    const secs = [...document.querySelectorAll('main .section')].slice(0, -1);   // not the last one: the page ends before it could catch up, a gap would stay above the footer
     const measure = () => {
-      for (const sec of slow) {
+      for (const sec of secs) {
         const kids = [...sec.children].filter(el => el.offsetHeight);
-        if (!kids.length) continue;
+        if (!kids.length || sec.querySelector('.ride, .cine__stage, .chain')) { sec.classList.remove('is-slow'); continue; }
+        const lag = 1 - (sec.matches(SLOW) ? 0.65 : 0.8), span = 1 / (lag * 0.88);
         const tall = kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top;
-        sec.style.setProperty('--drag', `${Math.round((tall + 0.5 * innerHeight) / 1.2727)}px`);
+        const drag = (tall + 0.5 * innerHeight) / (span - 1);
+        sec.style.setProperty('--drag', `${Math.round(drag)}px`);
+        sec.style.setProperty('--drag-span', `${Math.round(drag * span)}px`);
         sec.classList.add('is-slow');
       }
     };
     let w = innerWidth;
     const ro = new ResizeObserver(measure);
-    for (const sec of slow) for (const el of sec.children) ro.observe(el);
+    for (const sec of secs) for (const el of sec.children) ro.observe(el);
     addEventListener('resize', () => { if (innerWidth !== w) { w = innerWidth; measure(); } });   // not for the toolbar sliding in and out
     measure();
-  } else if (slow.length && lenis && lenis.virtualScroll && !touch) {
+  } else if (lenis && lenis.virtualScroll && !touch) {
+    const slow = [...document.querySelectorAll(SLOW)].filter(el => el.matches('.section'));
     const BASE = 0.9, c01 = v => Math.max(0, Math.min(1, v));
-    lenis.on('scroll', () => {
+    if (slow.length) lenis.on('scroll', () => {
       let k = 0;
       for (const sec of slow) {
         const r = sec.getBoundingClientRect(), vh = innerHeight;
         k = Math.max(k, c01((0.8 * vh - r.top) / (0.2 * vh)) * c01((r.bottom - 0.3 * vh) / (0.2 * vh)));
       }
       k = k * k * (3 - 2 * k);
-      lenis.virtualScroll.options.wheelMultiplier = BASE * (1 - 0.5 * k);
+      lenis.virtualScroll.options.wheelMultiplier = BASE * (1 - 0.35 * k);
     });
   }
   const updateAll = () => {

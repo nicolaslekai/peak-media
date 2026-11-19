@@ -5614,15 +5614,17 @@ html.layout-center .facts li {
   }
 }
 
-/* ---- HALF-SPEED SECTIONS: "So arbeiten wir" and "Das richtige Werkzeug" (Nicky, 2026-11-19:
-   "for the sections with the graphics all the scrolling has to happen at half speed, you
-   scroll twice as much to get half as far"). A phone scrolls natively and the finger cannot
-   be braked, so the section's content travels along with the scroll at half its speed for the
-   whole way across the screen (eased in and out over the first and last eighth). It ends
-   --drag lower than it lies in the page; that room is the section's extra padding below.
-   js/main.js sets .is-slow and --drag (the way is as long as the section is tall). A
-   scroll-driven animation, run by the compositor; browsers without it scroll as before.
-   Wheel and trackpad: js/main.js halves Lenis' wheel multiplier inside the two sections ---- */
+/* ---- SCROLL SPEED ON TOUCH SCREENS (Nicky, 2026-11-19, after trying it on his phone: the
+   sections with the graphics, "So arbeiten wir" and "Das richtige Werkzeug", at about two
+   thirds of the finger's speed (0.65; half was "30 percent too slow"), everything else at
+   0.8 ("20 percent too fast")). A phone scrolls natively and the finger cannot be braked, so
+   each section's content travels along with the scroll by the share it should be slower,
+   for its whole way across the screen (eased in and out over the first and last eighth). It
+   ends --drag lower than it lies in the page; that room is the section's extra padding below.
+   js/main.js sets .is-slow, --drag and --drag-span (the scroll it takes) per section; sections
+   with a pinned scene are left alone, the scenes are longer instead (below). A scroll-driven
+   animation, run by the compositor; browsers without it scroll as before.
+   Wheel and trackpad: js/main.js lowers Lenis' wheel multiplier inside the two sections ---- */
 @keyframes slow-section {
   0% {
     translate: 0 0;
@@ -5650,12 +5652,35 @@ html.layout-center .facts li {
     padding-bottom: calc(var(--section-y) + var(--drag));
   }
 
-  /* from the moment the section's top is a fifth of the screen in; 2.2727 = 2 / (1 - 0.12),
-     the way it takes to fall behind by --drag at half speed with the two eased ends */
+  /* from the moment the section's top is a fifth of the screen in */
   .section.is-slow>* {
     animation: slow-section linear both;
     animation-timeline: --slow-section;
-    animation-range: cover 20svh cover calc(20svh + 2.2727 * var(--drag));
+    animation-range: cover 20svh cover calc(20svh + var(--drag-span));
+  }
+
+  /* the swipe hint keeps its own fade (below) and travels along as well */
+  .section.is-slow>.phones__hint {
+    animation: hint-out linear both, slow-section linear both;
+    animation-timeline: --phones, --slow-section;
+    animation-range: 0 120px, cover 20svh cover calc(20svh + var(--drag-span));
+  }
+
+  /* the pinned scenes cannot travel along; a quarter more way makes them a fifth slower */
+  @media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+    .hero.cine {
+      height: 250vh;
+    }
+
+    .ride {
+      height: calc(var(--band) + 325vh);
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+    .ride {
+      height: calc(var(--band) + 300vh);
+    }
   }
 }
 

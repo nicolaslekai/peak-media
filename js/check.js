@@ -37,14 +37,15 @@
   }
 
   // ---- one question at a time (D-78): the card's head shows the step and the progress; a
-  // click on an answer moves on, Zurück and Weiter serve the keyboard (arrow keys only choose)
+  // click on an answer moves on by itself, so Weiter is not shown (Nicky, 2026-11-19); it stays in
+  // the page for the keyboard and shows when focused (arrow keys only choose, Enter moves on)
   panel.classList.add('check--steps');
   const head = document.createElement('div');
   head.className = 'check__head';
   head.innerHTML = `<span class="check__step"></span><ol class="check__progress" aria-hidden="true">${groups.map(() => '<li></li>').join('')}</ol>`;
   const nav = document.createElement('div');
   nav.className = 'check__nav';
-  nav.innerHTML = '<button type="button" class="check__go" data-dir="-1">Zurück</button><button type="button" class="check__go" data-dir="1">Weiter</button>';
+  nav.innerHTML = '<button type="button" class="check__go" data-dir="-1">Zurück</button><button type="button" class="check__go check__go--key" data-dir="1">Weiter</button>';
   form.prepend(head);
   form.append(nav);
   const stepLabel = head.querySelector('.check__step');
@@ -63,6 +64,7 @@
     marks.forEach((m, k) => { m.classList.toggle('is-done', k < i); m.classList.toggle('is-now', k === i); });
     stepLabel.textContent = `Frage ${i + 1} von ${groups.length}`;
     back.hidden = i === 0;
+    nav.classList.toggle('check__nav--bare', i === 0);
     next.disabled = !groups[i].querySelector('input:checked');
     next.textContent = i === groups.length - 1 ? 'Ergebnis' : 'Weiter';
   }
@@ -86,6 +88,15 @@
     // an answer chosen with the pointer (detail > 0; keyboard "clicks" on radios have 0)
     if (e.target.matches('input[type="radio"]') && e.detail > 0) {
       setTimeout(() => { show(current + 1); keepInView(); }, 220);   // the chosen answer lights up first
+    }
+  });
+  // Enter on a chosen answer moves on, as a click does
+  form.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.matches('input[type="radio"]:checked')) {
+      e.preventDefault();
+      show(current + 1);
+      keepInView();
+      (current >= groups.length ? result : groups[current]).querySelector('input, a, button').focus({ preventScroll: true });
     }
   });
   show(0);

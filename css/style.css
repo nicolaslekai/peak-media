@@ -2704,6 +2704,24 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
   border-top: 1px solid var(--line);
 }
 
+/* first question: nothing to go back to, so no bar at all */
+.check__nav--bare {
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* Weiter is for the keyboard only: an answer moves on by itself (Nicky, 2026-11-19) */
+.check__go--key:not(:focus-visible) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .check__nav [data-dir="1"] {
   margin-left: auto;
 }

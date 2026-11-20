@@ -90,15 +90,19 @@
   });
   // each one-click question is the whole step: on to the next at once. On click, not
   // change: after "Zurück", a click on the answer already chosen fires no change
+  // which answer a finger or the mouse went down on, and when: a click that follows on the same
+  // answer moves on. Arrow keys and space also "click" a radio, but nothing was pressed then, so
+  // keyboard users move through the answers first and go on with Enter or "Weiter" (shown on
+  // focus only). (Not event.detail and not the click's target: the radio covers its whole label,
+  // an iPhone tap arrives with detail 0, a click on the label's text is forwarded to the radio)
+  let pressed = null, pressedAt = 0;
+  const press = e => { const l = e.target.closest ? e.target.closest('label.choice') : null; if (l) { pressed = l; pressedAt = performance.now(); } };
+  for (const type of ['pointerdown', 'mousedown', 'touchstart']) form.addEventListener(type, press, { passive: true });
   form.addEventListener('click', e => {
     const el = e.target;
     if (el.type === 'radio' && el.name === 'betriebsart') showGroup();
-    // tap or mouse only: that click lands on the label's text (the radio is hidden) and the
-    // browser clicks the radio for it. Arrow keys and space "click" the radio alone: keyboard
-    // users move through the answers first and go on with Enter or "Weiter" (shown on focus only).
-    // (Not event.detail: it is 0 for the forwarded click on iPhones, so nothing moved on there)
     const answer = el.closest('label.choice');
-    if (!answer || el.matches('input') || !steps[current].contains(answer)) return;
+    if (!answer || answer !== pressed || performance.now() - pressedAt > 1500 || !steps[current].contains(answer)) return;
     const radio = answer.querySelector('input[type="radio"]');
     if (!radio) return;
     const from = current;

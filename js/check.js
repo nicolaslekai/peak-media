@@ -116,6 +116,14 @@
       window.lenis ? lenis.scrollTo(y) : scrollTo({ top: y, behavior: 'smooth' });
     }
   };
+  // which answer a finger or the mouse went down on, and when. A click that follows on the same
+  // answer moves on; the arrow keys and space also "click" a radio, but nothing was pressed then.
+  // (Not event.detail and not the click's target: the radio covers its whole label, so a mouse
+  // click lands on the radio with detail 1, an iPhone tap arrives with detail 0, and a click on
+  // the label's text is forwarded to the radio. Twice this failed on real devices, 2026-11-20)
+  let pressed = null, pressedAt = 0;
+  const press = e => { const l = e.target.closest ? e.target.closest('label.choice') : null; if (l) { pressed = l; pressedAt = performance.now(); } };
+  for (const type of ['pointerdown', 'mousedown', 'touchstart']) panel.addEventListener(type, press, { passive: true });
   form.addEventListener('change', () => { if (groups[current]) next.disabled = !groups[current].querySelector('input:checked'); });
   panel.addEventListener('click', e => {
     const go = e.target.closest('.check__go');
@@ -125,13 +133,9 @@
       (current >= groups.length ? result : groups[current]).querySelector('input, a, button').focus({ preventScroll: true });
       return;
     }
-    // an answer chosen by tap or mouse: the click lands on the label's text (the radio itself is
-    // hidden), the browser then clicks the radio for it. Keyboard "clicks" (arrow keys, space) go
-    // to the radio only and do not move on. (Until 2026-11-20 this looked at event.detail of the
-    // radio's click, which is 0 for the forwarded click on iPhones: the answer lit up and nothing
-    // happened, Nicky: "doesn't work")
+    // an answer chosen by tap or mouse (see "pressed" below); keyboard clicks do not move on
     const answer = e.target.closest('label.choice');
-    if (answer && !e.target.matches('input')) {
+    if (answer && answer === pressed && performance.now() - pressedAt < 1500) {
       const from = current;
       setTimeout(() => {
         if (current === from && answer.querySelector('input').checked) { show(current + 1); keepInView(); }

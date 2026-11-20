@@ -125,9 +125,17 @@
       (current >= groups.length ? result : groups[current]).querySelector('input, a, button').focus({ preventScroll: true });
       return;
     }
-    // an answer chosen with the pointer (detail > 0; keyboard "clicks" on radios have 0)
-    if (e.target.matches('input[type="radio"]') && e.detail > 0) {
-      setTimeout(() => { show(current + 1); keepInView(); }, 220);   // the chosen answer lights up first
+    // an answer chosen by tap or mouse: the click lands on the label's text (the radio itself is
+    // hidden), the browser then clicks the radio for it. Keyboard "clicks" (arrow keys, space) go
+    // to the radio only and do not move on. (Until 2026-11-20 this looked at event.detail of the
+    // radio's click, which is 0 for the forwarded click on iPhones: the answer lit up and nothing
+    // happened, Nicky: "doesn't work")
+    const answer = e.target.closest('label.choice');
+    if (answer && !e.target.matches('input')) {
+      const from = current;
+      setTimeout(() => {
+        if (current === from && answer.querySelector('input').checked) { show(current + 1); keepInView(); }
+      }, 220);   // the chosen answer lights up first
     }
   });
   // Enter on a chosen answer moves on, as a click does

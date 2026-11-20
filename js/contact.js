@@ -92,12 +92,20 @@
   // change: after "Zurück", a click on the answer already chosen fires no change
   form.addEventListener('click', e => {
     const el = e.target;
-    if (el.type !== 'radio' || !steps[current].contains(el)) return;
-    if (el.name === 'betriebsart') showGroup();
-    // pointer only (detail > 0): arrow keys also "click" radios, and keyboard users
-    // move through the answers first and go on with Enter or "Weiter" (shown on focus only)
+    if (el.type === 'radio' && el.name === 'betriebsart') showGroup();
+    // tap or mouse only: that click lands on the label's text (the radio is hidden) and the
+    // browser clicks the radio for it. Arrow keys and space "click" the radio alone: keyboard
+    // users move through the answers first and go on with Enter or "Weiter" (shown on focus only).
+    // (Not event.detail: it is 0 for the forwarded click on iPhones, so nothing moved on there)
+    const answer = el.closest('label.choice');
+    if (!answer || el.matches('input') || !steps[current].contains(answer)) return;
+    const radio = answer.querySelector('input[type="radio"]');
+    if (!radio) return;
     const from = current;
-    if (e.detail > 0) setTimeout(() => { if (current === from) go(1); }, 180);   // the answer lights up first
+    setTimeout(() => {
+      if (radio.name === 'betriebsart') showGroup();
+      if (current === from && radio.checked) go(1);
+    }, 180);   // the answer lights up first
   });
 
   // the size questions are ranges: a calculator number picks the first option whose

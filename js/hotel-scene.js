@@ -715,7 +715,7 @@ void main() {
       x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
     }
     // the band's top and bottom fade into the page (the canvas's mask), so the model keeps clear of them
-    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.65 : 0.525;   // phones: the copy stands above the model
+    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.695 : 0.525;   // phones: the copy stands above the model
     K = Math.min((phone ? 0.92 : 0.5) * W / (x1 - x0), (phone ? 0.46 : 0.87) * H / (y1 - y0));
     BW = (x1 - x0) * K;
     CX = 2 * cx - 1; CY = 1 - 2 * cy;

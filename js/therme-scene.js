@@ -743,7 +743,7 @@ void main() {
     }
     K0 = Math.min((phone ? 0.95 : 0.38) * Wd / (x1 - x0), (phone ? 0.44 : 0.80) * Hd / (y1 - y0)) / (1 + PUSH);
     BW = (x1 - x0) * K0; midX = (x0 + x1) / 2; midY = (y0 + y1) / 2;
-    CX = 2 * (phone ? 0.5 : 0.7) - 1; CY = 1 - 2 * (phone ? 0.65 : 0.5);
+    CX = 2 * (phone ? 0.5 : 0.7) - 1; CY = 1 - 2 * (phone ? 0.69 : 0.5);
     const ne = DIST - 34, fa = DIST + 70;
     proj.fill(0);
     proj[10] = (fa + ne) / (ne - fa); proj[11] = -1; proj[14] = 2 * fa * ne / (ne - fa);

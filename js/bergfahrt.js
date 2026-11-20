@@ -667,7 +667,7 @@ void main() {
       x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
     }
     // the band's upper and lower edge fade into the page (style.css), so the model keeps clear of them
-    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.66 : 0.525;   // phones: the copy stands above the model
+    const cx = phone ? 0.5 : 0.7, cy = phone ? 0.715 : 0.525;   // phones: the copy stands above the model
     K = Math.min((phone ? 0.92 : 0.5) * W / (x1 - x0), (phone ? 0.46 : 0.775) * H / (y1 - y0));
     const OX = 2 * cx - 1 - K * (x0 + x1) / W, OY = 1 - 2 * cy - K * (y0 + y1) / H;
     LCX = 2 * cx - 1; LCY = 1 - 2 * cy; LBW = (x1 - x0) * K;

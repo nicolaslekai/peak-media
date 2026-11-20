@@ -411,11 +411,11 @@ function __boot() {
   else window.addEventListener('scroll', () => onScroll(window.scrollY), { passive: true });
   onScroll(0);
 
-  /* the endless CSS animations (scroll cue, regions marquee, swipe cue) pause while off
+  /* the endless CSS animations (scroll cue, swipe cue) pause while off
      screen: they kept the main thread busy on an idle page (P3) */
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(es => { for (const e of es) e.target.classList.toggle('is-offscreen', !e.isIntersecting); });
-    document.querySelectorAll('.hero__cue, .regions ul, .phones__hint').forEach(el => io.observe(el));
+    document.querySelectorAll('.hero__cue, .phones__hint').forEach(el => io.observe(el));
   }
 
   // a section lands on its header (kicker first), clear of the fixed nav: the gap is the

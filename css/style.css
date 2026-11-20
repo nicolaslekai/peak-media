@@ -575,7 +575,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 html:not(.js) [data-scene="home"] .cine__stage {
-  background-image: url("../assets/frames-hd/home/frame_0001.webp?v=2");
+  background-image: url("../assets/frames-hd/home/frame_0001.webp?v=4");
 }
 
 /* phones held upright: the portrait set, framed on each scene's focal point (D-55) */
@@ -5565,7 +5565,8 @@ html.layout-center .facts li {
 /* ---- SCROLL SPEED ON TOUCH SCREENS (Nicky, 2026-11-19, after trying it on his phone: the
    sections with the graphics, "So arbeiten wir" and "Das richtige Werkzeug", at about two
    thirds of the finger's speed (0.65; half was "30 percent too slow"), everything else at
-   0.8 ("20 percent too fast")). A phone scrolls natively and the finger cannot be braked, so
+   0.8 ("20 percent too fast")). 2026-11-20: "a bit too slow now", both 20 % quicker: 0.78 and 0.96.
+   A phone scrolls natively and the finger cannot be braked, so
    each section's content travels along with the scroll by the share it should be slower,
    for its whole way across the screen (eased in and out over the first and last eighth). It
    ends --drag lower than it lies in the page; that room is the section's extra padding below.
@@ -5614,20 +5615,22 @@ html.layout-center .facts li {
     animation-range: 0 120px, cover 20svh cover calc(20svh + var(--drag-span));
   }
 
-  /* the pinned scenes cannot travel along; a quarter more way makes them a fifth slower */
+  /* the pinned scenes cannot travel along; their way sets their speed. 2026-11-20 (Nicky: "on the phone the
+     scrolling across the entire webpage is a bit too slow now, turn it up globally by 20% quicker"): every way
+     divided by 1.2 (title pictures 150vh -> 125vh of scrub, rides 325vh -> 270vh, on phones 300vh -> 250vh) */
   @media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: no-preference) {
     .hero.cine {
-      height: 250vh;
+      height: 225vh;
     }
 
     .ride {
-      height: calc(var(--band) + 325vh);
+      height: calc(var(--band) + 270vh);
     }
   }
 
   @media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: no-preference) and (max-width: 767px) {
     .ride {
-      height: calc(var(--band) + 300vh);
+      height: calc(var(--band) + 250vh);
     }
   }
 }

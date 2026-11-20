@@ -681,14 +681,18 @@ void main() {
   const kick = () => { if (!raf && visible && !still && R) raf = requestAnimationFrame(frame); };
   function begin() {
     if (began) return;
+    if (!wide.matches && !rested) ol.classList.add('steps--wait');   // phones: dimmed only while the picture draws in before the eyes
     began = true; t0 = performance.now();
     kick();
   }
 
   if (!still && 'IntersectionObserver' in window) {
-    ol.classList.add('steps--wait');   // the steps wait dimmed until their place is on (style.css)
+    if (wide.matches) ol.classList.add('steps--wait');   // the steps wait dimmed until their place is on (style.css)
     new IntersectionObserver(es => {
       for (const e of es) { visible = e.isIntersecting; if (e.intersectionRatio >= 0.35) begin(); }
+      // phones: the list is read below the picture. Scrolled past it before the draw-in had ended (the loop stops
+      // off screen), the last steps stayed dimmed for good (Nicky's screenshot, 2026-11-20): off screen, all are lit
+      if (!visible && !wide.matches) ol.classList.remove('steps--wait');
       kick();
     }, { threshold: [0, 0.35] }).observe(fig);
     // replay (Nicky, 2026-11-19: "when we get back to the animation it needs to play again"): once the

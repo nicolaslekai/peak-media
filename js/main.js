@@ -32,7 +32,7 @@ const SCENES = {
 const frameCfg = section => {
   const name = section.dataset.scene, clip = SCENES[name] || { bg: '#10141A' };
   const dir = new URL(`${PHONE ? 'frames-phone' : 'frames-hd'}/${name}/`, ASSETS).href;
-  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=7' : '?v=2'}` };   // v=5: hero and spa on phones are their own portrait shots of the same place (new camera position, animated), not strips of the wide frame (2026-11-19)
+  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=7' : '?v=4'}` };   // v=5: hero and spa on phones are their own portrait shots of the same place (new camera position, animated), not strips of the wide frame (2026-11-19)
 };
 // sharp frames kept around the playhead (phone ≈ 6 MB decoded, 2560 ≈ 15 MB): at rest
 // WINDOW on each side; while scrolling AHEAD in the direction of travel, BEHIND the other way
@@ -338,7 +338,8 @@ function __boot() {
   // Werkzeug", the sections with the graphics, run slower than the rest.
   // Touch scrolls natively: every section gets .is-slow, --drag and --drag-span, and style.css lets
   // its content travel along with the scroll (slow-section), so it moves at SPEED of the finger:
-  // 0.65 in the two sections, 0.8 everywhere else. --drag is how far the content falls behind
+  // 0.78 in the two sections, 0.96 everywhere else (2026-11-20: "a bit too slow now ... turn it up globally by
+  // 20% quicker"; before: 0.65 and 0.8). --drag is how far the content falls behind
   // until its end has passed the upper third of the screen, --drag-span the scroll that takes
   // (0.88: the eased first and last eighth). Sections with a pinned scene stay as they are.
   // Wheel and trackpad: Lenis moves the page 0.65 times as far per notch inside the two sections
@@ -350,7 +351,7 @@ function __boot() {
       for (const sec of secs) {
         const kids = [...sec.children].filter(el => el.offsetHeight);
         if (!kids.length || sec.querySelector('.ride, .cine__stage, .chain')) { sec.classList.remove('is-slow'); continue; }
-        const lag = 1 - (sec.matches(SLOW) ? 0.65 : 0.8), span = 1 / (lag * 0.88);
+        const lag = 1 - (sec.matches(SLOW) ? 0.78 : 0.96), span = 1 / (lag * 0.88);
         const tall = kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top;
         const drag = (tall + 0.5 * innerHeight) / (span - 1);
         sec.style.setProperty('--drag', `${Math.round(drag)}px`);

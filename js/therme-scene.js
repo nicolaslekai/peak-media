@@ -897,10 +897,10 @@ void main() {
   // the copy and, under it, one line that fills with the scroll: it says "read on while you scroll"
   const copy = document.createElement('div');
   copy.className = 'ride__copy';
-  copy.innerHTML = '<div class="ride__progress" aria-hidden="true"><i></i></div>';
+  copy.innerHTML = '<div class="ride__progress" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></div>';   // three dots, one per station; the current one is a pill that fills (2026-11-20: the thin line looked like the lines in the drawings)
   stage.insertBefore(copy, cta);
   copy.prepend(chain);
-  const bar = copy.querySelector('.ride__progress i');
+  const dots = [...copy.querySelectorAll('.ride__progress i')], EDGE = [0, 0.41, 0.79, 1];   // where one station's copy hands over to the next
   chain.classList.add('chain--ride');
   items[0].classList.add('is-active');
 
@@ -938,7 +938,11 @@ void main() {
         li.classList.toggle('is-active', o >= 0.5);
       });
       ride.classList.toggle('ride--top', p > 0.9);
-      bar.style.transform = `scaleX(${Math.max(0.03, p).toFixed(4)})`;
+      dots.forEach((d, i) => {
+        const f = k(EDGE[i], EDGE[i + 1]);
+        d.classList.toggle('is-on', p >= EDGE[i] && (p < EDGE[i + 1] || i === 2));
+        d.firstChild.style.transform = `translateX(${(-100 * (1 - Math.max(f, f > 0 || i === 0 ? 0.12 : 0))).toFixed(2)}%)`;
+      });
     }
   }
   new IntersectionObserver(([e]) => {

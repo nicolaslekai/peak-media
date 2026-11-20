@@ -2397,21 +2397,38 @@ html:not(.js) [data-scene="home"] .cine__stage {
   display: grid;
 }
 
+/* three dots, one per station; the current one stretches into a pill and fills with the scroll. Not a line:
+   the thin gold line that stood here "looks too much like the other slim lines in our illustrations"
+   (Nicky, 2026-11-20) */
 .ride__progress {
-  width: min(100%, 15rem);
-  height: 2px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 6px;
   margin-top: 2.2rem;
-  border-radius: 2px;
-  background: var(--line);
-  overflow: hidden;
 }
 
 .ride__progress i {
   display: block;
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(243, 237, 225, 0.2);
+  overflow: hidden;
+  transition: width 0.5s var(--ease);
+}
+
+.ride__progress i.is-on {
+  width: 2.6rem;
+}
+
+.ride__progress b {
+  display: block;
   height: 100%;
+  border-radius: 3px;
   background: var(--gold);
-  transform: scaleX(0.03);
-  transform-origin: left;
+  transform: translateX(-100%);
 }
 
 .chain.chain--ride li {
@@ -2521,7 +2538,6 @@ html:not(.js) [data-scene="home"] .cine__stage {
   }
 
   .ride__progress {
-    width: 100%;
     margin-top: 1.1rem;
   }
 

@@ -575,7 +575,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 html:not(.js) [data-scene="home"] .cine__stage {
-  background-image: url("../assets/frames-hd/home/frame_0001.webp?v=5");
+  background-image: url("../assets/frames-hd/home/frame_0001.webp?v=6");
 }
 
 /* phones held upright: the portrait set, framed on each scene's focal point (D-55) */

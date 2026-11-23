@@ -17,6 +17,10 @@
 // 2560×1440 (a 1920 screen draws it scaled down, at about the same file size per frame).
 const IS_MOBILE = window.matchMedia('(max-width: 767px)').matches;
 const PHONE = window.matchMedia('(max-width: 767px) and (orientation: portrait)').matches;
+// a third set, 3840×2160, for screens that draw more than 3000 px across (4K monitors, big Retina laptops), and only
+// for the scenes that have one (Nicky, 2026-11-23: "lets render this at 4k"). The canvas is at most 2 px per CSS px.
+const BIG = !PHONE && window.innerWidth * Math.min(window.devicePixelRatio || 1, 2) > 3000;
+const UHD = ['home'];
 // a page names its scenes: <section class="cine" data-scene="hero|spa|skilift">; the
 // folder is found from this script's own URL, so pages in subfolders work too (D-64)
 const ASSETS = new URL('../assets/', document.currentScript ? document.currentScript.src : location.href);
@@ -31,12 +35,13 @@ const SCENES = {
 };
 const frameCfg = section => {
   const name = section.dataset.scene, clip = SCENES[name] || { bg: '#10141A' };
-  const dir = new URL(`${PHONE ? 'frames-phone' : 'frames-hd'}/${name}/`, ASSETS).href;
-  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=7' : '?v=5'}` };   // v=5: hero and spa on phones are their own portrait shots of the same place (new camera position, animated), not strips of the wide frame (2026-11-19)
+  const dir = new URL(`${PHONE ? 'frames-phone' : BIG && UHD.includes(name) ? 'frames-4k' : 'frames-hd'}/${name}/`, ASSETS).href;
+  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=7' : '?v=6'}` };   // v=5: hero and spa on phones are their own portrait shots of the same place (new camera position, animated), not strips of the wide frame (2026-11-19)
 };
 // sharp frames kept around the playhead (phone ≈ 6 MB decoded, 2560 ≈ 15 MB): at rest
 // WINDOW on each side; while scrolling AHEAD in the direction of travel, BEHIND the other way
-const WINDOW = PHONE ? 6 : 8, AHEAD = PHONE ? 9 : 12, BEHIND = PHONE ? 3 : 4;
+// (a 3840 frame is 33 MB decoded: a shorter window there)
+const WINDOW = PHONE ? 6 : BIG ? 5 : 8, AHEAD = PHONE ? 9 : BIG ? 8 : 12, BEHIND = PHONE ? 3 : BIG ? 3 : 4;
 // preview width (a quarter of the frame): 640×360 ≈ 0.9 MB, 220×422 ≈ 0.4 MB decoded
 const LO_W = PHONE ? 220 : 640;
 let loOK = !!window.createImageBitmap;   // off when the browser ignores resizeWidth

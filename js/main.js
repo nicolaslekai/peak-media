@@ -181,21 +181,23 @@ function initScrub(cfg, wake) {
     return -1;
   }
 
-  // draw() takes a FLOAT frame position and cross-blends the two neighbouring
-  // frames by the fraction — the scrub has no visible stepping between frames.
-  // Both frames of a blend come from the same tier (a sharp and a soft one would
-  // flicker); the sharp tier wins whenever it has what the paint needs
+  // draw() takes a FLOAT frame position and paints the whole frame nearest to it. No cross-blend of two
+  // neighbours and no soft preview while a sharp frame is close by (Nicky, 2026-11-23: "the cinematic scrolls
+  // at the top of every section, they blur when I scroll. I don't want that"): two frames laid over each other
+  // read as blur (the grain averages out, whatever moves doubles), and the picture then snapped sharp at rest.
+  // Order: the exact frame sharp; a sharp frame up to NEAR away; the exact frame's preview; anything decoded
+  const NEAR = 4;
   function draw(pos) {
-    let i0 = Math.max(0, Math.min(n - 1, Math.floor(pos)));
-    let f = Math.min(1, Math.max(0, pos - i0));
-    const blend = f > 0.01 && i0 + 1 < n;
-    let tier = frames.has(i0) && (!blend || frames.has(i0 + 1)) ? frames
-      : lows.has(i0) && (!blend || lows.has(i0 + 1)) ? lows
-      : frames.has(i0) ? frames : lows.has(i0) ? lows : null;
+    let i0 = Math.max(0, Math.min(n - 1, Math.round(pos)));
+    let tier = frames.has(i0) ? frames : null;
+    for (let d = 1; d <= NEAR && !tier; d++) {
+      if (frames.has(i0 - d)) { i0 -= d; tier = frames; }
+      else if (frames.has(i0 + d)) { i0 += d; tier = frames; }
+    }
+    if (!tier && lows.has(i0)) tier = lows;
     if (!tier) {
       i0 = nearest(i0);
       if (i0 < 0) return false;
-      f = 0;
       tier = frames.has(i0) ? frames : lows;
     }
     const base = tier.get(i0);
@@ -208,12 +210,6 @@ function initScrub(cfg, wake) {
     if (ir > cr) { dh = ch; dw = ch * ir; dx = (cw - dw) * (IS_MOBILE ? cfg.focalX : 0.5); dy = 0; }
     else { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
     ctx.drawImage(base, dx, dy, dw, dh);
-    const nxt = f > 0.01 && tier.get(i0 + 1);
-    if (nxt) {
-      ctx.globalAlpha = f;
-      ctx.drawImage(nxt, dx, dy, dw, dh);
-      ctx.globalAlpha = 1;
-    }
     return true;
   }
   let cssW = 0, cssH = 0;
@@ -347,8 +343,9 @@ function __boot() {
   // 20% quicker"; before: 0.65 and 0.8). --drag is how far the content falls behind
   // until its end has passed the upper third of the screen, --drag-span the scroll that takes
   // (0.88: the eased first and last eighth). Sections with a pinned scene stay as they are.
-  // Wheel and trackpad: Lenis moves the page 0.65 times as far per notch inside the two sections
+  // Wheel and trackpad: Lenis moves the page 0.65 times as far per notch inside the tools section, 0.53 times in the process section
   const SLOW = '.services, .tools';
+  const CUT = sec => sec.matches('.services') ? 0.47 : 0.35;   // how much of the wheel's way a section takes away (2026-11-23, "So arbeiten wir": "slow down scrolling a bit", 0.35 -> 0.47)
   const touch = matchMedia('(hover: none) and (pointer: coarse)').matches;
   if (!reduce && touch && window.CSS && CSS.supports('animation-timeline: view()') && 'ResizeObserver' in window) {
     const secs = [...document.querySelectorAll('main .section')].slice(0, -1);   // not the last one: the page ends before it could catch up, a gap would stay above the footer
@@ -373,13 +370,13 @@ function __boot() {
     const slow = [...document.querySelectorAll(SLOW)].filter(el => el.matches('.section'));
     const BASE = 0.9, c01 = v => Math.max(0, Math.min(1, v));
     if (slow.length) lenis.on('scroll', () => {
-      let k = 0;
+      let cut = 0;
       for (const sec of slow) {
         const r = sec.getBoundingClientRect(), vh = innerHeight;
-        k = Math.max(k, c01((0.8 * vh - r.top) / (0.2 * vh)) * c01((r.bottom - 0.3 * vh) / (0.2 * vh)));
+        const k = c01((0.8 * vh - r.top) / (0.2 * vh)) * c01((r.bottom - 0.3 * vh) / (0.2 * vh));
+        cut = Math.max(cut, CUT(sec) * k * k * (3 - 2 * k));
       }
-      k = k * k * (3 - 2 * k);
-      lenis.virtualScroll.options.wheelMultiplier = BASE * (1 - 0.35 * k);
+      lenis.virtualScroll.options.wheelMultiplier = BASE * (1 - cut);
     });
   }
   const updateAll = () => {

@@ -5658,8 +5658,23 @@ html.layout-center .facts li {
    its look from above. .steps--wait: until the model has drawn in, each step waits dimmed
    and comes up (.is-on) when its place lights. ---- */
 .steps-model {
+  position: relative;
   margin: -1.4rem calc(-1 * var(--gutter)) 0;
   pointer-events: none;
+}
+
+/* the canvas' edges fade into the page: on Nicky's screen the canvases stood out as a slightly lighter box
+   (screenshots 2026-11-23; a WebGL surface and the page next to it are not always shown alike), and "no
+   lighter background box around a canvas" (2026-11-19). Gradients of the page's ink, no mask */
+.steps-model::after,
+.tools-model::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--ink), rgba(var(--ink-rgb), 0) 4%, rgba(var(--ink-rgb), 0) 96%, var(--ink)),
+    linear-gradient(180deg, var(--ink), rgba(var(--ink-rgb), 0) 11%, rgba(var(--ink-rgb), 0) 89%, var(--ink));
 }
 
 .steps-model canvas {

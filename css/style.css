@@ -593,7 +593,7 @@ html:not(.js) [data-scene="skilift"] .cine__stage {
 }
 
 html:not(.js) [data-scene="home"] .cine__stage {
-  background-image: url("../assets/frames-hd/home/frame_0001.webp?v=6");
+  background-image: url("../assets/frames-hd/home/frame_0001.webp?v=8");
 }
 
 /* phones held upright: the portrait set, framed on each scene's focal point (D-55) */
@@ -1580,22 +1580,26 @@ html:not(.js) [data-scene="home"] .cine__stage {
   padding-top: 2rem;
 }
 
-/* ---- one picture for the whole section (2026-11-23, .tools--picture): above the two columns, held to the
-   page's left edge; its background is the page's ink and its rim fades into it, so no box shows. The flat
-   pictures and the arrow between the columns go. It comes up as it scrolls into view (js/tools.js) ---- */
+/* ---- one moving picture for the whole section (2026-11-23, .tools--picture; Nicky: "have it to the right of
+   this text and make the text larger and ... the animation smaller"). Wide screens: the heading left, the
+   picture right of it, both centred on one line; below them the two columns. Narrower: the picture under the
+   heading. Its background is transparent, so no box shows. The flat pictures and the arrow between the
+   columns go. It comes up as it scrolls into view (js/tools.js) ---- */
 .tools__picture {
-  margin: clamp(1rem, 3vw, 2.4rem) 0 clamp(1.4rem, 3vw, 2.6rem);
+  margin: clamp(0.6rem, 2vw, 1.6rem) 0 clamp(1.2rem, 3vw, 2.2rem);
 }
 
 .tools__picture img {
   display: block;
   width: 100%;
-  max-width: 62rem;
+  max-width: 30rem;
   height: auto;
 }
 
-.tools__picture[data-pic="1"] img {
-  max-width: none;
+.section.tools--picture>header h2+p {
+  max-width: 34ch;
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+  line-height: 1.5;
 }
 
 .tools--picture .tools__art,
@@ -1603,49 +1607,56 @@ html:not(.js) [data-scene="home"] .cine__stage {
   display: none;
 }
 
-.tools__side-pic {
-  display: none;
-  width: 100%;
-  max-width: 30rem;
-  height: auto;
-  margin-bottom: 1.2rem;
+@media (min-width: 1000px) {
+  .tools--picture {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .tools--picture>header {
+    max-width: none;
+    margin-bottom: 0;
+  }
+
+  .tools--picture>.tools__picture {
+    margin: 0;
+    justify-self: end;
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  .tools--picture>.tools__picture img {
+    max-width: none;
+  }
+
+  .tools--picture>.tools__split,
+  .tools--picture>.tools__note {
+    grid-column: 1 / -1;
+  }
+
+  .tools--picture>.tools__split {
+    margin-top: clamp(2rem, 4vw, 3.4rem);
+  }
 }
 
-.js .tools__picture img,
-.js .tools__side-pic {
+.js .tools__picture img {
   opacity: 0;
   transform: translateY(1.4rem);
   transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
 
-.js .tools--shown .tools__picture img,
-.js .tools--shown .tools__side-pic {
+.js .tools--shown .tools__picture img {
   opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-  .js .tools__picture img,
-  .js .tools__side-pic {
+  .js .tools__picture img {
     opacity: 1;
     transform: none;
     transition: none;
-  }
-}
-
-@media (max-width: 767px) {
-  .tools__picture {
-    margin-inline: calc(-0.5 * var(--gutter));
-  }
-
-  /* sketch 1 is two trays: each above its own text */
-  .tools[data-pic="1"] .tools__picture {
-    display: none;
-  }
-
-  .tools[data-pic="1"] .tools__side-pic {
-    display: block;
   }
 }
 
@@ -3497,6 +3508,14 @@ html:not(.js) .wizard__progress {
   margin: 0;
   padding: 0;
   border: 0;
+}
+
+/* phones: one field per row, an e-mail address needs the width */
+@media (max-width: 600px) {
+  .wizard__step {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
 }
 
 .wizard__step[hidden] {

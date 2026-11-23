@@ -31,28 +31,11 @@
   if (!section) return;
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- 2026-11-23: the section shows one picture (.tools--picture, index.html) instead of the models. Three
-  // sketches exist; the page carries sketch 2, ?werkzeug=1 or ?werkzeug=3 swaps in another. Sketch 1 is two
-  // trays: on phones each stands above its own text. The picture comes up when it scrolls into view and
-  // goes back once it is well off screen, so it comes up again on the way back.
+  // ---- 2026-11-23: the section shows one moving picture (.tools--picture, index.html) instead of the models.
+  // It comes up when it scrolls into view and goes back once it is well off screen, so it comes up again on
+  // the way back.
   const fig = section.querySelector('.tools__picture');
   if (fig) {
-    const SIZE = {"tools-1-1920.webp": [1920, 570], "tools-1-960.webp": [960, 285], "tools-1-hand-900.webp": [900, 558], "tools-1-ki-900.webp": [900, 550], "tools-2-1920.webp": [1920, 1120], "tools-2-960.webp": [960, 560], "tools-3-1920.webp": [1920, 876], "tools-3-960.webp": [960, 438]};
-    const v = (new URLSearchParams(location.search).get('werkzeug') || '').trim();
-    const img = fig.querySelector('img');
-    if ((v === '1' || v === '3') && img) {
-      const at = f => img.getAttribute('src').replace('tools-2-1920.webp', f);
-      const wide = `tools-${v}-1920.webp`, small = `tools-${v}-960.webp`;
-      img.srcset = `${at(small)} 960w, ${at(wide)} 1920w`; img.src = at(wide);
-      img.width = SIZE[wide][0]; img.height = SIZE[wide][1];
-      fig.dataset.pic = v; section.dataset.pic = v;
-      if (v === '1') for (const [cls, f] of [['hand', 'tools-1-hand-900.webp'], ['ai', 'tools-1-ki-900.webp']]) {
-        const side = section.querySelector('.tools__side--' + cls); if (!side) continue;
-        const i = new Image(); i.className = 'tools__side-pic'; i.alt = ''; i.decoding = 'async';
-        i.width = SIZE[f][0]; i.height = SIZE[f][1]; i.src = at(f);
-        side.prepend(i);
-      }
-    }
     if (still || !('IntersectionObserver' in window)) section.classList.add('tools--shown');
     else {
       new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) section.classList.add('tools--shown'); }, { threshold: 0.2 }).observe(section.querySelector('.tools__split'));

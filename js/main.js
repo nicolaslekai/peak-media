@@ -36,7 +36,7 @@ const SCENES = {
 const frameCfg = section => {
   const name = section.dataset.scene, clip = SCENES[name] || { bg: '#10141A' };
   const dir = new URL(`${PHONE ? 'frames-phone' : BIG && UHD.includes(name) ? 'frames-4k' : 'frames-hd'}/${name}/`, ASSETS).href;
-  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=7' : '?v=6'}` };   // v=5: hero and spa on phones are their own portrait shots of the same place (new camera position, animated), not strips of the wide frame (2026-11-19)
+  return { section, frameCount: 120, bg: clip.bg, focalX: PHONE ? 0.5 : (clip.focalX || 0.5), path: i => `${dir}frame_${String(i).padStart(4, '0')}.webp${PHONE ? '?v=7' : '?v=8'}` };   // v=5: hero and spa on phones are their own portrait shots of the same place (new camera position, animated), not strips of the wide frame (2026-11-19)
 };
 // sharp frames kept around the playhead (phone ≈ 6 MB decoded, 2560 ≈ 15 MB): at rest
 // WINDOW on each side; while scrolling AHEAD in the direction of travel, BEHIND the other way

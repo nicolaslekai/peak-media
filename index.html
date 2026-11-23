@@ -109,7 +109,7 @@
       history.replaceState(null, '', location.pathname + location.search);
     }
   </script>
-  <link rel="stylesheet" href="css/style.css?v=164" />
+  <link rel="stylesheet" href="css/style.css?v=165" />
 </head>
 
 <body>
@@ -298,7 +298,12 @@
          (Nicky, 2026-11-19: "also in 3 d style please"): a film camera and a film light before
          the ridge; the week as a board of seven tiles. The two <svg> stay: they are the
          fallback, and the plan's words (Mo to So, heute, the legend) are read from them -->
-    <section class="section tools" id="werkzeuge">
+    <!-- 2026-11-23: one picture says it instead of the two models (Nicky: "make it more understandable", then
+         "update this with the new graphic"): a house cut open, above what guests see (the shoot at the pool),
+         below what runs in the background (plan, post, subtitles, report). Sketches 1 and 3 of the same round
+         show with ?werkzeug=1 / ?werkzeug=3 (js/tools.js). .tools--picture hides the flat pictures; js/tools.js
+         then builds no models -->
+    <section class="section tools tools--picture" id="werkzeuge">
       <header>
         <p class="kicker">Das richtige Werkzeug</p>
         <h2>Echte Bilder. Kluge Werkzeuge.</h2>
@@ -308,6 +313,10 @@
           gute Bilder.
         </p>
       </header>
+      <figure class="tools__picture" data-pic="2">
+        <img src="assets/img/tools-2-1920.webp?v=1" srcset="assets/img/tools-2-960.webp?v=1 960w, assets/img/tools-2-1920.webp?v=1 1920w"
+          sizes="(max-width: 767px) 100vw, 62rem" width="1920" height="1120" alt="" loading="lazy" decoding="async" />
+      </figure>
       <div class="tools__split">
         <article class="tools__side tools__side--hand">
           <svg class="tools__art tools__art--hand" viewBox="0 0 560 250" aria-hidden="true" focusable="false">
@@ -513,7 +522,7 @@
   <script src="js/main.js?v=92"></script>
   <script src="js/steps.js?v=26"></script>
   <script src="js/nav.js?v=3"></script>
-  <script src="js/tools.js?v=4"></script>
+  <script src="js/tools.js?v=5"></script>
 </body>
 
 </html>

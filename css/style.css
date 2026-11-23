@@ -1562,6 +1562,75 @@ html:not(.js) [data-scene="home"] .cine__stage {
   padding-top: 2rem;
 }
 
+/* ---- one picture for the whole section (2026-11-23, .tools--picture): above the two columns, held to the
+   page's left edge; its background is the page's ink and its rim fades into it, so no box shows. The flat
+   pictures and the arrow between the columns go. It comes up as it scrolls into view (js/tools.js) ---- */
+.tools__picture {
+  margin: clamp(1rem, 3vw, 2.4rem) 0 clamp(1.4rem, 3vw, 2.6rem);
+}
+
+.tools__picture img {
+  display: block;
+  width: 100%;
+  max-width: 62rem;
+  height: auto;
+}
+
+.tools__picture[data-pic="1"] img {
+  max-width: none;
+}
+
+.tools--picture .tools__art,
+.tools--picture .tools__divider::before {
+  display: none;
+}
+
+.tools__side-pic {
+  display: none;
+  width: 100%;
+  max-width: 30rem;
+  height: auto;
+  margin-bottom: 1.2rem;
+}
+
+.js .tools__picture img,
+.js .tools__side-pic {
+  opacity: 0;
+  transform: translateY(1.4rem);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+
+.js .tools--shown .tools__picture img,
+.js .tools--shown .tools__side-pic {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .js .tools__picture img,
+  .js .tools__side-pic {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .tools__picture {
+    margin-inline: calc(-0.5 * var(--gutter));
+  }
+
+  /* sketch 1 is two trays: each above its own text */
+  .tools[data-pic="1"] .tools__picture {
+    display: none;
+  }
+
+  .tools[data-pic="1"] .tools__side-pic {
+    display: block;
+  }
+}
+
 .tools__label {
   font-weight: 600;
   font-size: 0.72rem;

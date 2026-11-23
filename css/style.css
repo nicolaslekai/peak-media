@@ -130,6 +130,24 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+/* the page stands still sideways (Nicky, 2026-11-23: "it needs to be static on the x-axis. We do not want it to
+   wobble to the left and the right on the phone"). Nothing may be wider than the screen, and where something is
+   (the menu parked off screen to the right, a pixel of overhang), the root cuts it off instead of scrolling to
+   it; a finger moves the page up and down only. clip, not hidden: no scroll container, so pinned stages keep
+   working. Sideways scrollers inside the page (the phone row) keep their own swipe */
+html {
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  body {
+    touch-action: pan-y pinch-zoom;
+  }
 }
 
 /* the footer stays at the bottom of the window on short pages (Impressum, 404, Kontakt on
@@ -3213,8 +3231,15 @@ html:not(.js) [data-scene="home"] .cine__stage {
   margin: 0 auto;
 }
 
+/* fields as boxes with the label above them (Nicky, 2026-11-23: "make the form boxes so it looks easier to fill
+   out"; before: a hairline under each field and a label that floated up). The label follows its field in the
+   markup, so the column is reversed */
 .field {
   position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .field--full {
@@ -3225,36 +3250,49 @@ html:not(.js) [data-scene="home"] .cine__stage {
 .field select,
 .field textarea {
   width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--line);
+  min-height: 3.25rem;
+  background: rgba(243, 237, 225, 0.05);
+  border: 1px solid rgba(243, 237, 225, 0.26);
+  border-radius: 4px;
   color: var(--paper);
   font-family: var(--sans);
   font-size: 1rem;
-  padding: 0.9rem 0;
+  padding: 0.85rem 1rem;
   resize: none;
   transition:
-    border-color 0.4s,
-    box-shadow 0.4s;
+    border-color 0.25s,
+    background-color 0.25s,
+    box-shadow 0.25s;
 }
 
-/* focus: the underline turns gold and doubles to 2px (the shadow adds the second pixel),
-   a clear cue for keyboard users without a box around the field (A3) */
+.field textarea {
+  min-height: 8.5rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: rgba(243, 237, 225, 0.45);
+}
+
+/* focus: the box turns gold with a soft ring, and its label with it */
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   outline: none;
   border-color: var(--gold);
-  box-shadow: 0 1px 0 var(--gold);
+  background: rgba(243, 237, 225, 0.08);
+  box-shadow: 0 0 0 3px rgba(209, 168, 81, 0.2);
 }
 
-/* select: same underline field, a small gold caret instead of the native arrow */
+/* select: the same box, a small gold caret instead of the native arrow */
 .field select {
   -webkit-appearance: none;
   appearance: none;
-  border-radius: 0;
   cursor: pointer;
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23d1a851' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 0.2rem center;
+  background: rgba(243, 237, 225, 0.05) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23d1a851' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 1rem center;
 }
 
 .field select option {
@@ -3349,25 +3387,15 @@ html:not(.js) [data-scene="home"] .cine__stage {
 }
 
 .field label {
-  position: absolute;
-  left: 0;
-  top: 0.9rem;
-  color: rgba(243, 237, 225, 0.55);
-  font-size: 1rem;
-  pointer-events: none;
-  transition: 0.3s var(--ease);
+  color: rgba(243, 237, 225, 0.82);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.25s;
 }
 
 .field input:focus+label,
-.field input:not(:placeholder-shown)+label,
 .field select:focus+label,
-.field select:valid+label,
-.field textarea:focus+label,
-.field textarea:not(:placeholder-shown)+label {
-  top: -0.7rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.field textarea:focus+label {
   color: var(--gold);
 }
 
@@ -5739,7 +5767,7 @@ html.layout-center .facts li {
 .tools-model::after {
   content: "";
   position: absolute;
-  inset: -1px;
+  inset: 0;
   pointer-events: none;
   background:
     linear-gradient(90deg, var(--ink), rgba(var(--ink-rgb), 0) 4%, rgba(var(--ink-rgb), 0) 96%, var(--ink)),

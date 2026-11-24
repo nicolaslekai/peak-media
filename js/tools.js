@@ -36,6 +36,12 @@
   // the way back.
   const fig = section.querySelector('.tools__picture');
   if (fig) {
+    // ?grafik=1: the other still of the 2026-11-24 round (kitchen in cool steel), same size
+    if (new URLSearchParams(location.search).get('grafik') === '1') {
+      const img = fig.querySelector('img'), src = fig.querySelector('source');
+      if (img) img.src = img.getAttribute('src').replace('tools-anim.webp', 'tools-anim-1.webp');
+      if (src) src.srcset = src.getAttribute('srcset').replace('tools-still.webp', 'tools-still-1.webp');
+    }
     if (still || !('IntersectionObserver' in window)) section.classList.add('tools--shown');
     else {
       new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) section.classList.add('tools--shown'); }, { threshold: 0.2 }).observe(section.querySelector('.tools__split'));

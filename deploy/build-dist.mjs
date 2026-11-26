@@ -66,7 +66,9 @@ for (const p of refs.keys()) if (p.startsWith('assets/img/') && !existsSync(join
 for (const set of ['frames-hd', 'frames-phone']) for (const scene of ['hero', 'spa', 'skilift'])
   for (let i = 1; i <= 120; i++) refs.set(`assets/${set}/${scene}/frame_${String(i).padStart(4, '0')}.webp`, 'js/main.js');
 
-const missing = [...refs].filter(([p]) => !existsSync(join(OUT, p)));
+// js/script.outbound-links.js: the visitor statistics script, proxied by nginx to the Plausible instance on the VPS, not a package file
+const SERVED = new Set(['js/script.outbound-links.js']);
+const missing = [...refs].filter(([p]) => !SERVED.has(p) && !existsSync(join(OUT, p)));
 if (missing.length) {
   console.error('MISSING in the package:\n' + missing.map(([p, from]) => `  ${p}  (from ${from})`).join('\n'));
   process.exit(1);

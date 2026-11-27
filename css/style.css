@@ -4720,6 +4720,14 @@ html:not(.js) .wizard__step+.wizard__step {
   fill: rgba(243, 237, 225, 0.8);
 }
 
+/* the glyphs are links now (27.11.2026): keep the row exactly as before, without the
+   spacing of the text links in .foot__cols */
+.foot__cols .foot__icons a {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
 .foot__legal {
   position: relative;
   grid-column: 1/-1;

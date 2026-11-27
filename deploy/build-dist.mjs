@@ -26,7 +26,7 @@ const INDEXED = { 'index.html': '', 'hotels-resorts/index.html': 'hotels-resorts
   'wellness-thermen/index.html': 'wellness-thermen/', 'ueber-uns/index.html': 'ueber-uns/', 'kontakt/index.html': 'kontakt/' };
 // whole folders the scripts load by computed path (frames) or that belong together
 // api/: the form's mail script and its library (D-04); its secrets stay outside the web root
-const DIRS = ['css', 'js', 'api', 'assets/fonts', 'assets/icons', 'assets/brand', 'assets/frames-hd', 'assets/frames-phone'];
+const DIRS = ['css', 'js', 'api', 'assets/fonts', 'assets/icons', 'assets/brand', 'assets/frames-hd', 'assets/frames-4k', 'assets/frames-phone'];
 const FILES = ['site.webmanifest', 'favicon.ico', '.htaccess', 'llms.txt'];
 
 rmSync(OUT, { recursive: true, force: true });
